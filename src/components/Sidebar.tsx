@@ -88,8 +88,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'ORDERS' as ActiveTab,
           label: 'Two-Way Order Management',
           icon: Repeat,
-          badge: 'Phase 5',
-          badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+          badge: '5 Orders',
+          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 5',
         },
       ],
@@ -205,7 +205,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
-                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND';
+                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS';
                   
                   return (
                     <button

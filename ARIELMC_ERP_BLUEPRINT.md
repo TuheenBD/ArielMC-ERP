@@ -69,10 +69,11 @@ graph LR
 - 7-Stage Kanban pipeline & comprehensive tabular lead profile inspector.
 - Direct synchronization with Google Sheet database & Google Apps Script CRM WebApp.
 
-### Module 5: Two-Way Order Management System (OMS)
-- Buyer Sales Order (SO) synchronized with back-to-back Factory Purchase Orders (PO).
-- Time & Action (T&A) critical path tracking (Yarn/leather in-house, cutting, pilot run, bulk, inspection).
-- Digital QA/QC inspection sheets (Inline, Midline, Final FRI) with mobile photo upload & AQL calculation.
+### Module 5: Two-Way Order Management System (OMS) [LIVE]
+- Buyer Sales Order (SO in GBP, USD, EUR, AUD) synchronized back-to-back with Factory Purchase Orders (PO in BDT/USD).
+- Real-time Gross Margin Protection Engine: automated deduction of factory costs, ocean/air freight allowances, and testing buffers to lock healthy net margins ($>20\%$).
+- Time & Action (T&A) critical path tracking (L/C verification, raw material in-house, cutting, bulk sewing/firing, port cut-off).
+- Digital QA/QC inspection sheets (Inline, Midline, Final FRI) with ISO 2859-1 Level II sampling, defect categorization, and official inspection certificates.
 
 ### Module 6: Operations, Supply Chain & Export Documentation
 - Single-click export documentation: Proforma Invoice, Commercial Invoice, Packing List, Certificate of Origin, Form EXP (Bangladesh Bank).

@@ -300,3 +300,129 @@ export interface SampleDevelopmentOrder {
   tags: string[];
 }
 
+// -------------------------------------------------------------
+// Phase 5: Two-Way Order Management System (OMS)
+// -------------------------------------------------------------
+
+export type OrderStatus = 
+  | 'DRAFT'
+  | 'CONFIRMED'
+  | 'IN_PRODUCTION'
+  | 'QUALITY_INSPECTION'
+  | 'READY_TO_SHIP'
+  | 'SHIPPED_CHITTAGONG'
+  | 'FULFILLED'
+  | 'CANCELLED';
+
+export type FactoryPoStatus = 
+  | 'ISSUED'
+  | 'ACCEPTED'
+  | 'RAW_MATERIAL_STAGED'
+  | 'CUTTING'
+  | 'IN_LINE_SEWING'
+  | 'QC_PASSED'
+  | 'PACKED_EX_FACTORY';
+
+export interface OrderLineItem {
+  id: string;
+  productId?: string;
+  sku: string;
+  styleName: string;
+  sector: ProductSector;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  factoryUnitCost: number;
+  factoryTotalCost: number;
+}
+
+export interface TimeAndActionMilestone {
+  id: string;
+  name: string;
+  code: string;
+  plannedDate: string;
+  actualDate?: string;
+  status: 'COMPLETED' | 'ON_TRACK' | 'AT_RISK' | 'DELAYED' | 'PENDING';
+  responsibleParty: string;
+  notes?: string;
+}
+
+export interface AqlInspectionReport {
+  id: string;
+  inspectionType: 'INLINE' | 'MIDLINE' | 'FINAL_FRI';
+  inspectionDate: string;
+  inspectorName: string;
+  inspectionLevel: string; // e.g. 'Level II (ISO 2859-1)'
+  sampleSizeUnits: number;
+  aqlStandard: {
+    criticalMaxAllowed: number;
+    majorMaxAllowed: number;
+    minorMaxAllowed: number;
+  };
+  defectsFound: {
+    critical: number;
+    major: number;
+    minor: number;
+  };
+  defectLog: {
+    description: string;
+    category: 'Critical' | 'Major' | 'Minor';
+    count: number;
+  }[];
+  overallVerdict: 'PASS_CERTIFICATE_ISSUED' | 'PENDING_REWORK' | 'FAILED_REJECTED';
+  certificateNumber?: string;
+  digitalSealUrl?: string;
+}
+
+export interface FactoryPurchaseOrder {
+  id: string;
+  poNumber: string; // PO-2026-FAC-001
+  factoryId: string;
+  factoryName: string;
+  currency: 'BDT' | 'USD';
+  status: FactoryPoStatus;
+  issueDate: string;
+  targetExFactoryDate: string;
+  totalQuantity: number;
+  totalCostBdt: number;
+  totalCostUsd: number;
+  paymentTerms: string;
+  backToBackLcNumber?: string;
+  items: OrderLineItem[];
+}
+
+export interface BuyerSalesOrder {
+  id: string;
+  soNumber: string; // SO-2026-UK-001
+  buyerCompany: string; // Linked to CRM
+  buyerContact: string;
+  targetMarket: 'UK' | 'EU' | 'US' | 'AU';
+  operatingEntity: EntityCode;
+  currency: CurrencyCode;
+  incoterm: string; // e.g. FOB Chittagong, CIF London Gateway, DDP Los Angeles
+  status: OrderStatus;
+  orderDate: string;
+  targetExFactoryDate: string;
+  targetPortCutOffDate: string;
+  targetDeliveryDate: string;
+  paymentTerms: string;
+  masterLcNumber?: string;
+  items: OrderLineItem[];
+  totalQuantity: number;
+  totalAmountBuyerCurrency: number;
+  totalAmountUsd: number;
+  linkedPo: FactoryPurchaseOrder;
+  marginProtection: {
+    buyerRevenueUsd: number;
+    factoryCostUsd: number;
+    freightAllowanceUsd: number;
+    complianceBufferUsd: number;
+    netMarginUsd: number;
+    marginPercentage: number;
+    status: 'LOCKED_HEALTHY' | 'MARGIN_WARNING' | 'UNACCEPTABLE';
+  };
+  timeAndAction: TimeAndActionMilestone[];
+  inspections: AqlInspectionReport[];
+}
+
+

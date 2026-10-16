@@ -11,10 +11,13 @@ import {
   SampleDevelopmentOrder,
   SampleStage,
   SampleStatus,
+  BuyerSalesOrder,
+  OrderStatus,
 } from '@/types/erp';
 import { INITIAL_COMPANIES, INITIAL_CURRENCIES, INITIAL_PRODUCTS } from '@/data/initialData';
 import { INITIAL_FACTORIES } from '@/data/initialFactories';
 import { INITIAL_SAMPLES } from '@/data/initialSamples';
+import { INITIAL_ORDERS } from '@/data/initialOrders';
 import crmLeadsData from '@/data/crmLeads.json';
 import { Header } from '@/components/Header';
 import { Sidebar, ActiveTab } from '@/components/Sidebar';
@@ -22,6 +25,7 @@ import { EntityStationOverview } from '@/components/EntityStationOverview';
 import { ProductCatalog } from '@/components/ProductCatalog';
 import { FactoryManagement } from '@/components/FactoryManagement';
 import { SampleManagement } from '@/components/SampleManagement';
+import { OrderManagement } from '@/components/OrderManagement';
 import { CrmPipeline } from '@/components/CrmPipeline';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
@@ -38,6 +42,7 @@ import {
   Layers,
   Users2,
   FlaskConical,
+  Repeat,
 } from 'lucide-react';
 
 export default function Home() {
@@ -48,6 +53,7 @@ export default function Home() {
   const [products, setProducts] = useState<ProductItem[]>(INITIAL_PRODUCTS);
   const [factories, setFactories] = useState<SupplierFactory[]>(INITIAL_FACTORIES);
   const [samples, setSamples] = useState<SampleDevelopmentOrder[]>(INITIAL_SAMPLES);
+  const [orders, setOrders] = useState<BuyerSalesOrder[]>(INITIAL_ORDERS);
   const [crmLeads] = useState<CrmLead[]>(crmLeadsData as CrmLead[]);
   const [activeTab, setActiveTab] = useState<ActiveTab>('PRODUCTS');
   const [searchQuery, setSearchQuery] = useState('');
@@ -113,6 +119,32 @@ export default function Home() {
           roundNumber: 1,
           status: 'TECH_PACK_SENT',
         };
+      })
+    );
+  };
+
+  const handleAddOrder = (newOrder: BuyerSalesOrder) => {
+    setOrders((prev) => [newOrder, ...prev]);
+  };
+
+  const handleUpdateOrderStatus = (orderId: string, newStatus: OrderStatus) => {
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+    );
+  };
+
+  const handleUpdateMilestoneStatus = (
+    orderId: string,
+    milestoneId: string,
+    newStatus: 'COMPLETED' | 'ON_TRACK' | 'AT_RISK' | 'DELAYED'
+  ) => {
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (o.id !== orderId) return o;
+        const updatedTna = o.timeAndAction.map((m) =>
+          m.id === milestoneId ? { ...m, status: newStatus } : m
+        );
+        return { ...o, timeAndAction: updatedTna };
       })
     );
   };
@@ -247,11 +279,24 @@ export default function Home() {
             />
           )}
 
+          {activeTab === 'ORDERS' && (
+            <OrderManagement
+              orders={orders}
+              factories={factories}
+              products={products}
+              crmLeads={crmLeads}
+              onAddOrder={handleAddOrder}
+              onUpdateOrderStatus={handleUpdateOrderStatus}
+              onUpdateMilestoneStatus={handleUpdateMilestoneStatus}
+            />
+          )}
+
           {activeTab !== 'STATIONS' &&
             activeTab !== 'PRODUCTS' &&
             activeTab !== 'FACTORIES' &&
             activeTab !== 'CRM' &&
-            activeTab !== 'RND' && (
+            activeTab !== 'RND' &&
+            activeTab !== 'ORDERS' && (
               <PhaseRoadmapPreview
                 activeTab={activeTab}
                 onNavigateToProducts={() => setActiveTab('PRODUCTS')}
