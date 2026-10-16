@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   User, 
   Lock, 
@@ -24,7 +24,10 @@ import {
   Activity, 
   Fingerprint, 
   FileText,
-  UserPlus
+  UserPlus,
+  Camera,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import { UserProfile, UserRole, UserDepartment, TwoFactorMethod } from '@/types/auth';
 import { EntityCode } from '@/types/erp';
@@ -60,7 +63,25 @@ export const ProfileControlModal: React.FC<ProfileControlModalProps> = ({
   const [department, setDepartment] = useState<UserDepartment>(currentUser.department);
   const [primaryEntity, setPrimaryEntity] = useState<EntityCode>(currentUser.primaryEntity);
   const [signatureText, setSignatureText] = useState(currentUser.signatureText || '');
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(currentUser.avatarUrl);
+  const [avatarColor, setAvatarColor] = useState<string>(currentUser.avatarColor || '#C8A96A');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Please select an image smaller than 5MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const result = uploadEvent.target?.result as string;
+      setAvatarUrl(result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Password Modify State
   const [currentPassword, setCurrentPassword] = useState('');
@@ -106,6 +127,8 @@ export const ProfileControlModal: React.FC<ProfileControlModalProps> = ({
       department,
       primaryEntity,
       signatureText,
+      avatarUrl,
+      avatarColor,
     };
     onUpdateCurrentUser(updated);
 
@@ -341,10 +364,14 @@ export const ProfileControlModal: React.FC<ProfileControlModalProps> = ({
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#2C5240] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22]">
           <div className="flex items-center gap-4">
             <div 
-              className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-[#C8A96A]/40 text-[#1F3A2E]"
-              style={{ backgroundColor: currentUser.avatarColor || '#C8A96A' }}
+              className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-[#C8A96A]/40 text-[#1F3A2E] overflow-hidden shrink-0"
+              style={{ backgroundColor: avatarColor }}
             >
-              {currentUser.avatarInitials}
+              {avatarUrl ? (
+                <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+              ) : (
+                currentUser.avatarInitials
+              )}
             </div>
 
             <div>
@@ -451,6 +478,101 @@ export const ProfileControlModal: React.FC<ProfileControlModalProps> = ({
                   <span>{profileSuccessMsg}</span>
                 </div>
               )}
+
+              {/* Profile Picture Upload & Customizer */}
+              <div className="p-4 rounded-xl bg-[#0F1E16] border border-[#2C5240] flex flex-col sm:flex-row items-center gap-5">
+                {/* Avatar Preview */}
+                <div className="relative group shrink-0">
+                  <div 
+                    className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center font-bold text-xl shadow-lg ring-2 ring-[#C8A96A]/60"
+                    style={{ backgroundColor: avatarColor }}
+                  >
+                    {avatarUrl ? (
+                      <img 
+                        src={avatarUrl} 
+                        alt={name} 
+                        className="w-full h-full object-cover" 
+                      />
+                    ) : (
+                      <span className="text-[#1F3A2E]">{currentUser.avatarInitials}</span>
+                    )}
+                  </div>
+
+                  {/* Quick Camera Overlay Button */}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute -bottom-1.5 -right-1.5 p-1.5 rounded-xl bg-[#C8A96A] text-[#1F3A2E] hover:bg-white shadow-md transition-all hover:scale-110 cursor-pointer"
+                    title="Upload or Change Profile Photo"
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* Upload Controls & Description */}
+                <div className="flex-1 space-y-2 text-center sm:text-left">
+                  <div>
+                    <h3 className="text-xs font-bold text-white font-heading flex items-center justify-center sm:justify-start gap-1.5">
+                      <span>Official Profile Picture</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C8A96A]/20 text-[#C8A96A] font-mono font-bold">
+                        PNG / JPG / WEBP
+                      </span>
+                    </h3>
+                    <p className="text-[11px] text-[#CFE0D5] mt-0.5">
+                      Upload your portrait to display on the ERP header, live video conference desks, and export documents.
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-center sm:justify-start gap-2 pt-1 flex-wrap">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/png, image/jpeg, image/webp"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#C8A96A] hover:bg-[#d8b878] text-[#1F3A2E] text-xs font-bold transition-all shadow-xs cursor-pointer"
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{avatarUrl ? 'Change Photo' : 'Upload Profile Picture'}</span>
+                    </button>
+
+                    {avatarUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setAvatarUrl(undefined)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-950/60 border border-red-800 text-red-200 hover:bg-red-900 text-xs font-semibold transition-all shadow-xs cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Remove Photo</span>
+                      </button>
+                    )}
+
+                    {/* Badge Color Palette */}
+                    {!avatarUrl && (
+                      <div className="flex items-center gap-1 ml-2">
+                        <span className="text-[10px] text-[#CFE0D5]">Initials Badge:</span>
+                        {['#C8A96A', '#2563EB', '#1E6B3A', '#800020', '#7B1FA2', '#D97706'].map((color) => (
+                          <button
+                            key={color}
+                            type="button"
+                            onClick={() => setAvatarColor(color)}
+                            className={`w-4 h-4 rounded-full border transition-transform ${
+                              avatarColor === color ? 'scale-125 border-white ring-2 ring-white/40' : 'border-transparent hover:scale-110'
+                            }`}
+                            style={{ backgroundColor: color }}
+                            title={`Badge Color ${color}`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

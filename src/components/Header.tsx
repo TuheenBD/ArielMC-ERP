@@ -502,13 +502,21 @@ export const Header: React.FC<HeaderProps> = ({
           title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
         >
           <div 
-            className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shadow-xs shrink-0"
+            className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shadow-xs shrink-0 overflow-hidden"
             style={{
               backgroundColor: currentUser?.avatarColor || '#C8A96A',
               color: '#1F3A2E'
             }}
           >
-            {currentUser?.avatarInitials || 'AMC'}
+            {currentUser?.avatarUrl ? (
+              <img 
+                src={currentUser.avatarUrl} 
+                alt={currentUser.name} 
+                className="w-full h-full object-cover" 
+              />
+            ) : (
+              currentUser?.avatarInitials || 'AMC'
+            )}
           </div>
           <div className="text-left leading-tight hidden sm:block">
             <div className="font-bold text-white text-xs flex items-center gap-1.5">

@@ -51,6 +51,7 @@ export interface UserProfile {
   primaryEntity: EntityCode;
   avatarInitials: string;
   avatarColor: string;
+  avatarUrl?: string;
   signatureText?: string;
   twoFactorEnabled: boolean;
   twoFactorMethod: TwoFactorMethod;

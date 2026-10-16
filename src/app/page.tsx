@@ -328,7 +328,7 @@ export default function Home() {
     <div 
       id="arielmc-erp-root" 
       data-theme={theme} 
-      className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors max-w-full overflow-x-hidden`}
+      className={`flex h-screen w-screen overflow-hidden ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors`}
     >
       {/* Sidebar Navigation */}
       <Sidebar
@@ -339,8 +339,8 @@ export default function Home() {
       />
 
       {/* Main Content Pane */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#FAF9F5] overflow-x-hidden">
-        {/* Global Header */}
+      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[#FAF9F5]">
+        {/* Global Header (Permanently pinned at top) */}
         <Header
           companies={companies}
           activeEntity={activeEntity}
@@ -363,8 +363,8 @@ export default function Home() {
           onOpenUserGuide={() => setIsUserGuideModalOpen(true)}
         />
 
-        {/* Dashboard Workspace */}
-        <main className="flex-1 p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
+        {/* Dashboard Workspace (Independent Smooth Scroll) */}
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
           {/* Top Key KPI Strip */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">

@@ -28,7 +28,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className="min-h-full flex flex-col bg-[#FAF9F5] text-[#1A1A1A] antialiased selection:bg-[#C9A86A] selection:text-[#1F3A2E]"
+        className="h-full overflow-hidden flex flex-col bg-[#FAF9F5] text-[#1A1A1A] antialiased selection:bg-[#C9A86A] selection:text-[#1F3A2E]"
       >
         {children}
       </body>
