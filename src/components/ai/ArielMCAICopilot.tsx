@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import {
   Sparkles,
   Bot,
@@ -471,8 +472,14 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
           title="Open ArielMC AI Assistant"
         >
           <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#C8A96A] to-amber-200 text-[#1F3A2E] flex items-center justify-center font-bold text-sm shadow-md">
-              <Bot className="w-6 h-6 text-[#1F3A2E]" />
+            <div className="w-10 h-10 rounded-xl bg-white p-1 text-[#1F3A2E] flex items-center justify-center font-bold text-sm shadow-md border border-[#C8A96A]">
+              <Image
+                src="/images/ArielMC_Emblem_Square.png"
+                alt="ArielMC AI Copilot"
+                width={32}
+                height={32}
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#1F3A2E] animate-pulse" />
           </div>
@@ -512,8 +519,14 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
           >
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#C8A96A] to-amber-200 text-[#1F3A2E] flex items-center justify-center font-bold shadow-md">
-                  <Bot className="w-5 h-5 text-[#1F3A2E]" />
+                <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-md border border-[#C8A96A]">
+                  <Image
+                    src="/images/ArielMC_Emblem_Square.png"
+                    alt="ArielMC AI Copilot"
+                    width={32}
+                    height={32}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#1F3A2E]" />
               </div>
@@ -599,8 +612,14 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                   className={`flex gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   {!isUser && (
-                    <div className="w-7 h-7 rounded-lg bg-[#1F3A2E] text-[#C8A96A] flex items-center justify-center shrink-0 mt-0.5 shadow-xs font-bold text-[10px]">
-                      AMC
+                    <div className="w-7 h-7 rounded-lg bg-white p-0.5 border border-[#C8A96A] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                      <Image
+                        src="/images/ArielMC_Emblem_Square.png"
+                        alt="ArielMC AI"
+                        width={22}
+                        height={22}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                   )}
 

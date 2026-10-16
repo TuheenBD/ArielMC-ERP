@@ -396,8 +396,8 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                       <div className="flex items-center gap-3">
                         <div className="relative w-14 h-14 shrink-0">
                           <Image
-                            src="/images/ArielMC_Logo.png"
-                            alt="ArielMC Logo"
+                            src="/images/ArielMC_Emblem_Square.png"
+                            alt="ArielMC Logo Emblem"
                             fill
                             className="object-contain"
                             priority

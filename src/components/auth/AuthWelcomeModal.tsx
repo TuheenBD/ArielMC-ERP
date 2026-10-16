@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { 
   Lock, 
   Mail, 
@@ -258,8 +259,15 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
             </button>
           )}
 
-          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center text-base font-bold shadow-lg ring-4 ring-[#C8A96A]/20">
-            AMC
+          <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-white p-2 flex items-center justify-center shadow-xl ring-4 ring-[#C8A96A]/30 border border-[#C8A96A]">
+            <Image
+              src="/images/ArielMC_Emblem_Square.png"
+              alt="ArielMC Official Logo"
+              width={56}
+              height={56}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
 
           <h2 className="text-xl font-bold text-white font-heading tracking-wide">

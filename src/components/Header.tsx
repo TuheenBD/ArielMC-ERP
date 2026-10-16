@@ -113,8 +113,29 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className={`sticky top-0 z-30 ${headerBg} px-6 py-3 transition-colors shadow-md`}>
       <div className="flex items-center justify-between gap-4">
-        {/* Left: Search Bar & Global Scope */}
-        <div className="flex items-center gap-4 flex-1 max-w-xl">
+        {/* Left: ArielMC Brand Pill & Global Search */}
+        <div className="flex items-center gap-3 flex-1 max-w-2xl">
+          <div
+            onClick={() => onSelectTab && onSelectTab('STATIONS')}
+            className="flex items-center gap-2 cursor-pointer shrink-0 bg-white/95 hover:bg-white rounded-lg px-2.5 py-1.5 shadow-xs border border-[#C8A96A]/60 transition-all hover:border-[#C8A96A] group"
+            title="ArielMC Global Sourcing & Supply Chain ERP"
+          >
+            <div className="w-5 h-5 shrink-0 flex items-center justify-center">
+              <Image
+                src="/images/ArielMC_Emblem_Square.png"
+                alt="ArielMC Logo"
+                width={20}
+                height={20}
+                className="w-full h-full object-contain group-hover:scale-105 transition-transform"
+                priority
+              />
+            </div>
+            <div className="hidden sm:flex items-center gap-1 leading-none">
+              <span className="font-heading font-black text-[#003177] text-xs tracking-tight">ArielMC</span>
+              <span className="text-[8px] px-1 py-0.2 rounded bg-[#1F3A2E] text-[#C8A96A] font-mono font-bold">ERP</span>
+            </div>
+          </div>
+
           <div className="relative w-full">
             <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${isRoyal ? 'text-[#94A3B8]' : 'text-[#A0B9A8]'}`} />
             <input

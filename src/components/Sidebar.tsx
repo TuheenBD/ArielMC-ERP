@@ -211,28 +211,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className={`w-72 ${containerBg} flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl transition-colors`}>
       {/* Top Branding */}
       <div>
-        <div className={`p-4 ${headerBg}`}>
-          <div className="flex items-center gap-3">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-white border border-[#C8A96A] p-1 flex items-center justify-center shadow-md">
-              <Image
-                src="/images/ArielMC_Logo.png"
-                alt="ArielMC Logo"
-                width={36}
-                height={36}
-                className="object-contain w-auto h-auto"
-                priority
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className={`font-heading font-bold ${brandText} text-base tracking-wide`}>ArielMC</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono font-bold">
-                  ERP
-                </span>
+        <div className={`p-3.5 ${headerBg}`}>
+          {/* Executive Official ArielMC Logo Card */}
+          <div
+            onClick={() => onSelectTab('STATIONS')}
+            className="group cursor-pointer bg-white/95 hover:bg-white rounded-xl p-2.5 shadow-md border border-[#C8A96A]/60 flex items-center justify-between gap-2.5 transition-all hover:shadow-lg hover:border-[#C8A96A]"
+            title="ArielMC Global Sourcing & Supply Chain ERP"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center p-0.5 bg-slate-50 border border-slate-100/80 shadow-xs">
+                <Image
+                  src="/images/ArielMC_Emblem_Square.png"
+                  alt="ArielMC Logo Emblem"
+                  width={40}
+                  height={40}
+                  className="object-contain w-full h-full group-hover:scale-105 transition-transform"
+                  priority
+                />
               </div>
-              <p className={`text-[10px] ${brandSubtext} font-medium tracking-tight truncate max-w-[170px]`}>
-                Ariel Marketing &amp; Communications Ltd
-              </p>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-heading font-black text-[#003177] text-base tracking-tight leading-none group-hover:text-[#0A2540] transition-colors">
+                    ArielMC
+                  </span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#1F3A2E] text-[#C8A96A] font-mono font-bold tracking-wider shrink-0">
+                    ERP
+                  </span>
+                </div>
+                <p className="text-[8.5px] font-bold text-[#E89A1B] uppercase tracking-tighter truncate mt-1 leading-tight">
+                  Ariel Marketing &amp; Communications Ltd
+                </p>
+              </div>
             </div>
           </div>
 

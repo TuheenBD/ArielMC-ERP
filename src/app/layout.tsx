@@ -5,7 +5,8 @@ export const metadata: Metadata = {
   title: "ArielMC Enterprise ERP | Global Sourcing & Supply Chain",
   description: "Enterprise ERP for Ariel Marketing & Communications Limited (ArielMC) - B2B Export & D2C Brand Management",
   icons: {
-    icon: "/images/ArielMC_Logo.png",
+    icon: "/images/ArielMC_Emblem_Square.png",
+    apple: "/images/ArielMC_Emblem_Square.png",
   },
 };
 

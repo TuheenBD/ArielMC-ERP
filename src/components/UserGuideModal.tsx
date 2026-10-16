@@ -427,13 +427,13 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
         {/* Modal Header */}
         <div className={`px-6 py-4 flex items-center justify-between ${modalHeaderBg}`}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white border border-[#C8A96A] p-1 flex items-center justify-center shadow-md">
+            <div className="w-11 h-11 rounded-xl bg-white border border-[#C8A96A] p-1 flex items-center justify-center shadow-md">
               <Image
-                src="/images/ArielMC_Logo.png"
-                alt="ArielMC Logo"
-                width={36}
-                height={36}
-                className="object-contain"
+                src="/images/ArielMC_Emblem_Square.png"
+                alt="ArielMC Logo Emblem"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
               />
             </div>
             <div>
