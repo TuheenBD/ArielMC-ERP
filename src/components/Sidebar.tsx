@@ -241,11 +241,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center gap-2">
               <span className="text-base">{activeEntity.flag}</span>
               <div>
-                <span className={`font-medium ${entityTitle} block text-[11px] leading-tight`}>
-                  {activeEntity.city} Station
+                <span className={`font-bold ${entityTitle} block text-[11px] leading-tight font-heading`}>
+                  {activeEntity.code.replace('ARIEL_', 'ArielMC ')}
                 </span>
                 <span className={`text-[9px] ${entitySub}`}>
-                  {activeEntity.legalStatus.split(' ')[0]}
+                  {activeEntity.city} Station
                 </span>
               </div>
             </div>

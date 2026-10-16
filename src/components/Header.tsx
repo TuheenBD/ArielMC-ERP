@@ -35,6 +35,23 @@ interface HeaderProps {
   onSelectTab?: (tab: ActiveTab) => void;
 }
 
+const getStationBrandName = (code: EntityCode) => {
+  switch (code) {
+    case 'ARIEL_BD':
+      return 'ArielMC BD';
+    case 'ARIEL_UK':
+      return 'ArielMC UK';
+    case 'ARIEL_US':
+      return 'ArielMC US';
+    case 'ARIEL_EU':
+      return 'ArielMC EU';
+    case 'ARIEL_AU':
+      return 'ArielMC AU';
+    default:
+      return 'ArielMC';
+  }
+};
+
 export const Header: React.FC<HeaderProps> = ({
   companies,
   activeEntity,
@@ -215,7 +232,9 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-base leading-none">{activeEntity.flag}</span>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
-                  <span className={`font-heading font-semibold tracking-wide ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>{activeEntity.legalName.split(' ')[0]} {activeEntity.countryCode}</span>
+                  <span className={`font-heading font-bold tracking-wide ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>
+                    {getStationBrandName(activeEntity.code)}
+                  </span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono font-bold">
                     {activeEntity.baseCurrency}
                   </span>
@@ -247,7 +266,10 @@ export const Header: React.FC<HeaderProps> = ({
                       <div className="flex items-center gap-2.5">
                         <span className="text-lg">{comp.flag}</span>
                         <div>
-                          <div className="font-medium text-[#1A1A1A]">{comp.legalName}</div>
+                          <div className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
+                            <span>{getStationBrandName(comp.code)}</span>
+                            <span className="text-[10px] text-gray-500 font-normal">({comp.city})</span>
+                          </div>
                           <div className="text-[10px] text-[#6B7269]">{comp.taxIdentifier.type}: {comp.taxIdentifier.number}</div>
                         </div>
                       </div>
