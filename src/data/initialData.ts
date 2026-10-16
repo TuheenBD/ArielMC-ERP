@@ -3,7 +3,55 @@ import { CompanyEntity, CurrencyRate, ProductItem, CorporateCommunication } from
 export const OFFICIAL_COMMUNICATION_CHANNELS: CorporateCommunication = {
   mobileBd: '+8801819273458',
   whatsappIntl: '+8801819273458',
-  emails: ['info@arielmc.com', 'tuheen@arielmc.com', 'ArielMC.BD@gmail.com'],
+  emails: ['info@arielmc.com', 'tuheen@arielmc.com', 'TuheenBD@gmail.com', 'ArielMC.BD@gmail.com'],
+  emailSystems: {
+    hostinger: {
+      provider: 'Hostinger Business Mail',
+      webmailUrl: 'https://mail.hostinger.com',
+      accounts: {
+        general: 'info@arielmc.com',
+        executive: 'tuheen@arielmc.com',
+      },
+      serverSettings: {
+        imap: 'imap.hostinger.com:993 (SSL)',
+        smtp: 'smtp.hostinger.com:465 (SSL)',
+        pop: 'pop.hostinger.com:995 (SSL)',
+      },
+    },
+    gmail: {
+      provider: 'Google Workspace / Gmail',
+      webmailUrl: 'https://mail.google.com',
+      accounts: {
+        primary: 'TuheenBD@gmail.com',
+        backup: 'ArielMC.BD@gmail.com',
+      },
+    },
+  },
+  meetings: {
+    zoom: {
+      platform: 'Zoom',
+      account: 'TuheenBD@gmail.com',
+      launchUrl: 'https://zoom.us/join',
+      directMeetingUrl: 'https://zoom.us/start/videomeeting',
+    },
+    googleMeet: {
+      platform: 'Google Meet',
+      account: 'TuheenBD@gmail.com',
+      launchUrl: 'https://meet.google.com/new',
+    },
+    microsoftTeams: {
+      platform: 'Microsoft Teams',
+      account: 'TuheenBD@msn.com',
+      chatUrl: 'https://teams.microsoft.com/l/chat/0/0?users=TuheenBD@msn.com',
+      launchUrl: 'https://teams.microsoft.com',
+    },
+    whatsapp: {
+      platform: 'WhatsApp',
+      phone: '+8801819273458',
+      chatUrl: 'https://wa.me/8801819273458?text=Hello%20ArielMC%20Team%2C%20inquiry%20via%20ArielMC%20ERP',
+      webUrl: 'https://web.whatsapp.com',
+    },
+  },
   socialLinks: {
     linkedin: {
       corporate: 'https://www.linkedin.com/company/arielmc/?viewAsMember=true',

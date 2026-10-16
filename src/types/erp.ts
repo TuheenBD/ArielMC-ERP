@@ -32,6 +32,54 @@ export interface CorporateCommunication {
   mobileBd: string;
   whatsappIntl: string;
   emails: string[];
+  emailSystems: {
+    hostinger: {
+      provider: string;
+      webmailUrl: string;
+      accounts: {
+        general: string;
+        executive: string;
+      };
+      serverSettings: {
+        imap: string;
+        smtp: string;
+        pop: string;
+      };
+    };
+    gmail: {
+      provider: string;
+      webmailUrl: string;
+      accounts: {
+        primary: string;
+        backup: string;
+      };
+    };
+  };
+  meetings: {
+    zoom: {
+      platform: 'Zoom';
+      account: string;
+      launchUrl: string;
+      directMeetingUrl: string;
+    };
+    googleMeet: {
+      platform: 'Google Meet';
+      account: string;
+      launchUrl: string;
+    };
+    microsoftTeams: {
+      platform: 'Microsoft Teams';
+      account: string;
+      chatUrl: string;
+      launchUrl: string;
+    };
+    whatsapp: {
+      platform: 'WhatsApp';
+      phone: string;
+      chatUrl: string;
+      webUrl: string;
+    };
+  };
   socialLinks: {
     linkedin: {
       corporate: string;

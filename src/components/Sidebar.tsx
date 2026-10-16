@@ -22,9 +22,20 @@ import {
   Phone,
   MessageSquare,
   Mail,
-  Share2
+  Share2,
+  Video
 } from 'lucide-react';
-import { LinkedinIcon as Linkedin, YoutubeIcon as Youtube, FacebookIcon as Facebook, WhatsappIcon } from '@/components/SocialIcons';
+import {
+  LinkedinIcon as Linkedin,
+  YoutubeIcon as Youtube,
+  FacebookIcon as Facebook,
+  WhatsappIcon,
+  ZoomIcon,
+  GoogleMeetIcon,
+  TeamsIcon,
+  GmailIcon,
+  HostingerIcon
+} from '@/components/SocialIcons';
 
 export type ActiveTab = 
   | 'STATIONS' 
@@ -36,7 +47,8 @@ export type ActiveTab =
   | 'LOGISTICS' 
   | 'INVENTORY' 
   | 'FINANCE' 
-  | 'POS';
+  | 'POS'
+  | 'COMMUNICATIONS';
 
 export type ThemeProfile = 'crm-green' | 'light-clean' | 'heritage-tan';
 
@@ -104,6 +116,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       group: 'Commercial & Global Trade',
       items: [
+        {
+          id: 'COMMUNICATIONS' as ActiveTab,
+          label: 'Communications & Meetings',
+          icon: Video,
+          badge: 'Live Desks',
+          phase: 'Direct Hub',
+        },
         {
           id: 'CRM' as ActiveTab,
           label: 'Global CRM & B2B Leads',
@@ -247,7 +266,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
-                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS';
+                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS' || item.id === 'LOGISTICS' || item.id === 'FINANCE' || item.id === 'COMMUNICATIONS';
                   
                   // Active / Inactive Button Styling
                   let buttonClass = '';
@@ -303,18 +322,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Supplier & Buyer Communications Card & Footer */}
       <div>
         {/* Quick Channels Card */}
-        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2 ${isLight ? 'bg-[#F8F6F2] border-[#DDE3DD]' : 'bg-[#172D24] border-[#2C5240]'}`}>
+        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 ${isLight ? 'bg-[#F8F6F2] border-[#DDE3DD]' : 'bg-[#172D24] border-[#2C5240]'}`}>
           <div className="flex items-center justify-between">
             <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}>
               <Phone className="w-3 h-3 text-[#C8A96A]" />
               <span>Trade Channels</span>
             </span>
-            <button
-              onClick={() => setIsChannelsModalOpen(true)}
-              className={`text-[10px] font-semibold underline hover:brightness-110 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}
-            >
-              Directory
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => onSelectTab('COMMUNICATIONS')}
+                className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all font-mono ${
+                  activeTab === 'COMMUNICATIONS'
+                    ? 'bg-[#C8A96A] text-[#1F3A2E]'
+                    : isLight
+                    ? 'bg-[#1F3A2E] text-white hover:bg-[#15271F]'
+                    : 'bg-[#C8A96A]/20 text-[#C8A96A] hover:bg-[#C8A96A]/30 border border-[#C8A96A]/40'
+                }`}
+                title="Open Live Communications Hub"
+              >
+                Hub
+              </button>
+              <button
+                onClick={() => setIsChannelsModalOpen(true)}
+                className={`text-[10px] font-semibold underline hover:brightness-110 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}
+                title="View Full Directory"
+              >
+                Directory
+              </button>
+            </div>
           </div>
 
           <div className="flex items-center justify-between text-[11px] font-mono">
@@ -325,10 +360,60 @@ export const Sidebar: React.FC<SidebarProps> = ({
               href="https://wa.me/8801819273458?text=Hello%20ArielMC%20Team%2C%20inquiry%20via%20ArielMC%20ERP"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1 rounded bg-emerald-600/20 text-emerald-500 hover:bg-emerald-600 hover:text-white transition-colors"
+              className="px-1.5 py-0.5 rounded bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white transition-colors flex items-center gap-1 text-[10px] font-mono font-bold"
               title="Chat on WhatsApp"
             >
-              <MessageSquare className="w-3 h-3" />
+              <WhatsappIcon className="w-3 h-3" />
+              <span>WA</span>
+            </a>
+          </div>
+
+          {/* Virtual Meetings Quick Launcher Bar (Zoom, Meet, Teams, Hostinger, Gmail) */}
+          <div className={`pt-1.5 border-t flex items-center justify-between ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
+            <a
+              href="https://zoom.us/join"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1 rounded bg-[#2D8CFF]/15 text-[#2D8CFF] hover:bg-[#2D8CFF] hover:text-white transition-colors"
+              title="Zoom (TuheenBD@gmail.com)"
+            >
+              <ZoomIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://meet.google.com/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1 rounded bg-[#00897B]/15 text-[#00897B] hover:bg-[#00897B] hover:text-white transition-colors"
+              title="Google Meet (TuheenBD@gmail.com)"
+            >
+              <GoogleMeetIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://teams.microsoft.com/l/chat/0/0?users=TuheenBD@msn.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1 rounded bg-[#5059C9]/15 text-[#5059C9] hover:bg-[#5059C9] hover:text-white transition-colors"
+              title="Microsoft Teams (TuheenBD@msn.com)"
+            >
+              <TeamsIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://mail.hostinger.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1 rounded bg-[#673AB7]/15 text-[#673AB7] hover:bg-[#673AB7] hover:text-white transition-colors"
+              title="Hostinger Business Mail (info@arielmc.com)"
+            >
+              <HostingerIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://mail.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1 rounded bg-[#EA4335]/15 text-[#EA4335] hover:bg-[#EA4335] hover:text-white transition-colors"
+              title="Gmail / Google Workspace (TuheenBD@gmail.com)"
+            >
+              <GmailIcon className="w-3.5 h-3.5" />
             </a>
           </div>
 

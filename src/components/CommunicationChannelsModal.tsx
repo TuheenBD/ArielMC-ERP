@@ -13,9 +13,21 @@ import {
   Globe2,
   ShieldCheck,
   Share2,
-  Smartphone
+  Smartphone,
+  Video,
+  Users
 } from 'lucide-react';
-import { LinkedinIcon as Linkedin, YoutubeIcon as Youtube, FacebookIcon as Facebook, WhatsappIcon } from '@/components/SocialIcons';
+import {
+  LinkedinIcon as Linkedin,
+  YoutubeIcon as Youtube,
+  FacebookIcon as Facebook,
+  WhatsappIcon,
+  ZoomIcon,
+  GoogleMeetIcon,
+  TeamsIcon,
+  GmailIcon,
+  HostingerIcon
+} from '@/components/SocialIcons';
 import { OFFICIAL_COMMUNICATION_CHANNELS } from '@/data/initialData';
 
 interface CommunicationChannelsModalProps {
@@ -43,20 +55,26 @@ export const CommunicationChannelsModal: React.FC<CommunicationChannelsModalProp
     const allText = `Ariel Marketing & Communications Limited
 Official Communication Channels for Suppliers & Buyers:
 
-1. Mobile (Bangladesh): +8801819273458
-2. WhatsApp (International Desk): +8801819273458
-3. E-Mails:
-   - General & Commercial: info@arielmc.com
-   - Managing Director: tuheen@arielmc.com
-   - Operations Backup: ArielMC.BD@gmail.com
+1. Telephony & WhatsApp Desk:
+   - Mobile (Bangladesh): +8801819273458
+   - WhatsApp (International Desk): +8801819273458
 
-Official Social Media & Channels:
-- LinkedIn (Corporate): https://www.linkedin.com/company/arielmc/?viewAsMember=true
-- LinkedIn (ArielMC.shop): https://www.linkedin.com/showcase/arielmc-shop/?viewAsMember=true
-- YouTube (ArielMC-BD): https://www.youtube.com/@ArielMC-BD
-- YouTube (ArielMC.shop): https://www.youtube.com/@ArielMCShop
-- Facebook (ArielMC): https://www.facebook.com/profile.php?id=61593617982910
-- Facebook (ArielMC.shop): https://www.facebook.com/profile.php?id=61594583437920
+2. Instant Virtual Meeting Desks:
+   - Zoom: TuheenBD@gmail.com
+   - Google Meet: TuheenBD@gmail.com
+   - Microsoft Teams: TuheenBD@msn.com
+
+3. Dual Corporate Email Systems:
+   - Hostinger Business Mail: info@arielmc.com / tuheen@arielmc.com (Webmail: https://mail.hostinger.com)
+   - Google Workspace / Gmail: TuheenBD@gmail.com / ArielMC.BD@gmail.com (Webmail: https://mail.google.com)
+
+4. Official Social Media & Portals:
+   - LinkedIn (Corporate): https://www.linkedin.com/company/arielmc/?viewAsMember=true
+   - LinkedIn (ArielMC.shop): https://www.linkedin.com/showcase/arielmc-shop/?viewAsMember=true
+   - YouTube (ArielMC-BD): https://www.youtube.com/@ArielMC-BD
+   - YouTube (ArielMC.shop): https://www.youtube.com/@ArielMCShop
+   - Facebook (ArielMC): https://www.facebook.com/profile.php?id=61593617982910
+   - Facebook (ArielMC.shop): https://www.facebook.com/profile.php?id=61594583437920
 
 HQ: House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan, Dhaka-1212, Bangladesh
 Tel: +880 2410 811 91`;
@@ -190,95 +208,367 @@ Tel: +880 2410 811 91`;
             </div>
           </div>
 
-          {/* Section 2: Official Corporate E-Mails */}
+          {/* Section 2: Instant Virtual Meeting Desks (Zoom, Google Meet, Teams, WhatsApp) */}
           <div>
-            <h3 className="text-xs font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-3 flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#8A6D3B]" />
-              <span>Official Corporate E-Mail Addresses</span>
-            </h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+                <Video className="w-4 h-4 text-[#8A6D3B]" />
+                <span>Instant Virtual Meeting Desks &amp; Video Conferencing</span>
+              </h3>
+              <span className="text-[10px] font-mono text-[#6B7269]">
+                Live Buyer &amp; Supplier Rooms
+              </span>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {/* Email 1: info@arielmc.com */}
-              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Zoom */}
+              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between space-y-3 hover:border-[#2D8CFF]/50 transition-all">
                 <div>
-                  <span className="text-[10px] font-mono text-[#6B7269] block font-semibold uppercase">
-                    General Inquiries &amp; Intake
-                  </span>
-                  <div className="font-mono text-xs font-bold text-[#1F3A2E] mt-1 break-all">
-                    info@arielmc.com
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-[#E8F3FF] text-[#2D8CFF]">
+                        <ZoomIcon className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold font-['Montserrat'] text-[#1A1A1A]">Zoom</span>
+                    </div>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-1">Primary RFQ &amp; supplier submission</p>
+                  <div className="mt-2">
+                    <span className="text-[9px] font-mono text-[#6B7269] uppercase font-semibold block">Official Host Account</span>
+                    <div className="font-mono text-xs font-bold text-[#1F3A2E] truncate mt-0.5" title="TuheenBD@gmail.com">
+                      TuheenBD@gmail.com
+                    </div>
+                  </div>
                 </div>
-                <div className="pt-2 mt-2 border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+
+                <div className="pt-2 border-t border-[#DDE3DD] flex items-center gap-1.5">
                   <a
-                    href="mailto:info@arielmc.com?subject=Inquiry%20from%20ArielMC%20ERP"
-                    className="text-[#1F3A2E] font-semibold hover:underline flex items-center gap-1 text-[11px]"
+                    href="https://zoom.us/join"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-[#2D8CFF] hover:bg-[#1f73db] text-white text-[11px] font-semibold text-center transition-colors shadow-sm"
                   >
-                    Compose <ExternalLink className="w-2.5 h-2.5" />
+                    Join / Launch
                   </a>
                   <button
-                    onClick={() => handleCopy('info@arielmc.com', 'email1')}
-                    className="p-1 rounded hover:bg-[#F4F6F4] text-gray-500"
-                    title="Copy email"
+                    onClick={() => handleCopy('TuheenBD@gmail.com', 'zoom')}
+                    className="p-1.5 rounded-lg border border-[#DDE3DD] hover:bg-[#F4F6F4] text-[#6B7269] hover:text-[#1F3A2E] transition-colors"
+                    title="Copy Zoom account"
                   >
-                    {copiedKey === 'email1' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'zoom' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 </div>
               </div>
 
-              {/* Email 2: tuheen@arielmc.com */}
-              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between">
+              {/* Google Meet */}
+              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between space-y-3 hover:border-[#00897B]/50 transition-all">
                 <div>
-                  <span className="text-[10px] font-mono text-[#8A6D3B] block font-semibold uppercase">
-                    Managing Director Desk
-                  </span>
-                  <div className="font-mono text-xs font-bold text-[#1F3A2E] mt-1 break-all">
-                    tuheen@arielmc.com
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-[#E0F2F1] text-[#00897B]">
+                        <GoogleMeetIcon className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold font-['Montserrat'] text-[#1A1A1A]">Google Meet</span>
+                    </div>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-1">Syed Akramul Hassan (Executive)</p>
+                  <div className="mt-2">
+                    <span className="text-[9px] font-mono text-[#6B7269] uppercase font-semibold block">Workspace Account</span>
+                    <div className="font-mono text-xs font-bold text-[#1F3A2E] truncate mt-0.5" title="TuheenBD@gmail.com">
+                      TuheenBD@gmail.com
+                    </div>
+                  </div>
                 </div>
-                <div className="pt-2 mt-2 border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+
+                <div className="pt-2 border-t border-[#DDE3DD] flex items-center gap-1.5">
                   <a
-                    href="mailto:tuheen@arielmc.com?subject=Strategic%20Inquiry%20-%20ArielMC"
-                    className="text-[#1F3A2E] font-semibold hover:underline flex items-center gap-1 text-[11px]"
+                    href="https://meet.google.com/new"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-[#00897B] hover:bg-[#00796B] text-white text-[11px] font-semibold text-center transition-colors shadow-sm"
                   >
-                    Compose <ExternalLink className="w-2.5 h-2.5" />
+                    New Meet Room
                   </a>
                   <button
-                    onClick={() => handleCopy('tuheen@arielmc.com', 'email2')}
-                    className="p-1 rounded hover:bg-[#F4F6F4] text-gray-500"
-                    title="Copy email"
+                    onClick={() => handleCopy('TuheenBD@gmail.com', 'meet')}
+                    className="p-1.5 rounded-lg border border-[#DDE3DD] hover:bg-[#F4F6F4] text-[#6B7269] hover:text-[#1F3A2E] transition-colors"
+                    title="Copy Meet account"
                   >
-                    {copiedKey === 'email2' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'meet' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
                 </div>
               </div>
 
-              {/* Email 3: ArielMC.BD@gmail.com */}
-              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between">
+              {/* Microsoft Teams */}
+              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between space-y-3 hover:border-[#5059C9]/50 transition-all">
                 <div>
-                  <span className="text-[10px] font-mono text-[#6B7269] block font-semibold uppercase">
-                    Operational Backup
-                  </span>
-                  <div className="font-mono text-xs font-bold text-[#1F3A2E] mt-1 break-all">
-                    ArielMC.BD@gmail.com
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-[#EDE7F6] text-[#5059C9]">
+                        <TeamsIcon className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold font-['Montserrat'] text-[#1A1A1A]">MS Teams</span>
+                    </div>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-1">Google Workspace &amp; Cloud Backup</p>
+                  <div className="mt-2">
+                    <span className="text-[9px] font-mono text-[#6B7269] uppercase font-semibold block">Teams Account</span>
+                    <div className="font-mono text-xs font-bold text-[#1F3A2E] truncate mt-0.5" title="TuheenBD@msn.com">
+                      TuheenBD@msn.com
+                    </div>
+                  </div>
                 </div>
-                <div className="pt-2 mt-2 border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+
+                <div className="pt-2 border-t border-[#DDE3DD] flex items-center gap-1.5">
                   <a
-                    href="mailto:ArielMC.BD@gmail.com?subject=Support%20Request%20-%20ArielMC"
-                    className="text-[#1F3A2E] font-semibold hover:underline flex items-center gap-1 text-[11px]"
+                    href="https://teams.microsoft.com/l/chat/0/0?users=TuheenBD@msn.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-[#5059C9] hover:bg-[#434aa8] text-white text-[11px] font-semibold text-center transition-colors shadow-sm"
                   >
-                    Compose <ExternalLink className="w-2.5 h-2.5" />
+                    Direct Chat / Call
                   </a>
                   <button
-                    onClick={() => handleCopy('ArielMC.BD@gmail.com', 'email3')}
-                    className="p-1 rounded hover:bg-[#F4F6F4] text-gray-500"
-                    title="Copy email"
+                    onClick={() => handleCopy('TuheenBD@msn.com', 'teams')}
+                    className="p-1.5 rounded-lg border border-[#DDE3DD] hover:bg-[#F4F6F4] text-[#6B7269] hover:text-[#1F3A2E] transition-colors"
+                    title="Copy Teams account"
                   >
-                    {copiedKey === 'email3' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'teams' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                   </button>
+                </div>
+              </div>
+
+              {/* WhatsApp Desk */}
+              <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col justify-between space-y-3 hover:border-emerald-500/50 transition-all">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-lg bg-[#E8F8F0] text-emerald-600">
+                        <WhatsappIcon className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold font-['Montserrat'] text-[#1A1A1A]">WhatsApp Desk</span>
+                    </div>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-[9px] font-mono text-[#6B7269] uppercase font-semibold block">International Line</span>
+                    <div className="font-mono text-xs font-bold text-[#1F3A2E] truncate mt-0.5">
+                      +8801819273458
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-[#DDE3DD] flex items-center gap-1.5">
+                  <a
+                    href="https://wa.me/8801819273458?text=Hello%20ArielMC%20Team%2C%20inquiry%20via%20ArielMC%20ERP"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold text-center transition-colors shadow-sm"
+                  >
+                    Chat / Video
+                  </a>
+                  <button
+                    onClick={() => handleCopy('+8801819273458', 'wa-desk')}
+                    className="p-1.5 rounded-lg border border-[#DDE3DD] hover:bg-[#F4F6F4] text-[#6B7269] hover:text-[#1F3A2E] transition-colors"
+                    title="Copy WhatsApp Number"
+                  >
+                    {copiedKey === 'wa-desk' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: Dual Corporate Email Systems (Hostinger & Google Workspace) */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#8A6D3B]" />
+                <span>Dual Corporate Email Systems (Hostinger &amp; Gmail)</span>
+              </h3>
+              <div className="flex items-center gap-2 text-[10px] font-mono text-[#6B7269]">
+                <a
+                  href="https://mail.hostinger.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#673AB7] font-semibold hover:underline flex items-center gap-1"
+                >
+                  <HostingerIcon className="w-3 h-3" />
+                  Hostinger Webmail
+                </a>
+                <span>•</span>
+                <a
+                  href="https://mail.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#EA4335] font-semibold hover:underline flex items-center gap-1"
+                >
+                  <GmailIcon className="w-3 h-3" />
+                  Gmail Workspace
+                </a>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Box 1: Hostinger Business Mail System */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-[#EDE7F6] text-[#673AB7]">
+                      <HostingerIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs font-['Montserrat'] text-[#1A1A1A]">
+                        Hostinger Business Mail
+                      </h4>
+                      <span className="text-[10px] text-gray-500 font-mono">Domain: @arielmc.com</span>
+                    </div>
+                  </div>
+                  <a
+                    href="https://mail.hostinger.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 rounded-lg bg-[#673AB7]/10 hover:bg-[#673AB7]/20 text-[#673AB7] text-[10px] font-mono font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <span>Launch Webmail</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  {/* General */}
+                  <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[9px] font-mono text-[#6B7269] uppercase font-semibold block">Commercial &amp; General Inquiries</span>
+                      <span className="font-mono text-xs font-bold text-[#1F3A2E]">info@arielmc.com</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <a
+                        href="mailto:info@arielmc.com?subject=Commercial%20Inquiry%20via%20ArielMC%20ERP"
+                        className="p-1 text-[#1F3A2E] hover:underline text-[10px] font-semibold"
+                      >
+                        Compose
+                      </a>
+                      <button
+                        onClick={() => handleCopy('info@arielmc.com', 'info')}
+                        className="p-1 rounded hover:bg-white text-gray-500"
+                        title="Copy"
+                      >
+                        {copiedKey === 'info' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Executive */}
+                  <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[9px] font-mono text-[#8A6D3B] uppercase font-semibold block">Managing Director Desk</span>
+                      <span className="font-mono text-xs font-bold text-[#1F3A2E]">tuheen@arielmc.com</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <a
+                        href="mailto:tuheen@arielmc.com?subject=Strategic%20Inquiry%20via%20ArielMC%20ERP"
+                        className="p-1 text-[#1F3A2E] hover:underline text-[10px] font-semibold"
+                      >
+                        Compose
+                      </a>
+                      <button
+                        onClick={() => handleCopy('tuheen@arielmc.com', 'tuheen')}
+                        className="p-1 rounded hover:bg-white text-gray-500"
+                        title="Copy"
+                      >
+                        {copiedKey === 'tuheen' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-[10px] font-mono text-[#6B7269] pt-1 border-t border-[#DDE3DD] flex items-center justify-between">
+                  <span>IMAP: imap.hostinger.com:993</span>
+                  <span>SMTP: smtp.hostinger.com:465</span>
+                </div>
+              </div>
+
+              {/* Box 2: Google Workspace / Gmail System */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-[#FDEAEA] text-[#EA4335]">
+                      <GmailIcon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xs font-['Montserrat'] text-[#1A1A1A]">
+                        Google Workspace / Gmail
+                      </h4>
+                      <span className="text-[10px] text-gray-500 font-mono">Google Cloud Ecosystem</span>
+                    </div>
+                  </div>
+                  <a
+                    href="https://mail.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1 rounded-lg bg-[#EA4335]/10 hover:bg-[#EA4335]/20 text-[#EA4335] text-[10px] font-mono font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <span>Launch Gmail</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  {/* Primary Workspace */}
+                  <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[9px] font-mono text-[#EA4335] uppercase font-semibold block">Primary Executive Workspace</span>
+                      <span className="font-mono text-xs font-bold text-[#1F3A2E]">TuheenBD@gmail.com</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <a
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=TuheenBD@gmail.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1 text-[#EA4335] hover:underline text-[10px] font-semibold"
+                      >
+                        Web Compose
+                      </a>
+                      <button
+                        onClick={() => handleCopy('TuheenBD@gmail.com', 'tuheen-gmail')}
+                        className="p-1 rounded hover:bg-white text-gray-500"
+                        title="Copy"
+                      >
+                        {copiedKey === 'tuheen-gmail' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Operational Backup */}
+                  <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD] flex items-center justify-between">
+                    <div>
+                      <span className="text-[9px] font-mono text-[#6B7269] uppercase font-semibold block">Cloud Backup &amp; Operations</span>
+                      <span className="font-mono text-xs font-bold text-[#1F3A2E]">ArielMC.BD@gmail.com</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <a
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=ArielMC.BD@gmail.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1 text-[#EA4335] hover:underline text-[10px] font-semibold"
+                      >
+                        Web Compose
+                      </a>
+                      <button
+                        onClick={() => handleCopy('ArielMC.BD@gmail.com', 'ariel-gmail')}
+                        className="p-1 rounded hover:bg-white text-gray-500"
+                        title="Copy"
+                      >
+                        {copiedKey === 'ariel-gmail' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-[10px] font-mono text-[#6B7269] pt-1 border-t border-[#DDE3DD] flex items-center justify-between">
+                  <span>Linked with: Google Meet &amp; Zoom</span>
+                  <span>Direct Browser SSO</span>
                 </div>
               </div>
             </div>

@@ -32,6 +32,7 @@ import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
 import { LogisticsManagement } from '@/components/LogisticsManagement';
 import { FinanceManagement } from '@/components/FinanceManagement';
+import { CommunicationsHub } from '@/components/CommunicationsHub';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
 import {
@@ -334,6 +335,10 @@ export default function Home() {
             <FinanceManagement />
           )}
 
+          {activeTab === 'COMMUNICATIONS' && (
+            <CommunicationsHub />
+          )}
+
           {activeTab !== 'STATIONS' &&
             activeTab !== 'PRODUCTS' &&
             activeTab !== 'FACTORIES' &&
@@ -341,7 +346,8 @@ export default function Home() {
             activeTab !== 'RND' &&
             activeTab !== 'ORDERS' &&
             activeTab !== 'LOGISTICS' &&
-            activeTab !== 'FINANCE' && (
+            activeTab !== 'FINANCE' &&
+            activeTab !== 'COMMUNICATIONS' && (
               <PhaseRoadmapPreview
                 activeTab={activeTab}
                 onNavigateToProducts={() => setActiveTab('PRODUCTS')}
