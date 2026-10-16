@@ -158,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 alt="ArielMC Logo"
                 width={36}
                 height={36}
-                className="object-contain"
+                className="object-contain w-auto h-auto"
                 priority
               />
             </div>
