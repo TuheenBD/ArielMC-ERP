@@ -13,6 +13,7 @@ import {
   SampleStatus,
   BuyerSalesOrder,
   OrderStatus,
+  LogisticsConsignment,
 } from '@/types/erp';
 import { INITIAL_COMPANIES, INITIAL_CURRENCIES, INITIAL_PRODUCTS } from '@/data/initialData';
 import { INITIAL_FACTORIES } from '@/data/initialFactories';
@@ -29,7 +30,9 @@ import { OrderManagement } from '@/components/OrderManagement';
 import { CrmPipeline } from '@/components/CrmPipeline';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
+import { LogisticsManagement } from '@/components/LogisticsManagement';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
+import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
 import {
   Building2,
   Package,
@@ -54,6 +57,7 @@ export default function Home() {
   const [factories, setFactories] = useState<SupplierFactory[]>(INITIAL_FACTORIES);
   const [samples, setSamples] = useState<SampleDevelopmentOrder[]>(INITIAL_SAMPLES);
   const [orders, setOrders] = useState<BuyerSalesOrder[]>(INITIAL_ORDERS);
+  const [consignments, setConsignments] = useState<LogisticsConsignment[]>(initialConsignments);
   const [crmLeads] = useState<CrmLead[]>(crmLeadsData as CrmLead[]);
   const [activeTab, setActiveTab] = useState<ActiveTab>('PRODUCTS');
   const [searchQuery, setSearchQuery] = useState('');
@@ -291,12 +295,21 @@ export default function Home() {
             />
           )}
 
+          {activeTab === 'LOGISTICS' && (
+            <LogisticsManagement
+              consignments={consignments}
+              securityBudget={securityBudgetPlan}
+              securityIncidents={recentSecurityAudits}
+            />
+          )}
+
           {activeTab !== 'STATIONS' &&
             activeTab !== 'PRODUCTS' &&
             activeTab !== 'FACTORIES' &&
             activeTab !== 'CRM' &&
             activeTab !== 'RND' &&
-            activeTab !== 'ORDERS' && (
+            activeTab !== 'ORDERS' &&
+            activeTab !== 'LOGISTICS' && (
               <PhaseRoadmapPreview
                 activeTab={activeTab}
                 onNavigateToProducts={() => setActiveTab('PRODUCTS')}

@@ -14,7 +14,11 @@ import {
   Sparkles,
   Download,
   CheckCircle2,
-  Info
+  Info,
+  Barcode,
+  Box,
+  Truck,
+  ShieldAlert
 } from 'lucide-react';
 
 interface ProductDetailModalProps {
@@ -30,7 +34,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   if (!product) return null;
 
-  const [activeTab, setActiveTab] = useState<'SPECS' | 'COSTING' | 'FACTORY' | 'COMPLIANCE'>('SPECS');
+  const [activeTab, setActiveTab] = useState<'SPECS' | 'COSTING' | 'FACTORY' | 'COMPLIANCE' | 'PACKAGING'>('SPECS');
 
   const formatPrice = (usdAmount: number) => {
     const converted = usdAmount * activeCurrency.rateToUsd;
@@ -46,15 +50,33 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         {/* Modal Header */}
         <div className="p-6 border-b border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">
                 {product.sku}
               </span>
+              {product.styleCode && (
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-blue-900/30 text-blue-200 border border-blue-700/40 font-semibold">
+                  Style: {product.styleCode}
+                </span>
+              )}
+              {product.eanBarcode && (
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-600/40 flex items-center gap-1 font-semibold">
+                  <Barcode className="w-3.5 h-3.5 text-amber-400" />
+                  EAN: {product.eanBarcode}
+                </span>
+              )}
               <span className="text-xs text-slate-400">HS Code: {product.hsCode}</span>
               <span className="text-xs text-slate-400">•</span>
               <span className="text-xs text-slate-400">{product.category}</span>
             </div>
             <h2 className="text-xl font-bold text-white mt-1.5">{product.name}</h2>
+            {product.packagingMode && (
+              <div className="mt-1 text-xs text-slate-300 flex items-center gap-1.5">
+                <Box className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-slate-400">Packaging:</span>
+                <span className="font-medium text-slate-200">{product.packagingMode}</span>
+              </div>
+            )}
           </div>
 
           <button
@@ -66,10 +88,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* Modal Tab Bar */}
-        <div className="flex items-center px-6 border-b border-slate-800 bg-slate-950/40 gap-4 text-xs font-medium">
+        <div className="flex items-center px-6 border-b border-slate-800 bg-slate-950/40 gap-4 text-xs font-medium overflow-x-auto">
           <button
             onClick={() => setActiveTab('SPECS')}
-            className={`py-3 border-b-2 transition-colors ${
+            className={`py-3 border-b-2 transition-colors shrink-0 ${
               activeTab === 'SPECS'
                 ? 'border-blue-500 text-blue-400 font-semibold'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -78,8 +100,19 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             Technical Specs & Attributes
           </button>
           <button
+            onClick={() => setActiveTab('PACKAGING')}
+            className={`py-3 border-b-2 transition-colors shrink-0 flex items-center gap-1.5 ${
+              activeTab === 'PACKAGING'
+                ? 'border-amber-500 text-amber-400 font-semibold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Barcode className="w-3.5 h-3.5" />
+            <span>GS1 Barcodes & 3PL Packaging</span>
+          </button>
+          <button
             onClick={() => setActiveTab('COSTING')}
-            className={`py-3 border-b-2 transition-colors ${
+            className={`py-3 border-b-2 transition-colors shrink-0 ${
               activeTab === 'COSTING'
                 ? 'border-blue-500 text-blue-400 font-semibold'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -89,7 +122,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('FACTORY')}
-            className={`py-3 border-b-2 transition-colors ${
+            className={`py-3 border-b-2 transition-colors shrink-0 ${
               activeTab === 'FACTORY'
                 ? 'border-blue-500 text-blue-400 font-semibold'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -99,7 +132,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('COMPLIANCE')}
-            className={`py-3 border-b-2 transition-colors ${
+            className={`py-3 border-b-2 transition-colors shrink-0 ${
               activeTab === 'COMPLIANCE'
                 ? 'border-blue-500 text-blue-400 font-semibold'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -418,6 +451,139 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     <span className="font-medium text-slate-200">{cert}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'PACKAGING' && (
+            <div className="space-y-6">
+              {/* Header Banner */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-600/30 flex items-start justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Barcode className="w-4 h-4 text-amber-400" />
+                    <span className="font-bold text-amber-300 text-sm">Official GS1 Bangladesh Barcoding & Dual-3PL Packaging</span>
+                  </div>
+                  <p className="text-slate-300 text-xs">
+                    Standardized SKU syntax, GS1 GEPIR-registered EAN-13 barcodes, and dual 3PL warehouse prep guidelines for UK (Northampton) & Germany (Hamburg/Ruhr).
+                  </p>
+                </div>
+                <div className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs font-semibold shrink-0">
+                  GS1 Prefix: 053 (BD)
+                </div>
+              </div>
+
+              {/* Grid 1: Barcode & Hierarchy */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                      <Barcode className="w-3.5 h-3.5 text-blue-400" />
+                      GTIN-13 / EAN-13 Barcode
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono text-[10px]">
+                      GS1 GEPIR Verified
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block font-mono">Assigned EAN-13</span>
+                      <span className="text-base font-bold font-mono text-amber-400 tracking-wider">
+                        {product.eanBarcode || 'Pending Generation'}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-400 block">Style Code</span>
+                      <span className="text-xs font-mono font-bold text-blue-300">
+                        {product.styleCode || 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 text-[11px] text-slate-300">
+                    <div className="flex justify-between py-1 border-b border-slate-800/80">
+                      <span className="text-slate-400">GS1 Issuing Authority:</span>
+                      <span className="font-medium text-slate-200">MCCI Dhaka (GS1 Bangladesh)</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-slate-800/80">
+                      <span className="text-slate-400">SKU Code Architecture:</span>
+                      <span className="font-mono text-slate-200">{product.sku}</span>
+                    </div>
+                    <div className="flex justify-between py-1">
+                      <span className="text-slate-400">Amazon Marketplace:</span>
+                      <span className="text-emerald-400 font-medium">Valid for Amazon UK & DE Brand Registry</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                      <Box className="w-3.5 h-3.5 text-amber-400" />
+                      3PL Packaging Specification
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px]">
+                      Dual-Hub Standard
+                    </span>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Unit Packaging Mode</span>
+                    <span className="text-xs font-semibold text-slate-100 block mt-0.5">
+                      {product.packagingMode || 'Standard poly-sleeve with hangtag'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 text-[11px] text-slate-300">
+                    <div className="flex justify-between py-1 border-b border-slate-800/80">
+                      <span className="text-slate-400">Hangtag / Polybag Label:</span>
+                      <span className="font-medium text-slate-200">50x30mm or 60x40mm (EAN-13 + Made in BD)</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-slate-800/80">
+                      <span className="text-slate-400">Leather Surface Rule:</span>
+                      <span className="text-amber-400 font-medium">Affix to dustbag only, never on leather</span>
+                    </div>
+                    <div className="flex justify-between py-1">
+                      <span className="text-slate-400">Master Shipping Barcode:</span>
+                      <span className="font-mono text-slate-200">ITF-14 / Code-128 Master Carton</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 2: Ocean Freight & Warehouse Handling Protocols */}
+              <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-3">
+                <h4 className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-emerald-400" />
+                  Maritime Transit Protection & 3PL Warehouse Routing
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                    <span className="text-slate-400 text-[10px] block">Moisture & Mold Defense</span>
+                    <span className="text-xs font-semibold text-slate-200 block">Calcium Chloride Poles</span>
+                    <p className="text-[11px] text-slate-400 mt-1">
+                      Container desiccant poles + 5g–10g clay packet inside bag cavity for 35-45 day voyage.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                    <span className="text-slate-400 text-[10px] block">ISO Master Carton Icons</span>
+                    <span className="text-xs font-semibold text-slate-200 block">↑↑ This Side Up & Umbrella</span>
+                    <p className="text-[11px] text-slate-400 mt-1">
+                      Printed on master shipping boxes to prevent port workers stacking leather boxes upside down.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                    <span className="text-slate-400 text-[10px] block">Zero-Tariff Preference</span>
+                    <span className="text-xs font-semibold text-emerald-300 block">0% Duty (EBA & DCTS)</span>
+                    <p className="text-[11px] text-slate-400 mt-1">
+                      EU Everything But Arms (REX on invoice) and UK DCTS comprehensive preferences.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           )}

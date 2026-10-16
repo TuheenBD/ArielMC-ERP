@@ -109,8 +109,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'LOGISTICS' as ActiveTab,
           label: 'Logistics & Export Docs',
           icon: Ship,
-          badge: 'Phase 6',
-          badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+          badge: 'Dual-Hub Live',
+          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 6',
         },
         {

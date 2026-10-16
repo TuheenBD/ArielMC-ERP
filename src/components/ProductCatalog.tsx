@@ -18,7 +18,8 @@ import {
   ArrowRight,
   Sparkles,
   Search,
-  ExternalLink
+  ExternalLink,
+  Barcode
 } from 'lucide-react';
 
 interface ProductCatalogProps {
@@ -252,13 +253,35 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
                   {/* Product Title & Category */}
                   <div>
+                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                      <span className="font-mono text-slate-300 font-semibold text-xs bg-slate-950/80 px-2 py-0.5 rounded border border-slate-800">
+                        {prod.sku}
+                      </span>
+                      {prod.styleCode && (
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-700/40 font-semibold">
+                          Style {prod.styleCode}
+                        </span>
+                      )}
+                      {prod.eanBarcode && (
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-600/40 flex items-center gap-1 font-semibold">
+                          <Barcode className="w-3 h-3 text-amber-400" />
+                          {prod.eanBarcode}
+                        </span>
+                      )}
+                    </div>
                     <h3 className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors line-clamp-2">
                       {prod.name}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1 text-xs text-slate-400">
-                      <span className="font-mono text-slate-300 font-semibold">{prod.sku}</span>
-                      <span>•</span>
+                    <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-400 flex-wrap">
                       <span>HS {prod.hsCode}</span>
+                      {prod.packagingMode && (
+                        <>
+                          <span>•</span>
+                          <span className="text-[11px] text-slate-300 font-medium bg-slate-950/60 px-2 py-0.5 rounded border border-slate-800">
+                            📦 {prod.packagingMode}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -432,7 +455,25 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   <tr key={prod.id} className="hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-4">
                       <div className="font-bold text-white text-xs">{prod.name}</div>
-                      <div className="font-mono text-slate-400 text-[11px]">{prod.sku}</div>
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <span className="font-mono text-slate-300 font-semibold text-[11px]">{prod.sku}</span>
+                        {prod.styleCode && (
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-800 font-semibold">
+                            Style {prod.styleCode}
+                          </span>
+                        )}
+                        {prod.eanBarcode && (
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-700/60 flex items-center gap-1 font-semibold">
+                            <Barcode className="w-2.5 h-2.5 text-amber-400" />
+                            {prod.eanBarcode}
+                          </span>
+                        )}
+                      </div>
+                      {prod.packagingMode && (
+                        <div className="text-[10px] text-slate-400 mt-1">
+                          📦 {prod.packagingMode}
+                        </div>
+                      )}
                     </td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-0.5 rounded-full border text-[11px] ${sectorBadge.color}`}>

@@ -428,4 +428,118 @@ export interface BuyerSalesOrder {
   inspections: AqlInspectionReport[];
 }
 
+// -------------------------------------------------------------
+// Phase 6: Multi-Leg Logistics, Dual 3PL Hubs & Export Docs
+// -------------------------------------------------------------
+
+export type HubLocation = 'WH-UK' | 'WH-DE';
+
+export type ContainerType = '20FT' | '40FT' | '40HC' | 'LCL';
+
+export type ShipmentStatus =
+  | 'BOOKING_CONFIRMED'
+  | 'CUSTOMS_CLEARED_CTG'
+  | 'ON_VESSEL_TRANSIT'
+  | 'PORT_DISCHARGE'
+  | 'CUSTOMS_CLEARED_DEST'
+  | 'INBOUND_AT_3PL';
+
+export interface ConsignmentItem {
+  id: string;
+  sku: string;
+  styleCode: string;
+  eanBarcode: string;
+  productName: string;
+  sector: ProductSector;
+  hsCode: string;
+  cartons: number;
+  unitsPerCarton: number;
+  totalUnits: number;
+  grossWeightKg: number;
+  netWeightKg: number;
+  cbm: number;
+  packagingMode: string;
+  unitPriceUsd: number;
+  totalPriceUsd: number;
+  // Hybrid Inventory Allocation
+  fbaTransferUnits: number;
+  fbmInventoryUnits: number;
+  b2bWholesaleUnits: number;
+}
+
+export interface LogisticsConsignment {
+  id: string;
+  consignmentNumber: string; // EXP-2026-CTG-UK-01
+  linkedSoNumbers: string[];
+  destinationHub: HubLocation;
+  hubName: string; // e.g. WH-UK (Northampton) or WH-DE (Hamburg/Ruhr)
+  hubAddress: string;
+  originPort: string; // Chattogram Port (CTG), Bangladesh
+  destinationPort: string; // Felixstowe (UK) or Hamburg (Germany)
+  carrierVessel: string; // e.g. MSC MAYA / Voyage 2603W
+  billOfLadingNo: string;
+  containerNumber: string;
+  sealNumber: string;
+  containerType: ContainerType;
+  status: ShipmentStatus;
+  etdCtg: string;
+  etaDestination: string;
+  actualDeliveryDate?: string;
+  // Maritime & Quarantine Integrity
+  desiccantProtocol: {
+    containerPolesCount: number; // Calcium chloride poles
+    cavityPacketsCount: number; // 5-10g silica packets
+    verified: boolean;
+  };
+  phytosanitaryClearance: {
+    required: boolean;
+    daeCertificateNo?: string;
+    fumigationTreatment: string;
+    status: 'CERTIFIED' | 'PENDING' | 'EXEMPT';
+  };
+  // Customs & Preferential Tariffs
+  customsDutyRatePct: number; // 0% under EBA (EU) or DCTS (UK)
+  rexStatementOfOrigin: string;
+  bangladeshBankFormExp: string; // Form EXP under BB FE Circular 48/31
+  authorizedDealerBank: string; // Authorized Dealer in Dhaka
+  // Financial & Freight Costing
+  oceanFreightUsd: number;
+  customsClearanceFee: number;
+  portHandlingCfsFee: number;
+  inbound3plReceivingFee: number;
+  currency: 'USD' | 'GBP' | 'EUR';
+  items: ConsignmentItem[];
+  totalCartons: number;
+  totalUnits: number;
+  totalGrossWeightKg: number;
+  totalCbm: number;
+  totalFobValueUsd: number;
+}
+
+// -------------------------------------------------------------
+// Governance & SOP-SEC-2026-V1 Cyber Security Interfaces
+// -------------------------------------------------------------
+
+export interface SecurityIncident {
+  id: string;
+  title: string;
+  category: 'ATO_ATTEMPT' | 'AD_ACCOUNT_HIJACK' | 'CREDENTIAL_LEAK' | 'PHISHING_ALERT' | 'BEC_WIRE_ALTERATION';
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM';
+  status: 'ISOLATED_5MIN' | 'COMMAND_NOTIFIED_15MIN' | 'CONTAINED_60MIN' | 'RESOLVED';
+  detectedAt: string;
+  targetPlatform: string;
+  isolationActionTaken: string;
+  escalationLead: string;
+}
+
+export interface SecurityBudgetLine {
+  id: string;
+  component: string;
+  provider: string;
+  annualCostGbp: number;
+  annualCostBdt: number;
+  strategicPurpose: string;
+  status: 'ACTIVE' | 'PLANNED';
+}
+
 
