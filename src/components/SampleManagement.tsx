@@ -948,9 +948,9 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       {/* TAB 3: STANDARDIZED SAMPLE PRICING MATRIX */}
       {activeModuleTab === 'PRICING_MATRIX' && (
         <div className="space-y-6">
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-950 border border-blue-500/30 space-y-2">
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#12231B] border border-[#2C5240] space-y-2">
             <div className="flex items-center gap-2">
-              <Tag className="w-5 h-5 text-blue-400" />
+              <Tag className="w-5 h-5 text-[#C8A96A]" />
               <h2 className="text-base font-bold text-white font-['Montserrat']">
                 Section 5 Standardized Sample Pricing Matrix
               </h2>
@@ -986,7 +986,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                 <tbody className="divide-y divide-slate-800">
                   {SAMPLE_PRICING_MATRIX.filter((m) => m.division === 'The Leather Compendium').map((item) => (
                     <tr key={item.categoryCode} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-blue-300">
+                      <td className="py-3 px-4 font-mono font-bold text-[#C8A96A]">
                         {item.categoryCode}
                       </td>
                       <td className="py-3 px-4">
@@ -1128,7 +1128,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       onClick={() => setCalcSector('LEATHER')}
                       className={`p-2.5 rounded-lg border font-medium transition-all ${
                         calcSector === 'LEATHER'
-                          ? 'bg-blue-600/20 text-blue-300 border-blue-500'
+                          ? 'bg-[#C8A96A]/20 text-[#C8A96A] border-[#C8A96A]'
                           : 'bg-slate-950 text-slate-400 border-slate-800'
                       }`}
                     >
@@ -1282,7 +1282,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                     >
                       {selectedSample.stage} Sample (Round {selectedSample.roundNumber})
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 font-mono">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30 font-mono">
                       {selectedSample.targetMarket}
                     </span>
                   </div>
@@ -1929,8 +1929,8 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
                 <div className="font-bold text-white text-xs mt-0.5">Brief & Feasibility</div>
                 <p className="text-[11px] text-slate-400 mt-1">Tech pack review, BOM validation, target FOB costing, factory slot allocation.</p>
               </div>
-              <div className="p-3 rounded-xl bg-slate-900 border border-blue-500/30">
-                <div className="text-[10px] font-mono font-bold text-blue-400">Step 2 (1–4 Weeks)</div>
+              <div className="p-3 rounded-xl bg-slate-900 border border-[#C8A96A]/30">
+                <div className="text-[10px] font-mono font-bold text-[#C8A96A]">Step 2 (1–4 Weeks)</div>
                 <div className="font-bold text-white text-xs mt-0.5">Sampling & Prototyping</div>
                 <p className="text-[11px] text-slate-400 mt-1">Raw material lab dips, pattern adjustments/CNC cutting, hardware sourcing, specimen creation.</p>
               </div>
@@ -1965,7 +1965,7 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
               <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
                 <div className="flex items-center justify-between">
                   <h3 className="font-bold text-white text-xs">Tier A: Ready Catalog Showroom Samples (Off-the-Shelf)</h3>
-                  <span className="font-mono text-[10px] text-blue-400 bg-blue-950/40 px-2 py-0.5 rounded border border-blue-800/40">CATALOG</span>
+                  <span className="font-mono text-[10px] text-[#C8A96A] bg-[#C8A96A]/15 px-2 py-0.5 rounded border border-[#C8A96A]/30">CATALOG</span>
                 </div>
                 <p className="text-slate-300 text-[11px]">
                   <strong>Scope:</strong> Standard SKUs from current product roadmaps without structural modifications (e.g., JD-EDC-16 Market Tote, LD-EDC-1 Slim RFID Bifold).

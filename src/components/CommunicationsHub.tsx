@@ -992,7 +992,7 @@ export const CommunicationsHub: React.FC = () => {
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono ${
                         log.mode === 'LIVE_SMTP'
                           ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-blue-100 text-blue-800'
+                          : 'bg-[#1F3A2E]/10 text-[#1F3A2E] border border-[#1F3A2E]/20'
                       }`}
                     >
                       <CheckCircle2 className="w-3 h-3" />
@@ -1120,12 +1120,12 @@ export const CommunicationsHub: React.FC = () => {
                     onChange={(e) => setSmtpConfig({ ...smtpConfig, gmailPass: e.target.value })}
                     className="w-full p-2 bg-white border border-[#DDE3DD] rounded-lg font-mono"
                   />
-                  <div className="p-2.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-900 text-[10px] mt-2 space-y-1">
-                    <p className="font-bold flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                  <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-950 text-[10px] mt-2 space-y-1">
+                    <p className="font-bold flex items-center gap-1 text-[#1F3A2E]">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#1F3A2E]" />
                       <span>How to generate a Google App Password (takes 1 minute):</span>
                     </p>
-                    <ol className="list-decimal pl-4 space-y-0.5">
+                    <ol className="list-decimal pl-4 space-y-0.5 text-emerald-900">
                       <li>Go to your Google Account (myaccount.google.com) ➔ <strong>Security</strong>.</li>
                       <li>Ensure <strong>2-Step Verification</strong> is ON.</li>
                       <li>Search for <strong>App passwords</strong>.</li>

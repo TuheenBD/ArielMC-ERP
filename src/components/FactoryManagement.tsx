@@ -517,7 +517,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                     <div className="font-semibold text-[#1F3A2E]">{selectedFactory.contactPerson}</div>
                     <div className="text-[11px] text-gray-500">{selectedFactory.designation}</div>
                     <div className="text-[11px] font-mono text-gray-800 pt-1">Phone: {selectedFactory.phone}</div>
-                    <div className="text-[11px] text-blue-600 font-medium">Email: {selectedFactory.email}</div>
+                    <div className="text-[11px] text-emerald-700 font-medium">Email: {selectedFactory.email}</div>
                   </div>
                 </div>
 

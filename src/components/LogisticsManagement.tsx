@@ -1181,7 +1181,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                     </div>
                     <div>
                       <span className="text-slate-500 block">Destination Marker:</span>
-                      <strong className="text-blue-800">{activeConsignment.hubName}</strong>
+                      <strong className="text-[#1F3A2E]">{activeConsignment.hubName}</strong>
                     </div>
                   </div>
 
