@@ -1,4 +1,24 @@
-import { CompanyEntity, CurrencyRate, ProductItem } from '@/types/erp';
+import { CompanyEntity, CurrencyRate, ProductItem, CorporateCommunication } from '@/types/erp';
+
+export const OFFICIAL_COMMUNICATION_CHANNELS: CorporateCommunication = {
+  mobileBd: '+8801819273458',
+  whatsappIntl: '+8801819273458',
+  emails: ['info@arielmc.com', 'tuheen@arielmc.com', 'ArielMC.BD@gmail.com'],
+  socialLinks: {
+    linkedin: {
+      corporate: 'https://www.linkedin.com/company/arielmc/?viewAsMember=true',
+      shop: 'https://www.linkedin.com/showcase/arielmc-shop/?viewAsMember=true',
+    },
+    youtube: {
+      corporate: 'https://www.youtube.com/@ArielMC-BD',
+      shop: 'https://www.youtube.com/@ArielMCShop',
+    },
+    facebook: {
+      corporate: 'https://www.facebook.com/profile.php?id=61593617982910',
+      shop: 'https://www.facebook.com/profile.php?id=61594583437920',
+    },
+  },
+};
 
 export const INITIAL_COMPANIES: CompanyEntity[] = [
   {
@@ -9,7 +29,7 @@ export const INITIAL_COMPANIES: CompanyEntity[] = [
     countryCode: 'BD',
     flag: '🇧🇩',
     city: 'Dhaka',
-    address: 'House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan, Dhaka-1212, Bangladesh (Tel: +880 2410 811 91 / +880 1818273458)',
+    address: 'House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan, Dhaka-1212, Bangladesh (Tel: +880 2410 811 91 / Mobile & WhatsApp: +8801819273458)',
     baseCurrency: 'BDT',
     taxIdentifier: {
       type: 'BIN / TIN',
@@ -17,7 +37,7 @@ export const INITIAL_COMPANIES: CompanyEntity[] = [
     },
     legalStatus: 'Private Limited Company (RJSC Registered)',
     role: 'Global Holding, Product Sourcing & R&D Headquarters',
-    domains: ['www.arielmc.com', 'info@arielmc.com'],
+    domains: ['www.arielmc.com', 'info@arielmc.com', 'tuheen@arielmc.com', 'ArielMC.BD@gmail.com'],
     activeFacilities: ['Dhaka Central Merchandising Hub (Niketon)', 'Chattogram Port Clearing Office', 'Savar LWG QC Lab'],
     bankAccounts: [
       {

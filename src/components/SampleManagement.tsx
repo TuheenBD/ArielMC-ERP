@@ -757,187 +757,187 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
 
             {/* 5-Step Visual Progression */}
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 space-y-1">
-                <div className="text-[10px] font-mono font-bold text-purple-400 uppercase">
+              <div className="p-3.5 rounded-xl bg-[#172D24] border border-[#2C5240] space-y-1">
+                <div className="text-[10px] font-mono font-bold text-[#C8A96A] uppercase">
                   Step 1 (1–2 Days)
                 </div>
-                <div className="text-xs font-bold text-white font-['Montserrat']">Brief & Feasibility</div>
-                <p className="text-[11px] text-slate-400">
+                <div className="text-xs font-bold text-white font-['Montserrat']">Brief &amp; Feasibility</div>
+                <p className="text-[11px] text-[#CFE0D5]">
                   Tech-pack review, BOM validation, target FOB costing, and factory slot allocation.
                 </p>
-                <div className="text-[10px] text-purple-300 font-mono pt-1">Gate: CRM Stage 4 (35%)</div>
+                <div className="text-[10px] text-[#C8A96A] font-mono pt-1">Gate: CRM Stage 4 (35%)</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-blue-500/30 space-y-1">
-                <div className="text-[10px] font-mono font-bold text-blue-400 uppercase">
+              <div className="p-3.5 rounded-xl bg-[#172D24] border border-[#2C5240] space-y-1">
+                <div className="text-[10px] font-mono font-bold text-emerald-400 uppercase">
                   Step 2 (1–4 Weeks)
                 </div>
-                <div className="text-xs font-bold text-white font-['Montserrat']">Sampling & Prototyping</div>
-                <p className="text-[11px] text-slate-400">
+                <div className="text-xs font-bold text-white font-['Montserrat']">Sampling &amp; Prototyping</div>
+                <p className="text-[11px] text-[#CFE0D5]">
                   Raw material lab dips, pattern adjustments/CNC cutting, hardware sourcing, specimen creation.
                 </p>
-                <div className="text-[10px] text-blue-300 font-mono pt-1">Proto & PP Rounds</div>
+                <div className="text-[10px] text-emerald-300 font-mono pt-1">Proto &amp; PP Rounds</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-500/30 space-y-1">
+              <div className="p-3.5 rounded-xl bg-[#172D24] border border-[#2C5240] space-y-1">
                 <div className="text-[10px] font-mono font-bold text-amber-400 uppercase">
                   Step 3 (2–4 Weeks)
                 </div>
                 <div className="text-xs font-bold text-white font-['Montserrat']">Ethical Production</div>
-                <p className="text-[11px] text-slate-400">
-                  Bulk cutting and assembly across vetted, socially compliant manufacturing units in Savar & Narayanganj.
+                <p className="text-[11px] text-[#CFE0D5]">
+                  Bulk cutting and assembly across vetted, socially compliant manufacturing units in Savar &amp; Narayanganj.
                 </p>
                 <div className="text-[10px] text-amber-300 font-mono pt-1">50% Advance Deposit</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 space-y-1">
+              <div className="p-3.5 rounded-xl bg-[#172D24] border border-[#2C5240] space-y-1">
                 <div className="text-[10px] font-mono font-bold text-emerald-400 uppercase">
                   Step 4 (1–2 Weeks)
                 </div>
-                <div className="text-xs font-bold text-white font-['Montserrat']">In-Line & AQL Inspection</div>
-                <p className="text-[11px] text-slate-400">
+                <div className="text-xs font-bold text-white font-['Montserrat']">In-Line &amp; AQL Inspection</div>
+                <p className="text-[11px] text-[#CFE0D5]">
                   Strict inspection under AQL 1.5 Major / 2.5 Minor, dynamic 15kg load tests, carton markings.
                 </p>
                 <div className="text-[10px] text-emerald-300 font-mono pt-1">QA-DOC Dossier</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 space-y-1">
-                <div className="text-[10px] font-mono font-bold text-cyan-400 uppercase">
+              <div className="p-3.5 rounded-xl bg-[#172D24] border border-[#2C5240] space-y-1">
+                <div className="text-[10px] font-mono font-bold text-[#C8A96A] uppercase">
                   Step 5 (3–5 Days)
                 </div>
-                <div className="text-xs font-bold text-white font-['Montserrat']">Logistics & Customs</div>
-                <p className="text-[11px] text-slate-400">
+                <div className="text-xs font-bold text-white font-['Montserrat']">Logistics &amp; Customs</div>
+                <p className="text-[11px] text-[#CFE0D5]">
                   Bill of Lading, REX / DCTS Origin Statement (0% duty), DAE Phytosanitary, forwarder handover.
                 </p>
-                <div className="text-[10px] text-cyan-300 font-mono pt-1">Final 50% Balance BL</div>
+                <div className="text-[10px] text-[#C8A96A] font-mono pt-1">Final 50% Balance BL</div>
               </div>
             </div>
           </div>
 
           {/* 3 Sampling Request Classification Tiers */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-5 rounded-2xl bg-slate-900/60 border border-blue-500/30 space-y-3">
+            <div className="p-5 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                <h3 className="text-sm font-bold text-[#1F3A2E] font-['Montserrat']">
                   Tier A: Ready Catalog Showroom Samples
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#E4F3E9] text-[#14512C] border border-[#BDE3CA] font-semibold">
                   OFF-THE-SHELF
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#6B7269]">
                 Standard SKUs from current product roadmaps without structural modifications (e.g., JD-EDC-16 Market Tote, LD-EDC-1 Slim Bifold).
               </p>
-              <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+              <div className="space-y-1.5 text-xs text-[#1A1A1A] pt-2 border-t border-[#DDE3DD]">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Sample Fee:</span>
-                  <span className="font-semibold text-white">Nominal wholesale price (Complimentary up to 2 units for enterprise)</span>
+                  <span className="text-[#6B7269]">Sample Fee:</span>
+                  <span className="font-semibold text-[#1F3A2E]">Nominal wholesale price (Complimentary up to 2 units for enterprise)</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Express Freight:</span>
-                  <span className="text-slate-200">Paid by buyer or corporate DHL/FedEx account</span>
+                  <span className="text-[#6B7269]">Express Freight:</span>
+                  <span className="text-[#1A1A1A]">Paid by buyer or corporate DHL/FedEx account</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Bulk Adjustment:</span>
-                  <span className="text-emerald-400 font-semibold">100% credited against balance invoice</span>
+                  <span className="text-[#6B7269]">Bulk Adjustment:</span>
+                  <span className="text-emerald-700 font-semibold">100% credited against balance invoice</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/60 border border-[#C9A86A]/40 space-y-3">
+            <div className="p-5 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                <h3 className="text-sm font-bold text-[#1F3A2E] font-['Montserrat']">
                   Tier B: Custom OEM Prototypes
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FFF9EA] text-[#8A5A00] border border-[#F0D597] font-semibold">
                   TECH-PACK DRIVEN
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#6B7269]">
                 Custom designs, bespoke dimensions, buyer-specified GSM/tannage, custom Pantone lab dips, and personalized debossed/foil branding.
               </p>
-              <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+              <div className="space-y-1.5 text-xs text-[#1A1A1A] pt-2 border-t border-[#DDE3DD]">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Development Fee:</span>
-                  <span className="font-semibold text-[#C9A86A]">$45.00 – $140.00 fixed fee</span>
+                  <span className="text-[#6B7269]">Development Fee:</span>
+                  <span className="font-semibold text-[#8A5A00]">$45.00 – $140.00 fixed fee</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Brass Deboss Die:</span>
-                  <span className="text-slate-200">$35.00 – $65.00 (At cost)</span>
+                  <span className="text-[#6B7269]">Brass Deboss Die:</span>
+                  <span className="text-[#1A1A1A]">$35.00 – $65.00 (At cost)</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Screen Stencil:</span>
-                  <span className="text-slate-200">$25.00 / colorway</span>
+                  <span className="text-[#6B7269]">Screen Stencil:</span>
+                  <span className="text-[#1A1A1A]">$25.00 / colorway</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Bulk Reimbursement:</span>
-                  <span className="text-emerald-400 font-semibold">100% of dev fee credited on qualifying PO</span>
+                  <span className="text-[#6B7269]">Bulk Reimbursement:</span>
+                  <span className="text-emerald-700 font-semibold">100% of dev fee credited on qualifying PO</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/60 border border-purple-500/30 space-y-3">
+            <div className="p-5 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                <h3 className="text-sm font-bold text-[#1F3A2E] font-['Montserrat']">
                   Tier C: Corporate Specimen Kits
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#F3E8FF] text-[#6B21A8] border border-[#E9D5FF] font-semibold">
                   STRATEGIC PROSPECTING
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#6B7269]">
                 Presentation specimen box for institutional procurement executives (London/NY) with debossed Jute Bag, leather swatch, and ESG Factsheet.
               </p>
-              <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+              <div className="space-y-1.5 text-xs text-[#1A1A1A] pt-2 border-t border-[#DDE3DD]">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Commercial Fee:</span>
-                  <span className="font-semibold text-purple-300">$50.00 flat (Inclusive of express air courier)</span>
+                  <span className="text-[#6B7269]">Commercial Fee:</span>
+                  <span className="font-semibold text-[#1F3A2E]">$50.00 flat (Inclusive of express air courier)</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Complimentary Discretion:</span>
-                  <span className="text-slate-200">Reserved for Stage 4 feasibility calls</span>
+                  <span className="text-[#6B7269]">Complimentary Discretion:</span>
+                  <span className="text-[#1A1A1A]">Reserved for Stage 4 feasibility calls</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Bulk PO Rebate:</span>
-                  <span className="text-emerald-400 font-semibold">100% rebate on placement of baseline MOQ</span>
+                  <span className="text-[#6B7269]">Bulk PO Rebate:</span>
+                  <span className="text-emerald-700 font-semibold">100% rebate on placement of baseline MOQ</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Express Shipping & Labelling Standards */}
-          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
-            <h3 className="text-sm font-bold text-white font-['Montserrat'] flex items-center gap-2">
-              <Plane className="w-4 h-4 text-cyan-400" />
-              International Express Courier Terms & Mandatory Customs Labelling
+          <div className="p-5 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+            <h3 className="text-sm font-bold text-[#1F3A2E] font-['Montserrat'] flex items-center gap-2">
+              <Plane className="w-4 h-4 text-[#C8A96A]" />
+              International Express Courier Terms &amp; Mandatory Customs Labelling
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <span className="text-slate-400 text-[10px] block">UK / Western Europe (0.5–1.0kg)</span>
-                <span className="font-bold text-white font-mono mt-0.5 block">$38.00 – $48.00</span>
-                <span className="text-[10px] text-slate-400">DHL Express / FedEx Priority from Dhaka</span>
+              <div className="p-3 rounded-xl bg-[#F8F6F2] border border-[#DDE3DD]">
+                <span className="text-[#6B7269] text-[10px] block font-medium">UK / Western Europe (0.5–1.0kg)</span>
+                <span className="font-bold text-[#1F3A2E] font-mono mt-0.5 block text-sm">$38.00 – $48.00</span>
+                <span className="text-[10px] text-[#6B7269]">DHL Express / FedEx Priority from Dhaka</span>
               </div>
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <span className="text-slate-400 text-[10px] block">USA / Canada (0.5–1.0kg)</span>
-                <span className="font-bold text-white font-mono mt-0.5 block">$42.00 – $55.00</span>
-                <span className="text-[10px] text-slate-400">Direct courier dispatch with live tracking</span>
+              <div className="p-3 rounded-xl bg-[#F8F6F2] border border-[#DDE3DD]">
+                <span className="text-[#6B7269] text-[10px] block font-medium">USA / Canada (0.5–1.0kg)</span>
+                <span className="font-bold text-[#1F3A2E] font-mono mt-0.5 block text-sm">$42.00 – $55.00</span>
+                <span className="text-[10px] text-[#6B7269]">Direct courier dispatch with live tracking</span>
               </div>
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <span className="text-slate-400 text-[10px] block">Australia / New Zealand (0.5–1.0kg)</span>
-                <span className="font-bold text-white font-mono mt-0.5 block">$48.00 – $60.00</span>
-                <span className="text-[10px] text-slate-400">Door-to-door express transit (3–5 days)</span>
+              <div className="p-3 rounded-xl bg-[#F8F6F2] border border-[#DDE3DD]">
+                <span className="text-[#6B7269] text-[10px] block font-medium">Australia / New Zealand (0.5–1.0kg)</span>
+                <span className="font-bold text-[#1F3A2E] font-mono mt-0.5 block text-sm">$48.00 – $60.00</span>
+                <span className="text-[10px] text-[#6B7269]">Door-to-door express transit (3–5 days)</span>
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-600/30 text-xs space-y-1">
-              <span className="font-semibold text-amber-300 font-['Montserrat'] block">
-                Mandated Customs Valuation & Waybill Labelling (Section 6):
+            <div className="p-3.5 rounded-xl bg-[#FFF9EA] border border-[#F0D597] text-xs space-y-1">
+              <span className="font-semibold text-[#8A5A00] font-['Montserrat'] block">
+                Mandated Customs Valuation &amp; Waybill Labelling (Section 6):
               </span>
-              <p className="font-mono text-slate-300 text-[11px] bg-slate-900 p-2 rounded border border-slate-800">
-                "Commercial Mutilated Prototype Samples – No Commercial Value – Value for Customs Purposes Only: $10.00 USD"
+              <p className="font-mono text-[#1A1A1A] text-[11px] bg-white p-2.5 rounded-lg border border-[#F0D597]">
+                &quot;Commercial Mutilated Prototype Samples – No Commercial Value – Value for Customs Purposes Only: $10.00 USD&quot;
               </p>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-[#8A5A00]">
                 Prevents destination port customs holds and eliminates excessive VAT/import tariff assessments for buyers.
               </p>
             </div>

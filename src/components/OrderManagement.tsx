@@ -38,7 +38,9 @@ import {
   LayoutGrid,
   List,
   Sparkles,
+  PhoneCall,
 } from 'lucide-react';
+import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 
 interface OrderManagementProps {
   orders: BuyerSalesOrder[];
@@ -132,6 +134,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   const [selectedOrder, setSelectedOrder] = useState<BuyerSalesOrder | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'OVERVIEW' | 'MARGIN' | 'TNA' | 'AQL'>('OVERVIEW');
+  const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
 
   // Filter calculations
   const filteredOrders = orders.filter((order) => {
@@ -184,7 +187,15 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setIsChannelsModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 font-semibold text-xs transition-all shadow-sm font-['Montserrat']"
+            title="Official Supplier & Buyer Communication Channels"
+          >
+            <PhoneCall className="w-4 h-4" />
+            <span>Trade Channels</span>
+          </button>
           <button
             onClick={() => setIsAddModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#1F3A2E] font-bold text-xs transition-all shadow-md font-montserrat"
@@ -465,550 +476,569 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
 
       {/* Two-Way Order Detail Drawer */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-3xl bg-[#090d1a] border-l border-slate-800 h-full overflow-y-auto flex flex-col justify-between p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-3xl bg-[#F4F6F4] border-l border-[#DDE3DD] h-full overflow-y-auto flex flex-col justify-between shadow-2xl">
             {/* Drawer Header */}
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+              <div className="p-5 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white flex items-center justify-between">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-mono text-sky-400 font-bold">
+                    <span className="text-base font-mono text-[#C8A96A] font-bold">
                       {selectedOrder.soNumber}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
-                    <span className="text-base font-mono text-amber-400 font-bold">
+                    <ArrowRight className="w-3.5 h-3.5 text-white/60" />
+                    <span className="text-base font-mono text-emerald-300 font-bold">
                       {selectedOrder.linkedPo.poNumber}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 font-mono">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 font-mono font-semibold">
                       {selectedOrder.targetMarket}
                     </span>
                   </div>
-                  <h2 className="text-lg font-bold text-white">
+                  <h2 className="text-lg font-bold text-white font-['Montserrat']">
                     {selectedOrder.items[0]?.styleName}
                   </h2>
-                  <p className="text-xs text-slate-400">
-                    Buyer: <span className="text-white font-medium">{selectedOrder.buyerCompany}</span> | Factory:{' '}
-                    <span className="text-amber-300 font-medium">
+                  <p className="text-xs text-[#E8EFE8] font-['Open_Sans']">
+                    Buyer: <span className="text-white font-semibold">{selectedOrder.buyerCompany}</span> | Factory:{' '}
+                    <span className="text-[#C8A96A] font-semibold">
                       {selectedOrder.linkedPo.factoryName}
                     </span>
                   </p>
                 </div>
 
-                <button
-                  onClick={() => setSelectedOrder(null)}
-                  className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsChannelsModalOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 text-xs font-semibold transition-colors"
+                    title="Supplier & Buyer Communication Channels"
+                  >
+                    <PhoneCall className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Channels</span>
+                  </button>
+                  <button
+                    onClick={() => setSelectedOrder(null)}
+                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/90 hover:text-white transition-colors"
+                    title="Close Drawer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
-              {/* Status Ribbon with Quick Advancers */}
-              <div className="my-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-400">Order State:</span>
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-                      ORDER_STATUS_CONFIG[selectedOrder.status].bg
-                    } ${ORDER_STATUS_CONFIG[selectedOrder.status].text} ${
-                      ORDER_STATUS_CONFIG[selectedOrder.status].border
+              {/* Drawer Body Container */}
+              <div className="p-6 space-y-4">
+                {/* Status Ribbon with Quick Advancers */}
+                <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#6B7269] font-medium">Order State:</span>
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                        ORDER_STATUS_CONFIG[selectedOrder.status].bg
+                      } ${ORDER_STATUS_CONFIG[selectedOrder.status].text} ${
+                        ORDER_STATUS_CONFIG[selectedOrder.status].border
+                      }`}
+                    >
+                      {ORDER_STATUS_CONFIG[selectedOrder.status].label}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {selectedOrder.status === 'CONFIRMED' && (
+                      <button
+                        onClick={() => {
+                          onUpdateOrderStatus(selectedOrder.id, 'IN_PRODUCTION');
+                          setSelectedOrder({ ...selectedOrder, status: 'IN_PRODUCTION' });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[#8A5A00] hover:bg-[#6e4800] text-white font-semibold text-[11px] transition-all shadow-sm"
+                      >
+                        Start Factory Production
+                      </button>
+                    )}
+
+                    {selectedOrder.status === 'IN_PRODUCTION' && (
+                      <button
+                        onClick={() => {
+                          onUpdateOrderStatus(selectedOrder.id, 'QUALITY_INSPECTION');
+                          setSelectedOrder({ ...selectedOrder, status: 'QUALITY_INSPECTION' });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-semibold text-[11px] transition-all shadow-sm"
+                      >
+                        Schedule AQL Inspection
+                      </button>
+                    )}
+
+                    {selectedOrder.status === 'QUALITY_INSPECTION' && (
+                      <button
+                        onClick={() => {
+                          onUpdateOrderStatus(selectedOrder.id, 'READY_TO_SHIP');
+                          setSelectedOrder({ ...selectedOrder, status: 'READY_TO_SHIP' });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-[11px] transition-all shadow-sm"
+                      >
+                        Issue Quality Release Seal
+                      </button>
+                    )}
+
+                    {selectedOrder.status === 'READY_TO_SHIP' && (
+                      <button
+                        onClick={() => {
+                          onUpdateOrderStatus(selectedOrder.id, 'SHIPPED_CHITTAGONG');
+                          setSelectedOrder({ ...selectedOrder, status: 'SHIPPED_CHITTAGONG' });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#15271F] text-white font-semibold text-[11px] transition-all shadow-sm flex items-center gap-1"
+                      >
+                        <Ship className="w-3.5 h-3.5 text-[#C8A96A]" />
+                        <span>Depart Chittagong Port</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Drawer Tabs */}
+                <div className="flex items-center gap-2 border-b border-[#DDE3DD] text-xs">
+                  <button
+                    onClick={() => setActiveDrawerTab('OVERVIEW')}
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                      activeDrawerTab === 'OVERVIEW'
+                        ? 'border-[#1F3A2E] text-[#1F3A2E]'
+                        : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
                     }`}
                   >
-                    {ORDER_STATUS_CONFIG[selectedOrder.status].label}
-                  </span>
+                    Two-Way Order Overview
+                  </button>
+                  <button
+                    onClick={() => setActiveDrawerTab('MARGIN')}
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                      activeDrawerTab === 'MARGIN'
+                        ? 'border-[#1F3A2E] text-[#1F3A2E]'
+                        : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    Margin Protection ({selectedOrder.marginProtection.marginPercentage}%)
+                  </button>
+                  <button
+                    onClick={() => setActiveDrawerTab('TNA')}
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                      activeDrawerTab === 'TNA'
+                        ? 'border-[#1F3A2E] text-[#1F3A2E]'
+                        : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    T&amp;A Critical Path ({selectedOrder.timeAndAction.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveDrawerTab('AQL')}
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                      activeDrawerTab === 'AQL'
+                        ? 'border-[#1F3A2E] text-[#1F3A2E]'
+                        : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    Digital QA &amp; AQL ({selectedOrder.inspections.length})
+                  </button>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  {selectedOrder.status === 'CONFIRMED' && (
-                    <button
-                      onClick={() => {
-                        onUpdateOrderStatus(selectedOrder.id, 'IN_PRODUCTION');
-                        setSelectedOrder({ ...selectedOrder, status: 'IN_PRODUCTION' });
-                      }}
-                      className="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium text-[11px] transition-all"
-                    >
-                      Start Factory Production
-                    </button>
-                  )}
-
-                  {selectedOrder.status === 'IN_PRODUCTION' && (
-                    <button
-                      onClick={() => {
-                        onUpdateOrderStatus(selectedOrder.id, 'QUALITY_INSPECTION');
-                        setSelectedOrder({ ...selectedOrder, status: 'QUALITY_INSPECTION' });
-                      }}
-                      className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium text-[11px] transition-all"
-                    >
-                      Schedule AQL Inspection
-                    </button>
-                  )}
-
-                  {selectedOrder.status === 'QUALITY_INSPECTION' && (
-                    <button
-                      onClick={() => {
-                        onUpdateOrderStatus(selectedOrder.id, 'READY_TO_SHIP');
-                        setSelectedOrder({ ...selectedOrder, status: 'READY_TO_SHIP' });
-                      }}
-                      className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-[11px] transition-all"
-                    >
-                      Issue Quality Release Seal
-                    </button>
-                  )}
-
-                  {selectedOrder.status === 'READY_TO_SHIP' && (
-                    <button
-                      onClick={() => {
-                        onUpdateOrderStatus(selectedOrder.id, 'SHIPPED_CHITTAGONG');
-                        setSelectedOrder({ ...selectedOrder, status: 'SHIPPED_CHITTAGONG' });
-                      }}
-                      className="px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-[11px] transition-all flex items-center gap-1"
-                    >
-                      <Ship className="w-3.5 h-3.5" />
-                      <span>Depart Chittagong Port</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Drawer Tabs */}
-              <div className="flex items-center gap-2 border-b border-slate-800 text-xs mb-4">
-                <button
-                  onClick={() => setActiveDrawerTab('OVERVIEW')}
-                  className={`pb-2 px-2 border-b-2 font-medium transition-all ${
-                    activeDrawerTab === 'OVERVIEW'
-                      ? 'border-sky-500 text-sky-400 font-semibold'
-                      : 'border-transparent text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Two-Way Order Overview
-                </button>
-                <button
-                  onClick={() => setActiveDrawerTab('MARGIN')}
-                  className={`pb-2 px-2 border-b-2 font-medium transition-all ${
-                    activeDrawerTab === 'MARGIN'
-                      ? 'border-sky-500 text-sky-400 font-semibold'
-                      : 'border-transparent text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Margin Protection ({selectedOrder.marginProtection.marginPercentage}%)
-                </button>
-                <button
-                  onClick={() => setActiveDrawerTab('TNA')}
-                  className={`pb-2 px-2 border-b-2 font-medium transition-all ${
-                    activeDrawerTab === 'TNA'
-                      ? 'border-sky-500 text-sky-400 font-semibold'
-                      : 'border-transparent text-slate-400 hover:text-white'
-                  }`}
-                >
-                  T&A Critical Path ({selectedOrder.timeAndAction.length})
-                </button>
-                <button
-                  onClick={() => setActiveDrawerTab('AQL')}
-                  className={`pb-2 px-2 border-b-2 font-medium transition-all ${
-                    activeDrawerTab === 'AQL'
-                      ? 'border-sky-500 text-sky-400 font-semibold'
-                      : 'border-transparent text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Digital QA & AQL ({selectedOrder.inspections.length})
-                </button>
-              </div>
-
-              {/* Tab 1: Overview */}
-              {activeDrawerTab === 'OVERVIEW' && (
-                <div className="space-y-4 text-xs">
-                  {/* Two-Way Comparison Cards */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* Buyer SO Card */}
-                    <div className="p-3.5 rounded-xl bg-slate-900/70 border border-sky-900/40 space-y-2">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
-                        <span className="font-mono text-sky-400 font-bold">
-                          Buyer Sales Order (SO)
-                        </span>
-                        <span className="text-[10px] text-slate-400">
-                          {selectedOrder.operatingEntity}
-                        </span>
-                      </div>
-                      <div className="space-y-1 text-slate-300">
-                        <div>
-                          <span className="text-slate-400">Buyer:</span> {selectedOrder.buyerCompany}
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Contact:</span> {selectedOrder.buyerContact}
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Incoterm:</span>{' '}
-                          <span className="font-semibold text-white">{selectedOrder.incoterm}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Payment:</span> {selectedOrder.paymentTerms}
-                        </div>
-                        {selectedOrder.masterLcNumber && (
-                          <div className="font-mono text-emerald-400">
-                            <span className="text-slate-400 font-sans">Master L/C:</span>{' '}
-                            {selectedOrder.masterLcNumber}
-                          </div>
-                        )}
-                        <div className="pt-1.5 border-t border-slate-800 flex justify-between font-bold text-white text-sm">
-                          <span>Revenue:</span>
-                          <span className="text-sky-300 font-mono">
-                            ${selectedOrder.totalAmountUsd.toLocaleString()} USD
+                {/* Tab 1: Overview */}
+                {activeDrawerTab === 'OVERVIEW' && (
+                  <div className="space-y-4 text-xs font-['Open_Sans']">
+                    {/* Two-Way Comparison Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {/* Buyer SO Card */}
+                      <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-2.5">
+                        <div className="flex items-center justify-between pb-2 border-b border-[#DDE3DD]">
+                          <span className="font-mono text-[#1F3A2E] font-bold flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-[#1F3A2E]" />
+                            Buyer Sales Order (SO)
                           </span>
+                          <span className="text-[10px] font-mono text-[#6B7269] bg-[#F4F6F4] px-1.5 py-0.5 rounded">
+                            {selectedOrder.operatingEntity}
+                          </span>
+                        </div>
+                        <div className="space-y-1.5 text-[#1A1A1A]">
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Buyer:</span>
+                            <span className="font-semibold">{selectedOrder.buyerCompany}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Contact:</span>
+                            <span>{selectedOrder.buyerContact}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Incoterm:</span>
+                            <span className="font-semibold text-[#1F3A2E]">{selectedOrder.incoterm}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Payment:</span>
+                            <span>{selectedOrder.paymentTerms}</span>
+                          </div>
+                          {selectedOrder.masterLcNumber && (
+                            <div className="flex justify-between font-mono text-emerald-700">
+                              <span className="text-[#6B7269] font-sans">Master L/C:</span>
+                              <span className="font-bold">{selectedOrder.masterLcNumber}</span>
+                            </div>
+                          )}
+                          <div className="pt-2 border-t border-[#DDE3DD] flex justify-between font-bold text-sm">
+                            <span className="text-[#1F3A2E]">Revenue:</span>
+                            <span className="text-[#1F3A2E] font-mono">
+                              ${selectedOrder.totalAmountUsd.toLocaleString()} USD
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Factory PO Card */}
+                      <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-2.5">
+                        <div className="flex items-center justify-between pb-2 border-b border-[#DDE3DD]">
+                          <span className="font-mono text-[#8A5A00] font-bold flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-[#8A5A00]" />
+                            Factory Purchase Order (PO)
+                          </span>
+                          <span className="text-[10px] font-mono text-[#6B7269] bg-[#F4F6F4] px-1.5 py-0.5 rounded">
+                            Status: {selectedOrder.linkedPo.status}
+                          </span>
+                        </div>
+                        <div className="space-y-1.5 text-[#1A1A1A]">
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Factory:</span>
+                            <span className="font-semibold text-[#8A5A00]">{selectedOrder.linkedPo.factoryName}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Issue Date:</span>
+                            <span>{selectedOrder.linkedPo.issueDate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Ex-Factory Date:</span>
+                            <span className="font-semibold text-[#1F3A2E]">
+                              {selectedOrder.linkedPo.targetExFactoryDate}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[#6B7269]">Payment:</span>
+                            <span>{selectedOrder.linkedPo.paymentTerms}</span>
+                          </div>
+                          {selectedOrder.linkedPo.backToBackLcNumber && (
+                            <div className="flex justify-between font-mono text-[#8A5A00]">
+                              <span className="text-[#6B7269] font-sans">B2B L/C:</span>
+                              <span className="font-bold">{selectedOrder.linkedPo.backToBackLcNumber}</span>
+                            </div>
+                          )}
+                          <div className="pt-2 border-t border-[#DDE3DD] flex justify-between font-bold text-sm">
+                            <span className="text-[#8A5A00]">Factory Cost:</span>
+                            <span className="text-[#8A5A00] font-mono">
+                              ${selectedOrder.linkedPo.totalCostUsd.toLocaleString()} USD
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Factory PO Card */}
-                    <div className="p-3.5 rounded-xl bg-slate-900/70 border border-amber-900/40 space-y-2">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
-                        <span className="font-mono text-amber-400 font-bold">
-                          Factory Purchase Order (PO)
-                        </span>
-                        <span className="text-[10px] text-slate-400">
-                          Status: {selectedOrder.linkedPo.status}
+                    {/* Line Items Table */}
+                    <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-2.5">
+                      <div className="text-[10px] text-[#6B7269] uppercase font-mono font-bold">
+                        Order Line Items &amp; Unit Costing
+                      </div>
+                      <table className="w-full text-left text-xs">
+                        <thead>
+                          <tr className="text-[#6B7269] border-b border-[#DDE3DD] text-[10px] pb-2">
+                            <th className="py-1.5 font-semibold">SKU / Style</th>
+                            <th className="py-1.5 text-center font-semibold">Sector</th>
+                            <th className="py-1.5 text-right font-semibold">Units</th>
+                            <th className="py-1.5 text-right font-semibold">Buyer Price</th>
+                            <th className="py-1.5 text-right font-semibold">Factory Cost</th>
+                            <th className="py-1.5 text-right font-semibold">Margin / Unit</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#DDE3DD]">
+                          {selectedOrder.items.map((item) => {
+                            const unitMargin = item.unitPrice - item.factoryUnitCost / 120;
+                            return (
+                              <tr key={item.id} className="hover:bg-[#F4F6F4] transition-colors">
+                                <td className="py-2.5">
+                                  <div className="font-semibold text-[#1A1A1A]">{item.styleName}</div>
+                                  <div className="text-[10px] text-[#6B7269] font-mono">{item.sku}</div>
+                                </td>
+                                <td className="py-2.5 text-center">
+                                  <span className="px-1.5 py-0.5 rounded bg-[#F8F6F2] border border-[#DDE3DD] text-[10px] font-mono text-[#1F3A2E]">
+                                    {item.sector}
+                                  </span>
+                                </td>
+                                <td className="py-2.5 text-right font-mono font-semibold text-[#1A1A1A]">
+                                  {item.quantity.toLocaleString()}
+                                </td>
+                                <td className="py-2.5 text-right font-mono font-semibold text-[#1F3A2E]">
+                                  ${item.unitPrice}
+                                </td>
+                                <td className="py-2.5 text-right font-mono text-[#8A5A00]">
+                                  ৳{item.factoryUnitCost.toLocaleString()}
+                                </td>
+                                <td className="py-2.5 text-right font-mono text-emerald-700 font-bold">
+                                  +${unitMargin.toFixed(2)}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab 2: Margin Protection */}
+                {activeDrawerTab === 'MARGIN' && (
+                  <div className="space-y-4 text-xs font-['Open_Sans']">
+                    <div className="p-5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+                      <div className="flex items-center justify-between pb-2.5 border-b border-[#DDE3DD]">
+                        <span className="text-[#6B7269] font-medium">Total Buyer Invoiced Revenue:</span>
+                        <span className="font-mono text-lg font-bold text-[#1F3A2E]">
+                          ${selectedOrder.marginProtection.buyerRevenueUsd.toLocaleString()} USD
                         </span>
                       </div>
-                      <div className="space-y-1 text-slate-300">
-                        <div>
-                          <span className="text-slate-400">Factory:</span>{' '}
-                          {selectedOrder.linkedPo.factoryName}
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Issue Date:</span>{' '}
-                          {selectedOrder.linkedPo.issueDate}
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Ex-Factory Date:</span>{' '}
-                          <span className="font-semibold text-white">
-                            {selectedOrder.linkedPo.targetExFactoryDate}
+
+                      <div className="space-y-2 pt-1 text-[#1A1A1A]">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#6B7269]">Factory Production Cost:</span>
+                          <span className="font-mono text-[#8A5A00] font-semibold">
+                            - ${selectedOrder.marginProtection.factoryCostUsd.toLocaleString()} USD
                           </span>
                         </div>
-                        <div>
-                          <span className="text-slate-400">Payment:</span>{' '}
-                          {selectedOrder.linkedPo.paymentTerms}
-                        </div>
-                        {selectedOrder.linkedPo.backToBackLcNumber && (
-                          <div className="font-mono text-amber-400">
-                            <span className="text-slate-400 font-sans">B2B L/C:</span>{' '}
-                            {selectedOrder.linkedPo.backToBackLcNumber}
-                          </div>
-                        )}
-                        <div className="pt-1.5 border-t border-slate-800 flex justify-between font-bold text-white text-sm">
-                          <span>Factory Cost:</span>
-                          <span className="text-amber-400 font-mono">
-                            ${selectedOrder.linkedPo.totalCostUsd.toLocaleString()} USD
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#6B7269]">Ocean/Air Freight Allowance:</span>
+                          <span className="font-mono text-[#6B7269]">
+                            - ${selectedOrder.marginProtection.freightAllowanceUsd.toLocaleString()} USD
                           </span>
                         </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#6B7269]">Testing &amp; Compliance Reserve:</span>
+                          <span className="font-mono text-[#6B7269]">
+                            - ${selectedOrder.marginProtection.complianceBufferUsd.toLocaleString()} USD
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-between text-base font-bold">
+                        <span className="text-[#1F3A2E] font-['Montserrat']">Net ArielMC Gross Profit:</span>
+                        <span className="font-mono text-emerald-700 text-lg">
+                          +${selectedOrder.marginProtection.netMarginUsd.toLocaleString()} USD (
+                          {selectedOrder.marginProtection.marginPercentage}%)
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#E4F3E9] border border-[#BDE3CA] flex items-center gap-3">
+                      <ShieldCheck className="w-6 h-6 text-emerald-700 flex-shrink-0" />
+                      <div>
+                        <div className="font-bold text-emerald-900 text-xs font-['Montserrat']">
+                          Margin Protection Status: LOCKED &amp; VERIFIED
+                        </div>
+                        <p className="text-[11px] text-[#14512C] mt-0.5">
+                          Gross margin is above corporate hurdle rate of 20%. Price fluctuation risk is covered by back-to-back fixed L/C covenants with Bangladesh factories.
+                        </p>
                       </div>
                     </div>
                   </div>
+                )}
 
-                  {/* Line Items Table */}
-                  <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-                    <div className="text-[10px] text-slate-400 uppercase font-mono">
-                      Order Line Items & Unit Costing
+                {/* Tab 3: Time & Action (T&A) Calendar */}
+                {activeDrawerTab === 'TNA' && (
+                  <div className="space-y-4 text-xs font-['Open_Sans']">
+                    <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex items-center justify-between">
+                      <span className="text-[#1A1A1A]">
+                        Critical Path Progress:{' '}
+                        <b className="text-[#1F3A2E]">
+                          {selectedOrder.timeAndAction.filter((t) => t.status === 'COMPLETED').length}/
+                          {selectedOrder.timeAndAction.length} Milestones
+                        </b>
+                      </span>
+                      <span className="text-[10px] text-[#6B7269] font-mono">
+                        Target Ex-Factory: {selectedOrder.targetExFactoryDate}
+                      </span>
                     </div>
-                    <table className="w-full text-left text-xs">
-                      <thead>
-                        <tr className="text-slate-400 border-b border-slate-800 text-[10px]">
-                          <th className="py-1.5">SKU / Style</th>
-                          <th className="py-1.5 text-center">Sector</th>
-                          <th className="py-1.5 text-right">Units</th>
-                          <th className="py-1.5 text-right">Buyer Price</th>
-                          <th className="py-1.5 text-right">Factory Cost</th>
-                          <th className="py-1.5 text-right">Margin / Unit</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-800/60">
-                        {selectedOrder.items.map((item) => {
-                          const unitMargin = item.unitPrice - item.factoryUnitCost / 120;
-                          return (
-                            <tr key={item.id}>
-                              <td className="py-2">
-                                <div className="font-medium text-white">{item.styleName}</div>
-                                <div className="text-[10px] text-slate-400 font-mono">{item.sku}</div>
-                              </td>
-                              <td className="py-2 text-center">
-                                <span className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300">
-                                  {item.sector}
+
+                    <div className="space-y-2.5">
+                      {selectedOrder.timeAndAction.map((m, idx) => (
+                        <div
+                          key={m.id}
+                          className={`p-3 rounded-xl border flex items-start justify-between gap-3 transition-colors ${
+                            m.status === 'COMPLETED'
+                              ? 'bg-white border-[#BDE3CA]'
+                              : m.status === 'ON_TRACK'
+                              ? 'bg-white border-[#DDE3DD]'
+                              : 'bg-[#FFF9EA] border-[#F0D597]'
+                          }`}
+                        >
+                          <div className="flex items-start gap-2.5">
+                            <button
+                              onClick={() => {
+                                const newStatus =
+                                  m.status === 'COMPLETED' ? 'ON_TRACK' : 'COMPLETED';
+                                onUpdateMilestoneStatus(selectedOrder.id, m.id, newStatus);
+                                const updatedTna = selectedOrder.timeAndAction.map((t) =>
+                                  t.id === m.id ? { ...t, status: newStatus as any } : t
+                                );
+                                setSelectedOrder({ ...selectedOrder, timeAndAction: updatedTna });
+                              }}
+                              className={`mt-0.5 p-1 rounded-md transition-colors ${
+                                m.status === 'COMPLETED'
+                                  ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                                  : 'bg-[#F4F6F4] text-[#6B7269] hover:text-[#1F3A2E]'
+                              }`}
+                            >
+                              <CheckCircle2 className="w-4 h-4" />
+                            </button>
+                            <div>
+                              <div className="font-bold text-[#1A1A1A] text-xs flex items-center gap-2">
+                                <span>
+                                  {idx + 1}. {m.name}
                                 </span>
-                              </td>
-                              <td className="py-2 text-right font-mono font-medium text-white">
-                                {item.quantity.toLocaleString()}
-                              </td>
-                              <td className="py-2 text-right font-mono text-sky-300">
-                                ${item.unitPrice}
-                              </td>
-                              <td className="py-2 text-right font-mono text-amber-300">
-                                ৳{item.factoryUnitCost.toLocaleString()}
-                              </td>
-                              <td className="py-2 text-right font-mono text-emerald-400 font-bold">
-                                +${unitMargin.toFixed(2)}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 2: Margin Protection */}
-              {activeDrawerTab === 'MARGIN' && (
-                <div className="space-y-4 text-xs">
-                  <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-                    <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                      <span className="text-slate-400">Total Buyer Invoiced Revenue:</span>
-                      <span className="font-mono text-lg font-bold text-sky-400">
-                        ${selectedOrder.marginProtection.buyerRevenueUsd.toLocaleString()} USD
-                      </span>
-                    </div>
-
-                    <div className="space-y-2 pt-1 text-slate-300">
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Factory Production Cost:</span>
-                        <span className="font-mono text-amber-400">
-                          - ${selectedOrder.marginProtection.factoryCostUsd.toLocaleString()} USD
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Ocean/Air Freight Allowance:</span>
-                        <span className="font-mono text-slate-300">
-                          - ${selectedOrder.marginProtection.freightAllowanceUsd.toLocaleString()} USD
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-400">Testing & Compliance Reserve:</span>
-                        <span className="font-mono text-slate-300">
-                          - ${selectedOrder.marginProtection.complianceBufferUsd.toLocaleString()} USD
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-base font-bold">
-                      <span className="text-white">Net ArielMC Gross Profit:</span>
-                      <span className="font-mono text-emerald-400 text-lg">
-                        +${selectedOrder.marginProtection.netMarginUsd.toLocaleString()} USD (
-                        {selectedOrder.marginProtection.marginPercentage}%)
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/40 flex items-center gap-3">
-                    <ShieldCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-                    <div>
-                      <div className="font-semibold text-emerald-300 text-xs">
-                        Margin Protection Status: LOCKED & VERIFIED
-                      </div>
-                      <p className="text-[11px] text-slate-400">
-                        Gross margin is above corporate hurdle rate of 20%. Price fluctuation risk is covered by back-to-back fixed L/C covenants with Bangladesh factories.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 3: Time & Action (T&A) Calendar */}
-              {activeDrawerTab === 'TNA' && (
-                <div className="space-y-4 text-xs">
-                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800 flex items-center justify-between">
-                    <span className="text-slate-300">
-                      Critical Path Progress:{' '}
-                      <b className="text-white">
-                        {selectedOrder.timeAndAction.filter((t) => t.status === 'COMPLETED').length}/
-                        {selectedOrder.timeAndAction.length} Milestones
-                      </b>
-                    </span>
-                    <span className="text-[10px] text-slate-400">
-                      Target Ex-Factory: {selectedOrder.targetExFactoryDate}
-                    </span>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {selectedOrder.timeAndAction.map((m, idx) => (
-                      <div
-                        key={m.id}
-                        className={`p-3 rounded-xl border flex items-start justify-between gap-3 transition-colors ${
-                          m.status === 'COMPLETED'
-                            ? 'bg-slate-950/60 border-slate-800 text-slate-400'
-                            : m.status === 'ON_TRACK'
-                            ? 'bg-sky-950/20 border-sky-800/50 text-slate-200'
-                            : 'bg-slate-900/40 border-slate-800 text-slate-400'
-                        }`}
-                      >
-                        <div className="flex items-start gap-2.5">
-                          <button
-                            onClick={() => {
-                              const newStatus =
-                                m.status === 'COMPLETED' ? 'ON_TRACK' : 'COMPLETED';
-                              onUpdateMilestoneStatus(selectedOrder.id, m.id, newStatus);
-                              const updatedTna = selectedOrder.timeAndAction.map((t) =>
-                                t.id === m.id ? { ...t, status: newStatus as any } : t
-                              );
-                              setSelectedOrder({ ...selectedOrder, timeAndAction: updatedTna });
-                            }}
-                            className={`mt-0.5 p-1 rounded-md transition-colors ${
-                              m.status === 'COMPLETED'
-                                ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
-                                : 'bg-slate-800 text-slate-400 hover:text-white'
-                            }`}
-                          >
-                            <CheckCircle2 className="w-4 h-4" />
-                          </button>
-                          <div>
-                            <div className="font-semibold text-white text-xs flex items-center gap-2">
-                              <span>
-                                {idx + 1}. {m.name}
-                              </span>
-                              <span className="font-mono text-[9px] px-1 rounded bg-slate-800 text-slate-400">
-                                {m.code}
-                              </span>
+                                <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#F4F6F4] text-[#6B7269] border border-[#DDE3DD]">
+                                  {m.code}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-[#6B7269] mt-0.5">
+                                Responsible: <span className="text-[#1A1A1A] font-medium">{m.responsibleParty}</span>
+                              </div>
+                              {m.notes && (
+                                <div className="text-[10px] text-[#8A5A00] mt-1 italic">
+                                  Note: {m.notes}
+                                </div>
+                              )}
                             </div>
-                            <div className="text-[10px] text-slate-400 mt-0.5">
-                              Responsible: <span className="text-slate-300">{m.responsibleParty}</span>
+                          </div>
+
+                          <div className="text-right flex-shrink-0">
+                            <div className="font-mono text-[11px] font-semibold text-[#1A1A1A]">
+                              {m.actualDate || m.plannedDate}
                             </div>
-                            {m.notes && (
-                              <div className="text-[10px] text-amber-300 mt-1 italic">
-                                Note: {m.notes}
+                            <span
+                              className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-semibold ${
+                                m.status === 'COMPLETED'
+                                  ? 'bg-[#E4F3E9] text-[#14512C]'
+                                  : m.status === 'ON_TRACK'
+                                  ? 'bg-[#E8F0EA] text-[#1F3A2E]'
+                                  : 'bg-[#FDEAEA] text-[#991B1B]'
+                              }`}
+                            >
+                              {m.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab 4: Digital Quality Assurance & AQL */}
+                {activeDrawerTab === 'AQL' && (
+                  <div className="space-y-4 text-xs font-['Open_Sans']">
+                    {selectedOrder.inspections.length > 0 ? (
+                      selectedOrder.inspections.map((insp) => (
+                        <div
+                          key={insp.id}
+                          className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3"
+                        >
+                          <div className="flex items-center justify-between pb-2 border-b border-[#DDE3DD]">
+                            <div>
+                              <span className="px-2 py-0.5 rounded bg-[#E4F3E9] text-[#14512C] font-mono text-[10px] font-bold border border-[#BDE3CA]">
+                                {insp.inspectionType.replace('_', ' ')} INSPECTION
+                              </span>
+                              <h3 className="font-bold text-[#1A1A1A] text-sm mt-1 font-['Montserrat']">
+                                ISO 2859-1 Level II AQL Passed
+                              </h3>
+                            </div>
+                            {insp.certificateNumber && (
+                              <div className="text-right">
+                                <span className="text-[10px] text-[#6B7269] block font-mono">
+                                  Cert #
+                                </span>
+                                <span className="font-mono text-emerald-700 font-bold">
+                                  {insp.certificateNumber}
+                                </span>
                               </div>
                             )}
                           </div>
-                        </div>
 
-                        <div className="text-right flex-shrink-0">
-                          <div className="font-mono text-[11px] text-slate-200">
-                            {m.actualDate || m.plannedDate}
+                          <div className="grid grid-cols-2 gap-2 text-[#1A1A1A]">
+                            <div>
+                              <span className="text-[#6B7269]">Auditor:</span> {insp.inspectorName}
+                            </div>
+                            <div>
+                              <span className="text-[#6B7269]">Inspection Date:</span>{' '}
+                              {insp.inspectionDate}
+                            </div>
+                            <div>
+                              <span className="text-[#6B7269]">Sample Size:</span>{' '}
+                              <span className="font-mono font-bold text-[#1F3A2E]">
+                                {insp.sampleSizeUnits} units
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-[#6B7269]">Sampling Standard:</span>{' '}
+                              {insp.inspectionLevel}
+                            </div>
                           </div>
-                          <span
-                            className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
-                              m.status === 'COMPLETED'
-                                ? 'bg-emerald-500/20 text-emerald-300'
-                                : m.status === 'ON_TRACK'
-                                ? 'bg-sky-500/20 text-sky-300'
-                                : 'bg-slate-800 text-slate-400'
-                            }`}
-                          >
-                            {m.status}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
-              {/* Tab 4: Digital Quality Assurance & AQL */}
-              {activeDrawerTab === 'AQL' && (
-                <div className="space-y-4 text-xs">
-                  {selectedOrder.inspections.length > 0 ? (
-                    selectedOrder.inspections.map((insp) => (
-                      <div
-                        key={insp.id}
-                        className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3"
-                      >
-                        <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                          <div>
-                            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold">
-                              {insp.inspectionType.replace('_', ' ')} INSPECTION
-                            </span>
-                            <h3 className="font-bold text-white text-sm mt-1">
-                              ISO 2859-1 Level II AQL Passed
-                            </h3>
+                          {/* Defect Summary Grid */}
+                          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#DDE3DD] text-center font-mono">
+                            <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD]">
+                              <div className="text-[10px] text-[#6B7269]">Critical Allowed / Found</div>
+                              <div className="text-sm font-bold text-[#1A1A1A]">
+                                {insp.aqlStandard.criticalMaxAllowed} /{' '}
+                                <span className="text-emerald-700">{insp.defectsFound.critical}</span>
+                              </div>
+                            </div>
+                            <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD]">
+                              <div className="text-[10px] text-[#6B7269]">Major Allowed / Found</div>
+                              <div className="text-sm font-bold text-[#1A1A1A]">
+                                {insp.aqlStandard.majorMaxAllowed} /{' '}
+                                <span className="text-[#8A5A00]">{insp.defectsFound.major}</span>
+                              </div>
+                            </div>
+                            <div className="p-2 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD]">
+                              <div className="text-[10px] text-[#6B7269]">Minor Allowed / Found</div>
+                              <div className="text-sm font-bold text-[#1A1A1A]">
+                                {insp.aqlStandard.minorMaxAllowed} /{' '}
+                                <span className="text-[#6B7269]">{insp.defectsFound.minor}</span>
+                              </div>
+                            </div>
                           </div>
-                          {insp.certificateNumber && (
-                            <div className="text-right">
-                              <span className="text-[10px] text-slate-400 block font-mono">
-                                Cert #
+
+                          {/* Defect Log */}
+                          {insp.defectLog.length > 0 && (
+                            <div className="space-y-1 pt-1">
+                              <span className="text-[10px] uppercase font-mono text-[#6B7269] font-bold">
+                                Loged Minor/Major Non-Conformances:
                               </span>
-                              <span className="font-mono text-emerald-400 font-bold">
-                                {insp.certificateNumber}
-                              </span>
+                              <ul className="list-disc list-inside space-y-0.5 text-[#1A1A1A] text-[11px]">
+                                {insp.defectLog.map((def, idx) => (
+                                  <li key={idx}>
+                                    {def.description} (Category: <b className="text-[#8A5A00]">{def.category}</b>, Count: {def.count})
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
                           )}
                         </div>
-
-                        <div className="grid grid-cols-2 gap-2 text-slate-300">
-                          <div>
-                            <span className="text-slate-400">Auditor:</span> {insp.inspectorName}
-                          </div>
-                          <div>
-                            <span className="text-slate-400">Inspection Date:</span>{' '}
-                            {insp.inspectionDate}
-                          </div>
-                          <div>
-                            <span className="text-slate-400">Sample Size:</span>{' '}
-                            <span className="font-mono font-bold text-white">
-                              {insp.sampleSizeUnits} units
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-slate-400">Sampling Standard:</span>{' '}
-                            {insp.inspectionLevel}
-                          </div>
-                        </div>
-
-                        {/* Defect Summary Grid */}
-                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800 text-center font-mono">
-                          <div className="p-2 rounded bg-slate-950">
-                            <div className="text-[10px] text-slate-400">Critical Allowed / Found</div>
-                            <div className="text-sm font-bold text-white">
-                              {insp.aqlStandard.criticalMaxAllowed} /{' '}
-                              <span className="text-emerald-400">{insp.defectsFound.critical}</span>
-                            </div>
-                          </div>
-                          <div className="p-2 rounded bg-slate-950">
-                            <div className="text-[10px] text-slate-400">Major Allowed / Found</div>
-                            <div className="text-sm font-bold text-white">
-                              {insp.aqlStandard.majorMaxAllowed} /{' '}
-                              <span className="text-amber-400">{insp.defectsFound.major}</span>
-                            </div>
-                          </div>
-                          <div className="p-2 rounded bg-slate-950">
-                            <div className="text-[10px] text-slate-400">Minor Allowed / Found</div>
-                            <div className="text-sm font-bold text-white">
-                              {insp.aqlStandard.minorMaxAllowed} /{' '}
-                              <span className="text-slate-300">{insp.defectsFound.minor}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Defect Log */}
-                        {insp.defectLog.length > 0 && (
-                          <div className="space-y-1 pt-1">
-                            <span className="text-[10px] uppercase font-mono text-slate-400">
-                              Logged Minor/Major Non-Conformances:
-                            </span>
-                            <ul className="list-disc list-inside space-y-0.5 text-slate-300 text-[11px]">
-                              {insp.defectLog.map((def, idx) => (
-                                <li key={idx}>
-                                  {def.description} (Category: <b className="text-amber-400">{def.category}</b>, Count: {def.count})
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
+                      ))
+                    ) : (
+                      <div className="p-8 text-center rounded-xl bg-white border border-dashed border-[#DDE3DD] space-y-3">
+                        <ShieldCheck className="w-8 h-8 text-[#6B7269] mx-auto" />
+                        <p className="text-[#6B7269]">
+                          No official AQL report filed yet. Production must reach at least 80% completion before scheduling Final Random Inspection (FRI).
+                        </p>
                       </div>
-                    ))
-                  ) : (
-                    <div className="p-8 text-center rounded-xl bg-slate-900/40 border border-dashed border-slate-800 space-y-3">
-                      <ShieldCheck className="w-8 h-8 text-slate-400 mx-auto" />
-                      <p className="text-slate-400">
-                        No official AQL report filed yet. Production must reach at least 80% completion before scheduling Final Random Inspection (FRI).
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Bottom Modal Footer */}
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
-              <span className="text-slate-400">
-                Order Value: <b className="text-white">${selectedOrder.totalAmountUsd.toLocaleString()}</b>
+            <div className="p-4 bg-white border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+              <span className="text-[#6B7269]">
+                Order Value: <b className="text-[#1F3A2E] font-mono text-sm">${selectedOrder.totalAmountUsd.toLocaleString()} USD</b>
               </span>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium"
+                className="px-4 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#15271F] text-white font-semibold transition-colors shadow-sm font-['Montserrat']"
               >
                 Close Inspector
               </button>
@@ -1016,6 +1046,12 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           </div>
         </div>
       )}
+
+      {/* Official Communication Channels Modal */}
+      <CommunicationChannelsModal
+        isOpen={isChannelsModalOpen}
+        onClose={() => setIsChannelsModalOpen(false)}
+      />
 
       {/* New Order Creation Modal */}
       {isAddModalOpen && (
@@ -1216,33 +1252,47 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <Repeat className="w-5 h-5 text-sky-400" />
-            <h2 className="text-base font-bold text-white">Create Two-Way Back-to-Back Order</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-2xl bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Modal Header */}
+        <div className="p-5 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center font-bold">
+              <Repeat className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-white font-['Montserrat']">Create Back-to-Back Order</h2>
+              <p className="text-[11px] text-[#E8EFE8]">Mirror Buyer Sales Order (SO) with Factory PO</p>
+            </div>
           </div>
-          <button onClick={onClose} className="p-1 rounded text-slate-400 hover:text-white">
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/90 hover:text-white transition-colors"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
+        {/* Modal Body */}
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 bg-[#F4F6F4] text-[#1A1A1A] font-['Open_Sans'] text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-slate-400 mb-1">Buyer / Client Company</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Buyer / Client Company
+              </label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Harrods London, Zara Home, West Elm"
                 value={buyerCompany}
                 onChange={(e) => setBuyerCompany(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm"
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Target Market Zone</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Target Market Zone
+              </label>
               <select
                 value={targetMarket}
                 onChange={(e) => {
@@ -1250,7 +1300,7 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
                   setTargetMarket(m);
                   setCurrency(m === 'UK' ? 'GBP' : m === 'EU' ? 'EUR' : m === 'AU' ? 'AUD' : 'USD');
                 }}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm"
               >
                 <option value="UK">🇬🇧 United Kingdom (GBP)</option>
                 <option value="US">🇺🇸 United States (USD)</option>
@@ -1260,13 +1310,15 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-slate-400 mb-1">Select Master Product SKU</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Select Master Product SKU
+              </label>
               <select
                 value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm"
               >
                 <option value="">Select Catalog SKU...</option>
                 {products.map((p) => (
@@ -1278,11 +1330,13 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Bangladesh Partner Factory (PO Mirror)</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Bangladesh Partner Factory (PO Mirror)
+              </label>
               <select
                 value={factoryId}
                 onChange={(e) => setFactoryId(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm"
               >
                 <option value="">Select Partner Factory...</option>
                 {factories.map((f) => (
@@ -1294,46 +1348,54 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
             <div>
-              <label className="block text-slate-400 mb-1">Order Quantity (Units)</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Order Quantity (Units)
+              </label>
               <input
                 type="number"
                 min={100}
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Buyer Price ({currency})</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Buyer Price ({currency})
+              </label>
               <input
                 type="number"
                 value={buyerUnitPrice}
                 onChange={(e) => setBuyerUnitPrice(Number(e.target.value))}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Factory Cost (BDT ৳)</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Factory Cost (BDT ৳)
+              </label>
               <input
                 type="number"
                 value={factoryUnitCostBdt}
                 onChange={(e) => setFactoryUnitCostBdt(Number(e.target.value))}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm font-mono"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-slate-400 mb-1">Incoterms</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Incoterms
+              </label>
               <select
                 value={incoterm}
                 onChange={(e) => setIncoterm(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm"
               >
                 <option value="FOB Chittagong Port">FOB Chittagong Port</option>
                 <option value="CIF London Gateway">CIF London Gateway (UK)</option>
@@ -1344,29 +1406,32 @@ const CreateOrderModal: React.FC<CreateOrderModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Target Ex-Factory Date</label>
+              <label className="block text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider font-['Montserrat'] mb-1.5">
+                Target Ex-Factory Date
+              </label>
               <input
                 type="date"
                 value={targetExFactoryDate}
                 onChange={(e) => setTargetExFactoryDate(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className="w-full p-2.5 bg-white border border-[#DDE3DD] rounded-xl text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-sm font-mono"
               />
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
+          {/* Modal Footer */}
+          <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium"
+              className="px-4 py-2 rounded-xl border border-[#DDE3DD] hover:bg-white text-[#1A1A1A] font-semibold transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-all shadow-lg shadow-sky-600/30"
+              className="px-5 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#1F3A2E] font-bold text-xs shadow-md transition-all font-['Montserrat']"
             >
-              Issue Back-to-Back SO & PO
+              Issue Back-to-Back SO &amp; PO
             </button>
           </div>
         </form>

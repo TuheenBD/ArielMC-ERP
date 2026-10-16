@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { CompanyEntity } from '@/types/erp';
+import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import {
   Building2,
   Package,
@@ -17,8 +18,13 @@ import {
   CheckCircle2,
   Clock,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Phone,
+  MessageSquare,
+  Mail,
+  Share2
 } from 'lucide-react';
+import { LinkedinIcon as Linkedin, YoutubeIcon as Youtube, FacebookIcon as Facebook, WhatsappIcon } from '@/components/SocialIcons';
 
 export type ActiveTab = 
   | 'STATIONS' 
@@ -47,6 +53,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeEntity,
   theme = 'crm-green',
 }) => {
+  const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
+
   const navSections = [
     {
       group: 'Phase 1: Foundation (Live)',
@@ -204,7 +212,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </span>
               </div>
               <p className={`text-[10px] ${brandSubtext} font-medium tracking-tight truncate max-w-[170px]`}>
-                Ariel Marketing & Communications Ltd
+                Ariel Marketing &amp; Communications Ltd
               </p>
             </div>
           </div>
@@ -229,7 +237,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Navigation List */}
-        <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-210px)]">
+        <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-270px)]">
           {navSections.map((section, idx) => (
             <div key={idx} className="space-y-1">
               <div className={`px-2.5 py-1 text-[10px] font-bold tracking-wider ${sectionGroupText} uppercase font-heading`}>
@@ -292,20 +300,107 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      {/* Footer / System Health */}
-      <div className={`p-3.5 ${footerBg} text-[11px] space-y-2`}>
-        <div className={`flex items-center justify-between ${footerText}`}>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-            <span className="text-[10px] font-mono font-medium">ERP Engine Live</span>
-          </span>
-          <span className="text-[10px] font-mono text-[#C8A96A]">v1.0.0</span>
+      {/* Supplier & Buyer Communications Card & Footer */}
+      <div>
+        {/* Quick Channels Card */}
+        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2 ${isLight ? 'bg-[#F8F6F2] border-[#DDE3DD]' : 'bg-[#172D24] border-[#2C5240]'}`}>
+          <div className="flex items-center justify-between">
+            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}>
+              <Phone className="w-3 h-3 text-[#C8A96A]" />
+              <span>Trade Channels</span>
+            </span>
+            <button
+              onClick={() => setIsChannelsModalOpen(true)}
+              className={`text-[10px] font-semibold underline hover:brightness-110 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}
+            >
+              Directory
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] font-mono">
+            <a href="tel:+8801819273458" className={`font-bold hover:underline ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>
+              +8801819273458
+            </a>
+            <a
+              href="https://wa.me/8801819273458?text=Hello%20ArielMC%20Team%2C%20inquiry%20via%20ArielMC%20ERP"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1 rounded bg-emerald-600/20 text-emerald-500 hover:bg-emerald-600 hover:text-white transition-colors"
+              title="Chat on WhatsApp"
+            >
+              <MessageSquare className="w-3 h-3" />
+            </a>
+          </div>
+
+          {/* Social icons row */}
+          <div className={`flex items-center justify-between pt-1.5 border-t ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
+            <a
+              href="https://www.linkedin.com/company/arielmc/?viewAsMember=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-[#0A66C2] transition-colors p-0.5"
+              title="LinkedIn (ArielMC)"
+            >
+              <Linkedin className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://www.linkedin.com/showcase/arielmc-shop/?viewAsMember=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-[#0A66C2] transition-colors text-[9px] font-mono font-bold"
+              title="LinkedIn (ArielMC.shop)"
+            >
+              .shop
+            </a>
+            <a
+              href="https://www.youtube.com/@ArielMC-BD"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-[#FF0000] transition-colors p-0.5"
+              title="YouTube (ArielMC-BD)"
+            >
+              <Youtube className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61593617982910"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-[#1877F2] transition-colors p-0.5"
+              title="Facebook (ArielMC)"
+            >
+              <Facebook className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="mailto:info@arielmc.com"
+              className="text-gray-400 hover:text-[#C8A96A] transition-colors p-0.5"
+              title="Email: info@arielmc.com"
+            >
+              <Mail className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
-        <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
-          <span>PostgreSQL Active</span>
-          <span>Next.js 16</span>
+
+        {/* Footer / System Health */}
+        <div className={`p-3.5 ${footerBg} text-[11px] space-y-2`}>
+          <div className={`flex items-center justify-between ${footerText}`}>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+              <span className="text-[10px] font-mono font-medium">ERP Engine Live</span>
+            </span>
+            <span className="text-[10px] font-mono text-[#C8A96A]">v1.0.0</span>
+          </div>
+          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
+            <span>PostgreSQL Active</span>
+            <span>Next.js 16</span>
+          </div>
         </div>
       </div>
+
+      {/* Communication Channels Modal */}
+      <CommunicationChannelsModal
+        isOpen={isChannelsModalOpen}
+        onClose={() => setIsChannelsModalOpen(false)}
+      />
     </aside>
   );
 };

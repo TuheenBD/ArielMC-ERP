@@ -882,7 +882,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                 <div className="text-xs font-bold text-[#1A1A1A]">Notify Command</div>
                 <ul className="text-[11px] text-gray-600 space-y-1">
                   <li>• Dhaka Lead: Call <strong className="text-[#1A1A1A]">+880 2410 811 91</strong></li>
-                  <li>• Mobile: <strong className="text-[#1A1A1A]">+880 1818273458</strong></li>
+                  <li>• Mobile / WhatsApp: <strong className="text-[#1A1A1A]">+8801819273458</strong></li>
                   <li>• UK Operations Desk: Direct phone to Managing Director.</li>
                 </ul>
               </div>
@@ -1058,7 +1058,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                       </p>
                       <p className="text-[11px] text-[#3A3A3A] mt-1">
                         House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan, Dhaka-1212, Bangladesh<br />
-                        Tel: +880 2410 811 91 / +880 1818273458 • Email: info@arielmc.com / arielmc.bd@gmail.com
+                        Tel: +880 2410 811 91 / +8801819273458 (WhatsApp) • Email: info@arielmc.com / tuheen@arielmc.com / ArielMC.BD@gmail.com
                       </p>
                     </div>
                     <div className="text-right">

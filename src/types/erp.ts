@@ -28,6 +28,26 @@ export interface CompanyEntity {
   }[];
 }
 
+export interface CorporateCommunication {
+  mobileBd: string;
+  whatsappIntl: string;
+  emails: string[];
+  socialLinks: {
+    linkedin: {
+      corporate: string;
+      shop: string;
+    };
+    youtube: {
+      corporate: string;
+      shop: string;
+    };
+    facebook: {
+      corporate: string;
+      shop: string;
+    };
+  };
+}
+
 export type ProductSector = 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS';
 
 export interface LeatherAttributes {

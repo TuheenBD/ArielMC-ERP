@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { CompanyEntity, CurrencyRate, EntityCode } from '@/types/erp';
 import { ThemeProfile } from '@/components/Sidebar';
+import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import { 
   Building2, 
   ChevronDown, 
@@ -14,7 +15,8 @@ import {
   ShieldCheck,
   TrendingUp,
   Palette,
-  Check
+  Check,
+  PhoneCall
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -42,6 +44,8 @@ export const Header: React.FC<HeaderProps> = ({
   theme = 'crm-green',
   onSelectTheme,
 }) => {
+  const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
+
   const isLight = theme === 'light-clean';
   const isHeritage = theme === 'heritage-tan';
 
@@ -100,7 +104,18 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right: Station / Company Switcher & Tools */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          {/* Supplier & Buyer Communication Channels Button */}
+          <button
+            id="header-channels-btn"
+            onClick={() => setIsChannelsModalOpen(true)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all shadow-sm ${toolButtonBg}`}
+            title="Official Supplier & Buyer Communication Channels (Mobile, WhatsApp, E-Mails, Social Media)"
+          >
+            <PhoneCall className="w-3.5 h-3.5 text-[#C8A96A]" />
+            <span className="hidden md:inline">Channels</span>
+          </button>
+
           {/* Theme Profile Selector Dropdown */}
           <div className="relative group">
             <button
@@ -280,6 +295,12 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Official Communication Channels & Social Hub Modal */}
+      <CommunicationChannelsModal
+        isOpen={isChannelsModalOpen}
+        onClose={() => setIsChannelsModalOpen(false)}
+      />
     </header>
   );
 };
