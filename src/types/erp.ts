@@ -592,4 +592,90 @@ export interface SecurityBudgetLine {
   status: 'ACTIVE' | 'PLANNED';
 }
 
+// -------------------------------------------------------------
+// Phase 8: Global Finance, P&L & Dual-Track Economics
+// (From Craft to Cash Flow: Master Launch Blueprint)
+// -------------------------------------------------------------
+
+export interface FinancialLineItem {
+  name: string;
+  amountUsd: number;
+  pctNetTurnover?: number;
+  pctGrossSales?: number;
+  operationalLogic: string;
+  isSubtotal?: boolean;
+  isNegative?: boolean;
+}
+
+export interface DualTrackPnlStatement {
+  fiscalYear: string;
+  totalVolumeUnits: number;
+  b2cUnits: number;
+  b2bUnits: number;
+  grossCommercialTurnoverUsd: number;
+  netCommercialRevenueUsd: number;
+  grossProfitUsd: number;
+  ebitdaUsd: number;
+  ebitdaMarginPct: number;
+  taxProvisionUsd: number;
+  retainedNetProfitUsd: number;
+  blendedNetMarginPct: number;
+  b2cLines: FinancialLineItem[];
+  b2bLines: FinancialLineItem[];
+}
+
+export interface B2cUnitEconomics {
+  skuTier: string;
+  blendedRrpUsd: number;
+  factoryFobDhakaUsd: number;
+  landedSeaCostCifUsd: number;
+  pickPackPlatformFeeUsd: number;
+  paidAdCacTargetUsd: number;
+  netUnitContributionUsd: number;
+  contributionMarginPct: number;
+  sharePct: number;
+  targetUnits: number;
+  channels: string;
+  optimizationNote: string;
+}
+
+export interface B2bUnitEconomics {
+  category: string;
+  targetUnits: number;
+  wholesalePriceUsd: number;
+  bangladeshProductionCogsUsd: number;
+  oceanFreightDrayageUsd: number;
+  brandingScreenPrintUsd: number;
+  grossUnitProfitUsd: number;
+  grossMarginPct: number;
+  targetClientSegment: string;
+  buyerPersona: string;
+  moqUnits: string;
+}
+
+export interface WorkingCapitalRunwayItem {
+  category: string;
+  amountUsd: number;
+  amountGbp: number;
+  purpose: string;
+  timing: string;
+}
+
+export interface QuarterlyBatchPlan {
+  batchNumber: number;
+  name: string;
+  months: string;
+  totalUnits: number;
+  bloomUnits: number;
+  midLevelUnits: number;
+  commuterUnits: number;
+  economyUnits: number;
+  fundingMechanism: string;
+  logisticsAllocation: string;
+  reorderTriggerDay: number;
+  leadTimeDays: string;
+  status: 'COMPLETED' | 'IN_PRODUCTION' | 'SCHEDULED';
+}
+
+
 

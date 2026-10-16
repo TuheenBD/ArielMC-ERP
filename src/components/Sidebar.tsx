@@ -130,7 +130,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'FINANCE' as ActiveTab,
           label: 'Global Multi-Station Finance',
           icon: Landmark,
-          badge: 'Phase 8',
+          badge: '10k P&L Live',
           badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 8',
         },
