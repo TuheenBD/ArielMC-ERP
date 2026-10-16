@@ -5,8 +5,9 @@ export const metadata: Metadata = {
   title: "ArielMC Enterprise ERP | Global Sourcing & Supply Chain",
   description: "Enterprise ERP for Ariel Marketing & Communications Limited (ArielMC) - B2B Export & D2C Brand Management",
   icons: {
-    icon: "/images/ArielMC_Emblem_Square.png",
-    apple: "/images/ArielMC_Emblem_Square.png",
+    icon: "/images/ArielMC_ERP_Icon.png",
+    apple: "/images/ArielMC_ERP_Icon.png",
+    shortcut: "/images/ArielMC_ERP_Icon.png",
   },
 };
 
@@ -27,7 +28,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className="min-h-full flex flex-col bg-[#F4F6F4] text-[#1A1A1A] antialiased selection:bg-[#C9A86A] selection:text-[#1F3A2E]"
+        className="min-h-full flex flex-col bg-[#FAF9F5] text-[#1A1A1A] antialiased selection:bg-[#C9A86A] selection:text-[#1F3A2E]"
       >
         {children}
       </body>

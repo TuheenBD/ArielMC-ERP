@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CompanyEntity,
   CurrencyRate,
@@ -313,10 +313,19 @@ export default function Home() {
     products.reduce((acc, curr) => acc + curr.costing.arielSourcingMarginPct, 0) / (totalSkus || 1)
   ).toFixed(1);
 
-  const workspaceBg = theme === 'heritage-tan' ? 'bg-[#FAF7F2]' : theme === 'royal-blue' ? 'bg-[#F0F4FA]' : 'bg-[#F4F6F4]';
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const workspaceBg = 'bg-[#FAF9F5]';
 
   return (
-    <div className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors`}>
+    <div 
+      id="arielmc-erp-root" 
+      data-theme={theme} 
+      className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors`}
+    >
       {/* Sidebar Navigation */}
       <Sidebar
         activeTab={activeTab}
@@ -326,7 +335,7 @@ export default function Home() {
       />
 
       {/* Main Content Pane */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#FAF9F5]">
         {/* Global Header */}
         <Header
           companies={companies}

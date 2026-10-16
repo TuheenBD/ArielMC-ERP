@@ -219,12 +219,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             title="ArielMC Global Sourcing & Supply Chain ERP"
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center p-0.5 bg-slate-50 border border-slate-100/80 shadow-xs">
+              <div className="relative w-11 h-11 rounded-2xl overflow-hidden shrink-0 flex items-center justify-center p-0.5 bg-white shadow-md border border-[#C8A96A]/60">
                 <Image
-                  src="/images/ArielMC_Emblem_Square.png"
-                  alt="ArielMC Logo Emblem"
-                  width={40}
-                  height={40}
+                  src="/images/ArielMC_ERP_Icon.png"
+                  alt="ArielMC ERP Software Icon"
+                  width={44}
+                  height={44}
                   className="object-contain w-full h-full group-hover:scale-105 transition-transform"
                   priority
                 />
@@ -239,7 +239,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </span>
                 </div>
                 <p className="text-[8.5px] font-bold text-[#E89A1B] uppercase tracking-tighter truncate mt-1 leading-tight">
-                  Ariel Marketing &amp; Communications Ltd
+                  Global Trade &amp; Sourcing ERP
                 </p>
               </div>
             </div>

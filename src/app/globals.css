@@ -3,7 +3,7 @@
 @layer base {
   :root {
     /* Exact ArielMC CRM & Website Color System */
-    --background: #F4F6F4;      /* CRM Light Background */
+    --background: #FAF9F5;      /* Light Ivory White for ALL color schemes */
     --foreground: #1A1A1A;      /* High-contrast ink text */
     --card: #FFFFFF;            /* Crisp white cards */
     --card-foreground: #1A1A1A;
@@ -41,10 +41,21 @@
 }
 
 body {
-  background-color: #F4F6F4;
+  background-color: #FAF9F5 !important;
   color: #1A1A1A;
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
+}
+
+/* Light Ivory White Canvas for All Themes (#FAF9F5) */
+.bg-\[\#F4F6F4\],
+[class*="bg-[#F4F6F4]"],
+.bg-\[\#F8F6F2\],
+[class*="bg-[#F8F6F2]"],
+.bg-\[\#F0F4FA\],
+[class*="bg-[#F0F4FA]"],
+.bg-ivory {
+  background-color: #FAF9F5 !important;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
@@ -141,4 +152,142 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   .no-print {
     display: none !important;
   }
+}
+
+/* ========================================================
+   ROYAL BLUE THEME SYSTEM (#4169E1) - COMPLETE APP ADAPTATION
+   Transforms all hardcoded sourcing green into elegant Royal Blue
+   while keeping the Light Ivory White (#FAF9F5) main background
+   ======================================================== */
+[data-theme="royal-blue"] {
+  --primary: #4169E1;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EFF6FF;
+  --secondary-foreground: #1E3A8A;
+  --accent: #2563EB;
+  --border: #DBEAFE;
+  --ring: #4169E1;
+}
+
+/* Primary Dark Green -> Deep Royal Blue & Indigo */
+[data-theme="royal-blue"] .bg-\[\#1F3A2E\],
+[data-theme="royal-blue"] [class*="bg-[#1F3A2E]"],
+[data-theme="royal-blue"] .bg-\[\#172D24\],
+[data-theme="royal-blue"] [class*="bg-[#172D24]"],
+[data-theme="royal-blue"] .bg-\[\#162B22\],
+[data-theme="royal-blue"] [class*="bg-[#162B22]"],
+[data-theme="royal-blue"] .bg-\[\#11231A\],
+[data-theme="royal-blue"] [class*="bg-[#11231A]"],
+[data-theme="royal-blue"] .bg-\[\#12231B\],
+[data-theme="royal-blue"] [class*="bg-[#12231B]"],
+[data-theme="royal-blue"] .bg-\[\#0E1A14\],
+[data-theme="royal-blue"] [class*="bg-[#0E1A14]"] {
+  background-color: #1E3A8A !important;
+}
+
+/* Hover States for Royal Blue buttons */
+[data-theme="royal-blue"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#2C5240]"]:hover,
+[data-theme="royal-blue"] .hover\:bg-\[\#172D24\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#172D24]"]:hover,
+[data-theme="royal-blue"] .hover\:bg-\[\#11231A\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#11231A]"]:hover {
+  background-color: #2563EB !important;
+}
+
+/* Action Buttons & Badges -> Royal Blue */
+[data-theme="royal-blue"] .bg-\[\#1E6B3A\],
+[data-theme="royal-blue"] [class*="bg-[#1E6B3A]"],
+[data-theme="royal-blue"] .bg-\[\#2C5240\],
+[data-theme="royal-blue"] [class*="bg-[#2C5240]"],
+[data-theme="royal-blue"] .bg-\[\#224536\],
+[data-theme="royal-blue"] [class*="bg-[#224536]"] {
+  background-color: #2563EB !important;
+}
+
+/* Text Colors -> Royal Blue Navy & Vibrant Blue */
+[data-theme="royal-blue"] .text-\[\#1F3A2E\],
+[data-theme="royal-blue"] [class*="text-[#1F3A2E]"],
+[data-theme="royal-blue"] .text-\[\#1E6B3A\],
+[data-theme="royal-blue"] [class*="text-[#1E6B3A]"],
+[data-theme="royal-blue"] .text-\[\#172D24\],
+[data-theme="royal-blue"] [class*="text-[#172D24]"],
+[data-theme="royal-blue"] .text-\[\#14512C\],
+[data-theme="royal-blue"] [class*="text-[#14512C]"] {
+  color: #1E40AF !important;
+}
+
+/* Light Green Washes -> Light Soft Royal Blue Tint */
+[data-theme="royal-blue"] .bg-\[\#E8F0EA\],
+[data-theme="royal-blue"] [class*="bg-[#E8F0EA]"],
+[data-theme="royal-blue"] .bg-\[\#F0F4F1\],
+[data-theme="royal-blue"] [class*="bg-[#F0F4F1]"],
+[data-theme="royal-blue"] .bg-\[\#E4F3E9\],
+[data-theme="royal-blue"] [class*="bg-[#E4F3E9]"],
+[data-theme="royal-blue"] .bg-\[\#F8FAF8\],
+[data-theme="royal-blue"] [class*="bg-[#F8FAF8]"],
+[data-theme="royal-blue"] .bg-\[\#CFE0D5\]\/20,
+[data-theme="royal-blue"] [class*="bg-[#CFE0D5]/20"] {
+  background-color: #EFF6FF !important;
+}
+
+/* Borders in Royal Blue Mode */
+[data-theme="royal-blue"] .border-\[\#1F3A2E\],
+[data-theme="royal-blue"] [class*="border-[#1F3A2E]"],
+[data-theme="royal-blue"] .border-\[\#2C5240\],
+[data-theme="royal-blue"] [class*="border-[#2C5240]"],
+[data-theme="royal-blue"] .border-\[\#3A6B54\],
+[data-theme="royal-blue"] [class*="border-[#3A6B54]"],
+[data-theme="royal-blue"] .border-\[\#2A4837\],
+[data-theme="royal-blue"] [class*="border-[#2A4837]"] {
+  border-color: #3B82F6 !important;
+}
+
+[data-theme="royal-blue"] .border-\[\#DDE3DD\],
+[data-theme="royal-blue"] [class*="border-[#DDE3DD]"] {
+  border-color: #E2E8F0 !important;
+}
+
+/* Table Headings in Royal Blue */
+[data-theme="royal-blue"] thead {
+  background-color: #1E3A8A !important;
+  color: #FFFFFF !important;
+}
+
+/* Rings & Focus */
+[data-theme="royal-blue"] .focus\:border-\[\#1F3A2E\]:focus,
+[data-theme="royal-blue"] [class*="focus:border-[#1F3A2E]"]:focus {
+  border-color: #4169E1 !important;
+}
+
+[data-theme="royal-blue"] .focus\:ring-\[\#1F3A2E\]:focus,
+[data-theme="royal-blue"] [class*="focus:ring-[#1F3A2E]"]:focus {
+  --tw-ring-color: #4169E1 !important;
+}
+
+/* Status Badges in Royal Blue Mode */
+[data-theme="royal-blue"] .badge-good {
+  background-color: #EFF6FF !important;
+  color: #1E40AF !important;
+  border-color: #BFDBFE !important;
+}
+
+/* ========================================================
+   HERITAGE TAN THEME SYSTEM (#C8A96A / #8A6D3B)
+   ======================================================== */
+[data-theme="heritage-tan"] .bg-\[\#1F3A2E\],
+[data-theme="heritage-tan"] [class*="bg-[#1F3A2E]"] {
+  background-color: #2D3A30 !important;
+}
+[data-theme="heritage-tan"] .text-\[\#1F3A2E\],
+[data-theme="heritage-tan"] [class*="text-[#1F3A2E]"] {
+  color: #8A6D3B !important;
+}
+[data-theme="heritage-tan"] .border-\[\#1F3A2E\],
+[data-theme="heritage-tan"] [class*="border-[#1F3A2E]"] {
+  border-color: #C8A96A !important;
+}
+[data-theme="heritage-tan"] .bg-\[\#E8F0EA\],
+[data-theme="heritage-tan"] [class*="bg-[#E8F0EA]"] {
+  background-color: #FAF6EE !important;
 }
