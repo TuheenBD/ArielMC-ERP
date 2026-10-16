@@ -18,7 +18,8 @@ import {
   Check,
   PhoneCall,
   Video,
-  FileText
+  FileText,
+  Database
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -35,6 +36,8 @@ interface HeaderProps {
   activeTab?: ActiveTab;
   onSelectTab?: (tab: ActiveTab) => void;
   onOpenDocumentCenter?: () => void;
+  onOpenDatabaseSettings?: () => void;
+  isDatabaseConnected?: boolean;
 }
 
 const getStationBrandName = (code: EntityCode) => {
@@ -68,6 +71,8 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onSelectTab,
   onOpenDocumentCenter,
+  onOpenDatabaseSettings,
+  isDatabaseConnected = false,
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
 
@@ -315,6 +320,22 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <FileText className="w-3.5 h-3.5 text-[#C8A96A]" />
               <span className="hidden xl:inline">Export Docs</span>
+            </button>
+          )}
+
+          {/* Database Persistence Status & Sync Center */}
+          {onOpenDatabaseSettings && (
+            <button
+              id="header-database-settings-btn"
+              onClick={onOpenDatabaseSettings}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm ${toolButtonBg}`}
+              title="ArielMC ERP PostgreSQL Database & Persistent Storage Center (Supabase)"
+            >
+              <div className="relative flex items-center">
+                <Database className="w-3.5 h-3.5 text-[#C8A96A]" />
+                <span className={`absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full ${isDatabaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`} />
+              </div>
+              <span className="hidden xl:inline">Database</span>
             </button>
           )}
 

@@ -35,8 +35,20 @@ import { FinanceManagement } from '@/components/FinanceManagement';
 import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
 import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocumentCenter';
+import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
+import {
+  fetchProducts,
+  persistProduct,
+  fetchFactories,
+  persistFactory,
+  fetchSamples,
+  persistSample,
+  fetchOrders,
+  persistOrder,
+  testSupabaseHealth,
+} from '@/lib/erpPersistence';
 import {
   Building2,
   Package,
@@ -93,6 +105,34 @@ export default function Home() {
   const [isDocCenterOpen, setIsDocCenterOpen] = useState(false);
   const [docCenterType, setDocCenterType] = useState<DocumentType>('COMMERCIAL_INVOICE');
   const [docCenterOrderId, setDocCenterOrderId] = useState<string | undefined>(undefined);
+  const [isDbModalOpen, setIsDbModalOpen] = useState(false);
+  const [isDbConnected, setIsDbConnected] = useState(false);
+
+  // Persistent Storage Initial Hydration & Connection Ping
+  const loadPersistentData = React.useCallback(async () => {
+    try {
+      const health = await testSupabaseHealth();
+      setIsDbConnected(health.connected);
+
+      const [persistedProds, persistedFacs, persistedSmps, persistedOrds] = await Promise.all([
+        fetchProducts(),
+        fetchFactories(),
+        fetchSamples(),
+        fetchOrders(),
+      ]);
+
+      if (persistedProds && persistedProds.length > 0) setProducts(persistedProds);
+      if (persistedFacs && persistedFacs.length > 0) setFactories(persistedFacs);
+      if (persistedSmps && persistedSmps.length > 0) setSamples(persistedSmps);
+      if (persistedOrds && persistedOrds.length > 0) setOrders(persistedOrds);
+    } catch (e) {
+      console.warn('ArielMC ERP persistence hydration fallback active:', e);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    loadPersistentData();
+  }, [loadPersistentData]);
 
   const handleOpenDocCenter = (type?: DocumentType, orderId?: string) => {
     if (type) setDocCenterType(type);
@@ -105,14 +145,17 @@ export default function Home() {
 
   const handleAddProduct = (newProd: ProductItem) => {
     setProducts((prev) => [newProd, ...prev]);
+    persistProduct(newProd).catch(console.error);
   };
 
   const handleAddFactory = (newFactory: SupplierFactory) => {
     setFactories((prev) => [newFactory, ...prev]);
+    persistFactory(newFactory).catch(console.error);
   };
 
   const handleAddSample = (newSample: SampleDevelopmentOrder) => {
     setSamples((prev) => [newSample, ...prev]);
+    persistSample(newSample).catch(console.error);
   };
 
   const handleUpdateSampleStatus = (
@@ -142,6 +185,7 @@ export default function Home() {
             },
           ];
         }
+        persistSample(updated).catch(console.error);
         return updated;
       })
     );
@@ -151,23 +195,31 @@ export default function Home() {
     setSamples((prev) =>
       prev.map((s) => {
         if (s.id !== sdoId) return s;
-        return {
+        const updated: SampleDevelopmentOrder = {
           ...s,
           stage: nextStage,
           roundNumber: 1,
           status: 'TECH_PACK_SENT',
         };
+        persistSample(updated).catch(console.error);
+        return updated;
       })
     );
   };
 
   const handleAddOrder = (newOrder: BuyerSalesOrder) => {
     setOrders((prev) => [newOrder, ...prev]);
+    persistOrder(newOrder).catch(console.error);
   };
 
   const handleUpdateOrderStatus = (orderId: string, newStatus: OrderStatus) => {
     setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+      prev.map((o) => {
+        if (o.id !== orderId) return o;
+        const updated = { ...o, status: newStatus };
+        persistOrder(updated).catch(console.error);
+        return updated;
+      })
     );
   };
 
@@ -182,7 +234,9 @@ export default function Home() {
         const updatedTna = o.timeAndAction.map((m) =>
           m.id === milestoneId ? { ...m, status: newStatus } : m
         );
-        return { ...o, timeAndAction: updatedTna };
+        const updated = { ...o, timeAndAction: updatedTna };
+        persistOrder(updated).catch(console.error);
+        return updated;
       })
     );
   };
@@ -224,6 +278,8 @@ export default function Home() {
           activeTab={activeTab}
           onSelectTab={setActiveTab}
           onOpenDocumentCenter={() => handleOpenDocCenter('COMMERCIAL_INVOICE')}
+          onOpenDatabaseSettings={() => setIsDbModalOpen(true)}
+          isDatabaseConnected={isDbConnected}
         />
 
         {/* Dashboard Workspace */}
@@ -398,6 +454,13 @@ export default function Home() {
         initialOrderId={docCenterOrderId}
         activeEntity={activeEntity}
         activeCurrency={activeCurrency}
+      />
+
+      {/* Supabase PostgreSQL Database & Persistent Storage Modal */}
+      <DatabaseSettingsModal
+        isOpen={isDbModalOpen}
+        onClose={() => setIsDbModalOpen(false)}
+        onDataSynced={loadPersistentData}
       />
     </div>
   );
