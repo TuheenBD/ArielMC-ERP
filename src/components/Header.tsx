@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CompanyEntity, CurrencyRate, EntityCode } from '@/types/erp';
-import { ThemeProfile } from '@/components/Sidebar';
+import { ThemeProfile, ActiveTab } from '@/components/Sidebar';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import { 
   Building2, 
@@ -16,7 +16,8 @@ import {
   TrendingUp,
   Palette,
   Check,
-  PhoneCall
+  PhoneCall,
+  Video
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -30,6 +31,8 @@ interface HeaderProps {
   onSearchChange: (q: string) => void;
   theme?: ThemeProfile;
   onSelectTheme?: (t: ThemeProfile) => void;
+  activeTab?: ActiveTab;
+  onSelectTab?: (tab: ActiveTab) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -43,6 +46,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   theme = 'crm-green',
   onSelectTheme,
+  activeTab,
+  onSelectTab,
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
 
@@ -279,6 +284,33 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Bell className="w-4 h-4" />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C8A96A] ring-2 ring-[#1F3A2E]" />
+          </button>
+
+          {/* Communication Hub Upper Right Tab (Just Before Profile) */}
+          <button
+            id="header-comm-hub-tab-btn"
+            onClick={() => onSelectTab?.('COMMUNICATIONS')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm ${
+              activeTab === 'COMMUNICATIONS'
+                ? 'bg-[#C8A96A] text-[#1F3A2E] border-[#C8A96A] shadow-md ring-2 ring-[#C8A96A]/30'
+                : toolButtonBg
+            }`}
+            title="ArielMC Unified Communications & Meetings Hub"
+          >
+            <div className="relative flex items-center">
+              <Video className={`w-3.5 h-3.5 ${activeTab === 'COMMUNICATIONS' ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`} />
+              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+            <span className="font-heading tracking-wide hidden md:inline">Communication Hub</span>
+            <span
+              className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-bold ${
+                activeTab === 'COMMUNICATIONS'
+                  ? 'bg-[#1F3A2E] text-white'
+                  : 'bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/40'
+              }`}
+            >
+              LIVE
+            </span>
           </button>
 
           {/* User Profile */}

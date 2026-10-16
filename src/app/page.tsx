@@ -210,6 +210,8 @@ export default function Home() {
           onSearchChange={setSearchQuery}
           theme={theme}
           onSelectTheme={handleSelectTheme}
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
         />
 
         {/* Dashboard Workspace */}
