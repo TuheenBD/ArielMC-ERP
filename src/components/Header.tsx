@@ -127,16 +127,34 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Station / Company Switcher & Tools */}
         <div className="flex items-center gap-2.5">
-          {/* Supplier & Buyer Communication Channels Button */}
-          <button
-            id="header-channels-btn"
-            onClick={() => setIsChannelsModalOpen(true)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all shadow-sm ${toolButtonBg}`}
-            title="Official Supplier & Buyer Communication Channels (Mobile, WhatsApp, E-Mails, Social Media)"
-          >
-            <PhoneCall className="w-3.5 h-3.5 text-[#C8A96A]" />
-            <span className="hidden md:inline">Channels</span>
-          </button>
+          {/* Channels & Display Currency (Stacked Column) */}
+          <div className="flex flex-col gap-1 items-stretch shrink-0">
+            {/* Supplier & Buyer Communication Channels Button */}
+            <button
+              id="header-channels-btn"
+              onClick={() => setIsChannelsModalOpen(true)}
+              className={`flex items-center justify-center gap-1 px-2.5 py-1 rounded-md border text-[11px] font-semibold transition-all shadow-sm ${toolButtonBg}`}
+              title="Official Supplier & Buyer Communication Channels (Mobile, WhatsApp, E-Mails, Social Media)"
+            >
+              <PhoneCall className="w-3 h-3 text-[#C8A96A]" />
+              <span>Channels</span>
+            </button>
+
+            {/* Display Currency Switcher (Placed directly under Channels) */}
+            <select
+              id="currency-selector"
+              value={activeCurrency.code}
+              onChange={(e) => onSelectCurrency(e.target.value)}
+              className={`text-[10px] font-mono border rounded-md px-1.5 py-0.5 focus:outline-none focus:border-[#C8A96A] text-center cursor-pointer font-bold ${toolButtonBg}`}
+              title="Display Currency"
+            >
+              {currencies.map((curr) => (
+                <option key={curr.code} value={curr.code} className="bg-[#1F3A2E] text-white">
+                  {curr.code} ({curr.symbol})
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* Theme Profile Selector Dropdown */}
           <div className="relative group">
@@ -283,20 +301,6 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Currency Switcher */}
-          <select
-            id="currency-selector"
-            value={activeCurrency.code}
-            onChange={(e) => onSelectCurrency(e.target.value)}
-            className={`text-xs font-mono border rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#C8A96A] ${toolButtonBg}`}
-            title="Display Currency"
-          >
-            {currencies.map((curr) => (
-              <option key={curr.code} value={curr.code} className="bg-[#1F3A2E] text-white">
-                {curr.code} ({curr.symbol})
-              </option>
-            ))}
-          </select>
 
           {/* Notifications */}
           <button 
