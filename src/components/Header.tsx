@@ -16,7 +16,8 @@ import {
   Video,
   FileText,
   Database,
-  BookOpen
+  BookOpen,
+  ShieldCheck
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 
@@ -87,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const stationMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns on outside click for immediate, smooth 1-click UX
+  // Close dropdowns on outside click with smooth detection
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (themeMenuRef.current && !themeMenuRef.current.contains(event.target as Node)) {
@@ -115,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
     : 'bg-[#2C5240] text-white placeholder-[#A0B9A8] border-[#3A6B54] focus:border-[#C8A96A]';
 
   // Standard corporate toolbar button style - uniform 36px (h-9)
-  const toolBtn = `h-9 flex items-center justify-center gap-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer select-none ${
+  const toolBtn = `h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer select-none ${
     isRoyal
       ? 'bg-[#1E293B] text-white border-[#334155] hover:border-[#4169E1] hover:bg-[#334155]'
       : 'bg-[#2C5240] text-white border-[#3A6B54] hover:border-[#C8A96A] hover:bg-[#35614c]'
@@ -129,49 +130,21 @@ export const Header: React.FC<HeaderProps> = ({
   const tickerCurrency = isRoyal ? 'text-[#E2E8F0]' : 'text-[#E8F0EA]';
 
   return (
-    <header className={`sticky top-0 z-30 ${headerBg} px-4 py-2 transition-colors shadow-md`}>
-      <div className="flex items-center justify-between gap-3 max-w-full overflow-hidden">
+    <header className={`sticky top-0 z-30 ${headerBg} px-6 py-2.5 transition-colors shadow-md`}>
+      {/* ========================================================
+          LINE 1: Corporate Context Controls & Quick Action Tools
+          All uniform h-9 buttons with ample breathing room
+          ======================================================== */}
+      <div className="flex items-center justify-between gap-4 pb-2.5 border-b border-white/10">
         
-        {/* Left Section: Global ERP Search (Prominent fixed width, never squished) */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="relative w-56 sm:w-64 md:w-72 lg:w-80">
-            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${isRoyal ? 'text-[#94A3B8]' : 'text-[#A0B9A8]'}`} />
-            <input
-              id="global-erp-search"
-              type="text"
-              placeholder="Search SKUs, buyers, factories..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className={`w-full h-9 pl-9 pr-3 text-xs rounded-lg border transition-all shadow-inner focus:outline-none focus:ring-1 focus:ring-[#C8A96A] ${searchBoxBg}`}
-            />
-          </div>
-
-          {/* Live FX Ticker (Visible on wide screens) */}
-          <div className={`hidden 2xl:flex items-center gap-2 h-9 px-3 rounded-lg border text-xs shrink-0 ${tickerBg}`}>
-            <div className={`flex items-center gap-1 font-medium ${tickerText}`}>
-              <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span className="text-[11px] font-semibold">FX:</span>
-            </div>
-            <div className="flex items-center gap-2 text-[11px]">
-              {currencies.filter(c => c.code !== 'USD').map(curr => (
-                <span key={curr.code} className={`font-mono ${tickerCurrency}`}>
-                  {curr.code}: <span className="text-[#C8A96A] font-semibold">{curr.rateToUsd}</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Section: Standardized Corporate Toolbar (All Uniform h-9 Height) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-          
-          {/* Station Switcher Dropdown (Controlled 1-Click Menu) */}
-          <div className="relative shrink-0" ref={stationMenuRef}>
+        {/* Left Side: Station, Currency, and Color Scheme Selectors */}
+        <div className="flex items-center gap-2">
+          {/* Operating Station Switcher Dropdown */}
+          <div className="relative" ref={stationMenuRef}>
             <button 
               id="entity-selector-dropdown-btn"
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
                 setIsStationMenuOpen(prev => !prev);
                 setIsThemeMenuOpen(false);
               }}
@@ -179,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
               title="Switch Operating Station"
             >
               <span className="text-sm leading-none">{activeEntity.flag}</span>
-              <span className="font-heading font-bold text-xs tracking-wide text-white hidden sm:inline">
+              <span className="font-heading font-bold text-xs tracking-wide text-white">
                 {getStationBrandName(activeEntity.code)}
               </span>
               <ChevronDown className={`w-3.5 h-3.5 text-[#C8A96A] transition-transform duration-200 ${isStationMenuOpen ? 'rotate-180' : ''}`} />
@@ -187,7 +160,10 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Station Dropdown Menu */}
             {isStationMenuOpen && (
-              <div className="absolute right-0 mt-1.5 w-72 bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 z-50 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150">
+              <div 
+                className="absolute left-0 mt-2 w-72 bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150"
+                style={{ zIndex: 9999 }}
+              >
                 <div className="px-3 py-2 border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269] uppercase tracking-wider flex items-center justify-between">
                   <span>Switch Operating Station</span>
                   <Globe2 className="w-3.5 h-3.5 text-[#1F3A2E]" />
@@ -199,8 +175,12 @@ export const Header: React.FC<HeaderProps> = ({
                       <button
                         key={comp.code}
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          onSelectEntity(comp.code);
+                          setIsStationMenuOpen(false);
+                        }}
+                        onClick={() => {
                           onSelectEntity(comp.code);
                           setIsStationMenuOpen(false);
                         }}
@@ -231,13 +211,13 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-          {/* Display Currency Switcher (Uniform h-9) */}
-          <div className="relative shrink-0">
+          {/* Display Currency Switcher */}
+          <div className="relative">
             <select
               id="currency-selector"
               value={activeCurrency.code}
               onChange={(e) => onSelectCurrency(e.target.value)}
-              className={`h-9 text-xs font-mono border rounded-lg px-2 focus:outline-none focus:border-[#C8A96A] text-center cursor-pointer font-bold shadow-xs ${
+              className={`h-9 text-xs font-mono border rounded-lg px-2.5 focus:outline-none focus:border-[#C8A96A] text-center cursor-pointer font-bold shadow-xs ${
                 isRoyal
                   ? 'bg-[#1E293B] text-white border-[#334155]'
                   : 'bg-[#2C5240] text-white border-[#3A6B54]'
@@ -252,13 +232,12 @@ export const Header: React.FC<HeaderProps> = ({
             </select>
           </div>
 
-          {/* Theme Profile Selector (Instant 1-Click Controlled Dropdown) */}
-          <div className="relative shrink-0" ref={themeMenuRef}>
+          {/* Color Scheme Dropdown (Instant Click Selection with Zero Stuck Risk) */}
+          <div className="relative" ref={themeMenuRef}>
             <button
               id="theme-profile-selector-btn"
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
                 setIsThemeMenuOpen(prev => !prev);
                 setIsStationMenuOpen(false);
               }}
@@ -266,9 +245,9 @@ export const Header: React.FC<HeaderProps> = ({
               title="ERP Color Scheme & Theme Profile"
             >
               <Palette className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span className="hidden md:inline">
+              <span>
                 {theme === 'crm-green'
-                  ? 'CRM Green'
+                  ? 'ArielMC Green'
                   : theme === 'royal-blue'
                   ? 'Royal Blue'
                   : 'Heritage Tan'}
@@ -276,19 +255,26 @@ export const Header: React.FC<HeaderProps> = ({
               <ChevronDown className={`w-3.5 h-3.5 text-[#C8A96A] transition-transform duration-200 ${isThemeMenuOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Theme Dropdown Menu (Fixed 1-click select & instant close) */}
+            {/* Theme Dropdown Menu */}
             {isThemeMenuOpen && (
-              <div className="absolute right-0 mt-1.5 w-64 bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 z-50 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150">
+              <div 
+                className="absolute left-0 mt-2 w-64 bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150"
+                style={{ zIndex: 9999 }}
+              >
                 <div className="px-3 py-2 border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269] uppercase tracking-wider flex items-center justify-between">
                   <span>ERP Color Scheme</span>
                   <Palette className="w-3.5 h-3.5 text-[#1F3A2E]" />
                 </div>
                 <div className="mt-1 space-y-1 text-xs">
-                  {/* Option 1: CRM Green */}
+                  {/* Option 1: ArielMC Green */}
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('crm-green');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
                       onSelectTheme?.('crm-green');
                       setIsThemeMenuOpen(false);
                     }}
@@ -311,8 +297,12 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Option 2: Royal Blue (#4169E1) */}
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('royal-blue');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
                       onSelectTheme?.('royal-blue');
                       setIsThemeMenuOpen(false);
                     }}
@@ -335,8 +325,12 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Option 3: Heritage Tan */}
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('heritage-tan');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
                       onSelectTheme?.('heritage-tan');
                       setIsThemeMenuOpen(false);
                     }}
@@ -359,9 +353,10 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
           </div>
+        </div>
 
-          <div className="h-5 w-[1px] bg-white/20 mx-0.5 shrink-0" />
-
+        {/* Right Side: Operational Tools (Channels, Export, Database, Guide, Notifications, Comm Hub) */}
+        <div className="flex items-center gap-2">
           {/* Communication Channels Button */}
           <button
             id="header-channels-btn"
@@ -371,7 +366,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Official Supplier & Buyer Communication Channels (Mobile, WhatsApp, E-Mails, Social Media)"
           >
             <PhoneCall className="w-3.5 h-3.5 text-[#C8A96A]" />
-            <span className="hidden sm:inline">Channels</span>
+            <span>Channels</span>
           </button>
 
           {/* Official Documents PDF Generator */}
@@ -384,8 +379,7 @@ export const Header: React.FC<HeaderProps> = ({
               title="Official ArielMC PDF Document Engine (Commercial Invoices, Proforma Invoices, Mushak 6.3, Purchase Orders)"
             >
               <FileText className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span className="hidden xl:inline">Export Docs</span>
-              <span className="xl:hidden hidden sm:inline">Docs</span>
+              <span>Export Docs</span>
             </button>
           )}
 
@@ -402,8 +396,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <Database className="w-3.5 h-3.5 text-[#C8A96A]" />
                 <span className={`absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full ${isDatabaseConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`} />
               </div>
-              <span className="hidden xl:inline">Database</span>
-              <span className="xl:hidden hidden sm:inline">DB</span>
+              <span>Database</span>
             </button>
           )}
 
@@ -417,12 +410,11 @@ export const Header: React.FC<HeaderProps> = ({
               title="ArielMC ERP User Guide & Operational Manual (Official PDF & Interactive Reader)"
             >
               <BookOpen className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span className="hidden xl:inline">User Guide</span>
-              <span className="xl:hidden hidden sm:inline">Guide</span>
+              <span>User Guide</span>
             </button>
           )}
 
-          {/* Notifications (Uniform h-9 w-9) */}
+          {/* Notifications */}
           <button 
             id="header-notifications-btn"
             type="button"
@@ -438,7 +430,7 @@ export const Header: React.FC<HeaderProps> = ({
             id="header-comm-hub-tab-btn"
             type="button"
             onClick={() => onSelectTab?.('COMMUNICATIONS')}
-            className={`h-9 flex items-center gap-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 ${
+            className={`h-9 flex items-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 ${
               activeTab === 'COMMUNICATIONS'
                 ? 'bg-[#C8A96A] text-[#1F3A2E] border-[#C8A96A] shadow-md ring-2 ring-[#C8A96A]/30'
                 : toolBtn
@@ -449,7 +441,7 @@ export const Header: React.FC<HeaderProps> = ({
               <Video className={`w-3.5 h-3.5 ${activeTab === 'COMMUNICATIONS' ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`} />
               <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             </div>
-            <span className="font-heading tracking-wide hidden lg:inline">Comm Hub</span>
+            <span className="font-heading tracking-wide">Comm Hub</span>
             <span
               className={`text-[9px] font-mono px-1 py-0.2 rounded font-bold ${
                 activeTab === 'COMMUNICATIONS'
@@ -460,35 +452,78 @@ export const Header: React.FC<HeaderProps> = ({
               LIVE
             </span>
           </button>
-
-          <div className="h-5 w-[1px] bg-white/20 mx-0.5 shrink-0" />
-
-          {/* User Profile & Account Control */}
-          <button
-            id="header-user-profile-btn"
-            type="button"
-            onClick={onOpenProfileControl || onOpenAuthModal}
-            className={`h-9 flex items-center gap-2 pl-1.5 pr-2 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 ${
-              isRoyal ? 'border-[#334155] bg-[#1E293B]' : isHeritage ? 'border-[#2A4837] bg-[#2C5240]' : 'border-[#3A6B54] bg-[#2C5240]'
-            }`}
-            title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
-          >
-            <div 
-              className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold shadow-xs shrink-0"
-              style={{
-                backgroundColor: currentUser?.avatarColor || '#C8A96A',
-                color: '#1F3A2E'
-              }}
-            >
-              {currentUser?.avatarInitials || 'AMC'}
-            </div>
-            <div className="hidden xl:block text-left text-xs leading-none">
-              <div className="font-semibold text-white group-hover:text-[#C8A96A] transition-colors truncate max-w-[110px]">
-                {currentUser?.name || 'Syed Akramul Hassan'}
-              </div>
-            </div>
-          </button>
         </div>
+      </div>
+
+      {/* ========================================================
+          LINE 2: Search Bar & Executive User Profile (Per Instruction)
+          Search gets prominent width, Profile is placed on the 2nd line
+          ======================================================== */}
+      <div className="flex items-center justify-between gap-4 pt-2.5">
+        
+        {/* Left: Prominent Search Input + Live FX Ticker */}
+        <div className="flex items-center gap-3 flex-1 max-w-3xl">
+          <div className="relative flex-1">
+            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${isRoyal ? 'text-[#94A3B8]' : 'text-[#A0B9A8]'}`} />
+            <input
+              id="global-erp-search"
+              type="text"
+              placeholder="Search SKUs, HS codes, leather types, factories, buyers, purchase orders..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className={`w-full h-10 pl-10 pr-4 text-xs rounded-lg border transition-all shadow-inner focus:outline-none focus:ring-1 focus:ring-[#C8A96A] ${searchBoxBg}`}
+            />
+          </div>
+
+          {/* Live FX Ticker (Clean h-10 pill) */}
+          <div className={`hidden lg:flex items-center gap-2 h-10 px-3.5 rounded-lg border text-xs shrink-0 ${tickerBg}`}>
+            <div className={`flex items-center gap-1.5 font-medium ${tickerText}`}>
+              <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="text-[11px] font-semibold">FX:</span>
+            </div>
+            <div className="flex items-center gap-3 text-[11px]">
+              {currencies.filter(c => c.code !== 'USD').map(curr => (
+                <span key={curr.code} className={`font-mono ${tickerCurrency}`}>
+                  {curr.code}: <span className="text-[#C8A96A] font-semibold">{curr.rateToUsd}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Executive User Profile & Account Control (Prominent on Line 2) */}
+        <button
+          id="header-user-profile-btn"
+          type="button"
+          onClick={onOpenProfileControl || onOpenAuthModal}
+          className={`h-10 flex items-center gap-3 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 ${
+            isRoyal ? 'border-[#334155] bg-[#1E293B]' : isHeritage ? 'border-[#2A4837] bg-[#2C5240]' : 'border-[#3A6B54] bg-[#2C5240]'
+          }`}
+          title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
+        >
+          <div 
+            className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shadow-xs shrink-0"
+            style={{
+              backgroundColor: currentUser?.avatarColor || '#C8A96A',
+              color: '#1F3A2E'
+            }}
+          >
+            {currentUser?.avatarInitials || 'AMC'}
+          </div>
+          <div className="text-left leading-tight hidden sm:block">
+            <div className="font-bold text-white text-xs flex items-center gap-1.5">
+              <span>{currentUser?.name || 'Syed Akramul Hassan'}</span>
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#1F3A2E] font-bold">
+                SUPER ADMIN
+              </span>
+            </div>
+            <div className={`text-[10px] flex items-center gap-1 ${isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]'}`}>
+              <ShieldCheck className="w-3 h-3 text-[#C8A96A]" />
+              <span>{currentUser?.designation || 'Managing Director & Founder'}</span>
+            </div>
+          </div>
+          <ChevronDown className="w-3.5 h-3.5 text-[#C8A96A] ml-0.5" />
+        </button>
       </div>
 
       {/* Official Communication Channels & Social Hub Modal */}

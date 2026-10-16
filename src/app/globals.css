@@ -198,6 +198,18 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   color: #FFFFFF !important;
 }
 
+/* Modals and Deep Dark Panels in Royal Blue Mode */
+[data-theme="royal-blue"] #profile-control-modal,
+[data-theme="royal-blue"] .bg-\[\#12231B\],
+[data-theme="royal-blue"] [class*="bg-[#12231B]"] {
+  background-color: #0F172A !important;
+  border-color: #2563EB !important;
+}
+
+[data-theme="royal-blue"] [class*="from-[#162B22]"] {
+  background-image: linear-gradient(to right, #0F172A, #1E3A8A, #0F172A) !important;
+}
+
 /* Headers and Navigation Bars -> Deep Royal Blue */
 [data-theme="royal-blue"] thead,
 [data-theme="royal-blue"] thead tr,
