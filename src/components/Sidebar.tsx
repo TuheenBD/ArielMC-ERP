@@ -72,8 +72,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'FACTORIES' as ActiveTab,
           label: 'BD Factory & Compliance',
           icon: Factory,
-          badge: 'Phase 2',
-          badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+          badge: '8 Factories',
+          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 2',
         },
         {
@@ -205,7 +205,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
-                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'CRM';
+                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM';
                   
                   return (
                     <button

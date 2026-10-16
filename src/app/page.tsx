@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CompanyEntity, CurrencyRate, EntityCode, ProductItem, CrmLead } from '@/types/erp';
+import { CompanyEntity, CurrencyRate, EntityCode, ProductItem, CrmLead, SupplierFactory } from '@/types/erp';
 import { INITIAL_COMPANIES, INITIAL_CURRENCIES, INITIAL_PRODUCTS } from '@/data/initialData';
+import { INITIAL_FACTORIES } from '@/data/initialFactories';
 import crmLeadsData from '@/data/crmLeads.json';
 import { Header } from '@/components/Header';
 import { Sidebar, ActiveTab } from '@/components/Sidebar';
 import { EntityStationOverview } from '@/components/EntityStationOverview';
 import { ProductCatalog } from '@/components/ProductCatalog';
+import { FactoryManagement } from '@/components/FactoryManagement';
 import { CrmPipeline } from '@/components/CrmPipeline';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
@@ -31,6 +33,7 @@ export default function Home() {
   const [currencies] = useState<CurrencyRate[]>(INITIAL_CURRENCIES);
   const [activeCurrencyCode, setActiveCurrencyCode] = useState<string>('USD');
   const [products, setProducts] = useState<ProductItem[]>(INITIAL_PRODUCTS);
+  const [factories, setFactories] = useState<SupplierFactory[]>(INITIAL_FACTORIES);
   const [crmLeads] = useState<CrmLead[]>(crmLeadsData as CrmLead[]);
   const [activeTab, setActiveTab] = useState<ActiveTab>('PRODUCTS');
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,9 +49,14 @@ export default function Home() {
     setProducts((prev) => [newProd, ...prev]);
   };
 
+  const handleAddFactory = (newFactory: SupplierFactory) => {
+    setFactories((prev) => [newFactory, ...prev]);
+  };
+
   // Quick Stats
   const totalSkus = products.length;
   const totalLeads = crmLeads.length;
+  const totalFactories = factories.length;
   const avgMargin = (
     products.reduce((acc, curr) => acc + curr.costing.arielSourcingMarginPct, 0) / (totalSkus || 1)
   ).toFixed(1);
@@ -108,6 +116,19 @@ export default function Home() {
 
             <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
               <div className="flex items-center justify-between text-slate-400 text-xs">
+                <span>Partner Factories</span>
+                <Factory className="w-4 h-4 text-amber-400" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-amber-400 mt-1">
+                {totalFactories} <span className="text-xs text-slate-400 font-sans font-normal">Facilities</span>
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                <span>Savar, Gazipur, Narsingdi, Dhamrai</span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 text-xs">
                 <span>Global B2B Leads</span>
                 <Users2 className="w-4 h-4 text-purple-400" />
               </div>
@@ -116,19 +137,6 @@ export default function Home() {
               </div>
               <div className="text-[11px] text-purple-400 mt-1">
                 <span>UK (96), EU (57), USA (56), AU (45)</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
-              <div className="flex items-center justify-between text-slate-400 text-xs">
-                <span>Avg Sourcing Margin</span>
-                <Percent className="w-4 h-4 text-amber-400" />
-              </div>
-              <div className="text-2xl font-bold font-mono text-amber-400 mt-1">
-                {avgMargin}%
-              </div>
-              <div className="text-[11px] text-slate-400 mt-1">
-                <span>Locked Back-to-Back Export Spread</span>
               </div>
             </div>
           </div>
@@ -152,11 +160,18 @@ export default function Home() {
             />
           )}
 
+          {activeTab === 'FACTORIES' && (
+            <FactoryManagement
+              factories={factories}
+              onAddFactory={handleAddFactory}
+            />
+          )}
+
           {activeTab === 'CRM' && (
             <CrmPipeline initialLeads={crmLeads} />
           )}
 
-          {activeTab !== 'STATIONS' && activeTab !== 'PRODUCTS' && activeTab !== 'CRM' && (
+          {activeTab !== 'STATIONS' && activeTab !== 'PRODUCTS' && activeTab !== 'CRM' && activeTab !== 'FACTORIES' && (
             <PhaseRoadmapPreview
               activeTab={activeTab}
               onNavigateToProducts={() => setActiveTab('PRODUCTS')}
