@@ -199,3 +199,104 @@ export interface SupplierFactory {
   };
   associatedSkus: string[];
 }
+
+// -------------------------------------------------------------
+// Phase 3: R&D, Tech Packs & Sample Development Orders (SDO)
+// -------------------------------------------------------------
+
+export type SampleStage = 
+  | 'PROTO'        // 1st Prototype / Fit & Feasibility
+  | 'FIT'          // Styling & Measurement Adjustment
+  | 'SIZE_SET'     // Range / Grading Spec validation
+  | 'PP'           // Pre-Production (PP) Approval - Gate before bulk cutting/kiln
+  | 'TOP';         // Top of Production (TOP) - Pulled from initial mass run
+
+export type SampleStatus = 
+  | 'DRAFT'
+  | 'TECH_PACK_SENT'
+  | 'IN_FABRICATION'
+  | 'INTERNAL_QA_PASSED'
+  | 'DISPATCHED'
+  | 'DELIVERED_TO_BUYER'
+  | 'APPROVED'
+  | 'APPROVED_WITH_COMMENTS'
+  | 'REVISION_REQUIRED'
+  | 'REJECTED';
+
+export type CourierProvider = 'DHL Express' | 'FedEx Priority' | 'Aramex' | 'UPS Worldwide';
+
+export interface TechPackSpec {
+  dimensions: string;
+  tolerances: string;
+  primaryMaterial: string;
+  materialDetails: string;
+  liningOrFinish: string;
+  hardwareOrGlaze: string;
+  trimsAndPackaging: string;
+  careInstructions: string;
+  artworkOrDxfUrl?: string;
+  barcodeEan?: string;
+  colorwayPantone: string;
+  weightTargetGrams: number;
+}
+
+export interface SampleCourierTracking {
+  courier: CourierProvider;
+  awbNumber: string;
+  dispatchDate: string;
+  estimatedDeliveryDate: string;
+  actualDeliveryDate?: string;
+  originAirport: string; // e.g. DAC (Hazrat Shahjalal Intl, Dhaka)
+  destinationAirport: string; // e.g. LHR (London Heathrow), JFK (New York), AMS (Amsterdam), SYD (Sydney)
+  currentLocation: string;
+  transitStatus: 'LABEL_CREATED' | 'COLLECTED_DHAKA' | 'DEPARTED_DAC' | 'CUSTOMS_CLEARANCE' | 'OUT_FOR_DELIVERY' | 'DELIVERED';
+  costUsd: number;
+  trackingUrl: string;
+}
+
+export interface SampleCosting {
+  developmentCostBdt: number;
+  developmentCostUsd: number;
+  courierCostUsd: number;
+  totalCostUsd: number;
+  billingParty: 'BUYER_INVOICED' | 'FACTORY_ABSORBED' | 'ARIEL_MARKETING_INVESTMENT';
+  paymentStatus: 'PAID' | 'PENDING' | 'WAIVED';
+}
+
+export interface BuyerFeedback {
+  id: string;
+  date: string;
+  reviewedBy: string;
+  verdict: 'APPROVED' | 'APPROVED_WITH_COMMENTS' | 'REVISE_SAMPLE' | 'REJECTED';
+  aestheticScore: number; // 1-10
+  workmanshipScore: number; // 1-10
+  dimensionalAccuracyScore: number; // 1-10
+  comments: string;
+  requiredChanges?: string[];
+}
+
+export interface SampleDevelopmentOrder {
+  id: string; // SDO-2026-LTH-001
+  sdoNumber: string;
+  sector: ProductSector;
+  styleName: string;
+  styleCode: string;
+  associatedProductId?: string;
+  buyerCompany: string; // From CRM
+  buyerContact: string;
+  targetMarket: 'UK' | 'EU' | 'US' | 'AU';
+  factoryId: string;
+  factoryName: string;
+  stage: SampleStage;
+  roundNumber: number; // 1 = 1st round, 2 = 2nd round revision, etc.
+  status: SampleStatus;
+  requestDate: string;
+  targetDeliveryDate: string;
+  actualApprovalDate?: string;
+  techPack: TechPackSpec;
+  courier?: SampleCourierTracking;
+  costing: SampleCosting;
+  feedbacks: BuyerFeedback[];
+  tags: string[];
+}
+

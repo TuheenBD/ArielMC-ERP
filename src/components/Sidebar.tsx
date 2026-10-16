@@ -80,8 +80,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           id: 'RND' as ActiveTab,
           label: 'R&D, Tech Packs & Sampling',
           icon: FlaskConical,
-          badge: 'Phase 3',
-          badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+          badge: '8 SDOs',
+          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 3',
         },
         {
@@ -205,7 +205,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
-                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM';
+                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND';
                   
                   return (
                     <button

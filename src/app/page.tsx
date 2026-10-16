@@ -1,15 +1,27 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CompanyEntity, CurrencyRate, EntityCode, ProductItem, CrmLead, SupplierFactory } from '@/types/erp';
+import {
+  CompanyEntity,
+  CurrencyRate,
+  EntityCode,
+  ProductItem,
+  CrmLead,
+  SupplierFactory,
+  SampleDevelopmentOrder,
+  SampleStage,
+  SampleStatus,
+} from '@/types/erp';
 import { INITIAL_COMPANIES, INITIAL_CURRENCIES, INITIAL_PRODUCTS } from '@/data/initialData';
 import { INITIAL_FACTORIES } from '@/data/initialFactories';
+import { INITIAL_SAMPLES } from '@/data/initialSamples';
 import crmLeadsData from '@/data/crmLeads.json';
 import { Header } from '@/components/Header';
 import { Sidebar, ActiveTab } from '@/components/Sidebar';
 import { EntityStationOverview } from '@/components/EntityStationOverview';
 import { ProductCatalog } from '@/components/ProductCatalog';
 import { FactoryManagement } from '@/components/FactoryManagement';
+import { SampleManagement } from '@/components/SampleManagement';
 import { CrmPipeline } from '@/components/CrmPipeline';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
@@ -24,7 +36,8 @@ import {
   Percent,
   CheckCircle2,
   Layers,
-  Users2
+  Users2,
+  FlaskConical,
 } from 'lucide-react';
 
 export default function Home() {
@@ -34,6 +47,7 @@ export default function Home() {
   const [activeCurrencyCode, setActiveCurrencyCode] = useState<string>('USD');
   const [products, setProducts] = useState<ProductItem[]>(INITIAL_PRODUCTS);
   const [factories, setFactories] = useState<SupplierFactory[]>(INITIAL_FACTORIES);
+  const [samples, setSamples] = useState<SampleDevelopmentOrder[]>(INITIAL_SAMPLES);
   const [crmLeads] = useState<CrmLead[]>(crmLeadsData as CrmLead[]);
   const [activeTab, setActiveTab] = useState<ActiveTab>('PRODUCTS');
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,6 +65,56 @@ export default function Home() {
 
   const handleAddFactory = (newFactory: SupplierFactory) => {
     setFactories((prev) => [newFactory, ...prev]);
+  };
+
+  const handleAddSample = (newSample: SampleDevelopmentOrder) => {
+    setSamples((prev) => [newSample, ...prev]);
+  };
+
+  const handleUpdateSampleStatus = (
+    sdoId: string,
+    newStatus: SampleStatus,
+    feedbackComments?: string
+  ) => {
+    setSamples((prev) =>
+      prev.map((s) => {
+        if (s.id !== sdoId) return s;
+        const updated: SampleDevelopmentOrder = { ...s, status: newStatus };
+        if (feedbackComments) {
+          updated.feedbacks = [
+            ...s.feedbacks,
+            {
+              id: `fb-${Date.now()}`,
+              date: new Date().toISOString().split('T')[0],
+              reviewedBy: `${s.buyerCompany} Commercial Team`,
+              verdict:
+                newStatus === 'APPROVED' || newStatus === 'APPROVED_WITH_COMMENTS'
+                  ? 'APPROVED'
+                  : 'REVISE_SAMPLE',
+              aestheticScore: newStatus === 'APPROVED' ? 9 : 7,
+              workmanshipScore: newStatus === 'APPROVED' ? 9 : 7,
+              dimensionalAccuracyScore: newStatus === 'APPROVED' ? 9 : 7,
+              comments: feedbackComments,
+            },
+          ];
+        }
+        return updated;
+      })
+    );
+  };
+
+  const handleAdvanceSampleStage = (sdoId: string, nextStage: SampleStage) => {
+    setSamples((prev) =>
+      prev.map((s) => {
+        if (s.id !== sdoId) return s;
+        return {
+          ...s,
+          stage: nextStage,
+          roundNumber: 1,
+          status: 'TECH_PACK_SENT',
+        };
+      })
+    );
   };
 
   // Quick Stats
@@ -171,12 +235,28 @@ export default function Home() {
             <CrmPipeline initialLeads={crmLeads} />
           )}
 
-          {activeTab !== 'STATIONS' && activeTab !== 'PRODUCTS' && activeTab !== 'CRM' && activeTab !== 'FACTORIES' && (
-            <PhaseRoadmapPreview
-              activeTab={activeTab}
-              onNavigateToProducts={() => setActiveTab('PRODUCTS')}
+          {activeTab === 'RND' && (
+            <SampleManagement
+              samples={samples}
+              factories={factories}
+              products={products}
+              crmLeads={crmLeads}
+              onAddSample={handleAddSample}
+              onUpdateSampleStatus={handleUpdateSampleStatus}
+              onAdvanceSampleStage={handleAdvanceSampleStage}
             />
           )}
+
+          {activeTab !== 'STATIONS' &&
+            activeTab !== 'PRODUCTS' &&
+            activeTab !== 'FACTORIES' &&
+            activeTab !== 'CRM' &&
+            activeTab !== 'RND' && (
+              <PhaseRoadmapPreview
+                activeTab={activeTab}
+                onNavigateToProducts={() => setActiveTab('PRODUCTS')}
+              />
+            )}
         </main>
       </div>
 
