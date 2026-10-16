@@ -45,27 +45,29 @@ graph LR
     P7 & P8 --> P9[Phase 9: Physical Store POS]
 ```
 
-### Module 1: Core Foundation & Master Data Management (MDM)
+### Module 1: Core Foundation & Master Data Management (MDM) [LIVE]
 - Multi-company entity isolation (Dhaka HQ, UK Ltd, USA LLC, EU, AU).
 - Multi-currency ledger (BDT, GBP, USD, EUR, AUD) with automated FX sync.
-- Flexible JSONB Product Catalog with sector-specific technical specs.
+- Flexible JSONB Product Catalog with sector-specific technical specs and 4-tier pricing model.
 - Role-based security & permissions (Merchandiser, QC, Accounts, Buyer, Vendor).
 
-### Module 2: Factory & Supplier Management (Bangladesh Ecosystem)
-- Vendor directory, factory physical & machinery audit records.
-- Social & environmental compliance tracking (BSCI, SEDEX, OEKO-TEX, LWG) with audit expiry warnings.
-- Vendor scorecards (On-Time Delivery, AQL pass rate, price competitiveness).
+### Module 2: Factory & Supplier Management (Bangladesh Ecosystem) [LIVE]
+- Vendor directory with 8 partner factories across Savar, Gazipur, Narsingdi, Dhamrai.
+- Social & environmental compliance tracking (BSCI, SEDEX, OEKO-TEX, LWG, GOTS, FDA, REACH) with 60-day audit renewal alerts.
+- Vendor scorecards (On-Time Delivery %, AQL pass rate %, rating score).
+- Capacity utilization gauge and vendor onboarding modal.
 
-### Module 3: R&D, Tech Packs & Sample Development
-- Version-controlled digital Tech Packs (sketches, measurements, BOM).
-- Sample Development Orders (SDO) from Proto $\rightarrow$ Fit $\rightarrow$ Size Set $\rightarrow$ PP $\rightarrow$ TOP.
-- Costing sheets (Material + CM + Washing/Finishing + Lab testing + Margin + Port freight).
-- Courier tracking (DHL/FedEx) & Buyer approval workflows.
+### Module 3: R&D, Tech Packs & Sample Development (SDO) [LIVE]
+- Version-controlled digital Tech Packs (dimensions, tolerances, CAD/DXF attachments, Pantone colorways).
+- 5-Stage Sample Development Orders: Proto $\rightarrow$ Fit $\rightarrow$ Size Set $\rightarrow$ Pre-Production (PP) $\rightarrow$ Top of Production (TOP).
+- Integrated Express Courier Tracking (DHL Express / FedEx Priority with AWB numbers and flight route milestones).
+- Costing sheets & billing allocation (Buyer Invoiced, Factory Absorbed, ArielMC R&D Budget).
+- Buyer review & feedback approval gatekeeper with revision history.
 
-### Module 4: Global B2B CRM & Lead Management
-- Target market lead pipelines (UK, EU, USA, Australia).
-- Trade fair & inbound inquiry management (`arielmc.com`).
-- Dynamic quotation generator with Incoterms (FOB Chattogram, CIF Felixstowe, DDP Los Angeles).
+### Module 4: Global B2B CRM & Lead Management [LIVE]
+- Target market lead pipelines: 254 real buyer leads across UK (96), EU (57), USA (56), Australia (45).
+- 7-Stage Kanban pipeline & comprehensive tabular lead profile inspector.
+- Direct synchronization with Google Sheet database & Google Apps Script CRM WebApp.
 
 ### Module 5: Two-Way Order Management System (OMS)
 - Buyer Sales Order (SO) synchronized with back-to-back Factory Purchase Orders (PO).
