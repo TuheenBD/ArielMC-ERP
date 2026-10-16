@@ -370,15 +370,15 @@ CREATE TABLE IF NOT EXISTS pnl_records (
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
       <div 
         id="database-settings-modal"
-        className="relative w-full max-w-4xl bg-[#12231B] border border-[#2C5240] rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8"
+        className="relative w-full max-w-4xl bg-[#0B132B] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8 text-slate-100"
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2C5240] bg-[#162B22]/90">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#0F172A]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#C8A96A]/20 border border-[#C8A96A]/30 flex items-center justify-center text-[#C8A96A] shadow-inner">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-inner">
               <Database className="w-5 h-5" />
             </div>
             <div>
@@ -386,11 +386,11 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                 <h2 className="text-lg font-bold text-white font-heading tracking-wide">
                   <span className="font-bold">ArielMC</span> ERP Database & Persistence
                 </h2>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-blue-500/15 text-blue-300 border border-blue-500/30">
                   PostgreSQL
                 </span>
               </div>
-              <p className="text-xs text-[#CFE0D5]">
+              <p className="text-xs text-slate-400">
                 Supabase Cloud Storage & Real-Time Sync Engine for All Live Operations
               </p>
             </div>
@@ -398,7 +398,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-[#1F3A2E] transition-colors"
+            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
             title="Close Settings"
           >
             <X className="w-5 h-5" />
@@ -406,11 +406,11 @@ CREATE TABLE IF NOT EXISTS pnl_records (
         </div>
 
         {/* Live Connectivity Banner */}
-        <div className="px-6 py-3.5 bg-[#0D1913] border-b border-[#2C5240] flex flex-wrap items-center justify-between gap-4">
+        <div className="px-6 py-3.5 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <span className={`w-3 h-3 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-              <span className="text-xs font-bold font-mono tracking-wider text-white">
+              <span className="text-xs font-bold font-mono tracking-wider text-slate-200">
                 {isConnected ? 'POSTGRESQL LIVE CONNECTED' : isConfigured ? 'CREDENTIALS SET (OFFLINE)' : 'LOCAL HYBRID CACHE MODE'}
               </span>
             </div>
@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
               </span>
             )}
             {!isConfigured && (
-              <span className="text-[11px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded">
                 Seamless Offline Fallback Active
               </span>
             )}
@@ -428,29 +428,29 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
           <div className="flex items-center gap-2 text-xs">
             {lastChecked && (
-              <span className="text-[11px] text-[#CFE0D5]/70 hidden sm:inline">
+              <span className="text-[11px] text-slate-400 hidden sm:inline">
                 Pinging: {lastChecked}
               </span>
             )}
             <button
               onClick={runHealthCheck}
               disabled={isLoadingHealth}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] border border-[#2C5240] font-semibold transition-all disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition-all disabled:opacity-50"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoadingHealth ? 'animate-spin text-[#C8A96A]' : 'text-[#C8A96A]'}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoadingHealth ? 'animate-spin text-blue-400' : 'text-blue-400'}`} />
               <span>{isLoadingHealth ? 'Testing...' : 'Test Connection'}</span>
             </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-[#2C5240] px-6 bg-[#162B22]/50">
+        <div className="flex border-b border-slate-800 px-6 bg-[#0B132B]/60">
           <button
             onClick={() => setActiveTab('STATUS')}
             className={`py-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
               activeTab === 'STATUS'
-                ? 'border-[#C8A96A] text-[#C8A96A] bg-[#1F3A2E]/50'
-                : 'border-transparent text-gray-400 hover:text-white'
+                ? 'border-blue-500 text-blue-400 bg-slate-800/40'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <Server className="w-4 h-4" />
@@ -461,8 +461,8 @@ CREATE TABLE IF NOT EXISTS pnl_records (
             onClick={() => setActiveTab('SEED')}
             className={`py-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
               activeTab === 'SEED'
-                ? 'border-[#C8A96A] text-[#C8A96A] bg-[#1F3A2E]/50'
-                : 'border-transparent text-gray-400 hover:text-white'
+                ? 'border-blue-500 text-blue-400 bg-slate-800/40'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <Zap className="w-4 h-4" />
@@ -473,8 +473,8 @@ CREATE TABLE IF NOT EXISTS pnl_records (
             onClick={() => setActiveTab('SCHEMA')}
             className={`py-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
               activeTab === 'SCHEMA'
-                ? 'border-[#C8A96A] text-[#C8A96A] bg-[#1F3A2E]/50'
-                : 'border-transparent text-gray-400 hover:text-white'
+                ? 'border-blue-500 text-blue-400 bg-slate-800/40'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <HardDrive className="w-4 h-4" />
@@ -488,15 +488,15 @@ CREATE TABLE IF NOT EXISTS pnl_records (
           {activeTab === 'STATUS' && (
             <div className="space-y-6">
               {/* Architecture Overview */}
-              <div className="p-4 rounded-xl bg-[#162B22] border border-[#2C5240]/80">
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-[#C8A96A]" />
+                      <ShieldCheck className="w-4 h-4 text-blue-400" />
                       <span>Zero-Failure Hybrid Persistence Architecture</span>
                     </h3>
-                    <p className="text-xs text-[#CFE0D5] leading-relaxed">
-                      <span className="font-bold">ArielMC</span> ERP runs automatically in hybrid persistence mode. When Supabase PostgreSQL credentials are present in <code className="text-[#C8A96A] font-mono">.env.local</code>, all live transactions seamlessly read and write to cloud PostgreSQL. If running offline or without credentials, data gracefully persists in high-performance browser cache and local memory without any operational interruption.
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      <span className="font-bold text-white">ArielMC</span> ERP runs automatically in hybrid persistence mode. When Supabase PostgreSQL credentials are present in <code className="text-blue-400 font-mono bg-blue-950/40 px-1 py-0.5 rounded border border-blue-900/30">.env.local</code>, all live transactions seamlessly read and write to cloud PostgreSQL. If running offline or without credentials, data gracefully persists in high-performance browser cache and local memory without any operational interruption.
                     </p>
                   </div>
                 </div>
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
               {/* Live Tables Breakdown */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#C8A96A] mb-3 flex items-center gap-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
                   <Layers className="w-3.5 h-3.5" />
                   <span>PostgreSQL Persistent Tables Status</span>
                 </h4>
@@ -522,17 +522,17 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                   ].map((item, idx) => (
                     <div 
                       key={idx}
-                      className="p-3.5 rounded-xl bg-[#0F1E16] border border-[#2C5240] hover:border-[#C8A96A]/50 transition-all flex flex-col justify-between"
+                      className="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between"
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-semibold text-white">{item.label}</span>
-                        <span className="font-mono text-xs px-2 py-0.5 rounded font-bold bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30">
+                        <span className="text-xs font-semibold text-slate-200">{item.label}</span>
+                        <span className="font-mono text-xs px-2 py-0.5 rounded font-bold bg-blue-500/10 text-blue-300 border border-blue-500/20">
                           {isConnected ? `${item.count} rows` : `${item.count} cached`}
                         </span>
                       </div>
-                      <div className="text-[11px] text-[#CFE0D5]/70 flex items-center justify-between">
+                      <div className="text-[11px] text-slate-400 flex items-center justify-between">
                         <span className="truncate">{item.desc}</span>
-                        <span className="font-mono text-[10px] text-gray-400">table: {item.table}</span>
+                        <span className="font-mono text-[10px] text-slate-500">table: {item.table}</span>
                       </div>
                     </div>
                   ))}
@@ -557,15 +557,15 @@ CREATE TABLE IF NOT EXISTS pnl_records (
           {/* TAB 2: 1-CLICK SEED DATA SYNC */}
           {activeTab === 'SEED' && (
             <div className="space-y-6">
-              <div className="p-5 rounded-xl bg-[#162B22] border border-[#2C5240] space-y-4">
+              <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
                 <div className="flex items-start gap-3">
-                  <Zap className="w-6 h-6 text-[#C8A96A] shrink-0 mt-1" />
+                  <Zap className="w-6 h-6 text-blue-400 shrink-0 mt-1" />
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold text-white">
                       One-Click Supabase PostgreSQL Initializer
                     </h3>
-                    <p className="text-xs text-[#CFE0D5] leading-relaxed">
-                      Seed your live PostgreSQL instance with all foundational <span className="font-bold">ArielMC</span> ERP data. This synchronizes our authentic master catalog of 12 multi-sector products, 8 verified Bangladesh partner factories, 8 active SDO sample orders, 5 confirmed export sales orders, 35 CRM buyer leads, 4 international bonded warehouses, and multi-location global inventory.
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Seed your live PostgreSQL instance with all foundational <span className="font-bold text-white">ArielMC</span> ERP data. This synchronizes our authentic master catalog of 12 multi-sector products, 8 verified Bangladesh partner factories, 8 active SDO sample orders, 5 confirmed export sales orders, 35 CRM buyer leads, 4 international bonded warehouses, and multi-location global inventory.
                     </p>
                   </div>
                 </div>
@@ -574,7 +574,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                   <button
                     onClick={handleRunSeed}
                     disabled={isSeeding || !isConfigured}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C8A96A] text-[#1F3A2E] hover:bg-[#d6ba7f] font-bold text-xs transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <RefreshCw className={`w-4 h-4 ${isSeeding ? 'animate-spin' : ''}`} />
                     <span>{isSeeding ? 'Synchronizing All Master Datasets...' : 'Push All ERP Seed Data to Supabase'}</span>
@@ -613,7 +613,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono">
                       {Object.entries(seedResult.counts).map(([tbl, cnt]) => (
                         <div key={tbl} className="bg-black/30 p-2 rounded border border-white/10">
-                          <span className="text-gray-400">{tbl}:</span> <span className="font-bold text-[#C8A96A]">{cnt} rows</span>
+                          <span className="text-gray-400">{tbl}:</span> <span className="font-bold text-blue-400">{cnt} rows</span>
                         </div>
                       ))}
                     </div>
@@ -628,57 +628,57 @@ CREATE TABLE IF NOT EXISTS pnl_records (
             <div className="space-y-6">
               {/* 3 Step Setup Guide */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-[#162B22] border border-[#2C5240] flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="w-6 h-6 rounded-full bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center font-bold text-xs">
+                <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all group shadow-sm">
+                  <div className="space-y-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-mono">
                       1
-                    </span>
-                    <h4 className="text-xs font-bold text-white">Create Supabase Project</h4>
-                    <p className="text-[11px] text-[#CFE0D5]">
-                      Log in to <span className="text-[#C8A96A]">supabase.com</span> and create a new project with your preferred region (e.g. Singapore or Frankfurt).
+                    </div>
+                    <h4 className="text-sm font-bold text-white tracking-wide">Create Supabase Project</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Log in to <span className="text-blue-400 font-medium">supabase.com</span> and create a new project with your preferred region (e.g. Singapore or Frankfurt).
                     </p>
                   </div>
                   <a 
                     href="https://supabase.com/dashboard" 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs text-[#C8A96A] hover:underline font-semibold"
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold group-hover:underline"
                   >
                     <span>Supabase Dashboard</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#162B22] border border-[#2C5240] flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="w-6 h-6 rounded-full bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center font-bold text-xs">
+                <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all group shadow-sm">
+                  <div className="space-y-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-mono">
                       2
-                    </span>
-                    <h4 className="text-xs font-bold text-white">Run SQL DDL Script</h4>
-                    <p className="text-[11px] text-[#CFE0D5]">
-                      Open the <span className="text-white font-semibold">SQL Editor</span> in your Supabase project and execute the comprehensive <span className="font-bold">ArielMC</span> schema DDL.
+                    </div>
+                    <h4 className="text-sm font-bold text-white tracking-wide">Run SQL DDL Script</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Open the <span className="text-slate-200 font-semibold">SQL Editor</span> in your Supabase project and execute the comprehensive <span className="font-bold text-white">ArielMC</span> schema DDL.
                     </p>
                   </div>
                   <button 
                     onClick={handleCopySchema}
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs text-[#C8A96A] hover:underline font-semibold"
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold group-hover:underline"
                   >
                     {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedSchema ? 'Copied to Clipboard!' : 'Copy Schema SQL'}</span>
                   </button>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#162B22] border border-[#2C5240] flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <span className="w-6 h-6 rounded-full bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center font-bold text-xs">
+                <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all group shadow-sm">
+                  <div className="space-y-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-mono">
                       3
-                    </span>
-                    <h4 className="text-xs font-bold text-white">Configure .env.local</h4>
-                    <p className="text-[11px] text-[#CFE0D5]">
-                      Copy your Project URL and Anon API Key from Project Settings &gt; API into your local <code className="text-[#C8A96A]">.env.local</code> file.
+                    </div>
+                    <h4 className="text-sm font-bold text-white tracking-wide">Configure .env.local</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Copy your Project URL and Anon API Key from Project Settings &gt; API into your local <code className="text-blue-300 font-mono bg-blue-950/50 px-1 py-0.5 rounded border border-blue-900/40">.env.local</code> file.
                     </p>
                   </div>
-                  <span className="mt-3 font-mono text-[10px] text-gray-400">
+                  <span className="mt-4 font-mono text-[11px] text-slate-500">
                     NEXT_PUBLIC_SUPABASE_URL
                   </span>
                 </div>
@@ -686,31 +686,31 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
               {/* Action Buttons for SQL */}
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#CFE0D5]">
-                  Master Schema File: <code className="text-[#C8A96A] font-mono">supabase/schema.sql</code>
+                <span className="text-xs font-medium text-slate-400">
+                  Master Schema File: <code className="text-blue-400 font-mono bg-blue-950/40 px-2 py-0.5 rounded border border-blue-900/40">supabase/schema.sql</code>
                 </span>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleCopySchema}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] border border-[#2C5240] text-xs font-semibold transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
                   >
-                    {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#C8A96A]" />}
+                    {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-blue-400" />}
                     <span>{copiedSchema ? 'SQL Copied!' : 'Copy SQL'}</span>
                   </button>
 
                   <button
                     onClick={handleDownloadSchema}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] border border-[#2C5240] text-xs font-semibold transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all shadow-sm"
                   >
-                    <Download className="w-3.5 h-3.5 text-[#C8A96A]" />
+                    <Download className="w-3.5 h-3.5 text-white" />
                     <span>Download .sql</span>
                   </button>
                 </div>
               </div>
 
               {/* Code Snippet Preview */}
-              <div className="relative rounded-xl bg-[#0A140F] border border-[#2C5240] p-4 font-mono text-[11px] text-[#CFE0D5] overflow-x-auto max-h-56 leading-relaxed">
+              <div className="relative rounded-xl bg-[#070B14] border border-slate-800 p-4 font-mono text-[11px] text-slate-300 overflow-x-auto max-h-56 leading-relaxed">
                 <pre>{`-- ARIELMC ERP - POSTGRESQL TABLES INCLUDED:
 1. products                  (HS Codes, Costings, Sector Attributes, Compliance)
 2. factories                 (Savar, Gazipur, Narsingdi, Audits, Scorecards)
@@ -727,14 +727,14 @@ CREATE TABLE IF NOT EXISTS pnl_records (
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-3.5 bg-[#162B22] border-t border-[#2C5240] flex items-center justify-between text-xs">
-          <div className="text-[#CFE0D5]/70 flex items-center gap-2">
+        <div className="px-6 py-3.5 bg-[#0F172A] border-t border-slate-800 flex items-center justify-between text-xs">
+          <div className="text-slate-400 flex items-center gap-2">
             <span className="font-bold text-white">ArielMC</span> Enterprise Resource Planning System
           </div>
 
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] border border-[#2C5240] font-semibold transition-all"
+            className="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition-all"
           >
             Close
           </button>

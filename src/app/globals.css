@@ -175,87 +175,116 @@ h1, h2, h3, h4, h5, h6, .font-heading {
    while keeping the Light Ivory White (#FAF9F5) main background
    ======================================================== */
 [data-theme="royal-blue"] {
-  --primary: #4169E1;
+  --primary: #2563EB;
   --primary-foreground: #FFFFFF;
   --secondary: #EFF6FF;
   --secondary-foreground: #1E3A8A;
-  --accent: #2563EB;
+  --accent: #3B82F6;
   --border: #DBEAFE;
-  --ring: #4169E1;
+  --ring: #2563EB;
 }
 
-/* Primary Dark Green Surfaces -> Royal Blue Navy */
+/* Primary Dark Surfaces -> Executive Midnight Royal Navy & Slate */
 [data-theme="royal-blue"] .bg-\[\#1F3A2E\],
-[data-theme="royal-blue"] [class*="bg-[#1F3A2E]"],
+[data-theme="royal-blue"] [class*="bg-[#1F3A2E]"] {
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+}
+
 [data-theme="royal-blue"] .bg-\[\#172D24\],
 [data-theme="royal-blue"] [class*="bg-[#172D24]"],
 [data-theme="royal-blue"] .bg-\[\#162B22\],
-[data-theme="royal-blue"] [class*="bg-[#162B22]"],
+[data-theme="royal-blue"] [class*="bg-[#162B22]"] {
+  background-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+
 [data-theme="royal-blue"] .bg-\[\#11231A\],
 [data-theme="royal-blue"] [class*="bg-[#11231A]"],
 [data-theme="royal-blue"] .bg-\[\#12231B\],
 [data-theme="royal-blue"] [class*="bg-[#12231B]"],
 [data-theme="royal-blue"] .bg-\[\#0E1A14\],
-[data-theme="royal-blue"] [class*="bg-[#0E1A14]"] {
-  background-color: #2563EB !important;
+[data-theme="royal-blue"] [class*="bg-[#0E1A14]"],
+[data-theme="royal-blue"] .bg-\[\#0D1913\],
+[data-theme="royal-blue"] [class*="bg-[#0D1913]"] {
+  background-color: #0B132B !important;
   color: #FFFFFF !important;
+}
+
+[data-theme="royal-blue"] .bg-\[\#0A140F\],
+[data-theme="royal-blue"] [class*="bg-[#0A140F]"] {
+  background-color: #070B14 !important;
+  color: #E2E8F0 !important;
 }
 
 /* Modals and Deep Dark Panels in Royal Blue Mode */
 [data-theme="royal-blue"] #profile-control-modal,
-[data-theme="royal-blue"] .bg-\[\#12231B\],
-[data-theme="royal-blue"] [class*="bg-[#12231B]"] {
-  background-color: #0F172A !important;
-  border-color: #2563EB !important;
+[data-theme="royal-blue"] #database-settings-modal {
+  background-color: #0B132B !important;
+  border-color: #334155 !important;
 }
 
 [data-theme="royal-blue"] [class*="from-[#162B22]"] {
-  background-image: linear-gradient(to right, #0F172A, #1E3A8A, #0F172A) !important;
+  background-image: linear-gradient(to right, #0F172A, #1E293B, #0F172A) !important;
 }
 
-/* Headers and Navigation Bars -> Deep Royal Blue */
+/* Headers and Navigation Bars -> Deep Midnight Slate */
 [data-theme="royal-blue"] thead,
 [data-theme="royal-blue"] thead tr,
 [data-theme="royal-blue"] thead th {
-  background-color: #1E3A8A !important;
+  background-color: #0F172A !important;
   color: #FFFFFF !important;
+  border-color: #334155 !important;
 }
 
-/* Hover States for Royal Blue buttons */
+/* Hover States for Royal Blue buttons and cards */
 [data-theme="royal-blue"] .hover\:bg-\[\#2C5240\]:hover,
 [data-theme="royal-blue"] [class*="hover:bg-[#2C5240]"]:hover,
 [data-theme="royal-blue"] .hover\:bg-\[\#172D24\]:hover,
 [data-theme="royal-blue"] [class*="hover:bg-[#172D24]"]:hover,
 [data-theme="royal-blue"] .hover\:bg-\[\#11231A\]:hover,
 [data-theme="royal-blue"] [class*="hover:bg-[#11231A]"]:hover {
-  background-color: #1D4ED8 !important;
+  background-color: #334155 !important;
 }
 
-/* Action Buttons & Badges -> Royal Blue */
-[data-theme="royal-blue"] .bg-\[\#1E6B3A\],
-[data-theme="royal-blue"] [class*="bg-[#1E6B3A]"],
+/* Secondary dark toolbar elements */
 [data-theme="royal-blue"] .bg-\[\#2C5240\],
 [data-theme="royal-blue"] [class*="bg-[#2C5240]"],
 [data-theme="royal-blue"] .bg-\[\#224536\],
-[data-theme="royal-blue"] [class*="bg-[#224536]"],
+[data-theme="royal-blue"] [class*="bg-[#224536]"] {
+  background-color: #1E293B !important;
+  color: #FFFFFF !important;
+}
+
+/* Action CTA Buttons & Badges -> Crisp Royal Blue */
+[data-theme="royal-blue"] .bg-\[\#1E6B3A\],
+[data-theme="royal-blue"] [class*="bg-[#1E6B3A]"],
 [data-theme="royal-blue"] .bg-\[\#14512C\],
 [data-theme="royal-blue"] [class*="bg-[#14512C]"] {
   background-color: #2563EB !important;
   color: #FFFFFF !important;
 }
 
+[data-theme="royal-blue"] .hover\:bg-\[\#1E6B3A\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#1E6B3A]"]:hover {
+  background-color: #1D4ED8 !important;
+}
+
 /* Text Colors -> Royal Blue Navy & Vibrant Blue */
 [data-theme="royal-blue"] .text-\[\#1F3A2E\],
 [data-theme="royal-blue"] [class*="text-[#1F3A2E]"],
-[data-theme="royal-blue"] .text-\[\#1E6B3A\],
-[data-theme="royal-blue"] [class*="text-[#1E6B3A]"],
 [data-theme="royal-blue"] .text-\[\#172D24\],
 [data-theme="royal-blue"] [class*="text-[#172D24]"],
 [data-theme="royal-blue"] .text-\[\#14512C\],
-[data-theme="royal-blue"] [class*="text-[#14512C]"],
+[data-theme="royal-blue"] [class*="text-[#14512C]"] {
+  color: #1E3A8A !important;
+}
+
+[data-theme="royal-blue"] .text-\[\#1E6B3A\],
+[data-theme="royal-blue"] [class*="text-[#1E6B3A]"],
 [data-theme="royal-blue"] .text-\[\#1F5FA8\],
 [data-theme="royal-blue"] [class*="text-[#1F5FA8]"] {
-  color: #1E40AF !important;
+  color: #2563EB !important;
 }
 
 /* Light Green Washes -> Light Soft Royal Blue Tint (#EFF6FF) */
@@ -272,7 +301,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background-color: #EFF6FF !important;
 }
 
-/* Borders in Royal Blue Mode */
+/* Subtle Borders in Royal Blue Mode */
 [data-theme="royal-blue"] .border-\[\#1F3A2E\],
 [data-theme="royal-blue"] [class*="border-[#1F3A2E]"],
 [data-theme="royal-blue"] .border-\[\#2C5240\],
@@ -280,7 +309,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 [data-theme="royal-blue"] .border-\[\#3A6B54\],
 [data-theme="royal-blue"] [class*="border-[#3A6B54]"],
 [data-theme="royal-blue"] .border-\[\#2A4837\],
-[data-theme="royal-blue"] [class*="border-[#2A4837]"],
+[data-theme="royal-blue"] [class*="border-[#2A4837]"] {
+  border-color: #334155 !important;
+}
+
 [data-theme="royal-blue"] .border-\[\#BBE3C7\],
 [data-theme="royal-blue"] [class*="border-[#BBE3C7]"],
 [data-theme="royal-blue"] .border-\[\#B7E1CD\],
@@ -298,12 +330,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* Rings & Focus */
 [data-theme="royal-blue"] .focus\:border-\[\#1F3A2E\]:focus,
 [data-theme="royal-blue"] [class*="focus:border-[#1F3A2E]"]:focus {
-  border-color: #4169E1 !important;
+  border-color: #2563EB !important;
 }
 
 [data-theme="royal-blue"] .focus\:ring-\[\#1F3A2E\]:focus,
 [data-theme="royal-blue"] [class*="focus:ring-[#1F3A2E]"]:focus {
-  --tw-ring-color: #4169E1 !important;
+  --tw-ring-color: #2563EB !important;
 }
 
 /* Status Badges in Royal Blue Mode */
