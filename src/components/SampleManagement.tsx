@@ -40,7 +40,14 @@ import {
   SlidersHorizontal,
   LayoutGrid,
   List,
+  Printer,
+  Calculator,
+  ShieldAlert,
+  Award,
+  Barcode,
+  PackageCheck,
 } from 'lucide-react';
+import { SAMPLE_PRICING_MATRIX } from '@/data/samplePricingMatrix';
 
 interface SampleManagementProps {
   samples: SampleDevelopmentOrder[];
@@ -181,6 +188,12 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   const [selectedSample, setSelectedSample] = useState<SampleDevelopmentOrder | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'TECHPACK' | 'COURIER' | 'COSTING' | 'FEEDBACK'>('TECHPACK');
+  const [activeModuleTab, setActiveSampleModuleTab] = useState<'TRACKER' | 'SOP_POLICY' | 'PRICING_MATRIX' | 'REIMBURSEMENT_CALC'>('TRACKER');
+  const [showSopModal, setShowSopModal] = useState(false);
+  const [calcPoQty, setCalcPoQty] = useState(1200);
+  const [calcPoValue, setCalcPoValue] = useState(8400);
+  const [calcSector, setCalcSector] = useState<'JUTE' | 'LEATHER'>('JUTE');
+  const [calcDevFee, setCalcDevFee] = useState(154);
 
   // New feedback state
   const [feedbackNotes, setFeedbackNotes] = useState('');
@@ -275,6 +288,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setShowSopModal(true)}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#C9A86A]/20 hover:bg-[#C9A86A]/30 text-[#C9A86A] border border-[#C9A86A]/40 font-semibold text-xs transition-all shadow-md font-['Montserrat']"
+          >
+            <FileText className="w-4 h-4" />
+            <span>SOP-B2B-SMP-2026-V1 Agreement</span>
+          </button>
+          <button
             onClick={() => setIsAddModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-all shadow-lg shadow-purple-600/30"
           >
@@ -284,8 +304,61 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         </div>
       </div>
 
-      {/* KPI Stats Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+      {/* Sub-Tab Navigation Bar */}
+      <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto text-xs font-['Montserrat']">
+        <button
+          onClick={() => setActiveSampleModuleTab('TRACKER')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+            activeModuleTab === 'TRACKER'
+              ? 'bg-purple-600/20 text-purple-300 border border-purple-500/40 shadow-sm'
+              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+          }`}
+        >
+          <FlaskConical className="w-4 h-4 text-purple-400" />
+          <span>Active SDO Pipeline ({samples.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSampleModuleTab('SOP_POLICY')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+            activeModuleTab === 'SOP_POLICY'
+              ? 'bg-[#C9A86A]/20 text-[#C9A86A] border border-[#C9A86A]/40 shadow-sm'
+              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+          }`}
+        >
+          <FileText className="w-4 h-4 text-[#C9A86A]" />
+          <span>5-Stage Sourcing & Tier Classification</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSampleModuleTab('PRICING_MATRIX')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+            activeModuleTab === 'PRICING_MATRIX'
+              ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 shadow-sm'
+              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+          }`}
+        >
+          <Tag className="w-4 h-4 text-blue-400" />
+          <span>Sample Pricing Matrix (15 SKUs)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSampleModuleTab('REIMBURSEMENT_CALC')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+            activeModuleTab === 'REIMBURSEMENT_CALC'
+              ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+          }`}
+        >
+          <Calculator className="w-4 h-4 text-emerald-400" />
+          <span>100% Sample Fee Refund Calculator</span>
+        </button>
+      </div>
+
+      {activeModuleTab === 'TRACKER' && (
+        <>
+          {/* KPI Stats Strip */}
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
         <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
           <div className="text-[11px] text-slate-400">Total Active SDOs</div>
           <div className="text-xl font-bold font-mono text-white mt-0.5">{totalSamples}</div>
@@ -645,6 +718,548 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
               </div>
             );
           })}
+        </div>
+      )}
+        </>
+      )}
+
+      {/* TAB 2: SOP SOURCING FRAMEWORK & 3-TIER CLASSIFICATION */}
+      {activeModuleTab === 'SOP_POLICY' && (
+        <div className="space-y-6">
+          {/* Sourcing Lifecycle Hero */}
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-[#0A1A2F] to-slate-900 border border-[#C9A86A]/40 shadow-xl space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#C9A86A]/20 text-[#C9A86A] font-mono text-xs font-semibold border border-[#C9A86A]/30">
+                    SOP-B2B-SMP-2026-V1
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">
+                    Official Prototyping & Commercial Agreement Policy
+                  </span>
+                </div>
+                <h2 className="text-lg font-bold text-white font-['Montserrat']">
+                  ArielMC 5-Step Sourcing Workflow & Prototyping Lifecycle
+                </h2>
+                <p className="text-xs text-slate-300 font-['Open_Sans'] max-w-3xl">
+                  Defines commercial terms, technical intake gates, quality compliance standards, and 100% fee reimbursement mechanics across Dhaka, Narayanganj, and Savar manufacturing hubs.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowSopModal(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#C9A86A] to-[#B08D4D] text-[#0A1A2F] font-bold text-xs shadow-md hover:brightness-110 transition-all font-['Montserrat'] shrink-0"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print Official Agreement</span>
+              </button>
+            </div>
+
+            {/* 5-Step Visual Progression */}
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
+              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 space-y-1">
+                <div className="text-[10px] font-mono font-bold text-purple-400 uppercase">
+                  Step 1 (1–2 Days)
+                </div>
+                <div className="text-xs font-bold text-white font-['Montserrat']">Brief & Feasibility</div>
+                <p className="text-[11px] text-slate-400">
+                  Tech-pack review, BOM validation, target FOB costing, and factory slot allocation.
+                </p>
+                <div className="text-[10px] text-purple-300 font-mono pt-1">Gate: CRM Stage 4 (35%)</div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-blue-500/30 space-y-1">
+                <div className="text-[10px] font-mono font-bold text-blue-400 uppercase">
+                  Step 2 (1–4 Weeks)
+                </div>
+                <div className="text-xs font-bold text-white font-['Montserrat']">Sampling & Prototyping</div>
+                <p className="text-[11px] text-slate-400">
+                  Raw material lab dips, pattern adjustments/CNC cutting, hardware sourcing, specimen creation.
+                </p>
+                <div className="text-[10px] text-blue-300 font-mono pt-1">Proto & PP Rounds</div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-500/30 space-y-1">
+                <div className="text-[10px] font-mono font-bold text-amber-400 uppercase">
+                  Step 3 (2–4 Weeks)
+                </div>
+                <div className="text-xs font-bold text-white font-['Montserrat']">Ethical Production</div>
+                <p className="text-[11px] text-slate-400">
+                  Bulk cutting and assembly across vetted, socially compliant manufacturing units in Savar & Narayanganj.
+                </p>
+                <div className="text-[10px] text-amber-300 font-mono pt-1">50% Advance Deposit</div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 space-y-1">
+                <div className="text-[10px] font-mono font-bold text-emerald-400 uppercase">
+                  Step 4 (1–2 Weeks)
+                </div>
+                <div className="text-xs font-bold text-white font-['Montserrat']">In-Line & AQL Inspection</div>
+                <p className="text-[11px] text-slate-400">
+                  Strict inspection under AQL 1.5 Major / 2.5 Minor, dynamic 15kg load tests, carton markings.
+                </p>
+                <div className="text-[10px] text-emerald-300 font-mono pt-1">QA-DOC Dossier</div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-cyan-500/30 space-y-1">
+                <div className="text-[10px] font-mono font-bold text-cyan-400 uppercase">
+                  Step 5 (3–5 Days)
+                </div>
+                <div className="text-xs font-bold text-white font-['Montserrat']">Logistics & Customs</div>
+                <p className="text-[11px] text-slate-400">
+                  Bill of Lading, REX / DCTS Origin Statement (0% duty), DAE Phytosanitary, forwarder handover.
+                </p>
+                <div className="text-[10px] text-cyan-300 font-mono pt-1">Final 50% Balance BL</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3 Sampling Request Classification Tiers */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-5 rounded-2xl bg-slate-900/60 border border-blue-500/30 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                  Tier A: Ready Catalog Showroom Samples
+                </h3>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                  OFF-THE-SHELF
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Standard SKUs from current product roadmaps without structural modifications (e.g., JD-EDC-16 Market Tote, LD-EDC-1 Slim Bifold).
+              </p>
+              <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Sample Fee:</span>
+                  <span className="font-semibold text-white">Nominal wholesale price (Complimentary up to 2 units for enterprise)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Express Freight:</span>
+                  <span className="text-slate-200">Paid by buyer or corporate DHL/FedEx account</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Bulk Adjustment:</span>
+                  <span className="text-emerald-400 font-semibold">100% credited against balance invoice</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-900/60 border border-[#C9A86A]/40 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                  Tier B: Custom OEM Prototypes
+                </h3>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  TECH-PACK DRIVEN
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Custom designs, bespoke dimensions, buyer-specified GSM/tannage, custom Pantone lab dips, and personalized debossed/foil branding.
+              </p>
+              <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Development Fee:</span>
+                  <span className="font-semibold text-[#C9A86A]">$45.00 – $140.00 fixed fee</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Brass Deboss Die:</span>
+                  <span className="text-slate-200">$35.00 – $65.00 (At cost)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Screen Stencil:</span>
+                  <span className="text-slate-200">$25.00 / colorway</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Bulk Reimbursement:</span>
+                  <span className="text-emerald-400 font-semibold">100% of dev fee credited on qualifying PO</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-900/60 border border-purple-500/30 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                  Tier C: Corporate Specimen Kits
+                </h3>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  STRATEGIC PROSPECTING
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Presentation specimen box for institutional procurement executives (London/NY) with debossed Jute Bag, leather swatch, and ESG Factsheet.
+              </p>
+              <div className="space-y-1.5 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Commercial Fee:</span>
+                  <span className="font-semibold text-purple-300">$50.00 flat (Inclusive of express air courier)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Complimentary Discretion:</span>
+                  <span className="text-slate-200">Reserved for Stage 4 feasibility calls</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Bulk PO Rebate:</span>
+                  <span className="text-emerald-400 font-semibold">100% rebate on placement of baseline MOQ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Express Shipping & Labelling Standards */}
+          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+            <h3 className="text-sm font-bold text-white font-['Montserrat'] flex items-center gap-2">
+              <Plane className="w-4 h-4 text-cyan-400" />
+              International Express Courier Terms & Mandatory Customs Labelling
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
+                <span className="text-slate-400 text-[10px] block">UK / Western Europe (0.5–1.0kg)</span>
+                <span className="font-bold text-white font-mono mt-0.5 block">$38.00 – $48.00</span>
+                <span className="text-[10px] text-slate-400">DHL Express / FedEx Priority from Dhaka</span>
+              </div>
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
+                <span className="text-slate-400 text-[10px] block">USA / Canada (0.5–1.0kg)</span>
+                <span className="font-bold text-white font-mono mt-0.5 block">$42.00 – $55.00</span>
+                <span className="text-[10px] text-slate-400">Direct courier dispatch with live tracking</span>
+              </div>
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
+                <span className="text-slate-400 text-[10px] block">Australia / New Zealand (0.5–1.0kg)</span>
+                <span className="font-bold text-white font-mono mt-0.5 block">$48.00 – $60.00</span>
+                <span className="text-[10px] text-slate-400">Door-to-door express transit (3–5 days)</span>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-950/80 border border-amber-600/30 text-xs space-y-1">
+              <span className="font-semibold text-amber-300 font-['Montserrat'] block">
+                Mandated Customs Valuation & Waybill Labelling (Section 6):
+              </span>
+              <p className="font-mono text-slate-300 text-[11px] bg-slate-900 p-2 rounded border border-slate-800">
+                "Commercial Mutilated Prototype Samples – No Commercial Value – Value for Customs Purposes Only: $10.00 USD"
+              </p>
+              <p className="text-[10px] text-slate-400">
+                Prevents destination port customs holds and eliminates excessive VAT/import tariff assessments for buyers.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: STANDARDIZED SAMPLE PRICING MATRIX */}
+      {activeModuleTab === 'PRICING_MATRIX' && (
+        <div className="space-y-6">
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-950 border border-blue-500/30 space-y-2">
+            <div className="flex items-center gap-2">
+              <Tag className="w-5 h-5 text-blue-400" />
+              <h2 className="text-base font-bold text-white font-['Montserrat']">
+                Section 5 Standardized Sample Pricing Matrix
+              </h2>
+            </div>
+            <p className="text-xs text-slate-300 font-['Open_Sans']">
+              Pre-approved sample development fees, tooling/brass die costs, development lead times, and qualifying bulk MOQs across ArielMC's premier manufacturing divisions.
+            </p>
+          </div>
+
+          {/* Division 1: The Leather Compendium */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+                <span>👞</span>
+                <span>Division 01: The Leather Compendium (Everyday Carry, Tech & Executive Bags)</span>
+              </h3>
+              <span className="text-xs text-slate-400 font-mono">8 SKUs</span>
+            </div>
+
+            <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-xl">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4">Code</th>
+                    <th className="py-3 px-4">SKU Description</th>
+                    <th className="py-3 px-4">Dev Sample Fee</th>
+                    <th className="py-3 px-4">Brass Deboss / Tooling</th>
+                    <th className="py-3 px-4">Lead Time</th>
+                    <th className="py-3 px-4 text-emerald-400">Qualifying MOQ (100% Credit)</th>
+                    <th className="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {SAMPLE_PRICING_MATRIX.filter((m) => m.division === 'The Leather Compendium').map((item) => (
+                    <tr key={item.categoryCode} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-blue-300">
+                        {item.categoryCode}
+                      </td>
+                      <td className="py-3 px-4">
+                        <strong className="text-white block">{item.skuDescription}</strong>
+                        {item.techPackRef && (
+                          <span className="text-[10px] text-purple-400 font-mono">Ref: {item.techPackRef}</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-white">
+                        ${item.developmentSampleFeeUsd.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-4 font-mono text-slate-300">
+                        {item.toolingCostText}
+                      </td>
+                      <td className="py-3 px-4 text-slate-300">
+                        {item.developmentLeadTime}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-emerald-400">
+                        {item.qualifyingBulkMoq.toLocaleString()} pcs
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <button
+                          onClick={() => setIsAddModalOpen(true)}
+                          className="px-2.5 py-1 rounded bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white border border-purple-500/30 text-xs font-medium transition-all"
+                        >
+                          Request SDO
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Division 2: The Golden Fiber Edit */}
+          <div className="space-y-3 pt-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+                <span>🌾</span>
+                <span>Division 02: The Golden Fiber Edit (Jute, Jute-Cotton & Natural Fibers)</span>
+              </h3>
+              <span className="text-xs text-slate-400 font-mono">7 SKUs</span>
+            </div>
+
+            <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-xl">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4">Code</th>
+                    <th className="py-3 px-4">SKU Description</th>
+                    <th className="py-3 px-4">Dev Sample Fee</th>
+                    <th className="py-3 px-4">Die / Screen Stencil</th>
+                    <th className="py-3 px-4">Lead Time</th>
+                    <th className="py-3 px-4 text-emerald-400">Qualifying MOQ (100% Credit)</th>
+                    <th className="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {SAMPLE_PRICING_MATRIX.filter((m) => m.division === 'The Golden Fiber Edit').map((item) => (
+                    <tr key={item.categoryCode} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-[#C9A86A]">
+                        {item.categoryCode}
+                      </td>
+                      <td className="py-3 px-4">
+                        <strong className="text-white block">{item.skuDescription}</strong>
+                        {item.techPackRef && (
+                          <span className="text-[10px] text-amber-400 font-mono">Ref: {item.techPackRef}</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-white">
+                        ${item.developmentSampleFeeUsd.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-4 font-mono text-slate-300">
+                        {item.toolingCostText}
+                      </td>
+                      <td className="py-3 px-4 text-slate-300">
+                        {item.developmentLeadTime}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-emerald-400">
+                        {item.qualifyingBulkMoq.toLocaleString()} pcs
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <button
+                          onClick={() => setIsAddModalOpen(true)}
+                          className="px-2.5 py-1 rounded bg-[#C9A86A]/20 text-[#C9A86A] hover:bg-[#C9A86A] hover:text-[#0A1A2F] border border-[#C9A86A]/30 text-xs font-semibold transition-all"
+                        >
+                          Request SDO
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: 100% SAMPLE FEE REIMBURSEMENT CALCULATOR */}
+      {activeModuleTab === 'REIMBURSEMENT_CALC' && (
+        <div className="space-y-6">
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 border border-emerald-500/30 space-y-2">
+            <div className="flex items-center gap-2">
+              <Calculator className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-base font-bold text-white font-['Montserrat']">
+                Section 4 Commercial Credit & Reimbursement Engine
+              </h2>
+            </div>
+            <p className="text-xs text-slate-300 font-['Open_Sans']">
+              100% of the Sample Development Fee is credited against the buyer's final 50% balance invoice settled against the Bill of Lading (BL) copy once a qualifying bulk Purchase Order is placed within 90 calendar days.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Calculator Controls */}
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-xl space-y-4">
+              <h3 className="text-sm font-bold text-white font-['Montserrat']">
+                Simulate Bulk Purchase Order Credit
+              </h3>
+
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="block text-slate-400 mb-1">Manufacturing Division</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCalcSector('JUTE')}
+                      className={`p-2.5 rounded-lg border font-medium transition-all ${
+                        calcSector === 'JUTE'
+                          ? 'bg-[#C9A86A]/20 text-[#C9A86A] border-[#C9A86A]'
+                          : 'bg-slate-950 text-slate-400 border-slate-800'
+                      }`}
+                    >
+                      🌾 Jute & Golden Fiber (MOQ ≥ 1,000)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCalcSector('LEATHER')}
+                      className={`p-2.5 rounded-lg border font-medium transition-all ${
+                        calcSector === 'LEATHER'
+                          ? 'bg-blue-600/20 text-blue-300 border-blue-500'
+                          : 'bg-slate-950 text-slate-400 border-slate-800'
+                      }`}
+                    >
+                      👞 Leather Compendium (MOQ ≥ 300)
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-slate-400 mb-1">
+                    <span>Planned Bulk Order Quantity:</span>
+                    <strong className="text-white font-mono">{calcPoQty.toLocaleString()} units</strong>
+                  </div>
+                  <input
+                    type="range"
+                    min={100}
+                    max={5000}
+                    step={50}
+                    value={calcPoQty}
+                    onChange={(e) => setCalcPoQty(Number(e.target.value))}
+                    className="w-full accent-emerald-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-400 mb-1">Total PO Value (USD)</label>
+                    <input
+                      type="number"
+                      value={calcPoValue}
+                      onChange={(e) => setCalcPoValue(Number(e.target.value))}
+                      className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 mb-1">Sample Fee Paid (USD)</label>
+                    <input
+                      type="number"
+                      value={calcDevFee}
+                      onChange={(e) => setCalcDevFee(Number(e.target.value))}
+                      className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Live Rule Verification */}
+              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+                <div className="font-semibold text-slate-300">Criteria Check:</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Qualifying Volume:</span>
+                  <span className={calcSector === 'JUTE' ? (calcPoQty >= 1000 ? 'text-emerald-400 font-semibold' : 'text-amber-400') : (calcPoQty >= 300 ? 'text-emerald-400 font-semibold' : 'text-amber-400')}>
+                    {calcSector === 'JUTE' ? (calcPoQty >= 1000 ? '✓ Meets 1,000 pcs threshold' : '✗ Below 1,000 pcs') : (calcPoQty >= 300 ? '✓ Meets 300 pcs threshold' : '✗ Below 300 pcs')}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Minimum Order Value:</span>
+                  <span className={calcPoValue >= 3000 ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                    {calcPoValue >= 3000 ? '✓ Meets $3,000 minimum' : '✗ Below $3,000 threshold'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Claim Validity:</span>
+                  <span className="text-emerald-400 font-semibold">✓ Active within 90 Calendar Days</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Credit Outcome Card */}
+            {(() => {
+              const targetMoq = calcSector === 'JUTE' ? 1000 : 300;
+              const meetsVolume = calcPoQty >= targetMoq;
+              const meetsValue = calcPoValue >= 3000;
+              const isFullCredit = meetsVolume && meetsValue;
+              const isProRata = !isFullCredit && calcPoQty >= targetMoq * 0.5 && calcPoValue >= 1500;
+              const creditAmount = isFullCredit ? calcDevFee : isProRata ? calcDevFee * 0.5 : 0;
+
+              return (
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-[#0A1A2F] border border-emerald-500/40 shadow-xl space-y-4 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-slate-400 uppercase tracking-wider font-mono">
+                        Commercial Credit Outcome
+                      </span>
+                      <span
+                        className={`text-xs font-mono px-2.5 py-1 rounded font-bold ${
+                          isFullCredit
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            : isProRata
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                            : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        }`}
+                      >
+                        {isFullCredit ? '100% FULL REBATE' : isProRata ? '50% PRO-RATA REBATE' : 'NON-QUALIFYING'}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
+                      <div className="text-xs text-slate-400">Total Credit Amount Applied</div>
+                      <div className="text-3xl font-bold font-mono text-emerald-400">
+                        ${creditAmount.toFixed(2)} USD
+                      </div>
+                      <div className="text-[11px] text-slate-400">
+                        {isFullCredit ? '100% of sample development fee refunded' : isProRata ? '50% pro-rata credit for partial MOQ run' : 'Order does not meet qualifying volume'}
+                      </div>
+                    </div>
+
+                    {/* Order Deduction Mechanism Breakdown */}
+                    <div className="mt-4 space-y-2 text-xs">
+                      <div className="font-semibold text-white font-['Montserrat']">
+                        Deduction Timing (Section 4.I):
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex justify-between">
+                        <span className="text-slate-400">1. Advance Production Deposit (50%):</span>
+                        <strong className="text-slate-200 font-mono">$0.00 Credit</strong>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 flex justify-between">
+                        <span className="text-emerald-300">2. Final Balance against Bill of Lading (50%):</span>
+                        <strong className="text-emerald-300 font-mono font-bold">-${creditAmount.toFixed(2)} Credited</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+                    <p>• <strong>Courier & Metal Dies:</strong> Third-party air express ($38–$60) and custom brass deboss dies ($35–$65) are strictly non-creditable.</p>
+                    <p>• <strong>Repeat Orders:</strong> Client dies remain exclusive property of the buyer and are maintained free of charge in Dhaka for repeat manufacturing runs.</p>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
         </div>
       )}
 
@@ -1176,6 +1791,14 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         </div>
       )}
 
+      {/* Official SOP Agreement Modal */}
+      {showSopModal && (
+        <SopAgreementModal
+          isOpen={showSopModal}
+          onClose={() => setShowSopModal(false)}
+        />
+      )}
+
       {/* New SDO Creation Modal */}
       {isAddModalOpen && (
         <CreateSdoModal
@@ -1190,6 +1813,436 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           crmLeads={crmLeads}
         />
       )}
+    </div>
+  );
+};
+
+// ----------------------------------------------------------------------------
+// Official SOP & Buyer Portal Agreement Modal Component
+// (SOP-B2B-SMP-2026-V1)
+// ----------------------------------------------------------------------------
+
+interface SopAgreementModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }) => {
+  const [buyerSigned, setBuyerSigned] = useState(false);
+  const [signedName, setSignedName] = useState('Authorized Buyer Signatory');
+  const [signedCompany, setSignedCompany] = useState('Global Sourcing Client Ltd');
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="w-full max-w-4xl bg-slate-950 border border-[#C9A86A]/40 rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+        {/* Document Header Controls */}
+        <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded bg-[#C9A86A]/20 text-[#C9A86A] font-mono text-xs font-bold border border-[#C9A86A]/40">
+              SOP-B2B-SMP-2026-V1
+            </span>
+            <span className="text-xs text-slate-300 font-semibold hidden sm:inline">
+              Official Sourcing SOP & Buyer Portal Agreement
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => window.print()}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors border border-slate-700"
+              title="Print Agreement"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print / PDF</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Scrollable Printable Document Body */}
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-8 bg-[#0a1120] text-slate-200 font-['Open_Sans'] text-xs leading-relaxed selection:bg-[#C9A86A]/30">
+          {/* Official Letterhead */}
+          <div className="border-b border-[#C9A86A]/40 pb-6 text-center space-y-2">
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#0A1A2F] to-[#1E293B] border border-[#C9A86A] flex items-center justify-center font-bold font-mono text-xs text-[#C9A86A]">
+                AMC
+              </div>
+              <span className="text-sm font-black tracking-widest text-[#C9A86A] uppercase font-['Montserrat']">
+                ARIEL MARKETING & COMMUNICATIONS LIMITED
+              </span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight font-['Montserrat'] uppercase">
+              Standard Operating Procedure (SOP) & Buyer Portal Agreement
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800/80">
+              <div>
+                <strong className="text-slate-300">Code:</strong> SOP-B2B-SMP-2026-V1
+              </div>
+              <div>
+                <strong className="text-slate-300">Markets:</strong> UK, EU, USA, AU
+              </div>
+              <div>
+                <strong className="text-slate-300">Hubs:</strong> Dhaka, Narayanganj, Savar
+              </div>
+              <div>
+                <strong className="text-slate-300">Portals:</strong> arielmc.com | arielmc.co.uk
+              </div>
+            </div>
+          </div>
+
+          {/* Section 1 */}
+          <section className="space-y-2">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+              <span>1. Purpose & Scope</span>
+            </h2>
+            <p className="text-slate-300">
+              This Standard Operating Procedure (SOP) defines the commercial terms, technical intake requirements, quality standards, and reimbursement mechanics for physical specimen, catalog, and custom pre-production sample development across ArielMC’s premier B2B manufacturing divisions:
+            </p>
+            <ul className="list-disc list-inside space-y-1 text-slate-300 pl-2">
+              <li>
+                <strong className="text-white">The Golden Fiber Edit:</strong> Jute, jute-cotton, and laminated eco-carriers.
+              </li>
+              <li>
+                <strong className="text-white">The Leather Compendium:</strong> Everyday Carry (EDC), RFID Small Leather Goods (SLGs), and executive bags.
+              </li>
+            </ul>
+          </section>
+
+          {/* Section 2 */}
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              2. Sourcing & Prototyping Lifecycle (5-Stage Framework)
+            </h2>
+            <p className="text-slate-300">
+              Sample and prototype execution operates strictly under ArielMC's 5-Step Sourcing Workflow:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
+              <div className="p-3 rounded-xl bg-slate-900 border border-purple-500/30">
+                <div className="text-[10px] font-mono font-bold text-purple-400">Step 1 (1–2 Days)</div>
+                <div className="font-bold text-white text-xs mt-0.5">Brief & Feasibility</div>
+                <p className="text-[11px] text-slate-400 mt-1">Tech pack review, BOM validation, target FOB costing, factory slot allocation.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900 border border-blue-500/30">
+                <div className="text-[10px] font-mono font-bold text-blue-400">Step 2 (1–4 Weeks)</div>
+                <div className="font-bold text-white text-xs mt-0.5">Sampling & Prototyping</div>
+                <p className="text-[11px] text-slate-400 mt-1">Raw material lab dips, pattern adjustments/CNC cutting, hardware sourcing, specimen creation.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900 border border-amber-500/30">
+                <div className="text-[10px] font-mono font-bold text-amber-400">Step 3 (2–4 Weeks)</div>
+                <div className="font-bold text-white text-xs mt-0.5">Ethical Production</div>
+                <p className="text-[11px] text-slate-400 mt-1">Bulk cutting and assembly across vetted, socially compliant manufacturing units in Narayanganj and Savar.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900 border border-emerald-500/30">
+                <div className="text-[10px] font-mono font-bold text-emerald-400">Step 4 (1–2 Weeks)</div>
+                <div className="font-bold text-white text-xs mt-0.5">In-Line & AQL Inspection</div>
+                <p className="text-[11px] text-slate-400 mt-1">Strict inspection under AQL 1.5 Major / 2.5 Minor, dynamic 15 kg load testing, carton labeling checks.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900 border border-cyan-500/30">
+                <div className="text-[10px] font-mono font-bold text-cyan-400">Step 5 (3–5 Days)</div>
+                <div className="font-bold text-white text-xs mt-0.5">Logistics & Customs</div>
+                <p className="text-[11px] text-slate-400 mt-1">Bill of Lading (BL), GSP Form A / Certificate of Origin, phytosanitary clearance, and forwarder handover.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 3 */}
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              3. Sampling Request Classification & Fee Structure
+            </h2>
+            <p className="text-slate-300">
+              ArielMC manages three distinct sampling tiers to protect R&D tooling resources while providing rapid evaluation for qualified enterprise accounts:
+            </p>
+
+            <div className="space-y-3">
+              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-xs">Tier A: Ready Catalog Showroom Samples (Off-the-Shelf)</h3>
+                  <span className="font-mono text-[10px] text-blue-400 bg-blue-950/40 px-2 py-0.5 rounded border border-blue-800/40">CATALOG</span>
+                </div>
+                <p className="text-slate-300 text-[11px]">
+                  <strong>Scope:</strong> Standard SKUs from current product roadmaps without structural modifications (e.g., JD-EDC-16 Market Tote, LD-EDC-1 Slim RFID Bifold).
+                </p>
+                <p className="text-slate-300 text-[11px]">
+                  <strong>Sample Fee:</strong> Invoiced at nominal unit wholesale price (or complimentary up to 2 units for verified corporate accounts).
+                </p>
+                <p className="text-slate-300 text-[11px]">
+                  <strong>Freight:</strong> Paid by buyer or charged to buyer’s corporate courier account (DHL / FedEx / UPS).
+                </p>
+                <p className="text-emerald-400 text-[11px]">
+                  <strong>Bulk Adjustment:</strong> 100% of the sample fee is credited against the balance invoice of the subsequent bulk Purchase Order (PO). Freight charges remain non-refundable.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-[#C9A86A]/30 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-[#C9A86A] text-xs">Tier B: Custom OEM Prototypes & Pre-Production Samples (Tech-Pack Driven)</h3>
+                  <span className="font-mono text-[10px] text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">CUSTOM OEM</span>
+                </div>
+                <p className="text-slate-300 text-[11px]">
+                  <strong>Scope:</strong> Custom designs, bespoke dimensions, buyer-specified GSM/tannage, custom Pantone lab dips, and personalized debossed/foil/screen branding.
+                </p>
+                <p className="text-slate-300 text-[11px]">
+                  <strong>Sample Development Fee:</strong> Fixed fee as outlined in Section 5 (covers pattern engineering, material matching, machine calibration, and QA signoff).
+                </p>
+                <div className="text-slate-300 text-[11px] space-y-0.5 pl-2 border-l border-slate-700">
+                  <div>• Blind Debossing / Hot Foil Brass Die: $35.00 – $65.00 (depending on surface area).</div>
+                  <div>• Screen Print Stencil / Screen Frame: $25.00 per colorway.</div>
+                  <div>• Custom Hardware Die / Mold (Buckles, Pullers): Quoted per technical drawing.</div>
+                </div>
+                <div className="text-emerald-400 text-[11px] pt-1">
+                  <strong>Bulk Adjustment & Reimbursement Terms:</strong> 100% of the Sample Development Fee is credited against the final bulk production invoice upon placement of a Purchase Order meeting the Qualifying Order Threshold (Section 4). Custom Branding Dies and Molds are NOT refunded; dies remain the exclusive intellectual and physical property of the buyer, maintained free of charge by ArielMC in Dhaka for repeat orders.
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-white text-xs">Tier C: Corporate Specimen Kits (Strategic Outbound Account Sampling)</h3>
+                  <span className="font-mono text-[10px] text-purple-400 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-800/40">PROSPECTING</span>
+                </div>
+                <p className="text-slate-300 text-[11px]">
+                  <strong>Standard Policy:</strong> Specimen presentation boxes are invoiced at a flat administrative fee of $50.00 USD (inclusive of specimen merchandise and door-to-door express courier dispatch), OR dispatched freight-collect using the Buyer's corporate DHL/FedEx account.
+                </p>
+                <p className="text-emerald-400 text-[11px]">
+                  <strong>Bulk Order Rebate:</strong> 100% of this fee is credited directly against the Buyer's final bulk production invoice upon placement of a Purchase Order meeting baseline MOQ.
+                </p>
+                <p className="text-slate-400 text-[11px]">
+                  <strong>Complimentary Discretion:</strong> Complimentary kits remain strictly reserved for pre-qualified enterprise accounts following completion of a formal Stage 4 commercial feasibility call.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 4 */}
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              4. Commercial Credit & Reimbursement Rules
+            </h2>
+            <p className="text-slate-300">
+              To maintain gross margins across our Narayanganj and Savar facilities, financial adjustments are governed by the following criteria:
+            </p>
+
+            <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+                    <th className="py-2.5 px-4">Parameter</th>
+                    <th className="py-2.5 px-4">Commercial Standard</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800 text-slate-300">
+                  <tr>
+                    <td className="py-2 px-4 font-semibold text-white">Qualifying Volume (Jute Line)</td>
+                    <td className="py-2 px-4 font-mono text-emerald-400">Purchase Order (PO) ≥ 1,000 units per style/colorway</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 font-semibold text-white">Qualifying Volume (Leather)</td>
+                    <td className="py-2 px-4 font-mono text-emerald-400">Purchase Order (PO) ≥ 300 units (Bags) / 500 pcs (SLGs)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 font-semibold text-white">Minimum PO Value</td>
+                    <td className="py-2 px-4 font-mono">≥ $3,000 USD (or £2,500 GBP / €2,800 EUR)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 font-semibold text-white">Credit Allocation</td>
+                    <td className="py-2 px-4 text-[#C9A86A] font-semibold">100% of Development Fee applied to Final Balance (BL)</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 font-semibold text-white">Tooling & Freight Policy</td>
+                    <td className="py-2 px-4 text-amber-400">Express Courier & Metal Dies strictly non-creditable</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 font-semibold text-white">Claim Validity</td>
+                    <td className="py-2 px-4 font-mono">90 Calendar Days from sample dispatch date</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-1.5 text-xs text-slate-300 pt-1">
+              <p>
+                <strong>I. Order Deduction Mechanism:</strong> Approved sample credits are deducted from the final 50% balance invoice settled against the Bill of Lading (BL) copy. Credits are never deducted from the initial 50% advance production deposit.
+              </p>
+              <p>
+                <strong>II. Split & Partial Orders:</strong> If an initial bulk order is between 50% and 99% of standard MOQ, a pro-rata credit of 50% of the sample development fee will apply.
+              </p>
+              <p>
+                <strong>III. Expiration:</strong> Sample fees not converted into a confirmed commercial Purchase Order within 90 days are recognized as completed R&D services and are non-refundable.
+              </p>
+            </div>
+          </section>
+
+          {/* Section 5 Matrix Summary */}
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              5. Standardized Sample Pricing Matrix Summary
+            </h2>
+            <p className="text-slate-300">
+              All prices in USD ($). Excludes destination import customs clearance and VAT/duties. Covers standard pattern engineering, raw material matching, machine calibration, and QA signoff:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                <span className="font-bold text-white text-xs block font-['Montserrat']">
+                  5.1 The Golden Fiber Edit (Jute & Cotton)
+                </span>
+                <div className="space-y-1 text-[11px] text-slate-300">
+                  <div className="flex justify-between"><span>JD-EDC-16 Market Tote:</span> <strong className="font-mono text-white">$45 (MOQ 1,000)</strong></div>
+                  <div className="flex justify-between"><span>JD-EDC-17 Commuter Tote:</span> <strong className="font-mono text-white">$55 (MOQ 1,000)</strong></div>
+                  <div className="flex justify-between"><span>JD-EDC-18 Beach Shopper:</span> <strong className="font-mono text-white">$50 (MOQ 1,000)</strong></div>
+                  <div className="flex justify-between"><span>JD-EDC-19 Duffle Pouch:</span> <strong className="font-mono text-white">$50 (MOQ 1,000)</strong></div>
+                  <div className="flex justify-between"><span>JD-PKG-29 Wine Carrier:</span> <strong className="font-mono text-white">$40 (MOQ 1,500)</strong></div>
+                  <div className="flex justify-between"><span>JD-PKG-31 Swag Carrier:</span> <strong className="font-mono text-white">$35 (MOQ 2,000)</strong></div>
+                  <div className="flex justify-between"><span>JD-MLD-20 Storage Basket:</span> <strong className="font-mono text-white">$60 (MOQ 500)</strong></div>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                <span className="font-bold text-white text-xs block font-['Montserrat']">
+                  5.2 The Leather Compendium (Everyday Carry)
+                </span>
+                <div className="space-y-1 text-[11px] text-slate-300">
+                  <div className="flex justify-between"><span>LD-EDC-1 RFID Bifold Wallet:</span> <strong className="font-mono text-white">$65 (MOQ 500)</strong></div>
+                  <div className="flex justify-between"><span>LD-EDC-2 Front Cardholder:</span> <strong className="font-mono text-white">$50 (MOQ 500)</strong></div>
+                  <div className="flex justify-between"><span>LD-TNW-7 Padded Folio:</span> <strong className="font-mono text-white">$95 (MOQ 300)</strong></div>
+                  <div className="flex justify-between"><span>LD-TNW-9 Document Portfolio:</span> <strong className="font-mono text-white">$85 (MOQ 300)</strong></div>
+                  <div className="flex justify-between"><span>LD-TNV-10 Passport Wallet:</span> <strong className="font-mono text-white">$55 (MOQ 500)</strong></div>
+                  <div className="flex justify-between"><span>LD-SCB-5 Laptop Commuter Tote:</span> <strong className="font-mono text-white">$125 (MOQ 250)</strong></div>
+                  <div className="flex justify-between"><span>LD-BLM-16 Bloom Satchel:</span> <strong className="font-mono text-white">$140 (MOQ 300)</strong></div>
+                  <div className="flex justify-between"><span>LD-WAA-13 Bridle Formal Belt:</span> <strong className="font-mono text-white">$60 (MOQ 500)</strong></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 6 & 7 */}
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              6. International Shipping & Customs Declaration
+            </h2>
+            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5 text-xs text-slate-300">
+              <p>
+                <strong>Courier:</strong> All outbound sample parcels consigned via DHL Express or FedEx International Priority directly from Dhaka (DAC). Net pass-through freight: UK/EU $38–$48; USA/Canada $42–$55; Australia/NZ $48–$60.
+              </p>
+              <div className="p-2.5 rounded-lg bg-slate-950 border border-amber-500/30 font-mono text-[11px] text-amber-300">
+                Customs Waybill Labelling Mandate: "Commercial Mutilated Prototype Samples – No Commercial Value – Value for Customs Purposes Only: $10.00 USD"
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Prevents clearance delays and excessive import VAT/tariffs at UK and EU ports of entry.
+              </p>
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              7. Regulatory & Quality Compliance Signoff
+            </h2>
+            <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs text-slate-300">
+              <p>Every sample dispatched is accompanied by a Pre-Shipment Quality Inspection Dossier (QA-DOC):</p>
+              <ul className="list-disc list-inside space-y-1 pl-2 text-[11px]">
+                <li><strong className="text-white">Chemical Safety & REACH:</strong> Non-detectable Chromium VI (&lt; 3 mg/kg), dimethyl fumarate (DMFu &lt; 0.1 mg/kg), and AZO-free dyestuffs under UK REACH Annex XVII and EU Regulation (EC) 1907/2006.</li>
+                <li><strong className="text-white">Textile & Food Contact:</strong> Jute conforms to UK/EU fiber composition split disclosures (e.g. 60% Jute / 40% Cotton), utilizing hydrocarbon-free vegetable batching oil.</li>
+                <li><strong className="text-white">Structural Tolerances:</strong> Dynamic 15 kg pull-and-drop test clearance; leather seam-fatigue and hardware salt-spray resistance.</li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Section 8 & Signature Block */}
+          <section className="space-y-4 pt-4 border-t border-[#C9A86A]/40">
+            <h2 className="text-sm font-bold text-[#C9A86A] uppercase tracking-wider font-['Montserrat']">
+              8. Buyer Acceptance & Agreement Execution
+            </h2>
+            <div className="space-y-2 text-xs text-slate-300">
+              <p>By submitting a digital Sample Request through the ArielMC Buyer Portal (arielmc.com/portal/samples or arielmc.co.uk/portal), the Buyer confirms understanding and acceptance of these Terms:</p>
+              <div className="space-y-1 pl-3 text-[11px] text-slate-400 font-mono">
+                <div>I. Samples are fabricated solely for commercial evaluation, fit, and pre-production approval.</div>
+                <div>II. Development costs are creditable only against qualifying bulk production orders and exclude express freight pass-through costs.</div>
+                <div>III. ArielMC requires written approval (or digital portal sign-off) of the physical sample before issuing the 50% advance production invoice and initiating mass factory scheduling.</div>
+              </div>
+            </div>
+
+            {/* Interactive Acceptance Simulation */}
+            <div className="p-4 rounded-xl bg-slate-900 border border-emerald-500/30 space-y-3">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="sop-accept"
+                  checked={buyerSigned}
+                  onChange={(e) => setBuyerSigned(e.target.checked)}
+                  className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-400 border-slate-700 bg-slate-950"
+                />
+                <label htmlFor="sop-accept" className="text-xs font-semibold text-white cursor-pointer select-none">
+                  Digital Buyer Acceptance: I have read, understood, and accept all terms of SOP-B2B-SMP-2026-V1.
+                </label>
+              </div>
+
+              {buyerSigned && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800 text-xs">
+                  <div>
+                    <label className="block text-slate-400 text-[10px] mb-0.5">Buyer Signatory Name</label>
+                    <input
+                      type="text"
+                      value={signedName}
+                      onChange={(e) => setSignedName(e.target.value)}
+                      className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white font-mono text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 text-[10px] mb-0.5">Procurement Organization</label>
+                    <input
+                      type="text"
+                      value={signedCompany}
+                      onChange={(e) => setSignedCompany(e.target.value)}
+                      className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white font-mono text-xs"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Official Execution Stamp */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-xs font-mono">
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                <div className="text-[10px] text-slate-400 uppercase">Authorized by ArielMC:</div>
+                <div className="font-bold text-white">Trade Operations & Export Management Division</div>
+                <div className="text-[#C9A86A]">Ariel Marketing & Communications Limited</div>
+                <div className="text-[10px] text-slate-400">Dhaka Hub • London Liaison Office</div>
+                <div className="text-[10px] text-emerald-400 pt-1 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Digitally Verified & Validated for 2026/2027</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1.5">
+                <div className="text-[10px] text-slate-400 uppercase">Buyer Portal Execution:</div>
+                <div className="font-bold text-white">{signedName}</div>
+                <div className="text-slate-300">{signedCompany}</div>
+                <div className="text-[10px] text-slate-400">Status: {buyerSigned ? 'Digitally Signed & Confirmed' : 'Pending Client Acceptance'}</div>
+                <div className="text-[10px] text-slate-400">Date: {new Date().toISOString().split('T')[0]}</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between shrink-0">
+          <span className="text-[11px] text-slate-400 font-mono">
+            ArielMC ERP System • Secure B2B Export Governance
+          </span>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-[#C9A86A] hover:bg-[#B08D4D] text-[#0A1A2F] font-bold text-xs font-['Montserrat'] transition-all shadow-md"
+          >
+            Close & Return to Dashboard
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

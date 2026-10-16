@@ -278,12 +278,59 @@ export interface BuyerFeedback {
   requiredChanges?: string[];
 }
 
+export type SamplingTier = 
+  | 'TIER_A_SHOWROOM'    // Ready Catalog Showroom Samples (Off-the-Shelf)
+  | 'TIER_B_CUSTOM_OEM'    // Custom OEM Prototypes & Pre-Production (Tech-Pack Driven)
+  | 'TIER_C_SPECIMEN_KIT'; // Corporate Specimen Kits ($50 Flat Fee / Prospecting)
+
+export interface SamplePricingMatrixItem {
+  categoryCode: string; // e.g. JD-EDC-16, LD-BLM-16
+  division: 'The Golden Fiber Edit' | 'The Leather Compendium' | 'The Ceramic Index' | 'Thread & Weave' | 'Earth & Form';
+  skuDescription: string;
+  developmentSampleFeeUsd: number;
+  toolingCostText: string;
+  toolingCostUsd: number;
+  developmentLeadTime: string;
+  qualifyingBulkMoq: number;
+  techPackRef?: string;
+}
+
+export interface SampleReimbursementTerms {
+  qualifyingBulkMoq: number;
+  minimumPoValueUsd: number;
+  invoiceDeductionTarget: 'FINAL_50_BALANCE_BL';
+  status: 'PENDING_QUALIFYING_PO' | 'CREDIT_APPROVED' | 'CREDITED_ON_BL' | 'EXPIRED';
+  creditAmountUsd: number;
+  validityDays: number; // 90 Calendar Days
+  dispatchDate: string;
+}
+
+export interface SampleQaDossier {
+  dossierNumber: string;
+  inspectionDate: string;
+  inspectorName: string;
+  chemicalSafety: {
+    chromiumViPpm: string; // '< 0.5 mg/kg (Limit < 3.0 mg/kg)'
+    dmfuPpm: string; // '< 0.05 mg/kg (Limit < 0.1 mg/kg)'
+    azoColorants: string; // 'Non-detectable'
+    reachAnnexXviiCompliant: boolean;
+  };
+  mechanicalTesting: {
+    dropTest15kg: string; // 'Passed (3 drops from 1.2m)'
+    handlePullStrengthKg: number; // 42.5 kg (Pass >= 25 kg)
+    seamFatigueRating: string; // 'Grade 5 (Zero seam slippage)'
+    hardwareSaltSprayHours: number; // 48 Hours
+  };
+}
+
 export interface SampleDevelopmentOrder {
   id: string; // SDO-2026-LTH-001
   sdoNumber: string;
   sector: ProductSector;
   styleName: string;
   styleCode: string;
+  samplingTier?: SamplingTier;
+  sopReference?: string; // 'SOP-B2B-SMP-2026-V1'
   associatedProductId?: string;
   buyerCompany: string; // From CRM
   buyerContact: string;
@@ -299,6 +346,9 @@ export interface SampleDevelopmentOrder {
   techPack: TechPackSpec;
   courier?: SampleCourierTracking;
   costing: SampleCosting;
+  reimbursementTerms?: SampleReimbursementTerms;
+  qaDossier?: SampleQaDossier;
+  waybillLabelling?: string;
   feedbacks: BuyerFeedback[];
   tags: string[];
 }
