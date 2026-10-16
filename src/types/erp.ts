@@ -79,6 +79,9 @@ export type SectorAttributes =
 export interface ProductItem {
   id: string;
   sku: string;
+  eanBarcode?: string; // GS1 GTIN-13 (053 Country Prefix for Bangladesh)
+  styleCode?: string; // JCT, BLM, LT2, LT3
+  packagingMode?: string; // Flat poly-sleeve, 1pc | Dustbag + E-com box | Stuffed, Dustbag + Box
   name: string;
   sector: ProductSector;
   category: string;

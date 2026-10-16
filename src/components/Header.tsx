@@ -74,19 +74,19 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative group">
             <button 
               id="entity-selector-dropdown-btn"
-              className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-950/40 via-slate-900 to-indigo-950/40 border border-blue-500/30 hover:border-blue-400 text-xs font-medium text-slate-100 transition-all shadow-sm shadow-blue-500/10"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#0a1a2f] via-[#10233f] to-[#0a1a2f] border border-[#c9a86a]/40 hover:border-[#c9a86a] text-xs font-medium text-slate-100 transition-all shadow-sm shadow-[#c9a86a]/10"
             >
               <span className="text-base leading-none">{activeEntity.flag}</span>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-white tracking-wide">{activeEntity.legalName.split(' ')[0]} {activeEntity.countryCode}</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 font-mono border border-blue-500/30">
+                  <span className="font-heading font-semibold text-white tracking-wide">{activeEntity.legalName.split(' ')[0]} {activeEntity.countryCode}</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#c9a86a]/20 text-[#c9a86a] font-mono font-bold border border-[#c9a86a]/40">
                     {activeEntity.baseCurrency}
                   </span>
                 </div>
-                <p className="text-[10px] text-slate-400 leading-tight">{activeEntity.city}, {activeEntity.country}</p>
+                <p className="text-[10px] text-slate-300 leading-tight">{activeEntity.city}, {activeEntity.country}</p>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-1 group-hover:text-blue-400 transition-transform" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#c9a86a] ml-1 group-hover:scale-110 transition-transform" />
             </button>
 
             {/* Dropdown Menu */}

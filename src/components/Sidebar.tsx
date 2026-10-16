@@ -147,12 +147,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-72 bg-[#080c18] border-r border-slate-800/80 flex flex-col justify-between h-screen sticky top-0 select-none">
+    <aside className="w-72 bg-[#060e1a] border-r border-[#182e4b] flex flex-col justify-between h-screen sticky top-0 select-none">
       {/* Top Branding */}
       <div>
-        <div className="p-4 border-b border-slate-800/80 bg-gradient-to-b from-slate-900/60 to-transparent">
+        <div className="p-4 border-b border-[#182e4b] bg-gradient-to-b from-[#0a1a2f] to-[#060e1a]">
           <div className="flex items-center gap-3">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-900 border border-slate-700/80 p-1 flex items-center justify-center shadow-lg shadow-blue-500/10">
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#0a1a2f] border border-[#c9a86a]/40 p-1 flex items-center justify-center shadow-lg shadow-[#c9a86a]/10">
               <Image
                 src="/images/ArielMC_Logo.png"
                 alt="ArielMC Logo"
@@ -164,19 +164,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-white text-base tracking-wide">ArielMC</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono font-semibold border border-blue-500/30">
+                <span className="font-heading font-bold text-white text-base tracking-wide">ArielMC</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#c9a86a]/20 text-[#c9a86a] font-mono font-bold border border-[#c9a86a]/40">
                   ENTERPRISE
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium tracking-tight truncate max-w-[170px]">
-                Global Sourcing & Brand ERP
+              <p className="text-[10px] text-[#c9a86a] font-medium tracking-tight truncate max-w-[170px]">
+                Ariel Marketing & Communications Ltd
               </p>
             </div>
           </div>
 
           {/* Active Operating Entity Bar */}
-          <div className="mt-3.5 p-2 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs">
+          <div className="mt-3.5 p-2 rounded-lg bg-[#0a1a2f]/90 border border-[#182e4b] flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
               <span className="text-base">{activeEntity.flag}</span>
               <div>
@@ -188,7 +188,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </span>
               </div>
             </div>
-            <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-mono text-[10px] border border-blue-500/30">
+            <span className="px-1.5 py-0.5 rounded bg-[#c9a86a]/20 text-[#c9a86a] font-mono text-[10px] font-bold border border-[#c9a86a]/40">
               {activeEntity.baseCurrency}
             </span>
           </div>
