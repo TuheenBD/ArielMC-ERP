@@ -7,6 +7,7 @@ import {
   CompanyEntity,
   CurrencyRate
 } from '@/types/erp';
+import { ThemeProfile } from '@/components/Sidebar';
 import { INITIAL_ORDERS } from '@/data/initialOrders';
 import { INITIAL_COMPANIES } from '@/data/initialData';
 import {
@@ -45,6 +46,7 @@ interface OfficialDocumentCenterProps {
   initialOrderId?: string;
   activeEntity?: CompanyEntity;
   activeCurrency?: CurrencyRate;
+  theme?: ThemeProfile;
 }
 
 export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
@@ -53,6 +55,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
   initialDocumentType = 'COMMERCIAL_INVOICE',
   initialOrderId,
   activeEntity = INITIAL_COMPANIES[0],
+  theme = 'crm-green',
 }) => {
   const [docType, setDocType] = useState<DocumentType>(initialDocumentType);
   const [selectedOrderId, setSelectedOrderId] = useState<string>(
@@ -109,22 +112,121 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
     }
   };
 
+  const isRoyal = theme === 'royal-blue';
+  const isHeritage = theme === 'heritage-tan';
+
+  // Shell
+  const docShell = isRoyal
+    ? 'bg-[#0B132B] border-slate-700/80 text-slate-100'
+    : isHeritage
+    ? 'bg-[#1C160C] border-[#8A6D3B]/60 text-[#F5EEDC]'
+    : 'bg-[#12231B] border-[#2C5240] text-white';
+
+  // Header Bar
+  const docHeaderBg = isRoyal
+    ? 'bg-[#0F172A] border-b border-slate-800'
+    : isHeritage
+    ? 'bg-[#261E10] border-b-2 border-[#C8A96A]'
+    : 'bg-[#162B22] border-b-2 border-[#C8A96A]';
+
+  const docIconBox = isRoyal
+    ? 'bg-blue-500/15 border-blue-500/30 text-blue-400'
+    : 'bg-[#C8A96A]/15 border-[#C8A96A]/30 text-[#C8A96A]';
+
+  const docBadge = isRoyal
+    ? 'bg-blue-500/15 text-blue-300 border-blue-500/30'
+    : 'bg-[#C8A96A]/20 text-[#C8A96A] border-[#C8A96A]/30';
+
+  const printBtn = isRoyal
+    ? 'bg-[#C8A96A] hover:bg-[#d6ba7c] text-[#0B132B]'
+    : 'bg-[#C8A96A] hover:bg-[#d6ba7c] text-[#1F3A2E]';
+
+  const copyHtmlBtn = isRoyal
+    ? 'bg-slate-800/80 hover:bg-slate-700 border-slate-700 text-slate-200'
+    : isHeritage
+    ? 'bg-[#2A2012] hover:bg-[#382B18] border-[#8A6D3B]/50 text-[#F5EEDC]'
+    : 'bg-[#1F3A2E] hover:bg-[#2C5240] border-[#2C5240] text-white';
+
+  // Sidebar (Control panel)
+  const sidebarBg = isRoyal
+    ? 'bg-[#070D18] border-r border-slate-800/90 text-slate-300'
+    : isHeritage
+    ? 'bg-[#181208] border-r border-[#8A6D3B]/30 text-[#E5D5B3]'
+    : 'bg-[#172D24] border-r border-[#2C5240] text-[#CFE0D5]';
+
+  // Template active / inactive
+  const templateActive = isRoyal
+    ? 'bg-slate-800/90 border-2 border-[#C8A96A] text-white ring-1 ring-[#C8A96A]/30'
+    : isHeritage
+    ? 'bg-[#2E2211] border-2 border-[#C8A96A] text-white ring-1 ring-[#C8A96A]/30'
+    : 'bg-[#1F3A2E] border-2 border-[#C8A96A] text-white ring-1 ring-[#C8A96A]/30';
+
+  const templateInactive = isRoyal
+    ? 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 text-slate-300'
+    : isHeritage
+    ? 'bg-[#22180C] border-[#8A6D3B]/30 hover:border-[#8A6D3B]/60 hover:bg-[#2E2211]/50 text-[#CFE0D5]'
+    : 'bg-[#12231B]/70 border-[#2C5240] hover:border-[#3A6B54] hover:bg-[#1F3A2E]/50 text-[#CFE0D5]';
+
+  const templateSubtitleActive = isRoyal
+    ? 'text-[#E5D5B3]'
+    : 'text-[#C8A96A]';
+
+  const templateSubtitleInactive = isRoyal
+    ? 'text-slate-400'
+    : isHeritage
+    ? 'text-[#B8A382]'
+    : 'text-[#8FA89B]';
+
+  // Order select dropdown
+  const orderSelectBg = isRoyal
+    ? 'bg-slate-900/90 border-slate-700 text-slate-100 focus:border-blue-500'
+    : isHeritage
+    ? 'bg-[#22180C] border-[#8A6D3B]/50 text-[#F5EEDC] focus:border-[#C8A96A]'
+    : 'bg-[#12231B] border-[#2C5240] text-white focus:border-[#C8A96A]';
+
+  const optionBg = isRoyal ? 'bg-[#0F172A]' : isHeritage ? 'bg-[#261E10]' : 'bg-[#1F3A2E]';
+
+  // Box containers (Meta overrides & Toggles)
+  const metaBoxBg = isRoyal
+    ? 'bg-slate-900/50 border-slate-800/80'
+    : isHeritage
+    ? 'bg-[#22180C]/80 border-[#8A6D3B]/30'
+    : 'bg-[#12231B]/80 border-[#2C5240]';
+
+  const inputFieldBg = isRoyal
+    ? 'bg-slate-950/80 border-slate-700/80 text-slate-100 placeholder-slate-600 focus:border-blue-500'
+    : isHeritage
+    ? 'bg-[#150E06] border-[#8A6D3B]/40 text-[#F5EEDC] placeholder-amber-700/60 focus:border-[#C8A96A]'
+    : 'bg-[#0D1913] border-[#2C5240] text-white placeholder-[#5A7A6A] focus:border-[#C8A96A]';
+
+  const checkboxClass = isRoyal
+    ? 'rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500 w-4 h-4'
+    : isHeritage
+    ? 'rounded border-[#8A6D3B]/50 bg-[#150E06] text-[#C8A96A] focus:ring-[#C8A96A] w-4 h-4'
+    : 'rounded border-[#2C5240] bg-[#0D1913] text-[#1E6B3A] focus:ring-[#C8A96A] w-4 h-4';
+
+  const canvasStudioFloor = isRoyal
+    ? 'bg-[#050811]'
+    : isHeritage
+    ? 'bg-[#120D06]'
+    : 'bg-[#0A140F]';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-[#0B132B] rounded-2xl shadow-2xl border border-slate-700/80 w-full max-w-7xl h-[94vh] flex flex-col overflow-hidden text-slate-100">
+      <div className={`${docShell} rounded-2xl shadow-2xl w-full max-w-7xl h-[94vh] flex flex-col overflow-hidden`}>
         
         {/* Header Bar */}
-        <div className="px-6 py-4 bg-[#0F172A] border-b border-slate-800 flex items-center justify-between shrink-0">
+        <div className={`px-6 py-4 ${docHeaderBg} flex items-center justify-between shrink-0`}>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#C8A96A]/10 border border-[#C8A96A]/30 text-[#C8A96A] shadow-xs">
+            <div className={`p-2.5 rounded-xl ${docIconBox} shadow-xs`}>
               <FileText className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-[#C8A96A]/20 text-[#E5D5B3] border border-[#C8A96A]/40 font-bold uppercase tracking-wider">
+                <span className={`text-[10px] font-mono px-2.5 py-0.5 rounded-md ${docBadge} font-bold uppercase tracking-wider`}>
                   OFFICIAL DOCUMENT ENGINE
                 </span>
-                <span className="text-xs text-slate-400 font-medium">A4 Vector Calibration</span>
+                <span className="text-xs text-[#CFE0D5] font-medium">A4 Vector Calibration</span>
               </div>
               <h2 className="text-lg font-bold font-heading text-white mt-0.5">
                 Official ArielMC Export &amp; Statutory PDF Generator
@@ -135,7 +237,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#d6ba7c] text-[#0B132B] text-xs font-bold font-heading shadow-md transition-all active:scale-95"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl ${printBtn} text-xs font-bold font-heading shadow-md transition-all active:scale-95`}
               title="Print directly or Save as PDF with exact vector colors"
             >
               <Printer className="w-4 h-4" />
@@ -144,7 +246,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
 
             <button
               onClick={handleCopyHtml}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-all"
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl ${copyHtmlBtn} text-xs font-semibold transition-all`}
               title="Copy formatted HTML for email or archiving"
             >
               {copiedHtml ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#C8A96A]" />}
@@ -153,7 +255,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -164,11 +266,11 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           
           {/* LEFT: Controls & Customizer Sidebar */}
-          <div className="w-full lg:w-96 bg-[#070D18] p-5 border-r border-slate-800/90 overflow-y-auto shrink-0 space-y-5 text-xs text-slate-300">
+          <div className={`w-full lg:w-96 ${sidebarBg} p-5 overflow-y-auto shrink-0 space-y-5 text-xs`}>
             
             {/* Document Type Selector */}
             <div>
-              <label className="block text-slate-400 font-mono font-bold uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
+              <label className="block text-[#C8A96A] font-mono font-bold uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
                 <span>1. Select Document Template:</span>
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -176,15 +278,15 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                   onClick={() => setDocType('COMMERCIAL_INVOICE')}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     docType === 'COMMERCIAL_INVOICE'
-                      ? 'bg-slate-800/90 border-2 border-[#C8A96A] text-white shadow-sm ring-1 ring-[#C8A96A]/30'
-                      : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 text-slate-300'
+                      ? templateActive
+                      : templateInactive
                   }`}
                 >
                   <div className="text-xs font-bold text-white flex items-center justify-between">
                     <span>Commercial Invoice</span>
                     {docType === 'COMMERCIAL_INVOICE' && <span className="w-1.5 h-1.5 rounded-full bg-[#C8A96A]" />}
                   </div>
-                  <div className={`text-[10px] mt-0.5 ${docType === 'COMMERCIAL_INVOICE' ? 'text-[#E5D5B3] font-medium' : 'text-slate-400'}`}>
+                  <div className={`text-[10px] mt-0.5 ${docType === 'COMMERCIAL_INVOICE' ? templateSubtitleActive : templateSubtitleInactive}`}>
                     Export Shipping (CI)
                   </div>
                 </button>
@@ -193,15 +295,15 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                   onClick={() => setDocType('PROFORMA_INVOICE')}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     docType === 'PROFORMA_INVOICE'
-                      ? 'bg-slate-800/90 border-2 border-[#C8A96A] text-white shadow-sm ring-1 ring-[#C8A96A]/30'
-                      : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 text-slate-300'
+                      ? templateActive
+                      : templateInactive
                   }`}
                 >
                   <div className="text-xs font-bold text-white flex items-center justify-between">
                     <span>Proforma Invoice</span>
                     {docType === 'PROFORMA_INVOICE' && <span className="w-1.5 h-1.5 rounded-full bg-[#C8A96A]" />}
                   </div>
-                  <div className={`text-[10px] mt-0.5 ${docType === 'PROFORMA_INVOICE' ? 'text-[#E5D5B3] font-medium' : 'text-slate-400'}`}>
+                  <div className={`text-[10px] mt-0.5 ${docType === 'PROFORMA_INVOICE' ? templateSubtitleActive : templateSubtitleInactive}`}>
                     Sales Agreement (PI)
                   </div>
                 </button>
@@ -210,15 +312,15 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                   onClick={() => setDocType('MUSHAK_6_3')}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     docType === 'MUSHAK_6_3'
-                      ? 'bg-slate-800/90 border-2 border-[#C8A96A] text-white shadow-sm ring-1 ring-[#C8A96A]/30'
-                      : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 text-slate-300'
+                      ? templateActive
+                      : templateInactive
                   }`}
                 >
                   <div className="text-xs font-bold text-white flex items-center justify-between">
                     <span>Mushak 6.3 (কর চালান)</span>
                     {docType === 'MUSHAK_6_3' && <span className="w-1.5 h-1.5 rounded-full bg-[#C8A96A]" />}
                   </div>
-                  <div className={`text-[10px] mt-0.5 ${docType === 'MUSHAK_6_3' ? 'text-[#E5D5B3] font-medium' : 'text-slate-400'}`}>
+                  <div className={`text-[10px] mt-0.5 ${docType === 'MUSHAK_6_3' ? templateSubtitleActive : templateSubtitleInactive}`}>
                     Bangladesh NBR VAT
                   </div>
                 </button>
@@ -227,15 +329,15 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                   onClick={() => setDocType('PURCHASE_ORDER')}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     docType === 'PURCHASE_ORDER'
-                      ? 'bg-slate-800/90 border-2 border-[#C8A96A] text-white shadow-sm ring-1 ring-[#C8A96A]/30'
-                      : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 text-slate-300'
+                      ? templateActive
+                      : templateInactive
                   }`}
                 >
                   <div className="text-xs font-bold text-white flex items-center justify-between">
                     <span>Factory PO</span>
                     {docType === 'PURCHASE_ORDER' && <span className="w-1.5 h-1.5 rounded-full bg-[#C8A96A]" />}
                   </div>
-                  <div className={`text-[10px] mt-0.5 ${docType === 'PURCHASE_ORDER' ? 'text-[#E5D5B3] font-medium' : 'text-slate-400'}`}>
+                  <div className={`text-[10px] mt-0.5 ${docType === 'PURCHASE_ORDER' ? templateSubtitleActive : templateSubtitleInactive}`}>
                     Vendor PO &amp; BOM
                   </div>
                 </button>
@@ -244,16 +346,16 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
 
             {/* Order Data Source */}
             <div>
-              <label className="block text-slate-400 font-mono font-bold uppercase tracking-wider text-[11px] mb-2">
+              <label className="block text-[#C8A96A] font-mono font-bold uppercase tracking-wider text-[11px] mb-2">
                 2. Load Client Order Data:
               </label>
               <select
                 value={selectedOrderId}
                 onChange={(e) => setSelectedOrderId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-[#C8A96A] transition-all"
+                className={`w-full px-3 py-2.5 rounded-xl ${orderSelectBg} text-xs focus:outline-none transition-all`}
               >
                 {INITIAL_ORDERS.map((ord) => (
-                  <option key={ord.id} value={ord.id} className="bg-[#0F172A] text-slate-100">
+                  <option key={ord.id} value={ord.id} className={`${optionBg} text-white`}>
                     {ord.buyerCompany} ({ord.soNumber} - {ord.currency} {ord.totalAmountBuyerCurrency.toLocaleString()})
                   </option>
                 ))}
@@ -261,59 +363,59 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
             </div>
 
             {/* Dynamic Editable Fields */}
-            <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800/80 space-y-3">
-              <label className="block text-slate-400 font-mono font-bold uppercase tracking-wider text-[11px]">
+            <div className={`p-4 rounded-xl ${metaBoxBg} space-y-3`}>
+              <label className="block text-[#C8A96A] font-mono font-bold uppercase tracking-wider text-[11px]">
                 3. Document Meta Overrides:
               </label>
 
               <div>
-                <span className="text-[11px] text-slate-400 font-medium">Document / Invoice Ref No:</span>
+                <span className="text-[11px] text-[#CFE0D5] font-medium">Document / Invoice Ref No:</span>
                 <input
                   type="text"
                   placeholder={getDocNumber()}
                   value={customDocNumber}
                   onChange={(e) => setCustomDocNumber(e.target.value)}
-                  className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/80 text-slate-100 text-xs font-mono placeholder-slate-600 focus:outline-none focus:border-[#C8A96A] transition-all"
+                  className={`w-full mt-1 px-3 py-1.5 rounded-lg ${inputFieldBg} text-xs font-mono focus:outline-none transition-all`}
                 />
               </div>
 
               <div>
-                <span className="text-[11px] text-slate-400 font-medium">Document Issue Date:</span>
+                <span className="text-[11px] text-[#CFE0D5] font-medium">Document Issue Date:</span>
                 <input
                   type="date"
                   value={customDate}
                   onChange={(e) => setCustomDate(e.target.value)}
-                  className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/80 text-slate-100 text-xs focus:outline-none focus:border-[#C8A96A] transition-all"
+                  className={`w-full mt-1 px-3 py-1.5 rounded-lg ${inputFieldBg} text-xs focus:outline-none transition-all`}
                 />
               </div>
 
               {docType === 'COMMERCIAL_INVOICE' && (
                 <>
                   <div>
-                    <span className="text-[11px] text-slate-400 font-medium">Vessel &amp; Voyage:</span>
+                    <span className="text-[11px] text-[#CFE0D5] font-medium">Vessel &amp; Voyage:</span>
                     <input
                       type="text"
                       value={customVessel}
                       onChange={(e) => setCustomVessel(e.target.value)}
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/80 text-slate-100 text-xs focus:outline-none focus:border-[#C8A96A] transition-all"
+                      className={`w-full mt-1 px-3 py-1.5 rounded-lg ${inputFieldBg} text-xs focus:outline-none transition-all`}
                     />
                   </div>
                   <div>
-                    <span className="text-[11px] text-slate-400 font-medium">Bill of Lading (B/L) No:</span>
+                    <span className="text-[11px] text-[#CFE0D5] font-medium">Bill of Lading (B/L) No:</span>
                     <input
                       type="text"
                       value={customBlNumber}
                       onChange={(e) => setCustomBlNumber(e.target.value)}
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/80 text-slate-100 text-xs font-mono focus:outline-none focus:border-[#C8A96A] transition-all"
+                      className={`w-full mt-1 px-3 py-1.5 rounded-lg ${inputFieldBg} text-xs font-mono focus:outline-none transition-all`}
                     />
                   </div>
                   <div>
-                    <span className="text-[11px] text-slate-400 font-medium">Bangladesh Bank Form EXP No:</span>
+                    <span className="text-[11px] text-[#CFE0D5] font-medium">Bangladesh Bank Form EXP No:</span>
                     <input
                       type="text"
                       value={customFormExp}
                       onChange={(e) => setCustomFormExp(e.target.value)}
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/80 text-slate-100 text-xs font-mono focus:outline-none focus:border-[#C8A96A] transition-all"
+                      className={`w-full mt-1 px-3 py-1.5 rounded-lg ${inputFieldBg} text-xs font-mono focus:outline-none transition-all`}
                     />
                   </div>
                 </>
@@ -321,65 +423,65 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
 
               {docType === 'MUSHAK_6_3' && (
                 <div>
-                  <span className="text-[11px] text-slate-400 font-medium">যানবাহন নম্বর (Vehicle Reg):</span>
+                  <span className="text-[11px] text-[#CFE0D5] font-medium">যানবাহন নম্বর (Vehicle Reg):</span>
                   <input
                     type="text"
                     value={customVehicleNo}
                     onChange={(e) => setCustomVehicleNo(e.target.value)}
-                    className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-950/80 border border-slate-700/80 text-slate-100 text-xs focus:outline-none focus:border-[#C8A96A] transition-all"
+                    className={`w-full mt-1 px-3 py-1.5 rounded-lg ${inputFieldBg} text-xs focus:outline-none transition-all`}
                   />
                 </div>
               )}
             </div>
 
             {/* Letterhead & Security Toggles */}
-            <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800/80 space-y-2.5">
-              <label className="block text-slate-400 font-mono font-bold uppercase tracking-wider text-[11px]">
+            <div className={`p-4 rounded-xl ${metaBoxBg} space-y-2.5`}>
+              <label className="block text-[#C8A96A] font-mono font-bold uppercase tracking-wider text-[11px]">
                 4. Letterhead &amp; Security Toggles:
               </label>
 
-              <label className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-white cursor-pointer transition-colors">
+              <label className="flex items-center gap-2.5 text-xs text-[#CFE0D5] hover:text-white cursor-pointer transition-colors">
                 <input
                   type="checkbox"
                   checked={showLetterhead}
                   onChange={(e) => setShowLetterhead(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                  className={checkboxClass}
                 />
                 <span>Include Official ArielMC Letterhead Header</span>
               </label>
 
-              <label className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-white cursor-pointer transition-colors">
+              <label className="flex items-center gap-2.5 text-xs text-[#CFE0D5] hover:text-white cursor-pointer transition-colors">
                 <input
                   type="checkbox"
                   checked={showCorporateSeal}
                   onChange={(e) => setShowCorporateSeal(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                  className={checkboxClass}
                 />
                 <span>Include Digital Corporate Seal &amp; Signature</span>
               </label>
 
-              <label className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-white cursor-pointer transition-colors">
+              <label className="flex items-center gap-2.5 text-xs text-[#CFE0D5] hover:text-white cursor-pointer transition-colors">
                 <input
                   type="checkbox"
                   checked={showQrCode}
                   onChange={(e) => setShowQrCode(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                  className={checkboxClass}
                 />
                 <span>Include Anti-Tamper QR Verification Badge</span>
               </label>
 
-              <label className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-white cursor-pointer transition-colors">
+              <label className="flex items-center gap-2.5 text-xs text-[#CFE0D5] hover:text-white cursor-pointer transition-colors">
                 <input
                   type="checkbox"
                   checked={showBankDetails}
                   onChange={(e) => setShowBankDetails(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-950 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                  className={checkboxClass}
                 />
                 <span>Include Eastern Bank PLC Wire Coordinates</span>
               </label>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-200/90 flex items-start gap-2.5">
+            <div className="p-3.5 rounded-xl bg-[#C8A96A]/10 border border-[#C8A96A]/30 text-[11px] text-[#C8A96A] flex items-start gap-2.5">
               <Sparkles className="w-4 h-4 shrink-0 mt-0.5 text-[#C8A96A]" />
               <span>
                 Clicking <strong>Download / Print Official PDF</strong> opens the browser print preview, pre-scaled to A4 portrait with crisp vector graphics and exact margins.
@@ -388,7 +490,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
           </div>
 
           {/* RIGHT: Live High-Resolution A4 Canvas */}
-          <div className="flex-1 bg-[#050811] p-4 sm:p-8 overflow-y-auto flex justify-center items-start">
+          <div className={`flex-1 ${canvasStudioFloor} p-4 sm:p-8 overflow-y-auto flex justify-center items-start`}>
             
             {/* The Actual Printable Canvas Container */}
             <div

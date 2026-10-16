@@ -20,17 +20,20 @@ import {
 } from 'lucide-react';
 import { testSupabaseHealth, syncAllSeedDataToSupabase } from '@/lib/erpPersistence';
 import { isSupabaseConfigured } from '@/lib/supabaseClient';
+import { ThemeProfile } from '@/components/Sidebar';
 
 interface DatabaseSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDataSynced?: () => void;
+  theme?: ThemeProfile;
 }
 
 export const DatabaseSettingsModal: React.FC<DatabaseSettingsModalProps> = ({
   isOpen,
   onClose,
   onDataSynced,
+  theme = 'crm-green',
 }) => {
   const [activeTab, setActiveTab] = useState<'STATUS' | 'SEED' | 'SCHEMA'>('STATUS');
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
@@ -369,16 +372,144 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
   if (!isOpen) return null;
 
+  const isRoyal = theme === 'royal-blue';
+  const isHeritage = theme === 'heritage-tan';
+
+  // Theme-aware styles
+  const modalShell = isRoyal
+    ? 'bg-[#0B132B] border border-slate-700/80 text-slate-100'
+    : isHeritage
+    ? 'bg-[#1C160C] border border-[#8A6D3B]/60 text-[#F5EEDC]'
+    : 'bg-[#12231B] border border-[#2C5240] text-white';
+
+  const modalHeaderBg = isRoyal
+    ? 'bg-[#0F172A] border-b border-slate-800'
+    : isHeritage
+    ? 'bg-[#261E10] border-b-2 border-[#C8A96A]'
+    : 'bg-[#162B22] border-b-2 border-[#C8A96A]';
+
+  const iconBox = isRoyal
+    ? 'bg-blue-500/15 border border-blue-500/30 text-blue-400'
+    : 'bg-[#C8A96A]/15 border border-[#C8A96A]/30 text-[#C8A96A]';
+
+  const postgresBadge = isRoyal
+    ? 'bg-blue-500/15 text-blue-300 border border-blue-500/30'
+    : 'bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30';
+
+  const connectivityBanner = isRoyal
+    ? 'bg-slate-900/90 border-b border-slate-800'
+    : isHeritage
+    ? 'bg-[#151007] border-b border-[#8A6D3B]/40'
+    : 'bg-[#0D1913] border-b border-[#2C5240]';
+
+  const testBtn = isRoyal
+    ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+    : isHeritage
+    ? 'bg-[#2E2211] hover:bg-[#3D2E17] text-[#F5EEDC] border border-[#8A6D3B]/60'
+    : 'bg-[#1F3A2E] hover:bg-[#2C5240] text-white border border-[#2C5240]';
+
+  const testIcon = isRoyal ? 'text-blue-400' : 'text-[#C8A96A]';
+
+  const tabNavBg = isRoyal
+    ? 'border-b border-slate-800 bg-[#0B132B]/60'
+    : isHeritage
+    ? 'border-b border-[#8A6D3B]/40 bg-[#161109]'
+    : 'border-b border-[#2C5240] bg-[#162B22]/60';
+
+  const tabActive = isRoyal
+    ? 'border-blue-500 text-blue-400 bg-slate-800/40'
+    : isHeritage
+    ? 'border-[#C8A96A] text-[#C8A96A] bg-[#2E2211]/50'
+    : 'border-[#C8A96A] text-[#C8A96A] bg-[#1F3A2E]/50';
+
+  const tabInactive = isRoyal
+    ? 'border-transparent text-slate-400 hover:text-slate-200'
+    : isHeritage
+    ? 'border-transparent text-[#B8A382] hover:text-[#F5EEDC]'
+    : 'border-transparent text-[#8FA89B] hover:text-white';
+
+  const overviewCard = isRoyal
+    ? 'bg-slate-900/60 border border-slate-800'
+    : isHeritage
+    ? 'bg-[#22180C] border border-[#8A6D3B]/40'
+    : 'bg-[#162B22] border border-[#2C5240]';
+
+  const overviewIcon = isRoyal ? 'text-blue-400' : 'text-[#C8A96A]';
+
+  const codePill = isRoyal
+    ? 'text-blue-400 font-mono bg-blue-950/40 px-1 py-0.5 rounded border border-blue-900/30'
+    : isHeritage
+    ? 'text-[#C8A96A] font-mono bg-[#2A2012] px-1 py-0.5 rounded border border-[#8A6D3B]/50'
+    : 'text-[#C8A96A] font-mono bg-[#0D1913] px-1 py-0.5 rounded border border-[#2C5240]';
+
+  const tableCard = isRoyal
+    ? 'bg-slate-900/70 border border-slate-800 hover:border-slate-700'
+    : isHeritage
+    ? 'bg-[#22180C] border border-[#8A6D3B]/40 hover:border-[#C8A96A]/60'
+    : 'bg-[#162B22] border border-[#2C5240] hover:border-[#3A6B54]';
+
+  const tableCountBadge = isRoyal
+    ? 'bg-blue-500/10 text-blue-300 border border-blue-500/20'
+    : isHeritage
+    ? 'bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30'
+    : 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/60';
+
+  const seedBtn = isRoyal
+    ? 'bg-blue-600 hover:bg-blue-500 text-white font-bold'
+    : isHeritage
+    ? 'bg-[#C8A96A] hover:bg-[#d6ba7c] text-[#1C160C] font-bold'
+    : 'bg-[#1E6B3A] hover:bg-[#258247] text-white border border-emerald-600/40 font-bold';
+
+  const seedIcon = isRoyal ? 'text-blue-400' : 'text-[#C8A96A]';
+
+  const stepNumber = isRoyal
+    ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
+    : 'bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30';
+
+  const cardLink = isRoyal
+    ? 'text-blue-400 hover:text-blue-300'
+    : 'text-[#C8A96A] hover:text-[#d6ba7c]';
+
+  const copySqlBtn = isRoyal
+    ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+    : isHeritage
+    ? 'bg-[#2E2211] hover:bg-[#3D2E17] text-[#F5EEDC] border border-[#8A6D3B]/60'
+    : 'bg-[#1F3A2E] hover:bg-[#2C5240] text-white border border-[#2C5240]';
+
+  const downloadSqlBtn = isRoyal
+    ? 'bg-blue-600 hover:bg-blue-500 text-white font-semibold'
+    : isHeritage
+    ? 'bg-[#C8A96A] hover:bg-[#d6ba7c] text-[#1C160C] font-bold'
+    : 'bg-[#C8A96A] hover:bg-[#d6ba7c] text-[#1F3A2E] font-bold';
+
+  const terminalBg = isRoyal
+    ? 'bg-[#070B14] border border-slate-800 text-slate-300'
+    : isHeritage
+    ? 'bg-[#100C06] border border-[#8A6D3B]/40 text-[#E5D5B3]'
+    : 'bg-[#0A140F] border border-[#2C5240] text-[#CFE0D5]';
+
+  const modalFooterBg = isRoyal
+    ? 'bg-[#0F172A] border-t border-slate-800'
+    : isHeritage
+    ? 'bg-[#261E10] border-t border-[#8A6D3B]/40'
+    : 'bg-[#162B22] border-t border-[#2C5240]';
+
+  const closeBtn = isRoyal
+    ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+    : isHeritage
+    ? 'bg-[#2E2211] hover:bg-[#3D2E17] text-[#F5EEDC] border border-[#8A6D3B]/60'
+    : 'bg-[#1F3A2E] hover:bg-[#2C5240] text-white border border-[#2C5240]';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
       <div 
         id="database-settings-modal"
-        className="relative w-full max-w-4xl bg-[#0B132B] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8 text-slate-100"
+        className={`relative w-full max-w-4xl ${modalShell} rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8`}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-[#0F172A]">
+        <div className={`flex items-center justify-between px-6 py-4 ${modalHeaderBg}`}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-inner">
+            <div className={`w-10 h-10 rounded-xl ${iconBox} flex items-center justify-center shadow-inner`}>
               <Database className="w-5 h-5" />
             </div>
             <div>
@@ -386,11 +517,11 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                 <h2 className="text-lg font-bold text-white font-heading tracking-wide">
                   <span className="font-bold">ArielMC</span> ERP Database & Persistence
                 </h2>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${postgresBadge}`}>
                   PostgreSQL
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className={`text-xs ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#8FA89B]'}`}>
                 Supabase Cloud Storage & Real-Time Sync Engine for All Live Operations
               </p>
             </div>
@@ -398,7 +529,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
             title="Close Settings"
           >
             <X className="w-5 h-5" />
@@ -406,7 +537,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
         </div>
 
         {/* Live Connectivity Banner */}
-        <div className="px-6 py-3.5 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+        <div className={`px-6 py-3.5 ${connectivityBanner} flex flex-wrap items-center justify-between gap-4`}>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <span className={`w-3 h-3 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
@@ -428,29 +559,27 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
           <div className="flex items-center gap-2 text-xs">
             {lastChecked && (
-              <span className="text-[11px] text-slate-400 hidden sm:inline">
+              <span className={`text-[11px] ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#B8A382]' : 'text-[#8FA89B]'} hidden sm:inline`}>
                 Pinging: {lastChecked}
               </span>
             )}
             <button
               onClick={runHealthCheck}
               disabled={isLoadingHealth}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition-all disabled:opacity-50"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${testBtn} font-semibold transition-all disabled:opacity-50`}
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoadingHealth ? 'animate-spin text-blue-400' : 'text-blue-400'}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoadingHealth ? 'animate-spin' : ''} ${testIcon}`} />
               <span>{isLoadingHealth ? 'Testing...' : 'Test Connection'}</span>
             </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-800 px-6 bg-[#0B132B]/60">
+        <div className={`flex px-6 ${tabNavBg}`}>
           <button
             onClick={() => setActiveTab('STATUS')}
             className={`py-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
-              activeTab === 'STATUS'
-                ? 'border-blue-500 text-blue-400 bg-slate-800/40'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'STATUS' ? tabActive : tabInactive
             }`}
           >
             <Server className="w-4 h-4" />
@@ -460,9 +589,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
           <button
             onClick={() => setActiveTab('SEED')}
             className={`py-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
-              activeTab === 'SEED'
-                ? 'border-blue-500 text-blue-400 bg-slate-800/40'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'SEED' ? tabActive : tabInactive
             }`}
           >
             <Zap className="w-4 h-4" />
@@ -472,9 +599,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
           <button
             onClick={() => setActiveTab('SCHEMA')}
             className={`py-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-2 ${
-              activeTab === 'SCHEMA'
-                ? 'border-blue-500 text-blue-400 bg-slate-800/40'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+              activeTab === 'SCHEMA' ? tabActive : tabInactive
             }`}
           >
             <HardDrive className="w-4 h-4" />
@@ -488,15 +613,15 @@ CREATE TABLE IF NOT EXISTS pnl_records (
           {activeTab === 'STATUS' && (
             <div className="space-y-6">
               {/* Architecture Overview */}
-              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div className={`p-4 rounded-xl ${overviewCard}`}>
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-blue-400" />
+                      <ShieldCheck className={`w-4 h-4 ${overviewIcon}`} />
                       <span>Zero-Failure Hybrid Persistence Architecture</span>
                     </h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      <span className="font-bold text-white">ArielMC</span> ERP runs automatically in hybrid persistence mode. When Supabase PostgreSQL credentials are present in <code className="text-blue-400 font-mono bg-blue-950/40 px-1 py-0.5 rounded border border-blue-900/30">.env.local</code>, all live transactions seamlessly read and write to cloud PostgreSQL. If running offline or without credentials, data gracefully persists in high-performance browser cache and local memory without any operational interruption.
+                    <p className={`text-xs ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} leading-relaxed`}>
+                      <span className="font-bold text-white">ArielMC</span> ERP runs automatically in hybrid persistence mode. When Supabase PostgreSQL credentials are present in <code className={codePill}>.env.local</code>, all live transactions seamlessly read and write to cloud PostgreSQL. If running offline or without credentials, data gracefully persists in high-performance browser cache and local memory without any operational interruption.
                     </p>
                   </div>
                 </div>
@@ -504,7 +629,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
               {/* Live Tables Breakdown */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                <h4 className={`text-xs font-bold uppercase tracking-wider ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#C8A96A]' : 'text-[#8FA89B]'} mb-3 flex items-center gap-2`}>
                   <Layers className="w-3.5 h-3.5" />
                   <span>PostgreSQL Persistent Tables Status</span>
                 </h4>
@@ -522,17 +647,17 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                   ].map((item, idx) => (
                     <div 
                       key={idx}
-                      className="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between"
+                      className={`p-3.5 rounded-xl ${tableCard} transition-all flex flex-col justify-between`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-semibold text-slate-200">{item.label}</span>
-                        <span className="font-mono text-xs px-2 py-0.5 rounded font-bold bg-blue-500/10 text-blue-300 border border-blue-500/20">
+                        <span className="text-xs font-semibold text-slate-100">{item.label}</span>
+                        <span className={`font-mono text-xs px-2 py-0.5 rounded font-bold ${tableCountBadge}`}>
                           {isConnected ? `${item.count} rows` : `${item.count} cached`}
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                      <div className={`text-[11px] ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#B8A382]' : 'text-[#8FA89B]'} flex items-center justify-between`}>
                         <span className="truncate">{item.desc}</span>
-                        <span className="font-mono text-[10px] text-slate-500">table: {item.table}</span>
+                        <span className={`font-mono text-[10px] ${isRoyal ? 'text-slate-500' : isHeritage ? 'text-[#8A6D3B]' : 'text-[#5C7E6E]'}`}>table: {item.table}</span>
                       </div>
                     </div>
                   ))}
@@ -557,14 +682,14 @@ CREATE TABLE IF NOT EXISTS pnl_records (
           {/* TAB 2: 1-CLICK SEED DATA SYNC */}
           {activeTab === 'SEED' && (
             <div className="space-y-6">
-              <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
+              <div className={`p-5 rounded-xl ${overviewCard} space-y-4`}>
                 <div className="flex items-start gap-3">
-                  <Zap className="w-6 h-6 text-blue-400 shrink-0 mt-1" />
+                  <Zap className={`w-6 h-6 ${seedIcon} shrink-0 mt-1`} />
                   <div className="space-y-1">
                     <h3 className="text-sm font-bold text-white">
                       One-Click Supabase PostgreSQL Initializer
                     </h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className={`text-xs ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} leading-relaxed`}>
                       Seed your live PostgreSQL instance with all foundational <span className="font-bold text-white">ArielMC</span> ERP data. This synchronizes our authentic master catalog of 12 multi-sector products, 8 verified Bangladesh partner factories, 8 active SDO sample orders, 5 confirmed export sales orders, 35 CRM buyer leads, 4 international bonded warehouses, and multi-location global inventory.
                     </p>
                   </div>
@@ -574,7 +699,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                   <button
                     onClick={handleRunSeed}
                     disabled={isSeeding || !isConfigured}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl ${seedBtn} text-xs transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     <RefreshCw className={`w-4 h-4 ${isSeeding ? 'animate-spin' : ''}`} />
                     <span>{isSeeding ? 'Synchronizing All Master Datasets...' : 'Push All ERP Seed Data to Supabase'}</span>
@@ -613,7 +738,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono">
                       {Object.entries(seedResult.counts).map(([tbl, cnt]) => (
                         <div key={tbl} className="bg-black/30 p-2 rounded border border-white/10">
-                          <span className="text-gray-400">{tbl}:</span> <span className="font-bold text-blue-400">{cnt} rows</span>
+                          <span className="text-gray-400">{tbl}:</span> <span className={`font-bold ${isRoyal ? 'text-blue-400' : isHeritage ? 'text-[#C8A96A]' : 'text-emerald-400'}`}>{cnt} rows</span>
                         </div>
                       ))}
                     </div>
@@ -628,57 +753,57 @@ CREATE TABLE IF NOT EXISTS pnl_records (
             <div className="space-y-6">
               {/* 3 Step Setup Guide */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all group shadow-sm">
+                <div className={`p-5 rounded-xl ${tableCard} flex flex-col justify-between transition-all group shadow-sm`}>
                   <div className="space-y-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-mono">
+                    <div className={`w-7 h-7 rounded-lg ${stepNumber} flex items-center justify-center font-bold text-xs font-mono`}>
                       1
                     </div>
                     <h4 className="text-sm font-bold text-white tracking-wide">Create Supabase Project</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Log in to <span className="text-blue-400 font-medium">supabase.com</span> and create a new project with your preferred region (e.g. Singapore or Frankfurt).
+                    <p className={`text-xs ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} leading-relaxed`}>
+                      Log in to <span className={`${cardLink} font-medium`}>supabase.com</span> and create a new project with your preferred region (e.g. Singapore or Frankfurt).
                     </p>
                   </div>
                   <a 
                     href="https://supabase.com/dashboard" 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="mt-4 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold group-hover:underline"
+                    className={`mt-4 inline-flex items-center gap-1.5 text-xs ${cardLink} font-semibold group-hover:underline`}
                   >
                     <span>Supabase Dashboard</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
 
-                <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all group shadow-sm">
+                <div className={`p-5 rounded-xl ${tableCard} flex flex-col justify-between transition-all group shadow-sm`}>
                   <div className="space-y-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-mono">
+                    <div className={`w-7 h-7 rounded-lg ${stepNumber} flex items-center justify-center font-bold text-xs font-mono`}>
                       2
                     </div>
                     <h4 className="text-sm font-bold text-white tracking-wide">Run SQL DDL Script</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className={`text-xs ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} leading-relaxed`}>
                       Open the <span className="text-slate-200 font-semibold">SQL Editor</span> in your Supabase project and execute the comprehensive <span className="font-bold text-white">ArielMC</span> schema DDL.
                     </p>
                   </div>
                   <button 
                     onClick={handleCopySchema}
-                    className="mt-4 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold group-hover:underline"
+                    className={`mt-4 inline-flex items-center gap-1.5 text-xs ${cardLink} font-semibold group-hover:underline`}
                   >
                     {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedSchema ? 'Copied to Clipboard!' : 'Copy Schema SQL'}</span>
                   </button>
                 </div>
 
-                <div className="p-5 rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all group shadow-sm">
+                <div className={`p-5 rounded-xl ${tableCard} flex flex-col justify-between transition-all group shadow-sm`}>
                   <div className="space-y-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-xs font-mono">
+                    <div className={`w-7 h-7 rounded-lg ${stepNumber} flex items-center justify-center font-bold text-xs font-mono`}>
                       3
                     </div>
                     <h4 className="text-sm font-bold text-white tracking-wide">Configure .env.local</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Copy your Project URL and Anon API Key from Project Settings &gt; API into your local <code className="text-blue-300 font-mono bg-blue-950/50 px-1 py-0.5 rounded border border-blue-900/40">.env.local</code> file.
+                    <p className={`text-xs ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} leading-relaxed`}>
+                      Copy your Project URL and Anon API Key from Project Settings &gt; API into your local <code className={codePill}>.env.local</code> file.
                     </p>
                   </div>
-                  <span className="mt-4 font-mono text-[11px] text-slate-500">
+                  <span className={`mt-4 font-mono text-[11px] ${isRoyal ? 'text-slate-500' : isHeritage ? 'text-[#8A6D3B]' : 'text-[#5C7E6E]'}`}>
                     NEXT_PUBLIC_SUPABASE_URL
                   </span>
                 </div>
@@ -686,31 +811,31 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
               {/* Action Buttons for SQL */}
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">
-                  Master Schema File: <code className="text-blue-400 font-mono bg-blue-950/40 px-2 py-0.5 rounded border border-blue-900/40">supabase/schema.sql</code>
+                <span className={`text-xs font-medium ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'}`}>
+                  Master Schema File: <code className={codePill}>supabase/schema.sql</code>
                 </span>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleCopySchema}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${copySqlBtn} text-xs font-semibold transition-all`}
                   >
-                    {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-blue-400" />}
+                    {copiedSchema ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className={`w-3.5 h-3.5 ${testIcon}`} />}
                     <span>{copiedSchema ? 'SQL Copied!' : 'Copy SQL'}</span>
                   </button>
 
                   <button
                     onClick={handleDownloadSchema}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all shadow-sm"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${downloadSqlBtn} text-xs transition-all shadow-sm`}
                   >
-                    <Download className="w-3.5 h-3.5 text-white" />
+                    <Download className="w-3.5 h-3.5" />
                     <span>Download .sql</span>
                   </button>
                 </div>
               </div>
 
               {/* Code Snippet Preview */}
-              <div className="relative rounded-xl bg-[#070B14] border border-slate-800 p-4 font-mono text-[11px] text-slate-300 overflow-x-auto max-h-56 leading-relaxed">
+              <div className={`relative rounded-xl ${terminalBg} p-4 font-mono text-[11px] overflow-x-auto max-h-56 leading-relaxed`}>
                 <pre>{`-- ARIELMC ERP - POSTGRESQL TABLES INCLUDED:
 1. products                  (HS Codes, Costings, Sector Attributes, Compliance)
 2. factories                 (Savar, Gazipur, Narsingdi, Audits, Scorecards)
@@ -727,14 +852,14 @@ CREATE TABLE IF NOT EXISTS pnl_records (
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-3.5 bg-[#0F172A] border-t border-slate-800 flex items-center justify-between text-xs">
-          <div className="text-slate-400 flex items-center gap-2">
+        <div className={`px-6 py-3.5 ${modalFooterBg} flex items-center justify-between text-xs`}>
+          <div className={`${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} flex items-center gap-2`}>
             <span className="font-bold text-white">ArielMC</span> Enterprise Resource Planning System
           </div>
 
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition-all"
+            className={`px-4 py-1.5 rounded-lg ${closeBtn} font-semibold transition-all`}
           >
             Close
           </button>

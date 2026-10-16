@@ -153,7 +153,7 @@ arielmc.com | arielmc.co.uk`;
             <div className="text-xl font-bold font-mono text-[#1F3A2E]">
               ${(basePnl.ebitdaUsd * ((b2cVolumeMultiplier + b2bVolumeMultiplier) / 2)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </div>
-            <span className="text-[10px] text-blue-700 font-mono font-medium block">
+            <span className="text-[10px] text-emerald-700 font-mono font-medium block">
               33.7% EBITDA Margin
             </span>
           </div>
@@ -339,7 +339,7 @@ arielmc.com | arielmc.co.uk`;
                 <div>
                   <div className="flex justify-between text-gray-600 font-medium mb-1">
                     <span>B2C Sales Velocity (6,000 Units Baseline)</span>
-                    <strong className="text-blue-700 font-mono">
+                    <strong className="text-emerald-700 font-mono">
                       {(6000 * b2cVolumeMultiplier).toLocaleString()} pcs
                     </strong>
                   </div>
@@ -357,7 +357,7 @@ arielmc.com | arielmc.co.uk`;
                 <div>
                   <div className="flex justify-between text-gray-600 font-medium mb-1">
                     <span>B2B Contract Acquisition (4,000 Units Baseline)</span>
-                    <strong className="text-purple-700 font-mono">
+                    <strong className="text-[#8A6D3B] font-mono">
                       {(4000 * b2bVolumeMultiplier).toLocaleString()} pcs
                     </strong>
                   </div>
@@ -401,7 +401,7 @@ arielmc.com | arielmc.co.uk`;
                 </tr>
                 <tr className="hover:bg-[#F4F6F4] transition-colors">
                   <td className="py-3 px-4 font-semibold text-[#1F3A2E]">Net Commercial Turnover</td>
-                  <td className="py-3 px-4 font-mono text-blue-700 font-bold">
+                  <td className="py-3 px-4 font-mono text-emerald-700 font-bold">
                     ${(155850 * b2cVolumeMultiplier).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </td>
                   <td className="py-3 px-4 font-mono text-purple-700 font-bold">

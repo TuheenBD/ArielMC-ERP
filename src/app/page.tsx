@@ -535,6 +535,7 @@ export default function Home() {
         initialOrderId={docCenterOrderId}
         activeEntity={activeEntity}
         activeCurrency={activeCurrency}
+        theme={theme}
       />
 
       {/* Supabase PostgreSQL Database & Persistent Storage Modal */}
@@ -542,6 +543,7 @@ export default function Home() {
         isOpen={isDbModalOpen}
         onClose={() => setIsDbModalOpen(false)}
         onDataSynced={loadPersistentData}
+        theme={theme}
       />
 
       {/* Enterprise Authentication Gateway & Welcome Modal */}

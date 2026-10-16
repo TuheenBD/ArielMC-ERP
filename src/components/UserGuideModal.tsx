@@ -95,7 +95,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <div className="font-bold text-slate-800 flex items-center justify-between">
                 <span>🇬🇧 ArielMC UK (London, UK)</span>
-                <span className="font-mono text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">GBP (£)</span>
+                <span className="font-mono text-[10px] bg-[#1F3A2E]/10 text-[#1F3A2E] border border-[#1F3A2E]/20 px-1.5 py-0.5 rounded font-bold">GBP (£)</span>
               </div>
               <div className="text-[11px] text-gray-500 mt-1">HMRC VAT: <code>GB-982-1049-22</code> &bull; High Street Accounts</div>
               <p className="text-[11px] text-gray-600 mt-2">
@@ -313,14 +313,14 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 space-y-2">
-            <div className="font-bold uppercase tracking-wider text-[10px] text-blue-800">
+          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-2">
+            <div className="font-bold uppercase tracking-wider text-[10px] text-[#1F3A2E]">
               National Board of Revenue (NBR) Mushak 6.3 Standards
             </div>
             <p className="text-[11px] leading-relaxed">
               Under Bangladesh Value Added Tax and Supplementary Duty Act 2012, <strong>ArielMC BD</strong> (BIN: <code>001928374-0101</code>) issues official <strong>Mushak 6.3</strong> tax invoices:
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-[11px]">
+            <ul className="list-disc pl-5 space-y-1 text-[11px] text-emerald-900">
               <li><strong>Zero-Rated Exports (0% VAT)</strong>: Directly tied to export L/Cs, shipping bills, and EPB Certificates of Origin.</li>
               <li><strong>Domestic Institutional Supply (15% VAT)</strong>: Automated withholding and tax deduction at source.</li>
             </ul>
