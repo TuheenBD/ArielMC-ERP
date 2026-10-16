@@ -21,6 +21,7 @@ import {
   FileText,
   Database
 } from 'lucide-react';
+import { UserProfile } from '@/types/auth';
 
 interface HeaderProps {
   companies: CompanyEntity[];
@@ -38,6 +39,9 @@ interface HeaderProps {
   onOpenDocumentCenter?: () => void;
   onOpenDatabaseSettings?: () => void;
   isDatabaseConnected?: boolean;
+  currentUser?: UserProfile;
+  onOpenProfileControl?: () => void;
+  onOpenAuthModal?: () => void;
 }
 
 const getStationBrandName = (code: EntityCode) => {
@@ -73,6 +77,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDocumentCenter,
   onOpenDatabaseSettings,
   isDatabaseConnected = false,
+  currentUser,
+  onOpenProfileControl,
+  onOpenAuthModal,
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
 
@@ -376,18 +383,33 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
-          {/* User Profile */}
-          <div className={`flex items-center gap-2.5 pl-2 border-l ${isLight ? 'border-gray-200' : 'border-[#2C5240]'}`}>
-            <div className="w-8 h-8 rounded-lg bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center text-xs font-bold shadow-sm">
-              AMC
+          {/* User Profile & Account Control */}
+          <button
+            id="header-user-profile-btn"
+            onClick={onOpenProfileControl || onOpenAuthModal}
+            className={`flex items-center gap-2.5 pl-2 py-1 pr-2 rounded-xl border-l transition-all hover:bg-black/10 group ${
+              isLight ? 'border-gray-200' : 'border-[#2C5240]'
+            }`}
+            title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
+          >
+            <div 
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shadow-sm transition-transform group-hover:scale-105"
+              style={{
+                backgroundColor: currentUser?.avatarColor || '#C8A96A',
+                color: '#1F3A2E'
+              }}
+            >
+              {currentUser?.avatarInitials || 'AMC'}
             </div>
             <div className="hidden xl:block text-left text-xs">
-              <div className={`font-semibold leading-tight ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>Syed Akramul Hassan</div>
+              <div className={`font-semibold leading-tight flex items-center gap-1 group-hover:text-[#C8A96A] transition-colors ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>
+                <span>{currentUser?.name || 'Syed Akramul Hassan'}</span>
+              </div>
               <div className={`text-[10px] flex items-center gap-1 ${isLight ? 'text-gray-500' : 'text-[#CFE0D5]'}`}>
-                <ShieldCheck className="w-3 h-3 inline text-[#C8A96A]" /> Managing Director
+                <ShieldCheck className="w-3 h-3 inline text-[#C8A96A]" /> {currentUser?.designation || 'Managing Director'}
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 

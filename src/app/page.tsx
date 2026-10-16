@@ -36,8 +36,12 @@ import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
 import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocumentCenter';
 import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
+import { AuthWelcomeModal } from '@/components/auth/AuthWelcomeModal';
+import { ProfileControlModal } from '@/components/profile/ProfileControlModal';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
+import { UserProfile } from '@/types/auth';
+import { INITIAL_USERS } from '@/data/initialUsers';
 import {
   fetchProducts,
   persistProduct,
@@ -97,6 +101,63 @@ export default function Home() {
     } catch {
       // ignore
     }
+  };
+
+  // User Profile & Authentication State
+  const [users, setUsers] = useState<UserProfile[]>(INITIAL_USERS);
+  const [currentUser, setCurrentUser] = useState<UserProfile>(INITIAL_USERS[0]);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  // Load and persist users from localStorage
+  React.useEffect(() => {
+    try {
+      const cachedUsers = localStorage.getItem('arielmc_erp_all_users_v1');
+      if (cachedUsers) {
+        setUsers(JSON.parse(cachedUsers));
+      }
+      const cachedCurrent = localStorage.getItem('arielmc_erp_current_user_v1');
+      if (cachedCurrent) {
+        setCurrentUser(JSON.parse(cachedCurrent));
+      }
+    } catch {}
+  }, []);
+
+  const handleUpdateCurrentUser = (updated: UserProfile) => {
+    setCurrentUser(updated);
+    try {
+      localStorage.setItem('arielmc_erp_current_user_v1', JSON.stringify(updated));
+    } catch {}
+  };
+
+  const handleUpdateUserList = (updatedList: UserProfile[]) => {
+    setUsers(updatedList);
+    try {
+      localStorage.setItem('arielmc_erp_all_users_v1', JSON.stringify(updatedList));
+    } catch {}
+  };
+
+  const handleLoginSuccess = (user: UserProfile) => {
+    setCurrentUser(user);
+    try {
+      localStorage.setItem('arielmc_erp_current_user_v1', JSON.stringify(user));
+    } catch {}
+    setIsAuthModalOpen(false);
+  };
+
+  const handleRegisterUser = (newUser: UserProfile) => {
+    const updated = [newUser, ...users];
+    setUsers(updated);
+    setCurrentUser(newUser);
+    try {
+      localStorage.setItem('arielmc_erp_all_users_v1', JSON.stringify(updated));
+      localStorage.setItem('arielmc_erp_current_user_v1', JSON.stringify(newUser));
+    } catch {}
+  };
+
+  const handleSignOut = () => {
+    setIsProfileModalOpen(false);
+    setIsAuthModalOpen(true);
   };
 
   // Modals
@@ -280,6 +341,9 @@ export default function Home() {
           onOpenDocumentCenter={() => handleOpenDocCenter('COMMERCIAL_INVOICE')}
           onOpenDatabaseSettings={() => setIsDbModalOpen(true)}
           isDatabaseConnected={isDbConnected}
+          currentUser={currentUser}
+          onOpenProfileControl={() => setIsProfileModalOpen(true)}
+          onOpenAuthModal={() => setIsAuthModalOpen(true)}
         />
 
         {/* Dashboard Workspace */}
@@ -461,6 +525,26 @@ export default function Home() {
         isOpen={isDbModalOpen}
         onClose={() => setIsDbModalOpen(false)}
         onDataSynced={loadPersistentData}
+      />
+
+      {/* Enterprise Authentication Gateway & Welcome Modal */}
+      <AuthWelcomeModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+        allUsers={users}
+        onRegisterUser={handleRegisterUser}
+      />
+
+      {/* User Profile Control & 2SA Management Modal */}
+      <ProfileControlModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        currentUser={currentUser}
+        onUpdateCurrentUser={handleUpdateCurrentUser}
+        allUsers={users}
+        onUpdateUserList={handleUpdateUserList}
+        onSignOut={handleSignOut}
       />
     </div>
   );
