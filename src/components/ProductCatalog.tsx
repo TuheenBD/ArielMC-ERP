@@ -384,7 +384,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6B7269]">Ariel Locked Margin:</span>
+                      <span className="text-[#6B7269]">ArielMC Locked Margin:</span>
                       <span className="font-mono text-[#14512C] font-bold">
                         +{prod.costing.arielSourcingMarginPct}%
                       </span>

@@ -783,7 +783,7 @@ arielmc.com | arielmc.co.uk`;
                   </h3>
                 </div>
                 <p className="text-xs text-gray-600 font-['Open_Sans']">
-                  By declaring Ariel UK Ltd’s GB VAT and EORI number on UK customs entries, the 20% import VAT is deferred to quarterly VAT returns instead of being paid in cash at the port.
+                  By declaring ArielMC UK Ltd’s GB VAT and EORI number on UK customs entries, the 20% import VAT is deferred to quarterly VAT returns instead of being paid in cash at the port.
                 </p>
                 <div className="p-3.5 rounded-xl bg-[#E8F0FA] border border-[#C5D7ED] text-xs space-y-1.5 font-mono text-[#17456F]">
                   <div className="flex justify-between">
@@ -809,7 +809,7 @@ arielmc.com | arielmc.co.uk`;
                   </h3>
                 </div>
                 <p className="text-xs text-gray-600 font-['Open_Sans']">
-                  Ariel BD issues Batch 2 and 3 production orders under Net-60 intercompany credit terms. Ocean freight is paid upfront, but factory balances are settled directly from rolling 14-day Amazon disbursements and 48-hour Shopify Stripe payouts.
+                  ArielMC BD issues Batch 2 and 3 production orders under Net-60 intercompany credit terms. Ocean freight is paid upfront, but factory balances are settled directly from rolling 14-day Amazon disbursements and 48-hour Shopify Stripe payouts.
                 </p>
                 <div className="p-3.5 rounded-xl bg-[#FEF6E4] border border-[#FBE3B0] text-xs text-[#7A5508] font-mono space-y-1 font-medium">
                   <div>✓ Batch 1: Equity Funded ($4,900 FOB + $1,200 Freight)</div>

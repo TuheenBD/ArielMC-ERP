@@ -61,7 +61,7 @@ export const PhaseRoadmapPreview: React.FC<PhaseRoadmapPreviewProps> = ({
           deliverables: [
             'Interactive Digital Tech Packs with CAD sketches, measurement tolerance tables & BOM',
             'Sample Development Order (SDO) Lifecycle: Proto -> Fit -> Size Set -> PP -> TOP',
-            'Pre-Costing Calculator: Fabric + CM (Cut & Make) + Wash + Lab Tests + Ariel Margin + Port Cartage',
+            'Pre-Costing Calculator: Fabric + CM (Cut & Make) + Wash + Lab Tests + ArielMC Margin + Port Cartage',
             'Lab Test Verification: REACH heavy metals, shrinkage tests, color fastness, FDA food safety',
             'International Courier Tracking (DHL / FedEx express integration to London, NY, Frankfurt)',
           ],

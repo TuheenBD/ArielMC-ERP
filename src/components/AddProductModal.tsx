@@ -491,7 +491,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Ariel Margin (%)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">ArielMC Margin (%)</label>
                   <input
                     type="number"
                     value={marginPct}

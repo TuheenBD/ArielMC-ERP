@@ -411,7 +411,7 @@ export const QUARTERLY_BATCH_PLANS: QuarterlyBatchPlan[] = [
     midLevelUnits: 400,
     commuterUnits: 650,
     economyUnits: 350,
-    fundingMechanism: 'Net-60 Intercompany credit from Ariel BD + Month 1–2 sales receipts',
+    fundingMechanism: 'Net-60 Intercompany credit from ArielMC BD + Month 1–2 sales receipts',
     logisticsAllocation: 'LCL/FCL Sea freight consolidated to London Gateway and Port of NY/NJ',
     reorderTriggerDay: 35,
     leadTimeDays: '55–65 Days',
