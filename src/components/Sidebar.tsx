@@ -32,16 +32,20 @@ export type ActiveTab =
   | 'FINANCE' 
   | 'POS';
 
+export type ThemeProfile = 'crm-green' | 'light-clean' | 'heritage-tan';
+
 interface SidebarProps {
   activeTab: ActiveTab;
   onSelectTab: (tab: ActiveTab) => void;
   activeEntity: CompanyEntity;
+  theme?: ThemeProfile;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onSelectTab,
   activeEntity,
+  theme = 'crm-green',
 }) => {
   const navSections = [
     {
@@ -52,7 +56,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Multi-Entity Stations',
           icon: Building2,
           badge: '5 Stations',
-          badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
           phase: 'Phase 1',
         },
         {
@@ -60,7 +63,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Sector Product Master',
           icon: Package,
           badge: '4 Sectors',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 1',
         },
       ],
@@ -73,7 +75,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'BD Factory & Compliance',
           icon: Factory,
           badge: '8 Factories',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 2',
         },
         {
@@ -81,7 +82,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'R&D, Tech Packs & Sampling',
           icon: FlaskConical,
           badge: '8 SDOs',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 3',
         },
         {
@@ -89,7 +89,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Two-Way Order Management',
           icon: Repeat,
           badge: '5 Orders',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 5',
         },
       ],
@@ -102,7 +101,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Global CRM & B2B Leads',
           icon: Users2,
           badge: '254 Leads',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 4',
         },
         {
@@ -110,7 +108,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Logistics & Export Docs',
           icon: Ship,
           badge: 'Dual-Hub Live',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 6',
         },
         {
@@ -118,7 +115,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Multi-Warehouse Inventory',
           icon: Boxes,
           badge: 'Phase 7',
-          badgeColor: 'bg-teal-500/20 text-teal-300 border-teal-500/30',
           phase: 'Phase 7',
         },
       ],
@@ -131,7 +127,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Global Multi-Station Finance',
           icon: Landmark,
           badge: '10k P&L Live',
-          badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
           phase: 'Phase 8',
         },
         {
@@ -139,18 +134,57 @@ export const Sidebar: React.FC<SidebarProps> = ({
           label: 'Omnichannel Store POS',
           icon: Store,
           badge: 'Year 2+',
-          badgeColor: 'bg-slate-700/50 text-slate-400 border-slate-600/30',
           phase: 'Phase 9',
         },
       ],
     },
   ];
 
+  // Theme-specific styling variables
+  const isLight = theme === 'light-clean';
+  const isHeritage = theme === 'heritage-tan';
+
+  const containerBg = isLight
+    ? 'bg-white border-r border-[#DDE3DD]'
+    : isHeritage
+    ? 'bg-[#183124] border-r border-[#2A4837]'
+    : 'bg-[#1F3A2E] border-r border-[#2C5240]'; // crm-green default
+
+  const headerBg = isLight
+    ? 'bg-[#F8F6F2] border-b border-[#DDE3DD]'
+    : isHeritage
+    ? 'bg-[#11231A] border-b border-[#2A4837]'
+    : 'bg-[#172D24] border-b border-[#2C5240]';
+
+  const brandText = isLight ? 'text-[#1F3A2E]' : 'text-white';
+  const brandSubtext = isLight ? 'text-[#8A6D3B]' : 'text-[#C8A96A]';
+
+  const entityBoxBg = isLight
+    ? 'bg-white border border-[#DDE3DD]'
+    : isHeritage
+    ? 'bg-[#244232] border border-[#345943]'
+    : 'bg-[#28493A] border border-[#3A6B54]';
+
+  const entityTitle = isLight ? 'text-[#1A1A1A]' : 'text-white';
+  const entitySub = isLight ? 'text-[#6B7269]' : 'text-[#CFE0D5]';
+
+  const sectionGroupText = isLight
+    ? 'text-[#1F3A2E]'
+    : 'text-[#C8A96A]';
+
+  const footerBg = isLight
+    ? 'bg-[#F8F6F2] border-t border-[#DDE3DD]'
+    : isHeritage
+    ? 'bg-[#11231A] border-t border-[#2A4837]'
+    : 'bg-[#172D24] border-t border-[#2C5240]';
+
+  const footerText = isLight ? 'text-[#6B7269]' : 'text-[#CFE0D5]';
+
   return (
-    <aside className="w-72 bg-[#0A1A2F] border-r border-[#1B2D46] flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl">
+    <aside className={`w-72 ${containerBg} flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl transition-colors`}>
       {/* Top Branding */}
       <div>
-        <div className="p-4 border-b border-[#1B2D46] bg-[#071322]">
+        <div className={`p-4 ${headerBg}`}>
           <div className="flex items-center gap-3">
             <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-white border border-[#C8A96A] p-1 flex items-center justify-center shadow-md">
               <Image
@@ -164,26 +198,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-heading font-bold text-white text-base tracking-wide">ArielMC</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#C8A96A] text-[#0A1A2F] font-mono font-bold">
+                <span className={`font-heading font-bold ${brandText} text-base tracking-wide`}>ArielMC</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono font-bold">
                   ERP
                 </span>
               </div>
-              <p className="text-[10px] text-[#C8A96A] font-medium tracking-tight truncate max-w-[170px]">
+              <p className={`text-[10px] ${brandSubtext} font-medium tracking-tight truncate max-w-[170px]`}>
                 Ariel Marketing & Communications Ltd
               </p>
             </div>
           </div>
 
           {/* Active Operating Entity Bar */}
-          <div className="mt-3.5 p-2 rounded-lg bg-[#10233F] border border-[#1E365D] flex items-center justify-between text-xs">
+          <div className={`mt-3.5 p-2 rounded-lg ${entityBoxBg} flex items-center justify-between text-xs`}>
             <div className="flex items-center gap-2">
               <span className="text-base">{activeEntity.flag}</span>
               <div>
-                <span className="font-medium text-white block text-[11px] leading-tight">
+                <span className={`font-medium ${entityTitle} block text-[11px] leading-tight`}>
                   {activeEntity.city} Station
                 </span>
-                <span className="text-[9px] text-[#8EA3BE]">
+                <span className={`text-[9px] ${entitySub}`}>
                   {activeEntity.legalStatus.split(' ')[0]}
                 </span>
               </div>
@@ -198,7 +232,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-210px)]">
           {navSections.map((section, idx) => (
             <div key={idx} className="space-y-1">
-              <div className="px-2.5 py-1 text-[10px] font-bold tracking-wider text-[#C8A96A] uppercase font-heading">
+              <div className={`px-2.5 py-1 text-[10px] font-bold tracking-wider ${sectionGroupText} uppercase font-heading`}>
                 {section.group}
               </div>
               <div className="space-y-0.5">
@@ -207,28 +241,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   const isActive = activeTab === item.id;
                   const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS';
                   
+                  // Active / Inactive Button Styling
+                  let buttonClass = '';
+                  let iconClass = '';
+                  let badgeClass = '';
+
+                  if (isLight) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#1F3A2E] text-white font-bold shadow-sm';
+                      iconClass = 'text-[#C8A96A]';
+                      badgeClass = 'bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40';
+                    } else {
+                      buttonClass = 'text-[#4A5568] hover:bg-[#F0F5F1] hover:text-[#1F3A2E]';
+                      iconClass = isLive ? 'text-[#1F3A2E]' : 'text-gray-400';
+                      badgeClass = 'bg-[#F4F6F4] text-[#6B7269] border border-[#DDE3DD]';
+                    }
+                  } else {
+                    // crm-green or heritage-tan
+                    if (isActive) {
+                      buttonClass = 'bg-[#C8A96A] text-[#1F3A2E] font-bold shadow-md shadow-[#C8A96A]/20';
+                      iconClass = 'text-[#1F3A2E]';
+                      badgeClass = 'bg-[#1F3A2E]/20 text-[#1F3A2E] font-bold border border-[#1F3A2E]/30';
+                    } else {
+                      buttonClass = 'text-[#CFE0D5] hover:bg-[#28493A] hover:text-white';
+                      iconClass = isLive ? 'text-[#C8A96A]' : 'text-[#8EA896]';
+                      badgeClass = 'bg-[#28493A] text-[#CFE0D5] border border-[#3A6B54]';
+                    }
+                  }
+
                   return (
                     <button
                       key={item.id}
                       id={`nav-${item.id.toLowerCase()}`}
                       onClick={() => onSelectTab(item.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                        isActive
-                          ? 'bg-[#C8A96A] text-[#0A1A2F] font-bold shadow-md shadow-[#C8A96A]/20'
-                          : isLive
-                          ? 'text-[#CFE0D5] hover:bg-[#10233F] hover:text-white'
-                          : 'text-slate-400 hover:bg-[#10233F]/60 hover:text-slate-200'
-                      }`}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${buttonClass}`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-[#0A1A2F]' : isLive ? 'text-[#C8A96A]' : 'text-slate-400'}`} />
+                        <Icon className={`w-4 h-4 ${iconClass}`} />
                         <span>{item.label}</span>
                       </div>
-                      <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
-                        isActive 
-                          ? 'bg-[#0A1A2F]/20 text-[#0A1A2F] font-bold border border-[#0A1A2F]/30' 
-                          : 'bg-[#10233F] text-[#CFE0D5] border border-[#1E365D]'
-                      }`}>
+                      <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${badgeClass}`}>
                         {item.badge}
                       </span>
                     </button>
@@ -241,15 +293,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer / System Health */}
-      <div className="p-3.5 border-t border-[#1B2D46] bg-[#071322] text-[11px] space-y-2">
-        <div className="flex items-center justify-between text-[#8EA3BE]">
+      <div className={`p-3.5 ${footerBg} text-[11px] space-y-2`}>
+        <div className={`flex items-center justify-between ${footerText}`}>
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-            <span className="text-[10px] font-mono text-[#85E3A1] font-medium">ERP Engine Live</span>
+            <span className="text-[10px] font-mono font-medium">ERP Engine Live</span>
           </span>
           <span className="text-[10px] font-mono text-[#C8A96A]">v1.0.0</span>
         </div>
-        <div className="text-[10px] text-[#8EA3BE] flex items-center justify-between pt-1 border-t border-[#1B2D46]">
+        <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
           <span>PostgreSQL Active</span>
           <span>Next.js 16</span>
         </div>

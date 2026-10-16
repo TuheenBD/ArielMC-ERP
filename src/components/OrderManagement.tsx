@@ -187,7 +187,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#0A1A2F] font-bold text-xs transition-all shadow-md font-montserrat"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#1F3A2E] font-bold text-xs transition-all shadow-md font-montserrat"
           >
             <Plus className="w-4 h-4" />
             <span>Create Back-to-Back Order</span>

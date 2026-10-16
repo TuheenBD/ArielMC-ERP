@@ -89,7 +89,7 @@ arielmc.com | arielmc.co.uk`;
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#C8A96A] text-[#0A1A2F] font-mono text-xs font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-xs font-bold">
                 PHASE 8: LIVE
               </span>
               <span className="text-xs text-emerald-100 font-mono font-medium">
@@ -118,7 +118,7 @@ arielmc.com | arielmc.co.uk`;
                 setB2cVolumeMultiplier(1.0);
                 setB2bVolumeMultiplier(1.0);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59556] text-[#0A1A2F] text-xs font-bold font-['Montserrat'] transition-all shadow"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59556] text-[#1F3A2E] text-xs font-bold font-['Montserrat'] transition-all shadow"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Reset Baseline</span>
@@ -150,7 +150,7 @@ arielmc.com | arielmc.co.uk`;
 
           <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-1">
             <span className="text-[10px] text-gray-500 font-mono uppercase block font-semibold">Operating EBITDA</span>
-            <div className="text-xl font-bold font-mono text-[#0A1A2F]">
+            <div className="text-xl font-bold font-mono text-[#1F3A2E]">
               ${(basePnl.ebitdaUsd * ((b2cVolumeMultiplier + b2bVolumeMultiplier) / 2)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </div>
             <span className="text-[10px] text-blue-700 font-mono font-medium block">
@@ -425,13 +425,13 @@ arielmc.com | arielmc.co.uk`;
                 </tr>
                 <tr className="hover:bg-[#F4F6F4] transition-colors">
                   <td className="py-3 px-4 font-semibold text-[#1F3A2E]">Operating EBITDA</td>
-                  <td className="py-3 px-4 font-mono text-[#0A1A2F] font-semibold">
+                  <td className="py-3 px-4 font-mono text-[#1F3A2E] font-semibold">
                     ${(44590 * b2cVolumeMultiplier).toLocaleString(undefined, { maximumFractionDigits: 0 })} (28.6%)
                   </td>
-                  <td className="py-3 px-4 font-mono text-[#0A1A2F] font-semibold">
+                  <td className="py-3 px-4 font-mono text-[#1F3A2E] font-semibold">
                     ${(28312 * b2bVolumeMultiplier).toLocaleString(undefined, { maximumFractionDigits: 0 })} (46.7%)
                   </td>
-                  <td className="py-3 px-4 font-mono text-[#0A1A2F] font-bold">
+                  <td className="py-3 px-4 font-mono text-[#1F3A2E] font-bold">
                     ${((44590 * b2cVolumeMultiplier) + (28312 * b2bVolumeMultiplier)).toLocaleString(undefined, { maximumFractionDigits: 0 })} (33.7%)
                   </td>
                 </tr>

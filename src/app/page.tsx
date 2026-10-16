@@ -21,7 +21,7 @@ import { INITIAL_SAMPLES } from '@/data/initialSamples';
 import { INITIAL_ORDERS } from '@/data/initialOrders';
 import crmLeadsData from '@/data/crmLeads.json';
 import { Header } from '@/components/Header';
-import { Sidebar, ActiveTab } from '@/components/Sidebar';
+import { Sidebar, ActiveTab, ThemeProfile } from '@/components/Sidebar';
 import { EntityStationOverview } from '@/components/EntityStationOverview';
 import { ProductCatalog } from '@/components/ProductCatalog';
 import { FactoryManagement } from '@/components/FactoryManagement';
@@ -62,6 +62,27 @@ export default function Home() {
   const [crmLeads] = useState<CrmLead[]>(crmLeadsData as CrmLead[]);
   const [activeTab, setActiveTab] = useState<ActiveTab>('PRODUCTS');
   const [searchQuery, setSearchQuery] = useState('');
+  const [theme, setTheme] = useState<ThemeProfile>('crm-green');
+
+  React.useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('arielmc_erp_theme') as ThemeProfile;
+      if (savedTheme && (savedTheme === 'crm-green' || savedTheme === 'light-clean' || savedTheme === 'heritage-tan')) {
+        setTheme(savedTheme);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const handleSelectTheme = (newTheme: ThemeProfile) => {
+    setTheme(newTheme);
+    try {
+      localStorage.setItem('arielmc_erp_theme', newTheme);
+    } catch {
+      // ignore
+    }
+  };
 
   // Modals
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
@@ -162,13 +183,16 @@ export default function Home() {
     products.reduce((acc, curr) => acc + curr.costing.arielSourcingMarginPct, 0) / (totalSkus || 1)
   ).toFixed(1);
 
+  const workspaceBg = theme === 'heritage-tan' ? 'bg-[#FAF7F2]' : theme === 'light-clean' ? 'bg-[#F8FAF8]' : 'bg-[#F4F6F4]';
+
   return (
-    <div className="flex min-h-screen bg-[#F4F6F4] text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#0A1A2F]">
+    <div className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors`}>
       {/* Sidebar Navigation */}
       <Sidebar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         activeEntity={activeEntity}
+        theme={theme}
       />
 
       {/* Main Content Pane */}
@@ -183,6 +207,8 @@ export default function Home() {
           onSelectCurrency={setActiveCurrencyCode}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          theme={theme}
+          onSelectTheme={handleSelectTheme}
         />
 
         {/* Dashboard Workspace */}

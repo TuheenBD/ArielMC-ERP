@@ -236,7 +236,7 @@ CREATE TABLE purchase_orders (
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#C8A96A] text-[#0A1A2F] font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-bold">
                   NEXT SPRINT ROADMAP
                 </span>
                 <span className="text-xs text-emerald-100 font-medium">Architectural Spec Ready</span>
@@ -248,7 +248,7 @@ CREATE TABLE purchase_orders (
 
           <button
             onClick={onNavigateToProducts}
-            className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#b59556] text-[#0A1A2F] text-xs font-bold font-['Montserrat'] shadow transition-all"
+            className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#b59556] text-[#1F3A2E] text-xs font-bold font-['Montserrat'] shadow transition-all"
           >
             <span>Back to Live Product Master</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -296,7 +296,7 @@ CREATE TABLE purchase_orders (
               This module integrates directly into the unified PostgreSQL database using relational foreign keys linked to the Phase 1 Company and Product entities.
             </p>
 
-            <pre className="p-4 rounded-xl bg-[#0A1A2F] text-[#C8A96A] font-mono text-xs overflow-x-auto border border-[#0A1A2F] leading-relaxed shadow-inner">
+            <pre className="p-4 rounded-xl bg-[#172D24] text-[#C8A96A] font-mono text-xs overflow-x-auto border border-[#2C5240] leading-relaxed shadow-inner">
               {details.schemaPreview}
             </pre>
           </div>

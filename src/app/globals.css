@@ -16,7 +16,7 @@
     --muted: #E7EDE8;
     --muted-foreground: #6B7269;
     --accent: #C9A86A;          /* Ariel Sourcing Gold */
-    --accent-foreground: #0A1A2F;
+    --accent-foreground: #1F3A2E;
     --destructive: #B3261E;
     --destructive-foreground: #FFFFFF;
     --border: #DDE3DD;          /* CRM Line Border */
@@ -25,9 +25,9 @@
     --radius: 0.75rem;
 
     /* ArielMC Brand Identity Tokens */
-    --brand-navy: #0A1A2F;
     --brand-forest: #1F3A2E;
     --brand-forest-hover: #2C5240;
+    --brand-forest-dark: #172D24;
     --brand-gold: #C9A86A;
     --brand-gold-tan: #C8A96A;
     --brand-gold-dark: #8A6D3B;
@@ -53,8 +53,6 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* Official Website Classes */
-.brand-navy { background-color: #0A1A2F; }
-.text-brand-navy { color: #0A1A2F; }
 .brand-forest { background-color: #1F3A2E; }
 .text-brand-forest { color: #1F3A2E; }
 .brand-gold { background-color: #C9A86A; }
@@ -72,8 +70,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background-size: 250% 100%;
   animation: luxuryGradientFlow 5s ease-in-out infinite;
 }
-.gradient-flow-navy {
-  background: linear-gradient(90deg, #0A1A2F, #1E3A5F, #C9A86A, #E5C992, #C9A86A, #1E3A5F, #0A1A2F);
+.gradient-flow-green {
+  background: linear-gradient(90deg, #1F3A2E, #2C5240, #C9A86A, #E5C992, #C9A86A, #2C5240, #1F3A2E);
   background-size: 250% 100%;
   animation: luxuryGradientFlow 5s ease-in-out infinite;
 }

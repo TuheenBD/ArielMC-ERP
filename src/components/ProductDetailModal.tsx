@@ -45,7 +45,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1A2F]/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1F3A2E]/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl max-h-[90vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Modal Header */}
         <div className="p-6 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] flex items-start justify-between gap-4 text-white">

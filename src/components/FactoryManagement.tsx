@@ -436,7 +436,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
             <div className="p-6 border-b-[3px] border-[#C8A96A] bg-[#1F3A2E] text-white flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#C8A96A] text-[#0A1A2F] font-bold">
+                  <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-bold">
                     {selectedFactory.code}
                   </span>
                   <span className="text-xs text-emerald-100 font-medium">{selectedFactory.cluster}</span>
@@ -558,7 +558,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
           <div className="relative w-full max-w-2xl bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
             <div className="p-5 border-b-[3px] border-[#C8A96A] bg-[#1F3A2E] text-white flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#C8A96A] text-[#0A1A2F] flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-lg bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center font-bold">
                   <Factory className="w-4 h-4" />
                 </div>
                 <div>

@@ -651,7 +651,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#0A1A2F] font-mono text-xs text-slate-300 border border-slate-800 space-y-1">
+            <div className="p-4 rounded-xl bg-[#172D24] font-mono text-xs text-slate-300 border border-[#2C5240] space-y-1">
               <div className="text-emerald-400"># Central Odoo Automated Warehouse Assignment Rule</div>
               <div><span className="text-purple-400">if</span> record.partner_shipping_id.country_id.code == <span className="text-amber-300">&apos;GB&apos;</span>:</div>
               <div className="pl-4 text-slate-200">record.warehouse_id = env[<span className="text-amber-300">&apos;stock.warehouse&apos;</span>].search([(<span className="text-amber-300">&apos;code&apos;</span>, <span className="text-amber-300">&apos;=&apos;</span>, <span className="text-amber-300">&apos;WH-UK&apos;</span>)], limit=1)</div>
@@ -1044,13 +1044,13 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
             </div>
 
             {/* Document Body (Clean Ivory Paper Theme for Printing) */}
-            <div className="p-8 overflow-y-auto flex-1 bg-[#F8F6F2] text-[#0A1A2F] font-['Open_Sans']">
+            <div className="p-8 overflow-y-auto flex-1 bg-[#F8F6F2] text-[#1F3A2E] font-['Open_Sans']">
               {documentPreviewType === 'INVOICE' && (
                 <div className="space-y-6 max-w-3xl mx-auto">
                   {/* Official Letterhead Header */}
                   <div className="border-b-2 border-[#C8A96A] pb-4 flex items-start justify-between">
                     <div>
-                      <h1 className="text-xl font-bold font-['Montserrat'] tracking-tight text-[#0A1A2F]">
+                      <h1 className="text-xl font-bold font-['Montserrat'] tracking-tight text-[#1F3A2E]">
                         ARIEL MARKETING & COMMUNICATIONS LIMITED
                       </h1>
                       <p className="text-xs text-[#3A3A3A] mt-0.5">
@@ -1065,7 +1065,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                       <span className="text-xs font-bold font-['Montserrat'] uppercase tracking-wider text-[#8A6D3B] block">
                         COMMERCIAL INVOICE
                       </span>
-                      <span className="text-xs font-mono font-bold text-[#0A1A2F] block mt-1">
+                      <span className="text-xs font-mono font-bold text-[#1F3A2E] block mt-1">
                         INV-{activeConsignment.consignmentNumber}
                       </span>
                       <span className="text-[11px] text-[#3A3A3A] block">Date: {activeConsignment.etdCtg}</span>
@@ -1075,7 +1075,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                   {/* Consignee & Shipping Details */}
                   <div className="grid grid-cols-2 gap-4 text-xs">
                     <div className="p-3 rounded-lg border border-slate-300 bg-white">
-                      <strong className="block text-[#0A1A2F] font-['Montserrat'] mb-1">CONSIGNEE / BUYER:</strong>
+                      <strong className="block text-[#1F3A2E] font-['Montserrat'] mb-1">CONSIGNEE / BUYER:</strong>
                       <p className="text-[#3A3A3A]">
                         Ariel Marketing & Communications Ltd (UK)<br />
                         71-75 Shelton Street, Covent Garden, London WC2H 9JQ<br />
@@ -1083,7 +1083,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                       </p>
                     </div>
                     <div className="p-3 rounded-lg border border-slate-300 bg-white">
-                      <strong className="block text-[#0A1A2F] font-['Montserrat'] mb-1">PORT & VESSEL DETAILS:</strong>
+                      <strong className="block text-[#1F3A2E] font-['Montserrat'] mb-1">PORT & VESSEL DETAILS:</strong>
                       <p className="text-[#3A3A3A]">
                         Port of Loading: Chattogram (CTG), Bangladesh<br />
                         Port of Discharge: {activeConsignment.destinationPort}<br />
@@ -1107,7 +1107,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                       {activeConsignment.items.map((it) => (
                         <tr key={it.id}>
                           <td className="p-2.5">
-                            <strong className="block text-[#0A1A2F]">{it.productName}</strong>
+                            <strong className="block text-[#1F3A2E]">{it.productName}</strong>
                             <span className="text-[10px] text-slate-500 font-mono">SKU: {it.sku} (EAN: {it.eanBarcode})</span>
                           </td>
                           <td className="p-2.5 font-mono">{it.hsCode}</td>
@@ -1129,7 +1129,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
 
                   {/* Preferential Origin Declaration */}
                   <div className="p-3.5 rounded-lg border border-[#C8A96A] bg-amber-50/50 text-xs space-y-1">
-                    <strong className="font-['Montserrat'] text-[#0A1A2F] block">
+                    <strong className="font-['Montserrat'] text-[#1F3A2E] block">
                       PREFERENTIAL ORIGIN DECLARATION (0% DUTY APPLIED):
                     </strong>
                     <p className="text-[11px] text-[#3A3A3A] italic">
@@ -1155,7 +1155,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                 <div className="space-y-6 max-w-3xl mx-auto">
                   <div className="border-b-2 border-[#C8A96A] pb-4 flex items-start justify-between">
                     <div>
-                      <h1 className="text-xl font-bold font-['Montserrat'] text-[#0A1A2F]">
+                      <h1 className="text-xl font-bold font-['Montserrat'] text-[#1F3A2E]">
                         ARIEL MARKETING & COMMUNICATIONS LIMITED
                       </h1>
                       <p className="text-xs text-[#3A3A3A]">Master Cargo Packing List & ITF-14 Shipping Markings</p>
@@ -1164,7 +1164,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                       <span className="text-xs font-bold font-['Montserrat'] uppercase text-[#8A6D3B] block">
                         PACKING LIST
                       </span>
-                      <span className="text-xs font-mono font-bold text-[#0A1A2F] block mt-1">
+                      <span className="text-xs font-mono font-bold text-[#1F3A2E] block mt-1">
                         PKL-{activeConsignment.consignmentNumber}
                       </span>
                     </div>
@@ -1173,11 +1173,11 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                   <div className="p-3 rounded-lg border border-slate-300 bg-white grid grid-cols-3 gap-2 text-xs">
                     <div>
                       <span className="text-slate-500 block">Container No:</span>
-                      <strong className="font-mono text-[#0A1A2F]">{activeConsignment.containerNumber}</strong>
+                      <strong className="font-mono text-[#1F3A2E]">{activeConsignment.containerNumber}</strong>
                     </div>
                     <div>
                       <span className="text-slate-500 block">Seal Number:</span>
-                      <strong className="font-mono text-[#0A1A2F]">{activeConsignment.sealNumber}</strong>
+                      <strong className="font-mono text-[#1F3A2E]">{activeConsignment.sealNumber}</strong>
                     </div>
                     <div>
                       <span className="text-slate-500 block">Destination Marker:</span>
@@ -1201,7 +1201,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                         <tr key={it.id}>
                           <td className="p-2.5 font-mono">CTN #{idx * 40 + 1} - #{(idx + 1) * 40}</td>
                           <td className="p-2.5">
-                            <strong className="block text-[#0A1A2F]">{it.productName}</strong>
+                            <strong className="block text-[#1F3A2E]">{it.productName}</strong>
                             <span className="text-[10px] text-slate-500">{it.packagingMode}</span>
                           </td>
                           <td className="p-2.5 font-mono">{it.unitsPerCarton}</td>
@@ -1227,7 +1227,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
               {documentPreviewType === 'FORM_EXP' && (
                 <div className="space-y-4 max-w-2xl mx-auto font-mono text-xs">
                   <div className="border border-slate-400 p-4 bg-white space-y-2">
-                    <div className="text-center font-bold text-sm text-[#0A1A2F] pb-2 border-b border-slate-300">
+                    <div className="text-center font-bold text-sm text-[#1F3A2E] pb-2 border-b border-slate-300">
                       BANGLADESH BANK • FOREIGN EXCHANGE OPERATION DEPARTMENT<br />
                       FORM EXP (COMMERCIAL EXPORT DECLARATION)
                     </div>
@@ -1250,7 +1250,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
               {documentPreviewType === 'EDI_MANIFEST' && (
                 <div className="space-y-3 max-w-2xl mx-auto font-mono text-xs">
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-[#0A1A2F]">3PL WMS Inbound Manifest (CSV Data Format):</span>
+                    <span className="font-bold text-[#1F3A2E]">3PL WMS Inbound Manifest (CSV Data Format):</span>
                     <button
                       onClick={() => alert('Downloading CSV format manifest for 3PL auto-ingestion...')}
                       className="px-3 py-1 rounded bg-[#1F3A2E] text-white text-[11px] font-semibold"
@@ -1258,7 +1258,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
                       Download .CSV
                     </button>
                   </div>
-                  <pre className="p-4 rounded border border-slate-300 bg-white text-[11px] overflow-x-auto text-[#0A1A2F] leading-relaxed">
+                  <pre className="p-4 rounded border border-slate-300 bg-white text-[11px] overflow-x-auto text-[#1F3A2E] leading-relaxed">
 {`SKU,BARCODE_EAN13,STYLE,PRODUCT_NAME,CARTONS,TOTAL_QTY,FBA_DRIP,FBM_STOCK,WHOLESALE,GROSS_KG,CBM
 ${activeConsignment.items
   .map(

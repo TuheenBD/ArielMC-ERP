@@ -296,7 +296,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           </button>
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#0A1A2F] font-bold text-xs transition-all shadow-md font-montserrat"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#1F3A2E] font-bold text-xs transition-all shadow-md font-montserrat"
           >
             <Plus className="w-4 h-4" />
             <span>Create New SDO</span>
@@ -434,7 +434,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
               }`}
             >
               <span>{cfg.label}</span>
-              <span className="text-[10px] font-mono px-1 rounded bg-[#0A1A2F]/10 font-bold">
+              <span className="text-[10px] font-mono px-1 rounded bg-[#1F3A2E]/10 font-bold">
                 {count}
               </span>
             </button>
@@ -727,28 +727,28 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       {activeModuleTab === 'SOP_POLICY' && (
         <div className="space-y-6">
           {/* Sourcing Lifecycle Hero */}
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-[#0A1A2F] to-slate-900 border border-[#C9A86A]/40 shadow-xl space-y-4">
+          <div className="p-6 rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white shadow-md space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#C9A86A]/20 text-[#C9A86A] font-mono text-xs font-semibold border border-[#C9A86A]/30">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#C8A96A]/20 text-[#C8A96A] font-mono text-xs font-semibold border border-[#C8A96A]/30">
                     SOP-B2B-SMP-2026-V1
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">
+                  <span className="text-xs text-[#E8EFE8] font-mono">
                     Official Prototyping & Commercial Agreement Policy
                   </span>
                 </div>
                 <h2 className="text-lg font-bold text-white font-['Montserrat']">
                   ArielMC 5-Step Sourcing Workflow & Prototyping Lifecycle
                 </h2>
-                <p className="text-xs text-slate-300 font-['Open_Sans'] max-w-3xl">
+                <p className="text-xs text-[#E8EFE8] font-['Open_Sans'] max-w-3xl">
                   Defines commercial terms, technical intake gates, quality compliance standards, and 100% fee reimbursement mechanics across Dhaka, Narayanganj, and Savar manufacturing hubs.
                 </p>
               </div>
 
               <button
                 onClick={() => setShowSopModal(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#C9A86A] to-[#B08D4D] text-[#0A1A2F] font-bold text-xs shadow-md hover:brightness-110 transition-all font-['Montserrat'] shrink-0"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold text-xs shadow-md transition-all font-['Montserrat'] shrink-0"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print Official Agreement</span>
@@ -1072,7 +1072,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={() => setIsAddModalOpen(true)}
-                          className="px-2.5 py-1 rounded bg-[#C9A86A]/20 text-[#C9A86A] hover:bg-[#C9A86A] hover:text-[#0A1A2F] border border-[#C9A86A]/30 text-xs font-semibold transition-all"
+                          className="px-2.5 py-1 rounded bg-[#C9A86A]/20 text-[#C9A86A] hover:bg-[#C9A86A] hover:text-[#1F3A2E] border border-[#C9A86A]/30 text-xs font-semibold transition-all"
                         >
                           Request SDO
                         </button>
@@ -1207,10 +1207,10 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
               const creditAmount = isFullCredit ? calcDevFee : isProRata ? calcDevFee * 0.5 : 0;
 
               return (
-                <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-[#0A1A2F] border border-emerald-500/40 shadow-xl space-y-4 flex flex-col justify-between">
+                <div className="p-6 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-4 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-slate-400 uppercase tracking-wider font-mono">
+                      <span className="text-xs text-gray-500 uppercase tracking-wider font-mono font-semibold">
                         Commercial Credit Outcome
                       </span>
                       <span
@@ -1871,7 +1871,7 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
           {/* Official Letterhead */}
           <div className="border-b border-[#C9A86A]/40 pb-6 text-center space-y-2">
             <div className="flex items-center justify-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#0A1A2F] to-[#1E293B] border border-[#C9A86A] flex items-center justify-center font-bold font-mono text-xs text-[#C9A86A]">
+              <div className="w-7 h-7 rounded-lg bg-[#1F3A2E] border border-[#C9A86A] flex items-center justify-center font-bold font-mono text-xs text-[#C9A86A]">
                 AMC
               </div>
               <span className="text-sm font-black tracking-widest text-[#C9A86A] uppercase font-['Montserrat']">
@@ -2237,7 +2237,7 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-[#C9A86A] hover:bg-[#B08D4D] text-[#0A1A2F] font-bold text-xs font-['Montserrat'] transition-all shadow-md"
+            className="px-4 py-2 rounded-lg bg-[#C9A86A] hover:bg-[#B08D4D] text-[#1F3A2E] font-bold text-xs font-['Montserrat'] transition-all shadow-md"
           >
             Close & Return to Dashboard
           </button>
