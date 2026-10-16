@@ -66,31 +66,31 @@ const STAGE_CONFIG: Record<
   PROTO: {
     label: 'Proto (1st Fit)',
     desc: 'Pattern & initial mould feasibility test',
-    badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+    badgeColor: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
     order: 1,
   },
   FIT: {
     label: 'Fit & Styling',
     desc: 'Measurement, contour, and aesthetic adjustments',
-    badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    badgeColor: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
     order: 2,
   },
   SIZE_SET: {
     label: 'Size Set / Range',
     desc: 'Full grading specs and multi-dimension fit check',
-    badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    badgeColor: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]',
     order: 3,
   },
   PP: {
     label: 'Pre-Production (PP)',
     desc: 'Gatekeeper sample with final trims before bulk cutting/firing',
-    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    badgeColor: 'bg-[#FEF6E4] text-[#7A5508] border-[#FBE3B0]',
     order: 4,
   },
   TOP: {
     label: 'Top of Production (TOP)',
     desc: 'Pulled from initial 10% mass run for pre-shipment sign-off',
-    badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    badgeColor: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]',
     order: 5,
   },
 };
@@ -101,72 +101,72 @@ const STATUS_CONFIG: Record<
 > = {
   DRAFT: {
     label: 'Draft',
-    bg: 'bg-slate-800/60',
-    text: 'text-slate-400',
-    border: 'border-slate-700/60',
+    bg: 'bg-[#F4F6F4]',
+    text: 'text-[#6B7269]',
+    border: 'border-[#DDE3DD]',
     icon: Clock,
   },
   TECH_PACK_SENT: {
     label: 'Tech Pack Sent',
-    bg: 'bg-blue-950/40',
-    text: 'text-blue-400',
-    border: 'border-blue-800/60',
+    bg: 'bg-[#E8F0FA]',
+    text: 'text-[#17456F]',
+    border: 'border-[#C5D7ED]',
     icon: Send,
   },
   IN_FABRICATION: {
     label: 'In Fabrication',
-    bg: 'bg-amber-950/40',
-    text: 'text-amber-400',
-    border: 'border-amber-800/60',
+    bg: 'bg-[#FEF6E4]',
+    text: 'text-[#7A5508]',
+    border: 'border-[#FBE3B0]',
     icon: FlaskConical,
   },
   INTERNAL_QA_PASSED: {
     label: 'QA Passed (Dhaka)',
-    bg: 'bg-emerald-950/40',
-    text: 'text-emerald-400',
-    border: 'border-emerald-800/60',
+    bg: 'bg-[#E4F3E9]',
+    text: 'text-[#14512C]',
+    border: 'border-[#BBE3C7]',
     icon: ClipboardCheck,
   },
   DISPATCHED: {
     label: 'Dispatched (In Transit)',
-    bg: 'bg-cyan-950/40',
-    text: 'text-cyan-400',
-    border: 'border-cyan-800/60',
+    bg: 'bg-[#E0F2FE]',
+    text: 'text-[#0369A1]',
+    border: 'border-[#BAE6FD]',
     icon: Plane,
   },
   DELIVERED_TO_BUYER: {
     label: 'Delivered to Buyer',
-    bg: 'bg-purple-950/40',
-    text: 'text-purple-400',
-    border: 'border-purple-800/60',
+    bg: 'bg-[#EDE7F6]',
+    text: 'text-[#4A2E7A]',
+    border: 'border-[#D6C7EC]',
     icon: Truck,
   },
   APPROVED: {
     label: 'Buyer Approved',
-    bg: 'bg-emerald-900/40',
-    text: 'text-emerald-300',
-    border: 'border-emerald-500/50',
+    bg: 'bg-[#E4F3E9]',
+    text: 'text-[#14512C]',
+    border: 'border-[#BBE3C7]',
     icon: CheckCircle2,
   },
   APPROVED_WITH_COMMENTS: {
     label: 'Approved w/ Notes',
-    bg: 'bg-teal-950/40',
-    text: 'text-teal-300',
-    border: 'border-teal-700/60',
+    bg: 'bg-[#E6FFFA]',
+    text: 'text-[#0D9488]',
+    border: 'border-[#99F6E4]',
     icon: CheckCircle2,
   },
   REVISION_REQUIRED: {
     label: 'Revision Required',
-    bg: 'bg-rose-950/40',
-    text: 'text-rose-400',
-    border: 'border-rose-800/60',
+    bg: 'bg-[#FDEAEA]',
+    text: 'text-[#8A1515]',
+    border: 'border-[#F7C0C0]',
     icon: AlertCircle,
   },
   REJECTED: {
     label: 'Rejected',
-    bg: 'bg-red-950/40',
-    text: 'text-red-400',
-    border: 'border-red-800/60',
+    bg: 'bg-[#FDEAEA]',
+    text: 'text-[#8A1515]',
+    border: 'border-[#F7C0C0]',
     icon: X,
   },
 };
@@ -267,21 +267,21 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner / Hero */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-slate-800 shadow-xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] shadow-md text-white">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-mono text-xs font-semibold border border-purple-500/30">
+            <span className="px-2.5 py-0.5 rounded-full bg-white/15 text-[#C8A96A] font-mono text-xs font-semibold border border-white/20">
               PHASE 3: LIVE
             </span>
-            <span className="text-xs text-slate-400 font-mono">
+            <span className="text-xs text-white/80 font-mono">
               Export R&D, Tech Packs & Sampling Protocol
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-            <FlaskConical className="w-6 h-6 text-purple-400" />
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 font-montserrat">
+            <FlaskConical className="w-6 h-6 text-[#C8A96A]" />
             Sample Development Orders (SDO)
           </h1>
-          <p className="text-xs text-slate-400 max-w-2xl">
+          <p className="text-xs text-white/80 max-w-2xl leading-relaxed">
             Control the 5-stage sampling lifecycle from Proto pattern testing to Pre-Production (PP) gatekeeping and Top of Production (TOP) sign-off. Track international DHL/FedEx courier tracking and buyer feedback revisions.
           </p>
         </div>
@@ -289,14 +289,14 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowSopModal(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#C9A86A]/20 hover:bg-[#C9A86A]/30 text-[#C9A86A] border border-[#C9A86A]/40 font-semibold text-xs transition-all shadow-md font-['Montserrat']"
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#F4E3B8] border border-[#C8A96A]/40 font-semibold text-xs transition-all shadow-sm font-montserrat"
           >
-            <FileText className="w-4 h-4" />
+            <FileText className="w-4 h-4 text-[#C8A96A]" />
             <span>SOP-B2B-SMP-2026-V1 Agreement</span>
           </button>
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-all shadow-lg shadow-purple-600/30"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#0A1A2F] font-bold text-xs transition-all shadow-md font-montserrat"
           >
             <Plus className="w-4 h-4" />
             <span>Create New SDO</span>
@@ -305,52 +305,52 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       </div>
 
       {/* Sub-Tab Navigation Bar */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto text-xs font-['Montserrat']">
+      <div className="flex items-center gap-2 border-b border-[#DDE3DD] pb-2 overflow-x-auto text-xs font-montserrat">
         <button
           onClick={() => setActiveSampleModuleTab('TRACKER')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
             activeModuleTab === 'TRACKER'
-              ? 'bg-purple-600/20 text-purple-300 border border-purple-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-white'
           }`}
         >
-          <FlaskConical className="w-4 h-4 text-purple-400" />
+          <FlaskConical className="w-4 h-4 text-[#C8A96A]" />
           <span>Active SDO Pipeline ({samples.length})</span>
         </button>
 
         <button
           onClick={() => setActiveSampleModuleTab('SOP_POLICY')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
             activeModuleTab === 'SOP_POLICY'
-              ? 'bg-[#C9A86A]/20 text-[#C9A86A] border border-[#C9A86A]/40 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-white'
           }`}
         >
-          <FileText className="w-4 h-4 text-[#C9A86A]" />
+          <FileText className="w-4 h-4 text-[#C8A96A]" />
           <span>5-Stage Sourcing & Tier Classification</span>
         </button>
 
         <button
           onClick={() => setActiveSampleModuleTab('PRICING_MATRIX')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
             activeModuleTab === 'PRICING_MATRIX'
-              ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-white'
           }`}
         >
-          <Tag className="w-4 h-4 text-blue-400" />
+          <Tag className="w-4 h-4 text-[#C8A96A]" />
           <span>Sample Pricing Matrix (15 SKUs)</span>
         </button>
 
         <button
           onClick={() => setActiveSampleModuleTab('REIMBURSEMENT_CALC')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all shrink-0 ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
             activeModuleTab === 'REIMBURSEMENT_CALC'
-              ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-white'
           }`}
         >
-          <Calculator className="w-4 h-4 text-emerald-400" />
+          <Calculator className="w-4 h-4 text-[#C8A96A]" />
           <span>100% Sample Fee Refund Calculator</span>
         </button>
       </div>
@@ -359,62 +359,62 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         <>
           {/* KPI Stats Strip */}
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">Total Active SDOs</div>
-          <div className="text-xl font-bold font-mono text-white mt-0.5">{totalSamples}</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Across 4 Sectors</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">Total Active SDOs</div>
+          <div className="text-xl font-bold font-mono text-[#1F3A2E] mt-0.5">{totalSamples}</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">Across 4 Sectors</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium flex items-center justify-between">
             <span>In Fabrication</span>
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[#7A5508] animate-pulse" />
           </div>
-          <div className="text-xl font-bold font-mono text-amber-400 mt-0.5">{inFabrication}</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">At BD Factory Floors</div>
+          <div className="text-xl font-bold font-mono text-[#7A5508] mt-0.5">{inFabrication}</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">At BD Factory Floors</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium flex items-center justify-between">
             <span>In Transit (Air)</span>
-            <Plane className="w-3.5 h-3.5 text-cyan-400" />
+            <Plane className="w-3.5 h-3.5 text-[#0369A1]" />
           </div>
-          <div className="text-xl font-bold font-mono text-cyan-400 mt-0.5">{inTransit}</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">DHL & FedEx Express</div>
+          <div className="text-xl font-bold font-mono text-[#0369A1] mt-0.5">{inTransit}</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">DHL & FedEx Express</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">Awaiting Feedback</div>
-          <div className="text-xl font-bold font-mono text-purple-300 mt-0.5">{awaitingFeedback}</div>
-          <div className="text-[10px] text-purple-400 mt-0.5">With Global Buyers</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">Awaiting Feedback</div>
+          <div className="text-xl font-bold font-mono text-[#4A2E7A] mt-0.5">{awaitingFeedback}</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">With Global Buyers</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">Buyer Approved</div>
-          <div className="text-xl font-bold font-mono text-emerald-400 mt-0.5">{approvedCount}</div>
-          <div className="text-[10px] text-emerald-400 mt-0.5">Ready for Bulk PO</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">Buyer Approved</div>
+          <div className="text-xl font-bold font-mono text-[#14512C] mt-0.5">{approvedCount}</div>
+          <div className="text-[10px] text-[#14512C] mt-0.5 font-semibold">Ready for Bulk PO</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">R&D Expenditure</div>
-          <div className="text-xl font-bold font-mono text-white mt-0.5">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">R&D Expenditure</div>
+          <div className="text-xl font-bold font-mono text-[#1F3A2E] mt-0.5">
             ${totalSpendUsd.toLocaleString()}
           </div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Samples + Airfreight</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">Samples + Airfreight</div>
         </div>
       </div>
 
       {/* 5-Stage Lifecycle Filter Buttons */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <span className="text-[11px] font-medium text-slate-400 mr-1 flex items-center gap-1">
-          <Layers className="w-3.5 h-3.5" /> Stage Filter:
+        <span className="text-[11px] font-semibold text-[#1F3A2E] mr-1 flex items-center gap-1 font-montserrat">
+          <Layers className="w-3.5 h-3.5 text-[#C8A96A]" /> Stage Filter:
         </span>
         <button
           onClick={() => setSelectedStage('ALL')}
-          className={`px-3 py-1.5 rounded-lg border font-mono transition-all ${
+          className={`px-3 py-1.5 rounded-lg border font-mono transition-all font-semibold ${
             selectedStage === 'ALL'
-              ? 'bg-purple-600 text-white border-purple-500 font-semibold'
-              : 'bg-slate-900/70 text-slate-400 border-slate-800 hover:text-white'
+              ? 'bg-[#1F3A2E] text-white border-[#1F3A2E]'
+              : 'bg-white text-[#1A1A1A] border-[#DDE3DD] hover:bg-[#F8FAF8]'
           }`}
         >
           All Stages ({samples.length})
@@ -429,12 +429,12 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
               onClick={() => setSelectedStage(stage)}
               className={`px-3 py-1.5 rounded-lg border transition-all flex items-center gap-1.5 ${
                 isSelected
-                  ? `${cfg.badgeColor} border-current font-semibold shadow-md`
-                  : 'bg-slate-900/70 text-slate-400 border-slate-800 hover:text-white'
+                  ? `${cfg.badgeColor} border-current font-bold shadow-sm ring-2 ring-[#C8A96A]`
+                  : 'bg-white text-[#1A1A1A] border-[#DDE3DD] hover:bg-[#F8FAF8]'
               }`}
             >
               <span>{cfg.label}</span>
-              <span className="text-[10px] font-mono px-1 rounded bg-black/40">
+              <span className="text-[10px] font-mono px-1 rounded bg-[#0A1A2F]/10 font-bold">
                 {count}
               </span>
             </button>
@@ -443,16 +443,16 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       </div>
 
       {/* Control Bar: Search & Filters */}
-      <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3 w-full md:w-auto flex-1">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#6B7269] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search SDO #, Style Code, Buyer, Factory, AWB..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+              className="w-full pl-9 pr-4 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] placeholder-[#6B7269] focus:outline-none focus:border-[#1F3A2E]"
             />
           </div>
 
@@ -460,7 +460,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value as any)}
-            className="px-3 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+            className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
             <option value="ALL">All Sectors</option>
             <option value="LEATHER">Leather Goods</option>
@@ -473,7 +473,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as any)}
-            className="px-3 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+            className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
             <option value="ALL">All Statuses</option>
             <option value="IN_FABRICATION">In Fabrication</option>
@@ -486,13 +486,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         </div>
 
         {/* View Toggle */}
-        <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-lg border border-slate-800">
+        <div className="flex items-center gap-1 p-1 bg-[#F4F6F4] rounded-lg border border-[#DDE3DD]">
           <button
             onClick={() => setViewMode('TABLE')}
             className={`p-1.5 rounded text-xs flex items-center gap-1.5 transition-all ${
               viewMode === 'TABLE'
-                ? 'bg-purple-600 text-white font-medium shadow'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#1F3A2E] text-white font-bold shadow'
+                : 'text-[#6B7269] hover:text-[#1A1A1A]'
             }`}
           >
             <List className="w-3.5 h-3.5" />
@@ -502,8 +502,8 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
             onClick={() => setViewMode('KANBAN')}
             className={`p-1.5 rounded text-xs flex items-center gap-1.5 transition-all ${
               viewMode === 'KANBAN'
-                ? 'bg-purple-600 text-white font-medium shadow'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#1F3A2E] text-white font-bold shadow'
+                : 'text-[#6B7269] hover:text-[#1A1A1A]'
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
@@ -514,23 +514,23 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
 
       {/* Main View Display */}
       {viewMode === 'TABLE' ? (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-lg">
+        <div className="rounded-xl border border-[#DDE3DD] bg-white overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-950/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                  <th className="py-3 px-4">SDO Number</th>
-                  <th className="py-3 px-4">Style & Sector</th>
-                  <th className="py-3 px-4">Partner Factory</th>
-                  <th className="py-3 px-4">Buyer & Market</th>
-                  <th className="py-3 px-4">Stage & Round</th>
-                  <th className="py-3 px-4">Courier / AWB</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Cost (USD)</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                <tr className="border-b border-[#DDE3DD] bg-[#1F3A2E] text-[11px] font-semibold text-white uppercase tracking-wider font-montserrat">
+                  <th className="py-3.5 px-4">SDO Number</th>
+                  <th className="py-3.5 px-4">Style & Sector</th>
+                  <th className="py-3.5 px-4">Partner Factory</th>
+                  <th className="py-3.5 px-4">Buyer & Market</th>
+                  <th className="py-3.5 px-4">Stage & Round</th>
+                  <th className="py-3.5 px-4">Courier / AWB</th>
+                  <th className="py-3.5 px-4">Status</th>
+                  <th className="py-3.5 px-4">Cost (USD)</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+              <tbody className="divide-y divide-[#DDE3DD] text-[#1A1A1A]">
                 {filteredSamples.map((sample) => {
                   const statusCfg = STATUS_CONFIG[sample.status];
                   const stageCfg = STAGE_CONFIG[sample.stage];
@@ -539,61 +539,61 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   return (
                     <tr
                       key={sample.id}
-                      className="hover:bg-slate-800/40 transition-colors cursor-pointer group"
+                      className="hover:bg-[#F7FAF8] transition-colors cursor-pointer group"
                       onClick={() => setSelectedSample(sample)}
                     >
-                      <td className="py-3 px-4 font-mono font-medium text-white">
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                         <div className="flex items-center gap-1.5">
                           <span>{sample.sdoNumber}</span>
                           {sample.feedbacks.length > 0 && (
                             <span
                               title={`${sample.feedbacks.length} Feedback logged`}
-                              className="w-2 h-2 rounded-full bg-purple-400"
+                              className="w-2 h-2 rounded-full bg-[#C8A96A]"
                             />
                           )}
                         </div>
-                        <span className="text-[10px] text-slate-400 block font-sans">
+                        <span className="text-[10px] text-[#6B7269] block font-sans font-normal">
                           Req: {sample.requestDate}
                         </span>
                       </td>
 
                       <td className="py-3 px-4">
-                        <div className="font-semibold text-white group-hover:text-purple-300 transition-colors">
+                        <div className="font-bold text-[#1A1A1A] group-hover:text-[#1F3A2E] transition-colors">
                           {sample.styleName}
                         </div>
-                        <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5">
+                        <div className="text-[10px] text-[#6B7269] font-mono flex items-center gap-1.5">
                           <span>{sample.styleCode}</span>
                           <span>•</span>
-                          <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
+                          <span className="px-1.5 py-0.2 rounded bg-[#E8EDE8] text-[#1F3A2E] font-semibold">
                             {sample.sector}
                           </span>
                         </div>
                       </td>
 
                       <td className="py-3 px-4">
-                        <div className="text-slate-200 text-xs font-medium">
+                        <div className="text-[#1A1A1A] text-xs font-semibold">
                           {sample.factoryName.split('-')[0]}
                         </div>
-                        <div className="text-[10px] text-slate-400">
+                        <div className="text-[10px] text-[#6B7269]">
                           Due: {sample.targetDeliveryDate}
                         </div>
                       </td>
 
                       <td className="py-3 px-4">
-                        <div className="font-medium text-white flex items-center gap-1">
+                        <div className="font-semibold text-[#1A1A1A] flex items-center gap-1">
                           <span>{sample.buyerCompany}</span>
-                          <span className="px-1 py-0.2 rounded bg-blue-500/20 text-blue-300 font-mono text-[9px] border border-blue-500/30">
+                          <span className="px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-mono text-[9px] font-bold">
                             {sample.targetMarket}
                           </span>
                         </div>
-                        <div className="text-[10px] text-slate-400 truncate max-w-[160px]">
+                        <div className="text-[10px] text-[#6B7269] truncate max-w-[160px]">
                           {sample.buyerContact.split('(')[0]}
                         </div>
                       </td>
 
                       <td className="py-3 px-4">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border ${stageCfg.badgeColor}`}
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${stageCfg.badgeColor}`}
                         >
                           {sample.stage}
                           <span className="text-[9px] opacity-75">(R{sample.roundNumber})</span>
@@ -603,23 +603,23 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       <td className="py-3 px-4">
                         {sample.courier ? (
                           <div>
-                            <div className="flex items-center gap-1 font-mono text-cyan-300 text-[11px]">
+                            <div className="flex items-center gap-1 font-mono text-[#0369A1] font-semibold text-[11px]">
                               <span>{sample.courier.courier.split(' ')[0]}</span>
-                              <span className="text-slate-400">•</span>
+                              <span className="text-[#6B7269]">•</span>
                               <span className="truncate max-w-[100px]">{sample.courier.awbNumber}</span>
                             </div>
-                            <div className="text-[10px] text-slate-400 truncate max-w-[130px]">
-                              {sample.courier.transitStatus.replace('_', ' ')}
+                            <div className="text-[10px] text-[#6B7269] truncate max-w-[130px]">
+                              {sample.courier.transitStatus.replace(/_/g, ' ')}
                             </div>
                           </div>
                         ) : (
-                          <span className="text-[10px] text-slate-400 italic">No AWB yet</span>
+                          <span className="text-[10px] text-[#6B7269] italic">No AWB yet</span>
                         )}
                       </td>
 
                       <td className="py-3 px-4">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}
                         >
                           <StatusIcon className="w-3 h-3" />
                           <span>{statusCfg.label}</span>
@@ -627,10 +627,10 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       </td>
 
                       <td className="py-3 px-4 font-mono">
-                        <div className="text-white font-medium">
+                        <div className="text-[#1F3A2E] font-bold">
                           ${sample.costing.totalCostUsd}
                         </div>
-                        <div className="text-[10px] text-slate-400">
+                        <div className="text-[10px] text-[#6B7269]">
                           {sample.costing.billingParty.split('_')[0]}
                         </div>
                       </td>
@@ -641,7 +641,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                             e.stopPropagation();
                             setSelectedSample(sample);
                           }}
-                          className="px-2.5 py-1 rounded bg-slate-800 hover:bg-purple-600 hover:text-white text-slate-300 text-[11px] transition-colors border border-slate-700"
+                          className="px-2.5 py-1 rounded bg-white hover:bg-[#1F3A2E] hover:text-white text-[#1A1A1A] text-[11px] transition-colors border border-[#DDE3DD] font-semibold shadow-sm"
                         >
                           Inspect SDO
                         </button>
@@ -661,11 +661,11 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
             return (
               <div
                 key={col.id}
-                className={`p-3 rounded-xl border ${col.color} bg-slate-950/40 flex flex-col min-h-[500px]`}
+                className="p-3.5 rounded-xl border border-[#DDE3DD] bg-[#E8EDE8] flex flex-col min-h-[500px]"
               >
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-3">
-                  <span className="text-xs font-semibold text-slate-200">{col.title}</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                <div className="flex items-center justify-between pb-3 border-b border-[#DDE3DD] mb-3">
+                  <span className="text-xs font-bold text-[#1F3A2E] font-montserrat">{col.title}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white text-[#1F3A2E] font-bold border border-[#DDE3DD]">
                     {colSamples.length}
                   </span>
                 </div>
@@ -677,30 +677,30 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       <div
                         key={sample.id}
                         onClick={() => setSelectedSample(sample)}
-                        className="p-3 rounded-lg bg-slate-900 border border-slate-800 hover:border-purple-500/60 transition-all cursor-pointer shadow hover:shadow-purple-500/10 space-y-2 group"
+                        className="p-3.5 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#C8A96A] transition-all cursor-pointer shadow-sm space-y-2 group"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-mono text-[10px] text-purple-400 font-semibold">
+                          <span className="font-mono text-[10px] text-[#1F3A2E] font-bold">
                             {sample.sdoNumber}
                           </span>
                           <span
-                            className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${stageCfg.badgeColor}`}
+                            className={`text-[9px] font-mono px-1.5 py-0.5 rounded border font-semibold ${stageCfg.badgeColor}`}
                           >
                             {sample.stage} R{sample.roundNumber}
                           </span>
                         </div>
 
-                        <div className="text-xs font-semibold text-white group-hover:text-purple-300 transition-colors line-clamp-1">
+                        <div className="text-xs font-bold text-[#1A1A1A] group-hover:text-[#1F3A2E] transition-colors line-clamp-1 font-montserrat">
                           {sample.styleName}
                         </div>
 
-                        <div className="text-[10px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/60">
-                          <span className="truncate max-w-[110px]">{sample.buyerCompany}</span>
-                          <span className="text-emerald-400 font-mono">${sample.costing.totalCostUsd}</span>
+                        <div className="text-[10px] text-[#6B7269] flex items-center justify-between pt-1 border-t border-[#DDE3DD]">
+                          <span className="truncate max-w-[110px] font-medium text-[#1A1A1A]">{sample.buyerCompany}</span>
+                          <span className="text-[#14512C] font-mono font-bold">${sample.costing.totalCostUsd}</span>
                         </div>
 
                         {sample.courier && (
-                          <div className="text-[9px] font-mono text-cyan-400 bg-cyan-950/30 px-1.5 py-0.5 rounded border border-cyan-800/40 flex items-center justify-between">
+                          <div className="text-[9px] font-mono text-[#0369A1] bg-[#E0F2FE] px-1.5 py-0.5 rounded border border-[#BAE6FD] flex items-center justify-between font-semibold">
                             <span>{sample.courier.courier.split(' ')[0]}</span>
                             <span className="truncate max-w-[80px]">{sample.courier.awbNumber}</span>
                           </div>
@@ -710,7 +710,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   })}
 
                   {colSamples.length === 0 && (
-                    <div className="h-32 flex items-center justify-center text-[11px] text-slate-400 italic">
+                    <div className="h-32 flex items-center justify-center text-[11px] text-[#6B7269] italic">
                       No samples in this stage
                     </div>
                   )}

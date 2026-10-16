@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "ArielMC Enterprise ERP | Global Sourcing & Supply Chain",
   description: "Enterprise ERP for Ariel Marketing & Communications Limited (ArielMC) - B2B Export & D2C Brand Management",
+  icons: {
+    icon: "/images/ArielMC_Logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -12,10 +15,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full dark" suppressHydrationWarning>
+    <html lang="en" className="h-full light" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         suppressHydrationWarning
-        className="min-h-full flex flex-col bg-[#090d16] text-slate-100 antialiased selection:bg-blue-600 selection:text-white"
+        className="min-h-full flex flex-col bg-[#F4F6F4] text-[#1A1A1A] antialiased selection:bg-[#C9A86A] selection:text-[#0A1A2F]"
       >
         {children}
       </body>

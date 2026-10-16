@@ -60,58 +60,58 @@ const ORDER_STATUS_CONFIG: Record<
 > = {
   DRAFT: {
     label: 'Draft',
-    bg: 'bg-slate-800/60',
-    text: 'text-slate-400',
-    border: 'border-slate-700/60',
+    bg: 'bg-[#F4F6F4]',
+    text: 'text-[#6B7269]',
+    border: 'border-[#DDE3DD]',
     icon: Clock,
   },
   CONFIRMED: {
     label: 'Confirmed / L/C Opened',
-    bg: 'bg-blue-950/40',
-    text: 'text-blue-400',
-    border: 'border-blue-800/60',
+    bg: 'bg-[#E8F0FA]',
+    text: 'text-[#17456F]',
+    border: 'border-[#C5D7ED]',
     icon: FileCheck,
   },
   IN_PRODUCTION: {
     label: 'In Factory Production',
-    bg: 'bg-amber-950/40',
-    text: 'text-amber-400',
-    border: 'border-amber-800/60',
+    bg: 'bg-[#FEF6E4]',
+    text: 'text-[#7A5508]',
+    border: 'border-[#FBE3B0]',
     icon: Factory,
   },
   QUALITY_INSPECTION: {
     label: 'QA / AQL Inspection',
-    bg: 'bg-purple-950/40',
-    text: 'text-purple-400',
-    border: 'border-purple-800/60',
+    bg: 'bg-[#EDE7F6]',
+    text: 'text-[#4A2E7A]',
+    border: 'border-[#D6C7EC]',
     icon: ShieldCheck,
   },
   READY_TO_SHIP: {
     label: 'Ready for Chittagong',
-    bg: 'bg-emerald-950/40',
-    text: 'text-emerald-400',
-    border: 'border-emerald-800/60',
+    bg: 'bg-[#E4F3E9]',
+    text: 'text-[#14512C]',
+    border: 'border-[#BBE3C7]',
     icon: CheckCircle2,
   },
   SHIPPED_CHITTAGONG: {
     label: 'Shipped (Ocean/Air Transit)',
-    bg: 'bg-cyan-950/40',
-    text: 'text-cyan-400',
-    border: 'border-cyan-800/60',
+    bg: 'bg-[#E0F2FE]',
+    text: 'text-[#0369A1]',
+    border: 'border-[#BAE6FD]',
     icon: Ship,
   },
   FULFILLED: {
     label: 'Delivered & Settled',
-    bg: 'bg-emerald-900/40',
-    text: 'text-emerald-300',
-    border: 'border-emerald-500/50',
+    bg: 'bg-[#E4F3E9]',
+    text: 'text-[#14512C]',
+    border: 'border-[#BBE3C7]',
     icon: CheckCircle2,
   },
   CANCELLED: {
     label: 'Cancelled',
-    bg: 'bg-red-950/40',
-    text: 'text-red-400',
-    border: 'border-red-800/60',
+    bg: 'bg-[#FDEAEA]',
+    text: 'text-[#8A1515]',
+    border: 'border-[#F7C0C0]',
     icon: AlertCircle,
   },
 };
@@ -165,21 +165,21 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner / Hero */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-sky-950/40 to-slate-900 border border-slate-800 shadow-xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] shadow-md text-white">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-400 font-mono text-xs font-semibold border border-sky-500/30">
+            <span className="px-2.5 py-0.5 rounded-full bg-white/15 text-[#C8A96A] font-mono text-xs font-semibold border border-white/20">
               PHASE 5: LIVE
             </span>
-            <span className="text-xs text-slate-400 font-mono">
+            <span className="text-xs text-white/80 font-mono">
               Two-Way Back-to-Back Order Synchronization Engine
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-            <Repeat className="w-6 h-6 text-sky-400" />
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5 font-montserrat">
+            <Repeat className="w-6 h-6 text-[#C8A96A]" />
             Two-Way Order Management (OMS)
           </h1>
-          <p className="text-xs text-slate-400 max-w-2xl">
+          <p className="text-xs text-white/80 max-w-2xl leading-relaxed">
             Synchronize Buyer Sales Orders (SO in GBP, USD, EUR, AUD) back-to-back with Bangladesh Factory Purchase Orders (PO in BDT/USD). Lock in gross margins, enforce Time & Action (T&A) milestones, and manage digital AQL inspections.
           </p>
         </div>
@@ -187,7 +187,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition-all shadow-lg shadow-sky-600/30"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#8A6D3B] text-[#0A1A2F] font-bold text-xs transition-all shadow-md font-montserrat"
           >
             <Plus className="w-4 h-4" />
             <span>Create Back-to-Back Order</span>
@@ -197,77 +197,77 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
 
       {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">Total Pipeline Value</div>
-          <div className="text-xl font-bold font-mono text-white mt-0.5">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">Total Pipeline Value</div>
+          <div className="text-xl font-bold font-mono text-[#1F3A2E] mt-0.5">
             ${totalOrderValueUsd.toLocaleString()}
           </div>
-          <div className="text-[10px] text-slate-400 mt-0.5">{orders.length} Active Orders</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">{orders.length} Active Orders</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">Total Factory POs</div>
-          <div className="text-xl font-bold font-mono text-slate-200 mt-0.5">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">Total Factory POs</div>
+          <div className="text-xl font-bold font-mono text-[#8A5A00] mt-0.5">
             ${totalFactorySpendUsd.toLocaleString()}
           </div>
-          <div className="text-[10px] text-slate-400 mt-0.5">BDT / USD Allocation</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">BDT / USD Allocation</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium flex items-center justify-between">
             <span>Net Gross Margin</span>
-            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+            <TrendingUp className="w-3.5 h-3.5 text-[#14512C]" />
           </div>
-          <div className="text-xl font-bold font-mono text-emerald-400 mt-0.5">
+          <div className="text-xl font-bold font-mono text-[#14512C] mt-0.5">
             ${totalNetMarginUsd.toLocaleString()}
           </div>
-          <div className="text-[10px] text-emerald-400 font-mono mt-0.5">
+          <div className="text-[10px] text-[#14512C] font-mono mt-0.5 font-semibold">
             Avg {averageMarginPct}% Protected
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium flex items-center justify-between">
             <span>In Fabrication</span>
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[#7A5508] animate-pulse" />
           </div>
-          <div className="text-xl font-bold font-mono text-amber-400 mt-0.5">
+          <div className="text-xl font-bold font-mono text-[#7A5508] mt-0.5">
             {activeInProduction} Orders
           </div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Active Sewing & Kilns</div>
+          <div className="text-[10px] text-[#6B7269] mt-0.5">Active Sewing & Kilns</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400">AQL QA Stage</div>
-          <div className="text-xl font-bold font-mono text-purple-300 mt-0.5">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium">AQL QA Stage</div>
+          <div className="text-xl font-bold font-mono text-[#4A2E7A] mt-0.5">
             {inInspection} Orders
           </div>
-          <div className="text-[10px] text-purple-400 mt-0.5">Pre-Shipment FRI</div>
+          <div className="text-[10px] text-[#4A2E7A] mt-0.5">Pre-Shipment FRI</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
-          <div className="text-[11px] text-slate-400 flex items-center justify-between">
+        <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+          <div className="text-[11px] text-[#6B7269] uppercase font-medium flex items-center justify-between">
             <span>Ocean / Air Transit</span>
-            <Ship className="w-3.5 h-3.5 text-cyan-400" />
+            <Ship className="w-3.5 h-3.5 text-[#0369A1]" />
           </div>
-          <div className="text-xl font-bold font-mono text-cyan-400 mt-0.5">
+          <div className="text-xl font-bold font-mono text-[#0369A1] mt-0.5">
             {inOceanTransit} Orders
           </div>
-          <div className="text-[10px] text-cyan-400 mt-0.5">Ex-Chittagong Port</div>
+          <div className="text-[10px] text-[#0369A1] mt-0.5">Ex-Chittagong Port</div>
         </div>
       </div>
 
       {/* Control Bar: Search & Filters */}
-      <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3 w-full md:w-auto flex-1">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#6B7269] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search SO #, PO #, Buyer, Factory, Master L/C, SKU..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-500"
+              className="w-full pl-9 pr-4 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] placeholder-[#6B7269] focus:outline-none focus:border-[#1F3A2E]"
             />
           </div>
 
@@ -275,7 +275,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           <select
             value={selectedMarket}
             onChange={(e) => setSelectedMarket(e.target.value as any)}
-            className="px-3 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500"
+            className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
             <option value="ALL">All Target Zones</option>
             <option value="UK">🇬🇧 United Kingdom (GBP)</option>
@@ -288,7 +288,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value as any)}
-            className="px-3 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500"
+            className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
             <option value="ALL">All Sectors</option>
             <option value="LEATHER">Leather Goods</option>
@@ -301,7 +301,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as any)}
-            className="px-3 py-2 bg-slate-950/80 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-sky-500"
+            className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
             <option value="ALL">All Statuses</option>
             <option value="CONFIRMED">Confirmed / L/C Opened</option>
@@ -314,23 +314,23 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
       </div>
 
       {/* Orders Table */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-lg">
+      <div className="rounded-xl border border-[#DDE3DD] bg-white overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/80 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                <th className="py-3 px-4">Sales Order (SO)</th>
-                <th className="py-3 px-4">Buyer & Market</th>
-                <th className="py-3 px-4">Items & Quantity</th>
-                <th className="py-3 px-4">Factory PO Mirror</th>
-                <th className="py-3 px-4">Order Value (Buyer)</th>
-                <th className="py-3 px-4">Factory Cost</th>
-                <th className="py-3 px-4">Locked Margin</th>
-                <th className="py-3 px-4">Status & T&A</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+              <tr className="border-b border-[#DDE3DD] bg-[#1F3A2E] text-[11px] font-semibold text-white uppercase tracking-wider font-montserrat">
+                <th className="py-3.5 px-4">Sales Order (SO)</th>
+                <th className="py-3.5 px-4">Buyer & Market</th>
+                <th className="py-3.5 px-4">Items & Quantity</th>
+                <th className="py-3.5 px-4">Factory PO Mirror</th>
+                <th className="py-3.5 px-4">Order Value (Buyer)</th>
+                <th className="py-3.5 px-4">Factory Cost</th>
+                <th className="py-3.5 px-4">Locked Margin</th>
+                <th className="py-3.5 px-4">Status & T&A</th>
+                <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-[#DDE3DD] text-[#1A1A1A]">
               {filteredOrders.map((order) => {
                 const statusCfg = ORDER_STATUS_CONFIG[order.status];
                 const StatusIcon = statusCfg.icon;
@@ -341,57 +341,57 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                 return (
                   <tr
                     key={order.id}
-                    className="hover:bg-slate-800/40 transition-colors cursor-pointer group"
+                    className="hover:bg-[#F7FAF8] transition-colors cursor-pointer group"
                     onClick={() => setSelectedOrder(order)}
                   >
-                    <td className="py-3 px-4 font-mono font-medium text-white">
+                    <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-sky-400">{order.soNumber}</span>
+                        <span className="font-bold text-[#1F3A2E]">{order.soNumber}</span>
                         {order.inspections.length > 0 && (
                           <span
                             title="AQL Quality Inspection Certificate on File"
-                            className="p-0.5 rounded bg-emerald-500/20 text-emerald-300"
+                            className="p-0.5 rounded bg-[#E4F3E9] text-[#14512C]"
                           >
                             <ShieldCheck className="w-3 h-3 inline" />
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] text-slate-400 block font-sans">
+                      <span className="text-[10px] text-[#6B7269] block font-sans font-normal">
                         Ordered: {order.orderDate}
                       </span>
                     </td>
 
                     <td className="py-3 px-4">
-                      <div className="font-semibold text-white flex items-center gap-1.5">
+                      <div className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
                         <span>{order.buyerCompany}</span>
-                        <span className="px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 font-mono text-[9px] border border-blue-500/30">
+                        <span className="px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-mono text-[9px] font-bold">
                           {order.targetMarket}
                         </span>
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate max-w-[150px]">
+                      <div className="text-[10px] text-[#6B7269] truncate max-w-[150px]">
                         {order.incoterm}
                       </div>
                     </td>
 
                     <td className="py-3 px-4">
-                      <div className="font-medium text-slate-200">
+                      <div className="font-semibold text-[#1A1A1A]">
                         {order.items[0]?.styleName}
                       </div>
-                      <div className="text-[10px] text-slate-400 font-mono">
+                      <div className="text-[10px] text-[#6B7269] font-mono">
                         {order.totalQuantity.toLocaleString()} pcs • {order.items[0]?.sector}
                       </div>
                     </td>
 
                     <td className="py-3 px-4">
-                      <div className="font-mono text-amber-400 text-[11px] font-semibold">
+                      <div className="font-mono text-[#8A5A00] text-[11px] font-bold">
                         {order.linkedPo.poNumber}
                       </div>
-                      <div className="text-[10px] text-slate-300 truncate max-w-[160px]">
+                      <div className="text-[10px] text-[#6B7269] truncate max-w-[160px]">
                         {order.linkedPo.factoryName.split('-')[0]}
                       </div>
                     </td>
 
-                    <td className="py-3 px-4 font-mono font-medium text-white">
+                    <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                       <div>
                         {order.currency === 'GBP'
                           ? `£${order.totalAmountBuyerCurrency.toLocaleString()}`
@@ -401,45 +401,45 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           ? `A$${order.totalAmountBuyerCurrency.toLocaleString()}`
                           : `$${order.totalAmountBuyerCurrency.toLocaleString()}`}
                       </div>
-                      <div className="text-[10px] text-slate-400 font-sans">
+                      <div className="text-[10px] text-[#6B7269] font-sans font-normal">
                         ≈ ${order.totalAmountUsd.toLocaleString()} USD
                       </div>
                     </td>
 
                     <td className="py-3 px-4 font-mono">
-                      <div className="text-slate-200 font-medium">
+                      <div className="text-[#1A1A1A] font-medium">
                         ৳{(order.linkedPo.totalCostBdt / 100000).toFixed(1)} Lakh
                       </div>
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-[10px] text-[#6B7269]">
                         ${order.linkedPo.totalCostUsd.toLocaleString()} USD
                       </div>
                     </td>
 
                     <td className="py-3 px-4 font-mono">
-                      <div className="text-emerald-400 font-bold">
+                      <div className="text-[#14512C] font-bold">
                         ${order.marginProtection.netMarginUsd.toLocaleString()}
                       </div>
-                      <div className="text-[10px] text-emerald-300 font-sans font-medium flex items-center gap-1">
+                      <div className="text-[10px] text-[#14512C] font-sans font-semibold flex items-center gap-1">
                         <span>{order.marginProtection.marginPercentage}% Locked</span>
                       </div>
                     </td>
 
                     <td className="py-3 px-4">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}
                       >
                         <StatusIcon className="w-3 h-3" />
                         <span>{statusCfg.label}</span>
                       </span>
 
                       {/* T&A progress bar */}
-                      <div className="mt-1.5 w-28 bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                      <div className="mt-1.5 w-28 bg-[#E8EDE8] rounded-full h-1.5 overflow-hidden">
                         <div
-                          className="bg-sky-500 h-full rounded-full transition-all"
+                          className="bg-[#1F3A2E] h-full rounded-full transition-all"
                           style={{ width: `${tnaProgressPct}%` }}
                         />
                       </div>
-                      <div className="text-[9px] text-slate-400 mt-0.5">
+                      <div className="text-[9px] text-[#6B7269] mt-0.5">
                         T&A: {completedTna}/{totalTna} Milestones ({tnaProgressPct}%)
                       </div>
                     </td>

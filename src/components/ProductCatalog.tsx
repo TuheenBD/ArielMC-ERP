@@ -71,25 +71,25 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         return {
           label: 'Leather Goods',
           icon: '👞',
-          color: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+          color: 'bg-[#FAF5EC] text-[#8A6D3B] border-[#C8A96A]',
         };
       case 'JUTE':
         return {
           label: 'Jute & Diversified',
           icon: '🌾',
-          color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+          color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]',
         };
       case 'TEXTILE':
         return {
           label: 'Home Textiles',
           icon: '🧵',
-          color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
+          color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]',
         };
       case 'CERAMICS':
         return {
           label: 'Ceramics & Pottery',
           icon: '🏺',
-          color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+          color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
         };
     }
   };
@@ -99,22 +99,22 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       case 'BUYER_APPROVED':
         return {
           label: 'Buyer Approved',
-          color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+          color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]',
         };
       case 'IN_BULK_PRODUCTION':
         return {
           label: 'In Bulk Production',
-          color: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+          color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]',
         };
       case 'DEVELOPMENT_PASSED':
         return {
           label: 'R&D Passed',
-          color: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+          color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
         };
       case 'PROTO_REQUESTED':
         return {
           label: 'Proto Requested',
-          color: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+          color: 'bg-[#FEF6E4] text-[#7A5508] border-[#FBE3B0]',
         };
     }
   };
@@ -124,30 +124,30 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       {/* Top Action Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <Package className="w-5 h-5 text-blue-400" />
+          <h2 className="text-xl font-bold font-heading text-[#1F3A2E] flex items-center gap-2">
+            <Package className="w-5 h-5 text-[#1F3A2E]" />
             <span>Master Product Catalog & Dynamic Taxonomy</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#6B7269] mt-0.5">
             Technical specs, Bangladesh factory costs, locked sourcing margins, and export compliance.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* View mode toggle */}
-          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-1 text-xs">
+          <div className="flex items-center bg-white border border-[#DDE3DD] rounded-lg p-0.5 text-xs shadow-sm">
             <button
               onClick={() => setViewMode('GRID')}
-              className={`px-3 py-1 rounded-md font-medium transition-colors ${
-                viewMode === 'GRID' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1 rounded-md font-semibold transition-colors ${
+                viewMode === 'GRID' ? 'bg-[#1F3A2E] text-white shadow-sm' : 'text-[#6B7269] hover:text-[#1A1A1A]'
               }`}
             >
               Grid View
             </button>
             <button
               onClick={() => setViewMode('TABLE')}
-              className={`px-3 py-1 rounded-md font-medium transition-colors ${
-                viewMode === 'TABLE' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              className={`px-3 py-1 rounded-md font-semibold transition-colors ${
+                viewMode === 'TABLE' ? 'bg-[#1F3A2E] text-white shadow-sm' : 'text-[#6B7269] hover:text-[#1A1A1A]'
               }`}
             >
               Table View
@@ -158,23 +158,23 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           <button
             id="add-new-sku-btn"
             onClick={onOpenAddModal}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-[#C8A96A]" />
             <span>Create Master SKU</span>
           </button>
         </div>
       </div>
 
       {/* Filter Tabs by Sector */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DDE3DD] pb-4">
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setSelectedSector('ALL')}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               selectedSector === 'ALL'
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                ? 'bg-[#1F3A2E] text-white shadow-sm'
+                : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border border-[#DDE3DD]'
             }`}
           >
             All Sectors ({products.length})
@@ -191,13 +191,13 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 onClick={() => setSelectedSector(sector)}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
                   isSelected
-                    ? 'bg-slate-800 text-white border-blue-500 shadow-sm shadow-blue-500/20 ring-1 ring-blue-500/40'
-                    : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700'
+                    ? 'bg-[#1F3A2E] text-white border-[#1F3A2E] shadow-sm'
+                    : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border-[#DDE3DD]'
                 }`}
               >
                 <span>{badge.icon}</span>
                 <span>{badge.label}</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300">
+                <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#F0F4F1] text-[#1A1A1A]'}`}>
                   {count}
                 </span>
               </button>
@@ -207,11 +207,11 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
         {/* Target Market Selector */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-400 font-medium">Target Zone:</span>
+          <span className="text-[#6B7269] font-medium">Target Zone:</span>
           <select
             value={selectedMarket}
             onChange={(e) => setSelectedMarket(e.target.value)}
-            className="bg-slate-900 text-xs font-medium text-slate-200 border border-slate-800 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
+            className="bg-white text-xs font-medium text-[#1A1A1A] border border-[#DDE3DD] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#1F3A2E] shadow-sm"
           >
             <option value="ALL">All Markets (UK / EU / US / AU)</option>
             <option value="UK">🇬🇧 United Kingdom</option>
@@ -232,20 +232,20 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             return (
               <div
                 key={prod.id}
-                className="group rounded-xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 flex flex-col justify-between overflow-hidden shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/5"
+                className="group rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md text-[#1A1A1A]"
               >
                 <div className="p-5 space-y-4">
                   {/* Top: Sector & SKU */}
                   <div className="flex items-start justify-between gap-2">
                     <span
-                      className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border ${sectorBadge.color}`}
+                      className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${sectorBadge.color}`}
                     >
                       <span>{sectorBadge.icon}</span>
                       <span>{sectorBadge.label}</span>
                     </span>
 
                     <span
-                      className={`text-[10px] font-mono px-2 py-0.5 rounded border ${statusBadge.color}`}
+                      className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${statusBadge.color}`}
                     >
                       {statusBadge.label}
                     </span>
@@ -254,30 +254,30 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   {/* Product Title & Category */}
                   <div>
                     <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                      <span className="font-mono text-slate-300 font-semibold text-xs bg-slate-950/80 px-2 py-0.5 rounded border border-slate-800">
+                      <span className="font-mono text-[#1F3A2E] font-semibold text-xs bg-[#F4F6F4] px-2 py-0.5 rounded border border-[#DDE3DD]">
                         {prod.sku}
                       </span>
                       {prod.styleCode && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-700/40 font-semibold">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-semibold">
                           Style {prod.styleCode}
                         </span>
                       )}
                       {prod.eanBarcode && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-600/40 flex items-center gap-1 font-semibold">
-                          <Barcode className="w-3 h-3 text-amber-400" />
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] flex items-center gap-1 font-semibold">
+                          <Barcode className="w-3 h-3 text-[#7A5508]" />
                           {prod.eanBarcode}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors line-clamp-2">
+                    <h3 className="text-sm font-bold font-heading text-[#1F3A2E] group-hover:text-[#8A6D3B] transition-colors line-clamp-2">
                       {prod.name}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-400 flex-wrap">
+                    <div className="flex items-center gap-2 mt-1.5 text-xs text-[#6B7269] flex-wrap">
                       <span>HS {prod.hsCode}</span>
                       {prod.packagingMode && (
                         <>
                           <span>•</span>
-                          <span className="text-[11px] text-slate-300 font-medium bg-slate-950/60 px-2 py-0.5 rounded border border-slate-800">
+                          <span className="text-[11px] text-[#1A1A1A] font-medium bg-[#F8FAF8] px-2 py-0.5 rounded border border-[#DDE3DD]">
                             📦 {prod.packagingMode}
                           </span>
                         </>
@@ -286,37 +286,37 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   </div>
 
                   {/* Sourcing Partner & Bangladesh Region */}
-                  <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs space-y-1.5">
-                    <div className="flex items-center justify-between text-slate-300">
-                      <span className="flex items-center gap-1.5 text-slate-400 text-[11px]">
-                        <Factory className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="p-3 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] text-xs space-y-1.5">
+                    <div className="flex items-center justify-between text-[#1A1A1A]">
+                      <span className="flex items-center gap-1.5 text-[#6B7269] text-[11px]">
+                        <Factory className="w-3.5 h-3.5 text-[#8A6D3B]" />
                         <span>Sourcing Factory:</span>
                       </span>
-                      <span className="font-semibold text-white truncate max-w-[150px]">
+                      <span className="font-semibold text-[#1F3A2E] truncate max-w-[150px]">
                         {prod.partnerFactory.factoryName}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-400">
+                    <div className="flex items-center justify-between text-[11px] text-[#6B7269]">
                       <span>{prod.partnerFactory.location}</span>
-                      <span className="text-slate-300 font-mono">
+                      <span className="text-[#1A1A1A] font-mono font-medium">
                         Lead: {prod.partnerFactory.leadTimeDays}d • MOQ: {prod.partnerFactory.moq}
                       </span>
                     </div>
                   </div>
 
                   {/* Sector Key Attributes Summary */}
-                  <div className="text-[11px] text-slate-300 bg-slate-900/90 rounded-lg p-2.5 border border-slate-800 space-y-1">
+                  <div className="text-[11px] text-[#1A1A1A] bg-[#F4F6F4] rounded-lg p-2.5 border border-[#DDE3DD] space-y-1">
                     {prod.sector === 'LEATHER' && prod.attributes.sector === 'LEATHER' && (
                       <>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Leather:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Leather:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.leatherType} {prod.attributes.data.hideOrigin} ({prod.attributes.data.tanningMethod})
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Hardware & Certification:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Hardware & Certification:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.hardwareFinish} • LWG {prod.attributes.data.lwgCertification}
                           </span>
                         </div>
@@ -326,14 +326,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     {prod.sector === 'JUTE' && prod.attributes.sector === 'JUTE' && (
                       <>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Weave & GSM:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Weave & GSM:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.construction} • {prod.attributes.data.weightGsm} GSM
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Lamination:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Lamination:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.lamination}
                           </span>
                         </div>
@@ -343,14 +343,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     {prod.sector === 'TEXTILE' && prod.attributes.sector === 'TEXTILE' && (
                       <>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Fabric & TC:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Fabric & TC:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.composition} • {prod.attributes.data.threadCount} TC
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Weave & Finish:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Weave & Finish:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.weaveType} • {prod.attributes.data.finishType}
                           </span>
                         </div>
@@ -360,14 +360,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     {prod.sector === 'CERAMICS' && prod.attributes.sector === 'CERAMICS' && (
                       <>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Body & Glaze:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Body & Glaze:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.clayBody} • {prod.attributes.data.glazeType}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400">Firing & Food Safety:</span>
-                          <span className="font-medium text-slate-200">
+                          <span className="text-[#6B7269]">Firing & Food Safety:</span>
+                          <span className="font-medium text-[#1A1A1A]">
                             {prod.attributes.data.firingTempCelsius}°C • {prod.attributes.data.foodContactSafety.split(' ')[0]}
                           </span>
                         </div>
@@ -378,26 +378,26 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   {/* Multi-Tier Commercial Pricing Matrix */}
                   <div className="space-y-1.5 pt-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Factory Base:</span>
-                      <span className="font-mono text-slate-300">
+                      <span className="text-[#6B7269]">Factory Base:</span>
+                      <span className="font-mono text-[#1A1A1A]">
                         ৳{prod.costing.factoryCostBdt.toLocaleString()} (${prod.costing.factoryCostUsd})
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Ariel Locked Margin:</span>
-                      <span className="font-mono text-emerald-400 font-semibold">
+                      <span className="text-[#6B7269]">Ariel Locked Margin:</span>
+                      <span className="font-mono text-[#14512C] font-bold">
                         +{prod.costing.arielSourcingMarginPct}%
                       </span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-blue-950/30 border border-blue-500/20 text-xs">
-                      <span className="text-blue-300 font-medium">B2B FOB Chattogram:</span>
-                      <span className="font-mono font-bold text-white text-sm">
+                    <div className="flex items-center justify-between p-2 rounded-lg bg-[#E4F3E9] border border-[#BBE3C7] text-xs">
+                      <span className="text-[#14512C] font-semibold">B2B FOB Chattogram:</span>
+                      <span className="font-mono font-bold text-[#14512C] text-sm">
                         {formatPrice(prod.costing.b2bFobPriceUsd)}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                    <div className="flex items-center justify-between text-[11px] text-[#6B7269] px-1">
                       <span>D2C Retail (Amazon/Shopify):</span>
-                      <span className="font-mono text-amber-300 font-semibold">
+                      <span className="font-mono text-[#8A6D3B] font-bold">
                         {formatPrice(prod.costing.d2cRetailPriceUsd)}
                       </span>
                     </div>
@@ -405,12 +405,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 </div>
 
                 {/* Card Action */}
-                <div className="p-3 border-t border-slate-800 bg-slate-950/40 flex items-center justify-between">
+                <div className="p-3 border-t border-[#DDE3DD] bg-[#F8FAF8] flex items-center justify-between">
                   <div className="flex items-center gap-1">
                     {prod.targetMarkets.map((m) => (
                       <span
                         key={m}
-                        className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold"
+                        className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white text-[#1F3A2E] border border-[#DDE3DD] font-semibold"
                       >
                         {m}
                       </span>
@@ -419,7 +419,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
                   <button
                     onClick={() => onSelectProduct(prod)}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
                   >
                     <span>View Tech Specs & BOM</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -431,78 +431,78 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         </div>
       ) : (
         /* Detailed Table View */
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-xl">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800">
+        <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+          <table className="w-full text-left text-xs text-[#1A1A1A]">
+            <thead className="bg-[#1F3A2E] text-white uppercase text-[11px] font-semibold tracking-wider">
               <tr>
-                <th className="py-3 px-4">Master SKU & Name</th>
-                <th className="py-3 px-4">Sector</th>
-                <th className="py-3 px-4">HS Code</th>
-                <th className="py-3 px-4">BD Sourcing Factory</th>
-                <th className="py-3 px-4">Factory Cost</th>
-                <th className="py-3 px-4">B2B FOB Ctg</th>
-                <th className="py-3 px-4">D2C Retail</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3.5 px-4 font-heading">Master SKU & Name</th>
+                <th className="py-3.5 px-4 font-heading">Sector</th>
+                <th className="py-3.5 px-4 font-heading">HS Code</th>
+                <th className="py-3.5 px-4 font-heading">BD Sourcing Factory</th>
+                <th className="py-3.5 px-4 font-heading">Factory Cost</th>
+                <th className="py-3.5 px-4 font-heading">B2B FOB Ctg</th>
+                <th className="py-3.5 px-4 font-heading">D2C Retail</th>
+                <th className="py-3.5 px-4 font-heading">Status</th>
+                <th className="py-3.5 px-4 font-heading text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-[#DDE3DD]">
               {filteredProducts.map((prod) => {
                 const sectorBadge = getSectorBadge(prod.sector);
                 const statusBadge = getSampleStatusBadge(prod.sampleStatus);
 
                 return (
-                  <tr key={prod.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={prod.id} className="hover:bg-[#F7FAF8] transition-colors">
                     <td className="py-3 px-4">
-                      <div className="font-bold text-white text-xs">{prod.name}</div>
+                      <div className="font-bold text-[#1F3A2E] text-xs">{prod.name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                        <span className="font-mono text-slate-300 font-semibold text-[11px]">{prod.sku}</span>
+                        <span className="font-mono text-[#1F3A2E] font-semibold text-[11px] bg-[#F4F6F4] px-1.5 py-0.5 rounded border border-[#DDE3DD]">{prod.sku}</span>
                         {prod.styleCode && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-300 border border-blue-800 font-semibold">
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-semibold">
                             Style {prod.styleCode}
                           </span>
                         )}
                         {prod.eanBarcode && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-700/60 flex items-center gap-1 font-semibold">
-                            <Barcode className="w-2.5 h-2.5 text-amber-400" />
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] flex items-center gap-1 font-semibold">
+                            <Barcode className="w-2.5 h-2.5 text-[#7A5508]" />
                             {prod.eanBarcode}
                           </span>
                         )}
                       </div>
                       {prod.packagingMode && (
-                        <div className="text-[10px] text-slate-400 mt-1">
+                        <div className="text-[10px] text-[#6B7269] mt-1">
                           📦 {prod.packagingMode}
                         </div>
                       )}
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded-full border text-[11px] ${sectorBadge.color}`}>
+                      <span className={`px-2 py-0.5 rounded-full border text-[11px] font-semibold ${sectorBadge.color}`}>
                         {sectorBadge.label}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-mono text-slate-300">{prod.hsCode}</td>
+                    <td className="py-3 px-4 font-mono text-[#6B7269]">{prod.hsCode}</td>
                     <td className="py-3 px-4">
-                      <div className="text-slate-200 font-medium">{prod.partnerFactory.factoryName}</div>
-                      <div className="text-[10px] text-slate-400">{prod.partnerFactory.location}</div>
+                      <div className="text-[#1F3A2E] font-medium">{prod.partnerFactory.factoryName}</div>
+                      <div className="text-[10px] text-[#6B7269]">{prod.partnerFactory.location}</div>
                     </td>
                     <td className="py-3 px-4 font-mono">
                       ৳{prod.costing.factoryCostBdt} (${prod.costing.factoryCostUsd})
                     </td>
-                    <td className="py-3 px-4 font-mono font-bold text-white">
+                    <td className="py-3 px-4 font-mono font-bold text-[#14512C]">
                       {formatPrice(prod.costing.b2bFobPriceUsd)}
                     </td>
-                    <td className="py-3 px-4 font-mono font-semibold text-amber-400">
+                    <td className="py-3 px-4 font-mono font-semibold text-[#8A6D3B]">
                       {formatPrice(prod.costing.d2cRetailPriceUsd)}
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${statusBadge.color}`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${statusBadge.color}`}>
                         {statusBadge.label}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
                       <button
                         onClick={() => onSelectProduct(prod)}
-                        className="px-2.5 py-1 rounded bg-blue-600/20 text-blue-300 hover:bg-blue-600 hover:text-white border border-blue-500/30 text-xs font-medium transition-all"
+                        className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-semibold shadow-sm transition-all"
                       >
                         Inspect
                       </button>

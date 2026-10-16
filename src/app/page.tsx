@@ -163,7 +163,7 @@ export default function Home() {
   ).toFixed(1);
 
   return (
-    <div className="flex min-h-screen bg-[#070b14] text-slate-100 selection:bg-blue-600 selection:text-white">
+    <div className="flex min-h-screen bg-[#F4F6F4] text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#0A1A2F]">
       {/* Sidebar Navigation */}
       <Sidebar
         activeTab={activeTab}
@@ -189,54 +189,54 @@ export default function Home() {
         <main className="flex-1 p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
           {/* Top Key KPI Strip */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
-              <div className="flex items-center justify-between text-slate-400 text-xs">
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
                 <span>Operating Stations</span>
-                <Globe2 className="w-4 h-4 text-blue-400" />
+                <Globe2 className="w-4 h-4 text-[#1F5FA8]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-white mt-1">
-                5 <span className="text-xs text-slate-400 font-sans font-normal">Entities</span>
+              <div className="text-2xl font-bold font-mono text-[#1F3A2E] mt-1">
+                5 <span className="text-xs text-[#6B7269] font-sans font-normal">Entities</span>
               </div>
-              <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+              <div className="text-[11px] text-[#6B7269] mt-1 flex items-center gap-1 font-mono">
                 <span>🇧🇩 BD, 🇬🇧 UK, 🇺🇸 US, 🇪🇺 EU, 🇦🇺 AU</span>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
-              <div className="flex items-center justify-between text-slate-400 text-xs">
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
                 <span>Master Product SKUs</span>
-                <Package className="w-4 h-4 text-emerald-400" />
+                <Package className="w-4 h-4 text-[#1E6B3A]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-white mt-1">
-                {totalSkus} <span className="text-xs text-slate-400 font-sans font-normal">Registered</span>
+              <div className="text-2xl font-bold font-mono text-[#1E6B3A] mt-1">
+                {totalSkus} <span className="text-xs text-[#6B7269] font-sans font-normal">Registered</span>
               </div>
-              <div className="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+              <div className="text-[11px] text-[#1E6B3A] mt-1 flex items-center gap-1 font-medium">
                 <span>Leather, Jute, Textiles, Ceramics</span>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
-              <div className="flex items-center justify-between text-slate-400 text-xs">
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
                 <span>Partner Factories</span>
-                <Factory className="w-4 h-4 text-amber-400" />
+                <Factory className="w-4 h-4 text-[#8A5A00]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-amber-400 mt-1">
-                {totalFactories} <span className="text-xs text-slate-400 font-sans font-normal">Facilities</span>
+              <div className="text-2xl font-bold font-mono text-[#8A5A00] mt-1">
+                {totalFactories} <span className="text-xs text-[#6B7269] font-sans font-normal">Facilities</span>
               </div>
-              <div className="text-[11px] text-slate-400 mt-1">
+              <div className="text-[11px] text-[#6B7269] mt-1">
                 <span>Savar, Gazipur, Narsingdi, Dhamrai</span>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 shadow-md">
-              <div className="flex items-center justify-between text-slate-400 text-xs">
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
                 <span>Global B2B Leads</span>
-                <Users2 className="w-4 h-4 text-purple-400" />
+                <Users2 className="w-4 h-4 text-[#7B1FA2]" />
               </div>
-              <div className="text-2xl font-bold font-mono text-purple-300 mt-1">
-                {totalLeads} <span className="text-xs text-slate-400 font-sans font-normal">Accounts</span>
+              <div className="text-2xl font-bold font-mono text-[#7B1FA2] mt-1">
+                {totalLeads} <span className="text-xs text-[#6B7269] font-sans font-normal">Accounts</span>
               </div>
-              <div className="text-[11px] text-purple-400 mt-1">
+              <div className="text-[11px] text-[#6B7269] mt-1 font-mono">
                 <span>UK (96), EU (57), USA (56), AU (45)</span>
               </div>
             </div>

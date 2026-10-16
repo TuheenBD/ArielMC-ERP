@@ -164,32 +164,32 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl max-h-[90vh] bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1A2F]/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-3xl max-h-[90vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="p-5 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+        <div className="p-5 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-white/15 text-[#C8A96A] border border-white/20 flex items-center justify-center">
               <Plus className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Create New Master SKU</h2>
-              <p className="text-xs text-slate-400">Add an export product with sector technical attributes & Bangladesh factory costing</p>
+              <h2 className="text-base font-bold text-white font-montserrat">Create New Master SKU</h2>
+              <p className="text-xs text-white/80">Add an export product with sector technical attributes & Bangladesh factory costing</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 text-xs flex-1">
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 text-xs flex-1 bg-[#F4F6F4]">
           {/* Sector Selection */}
           <div>
-            <label className="block text-slate-300 font-semibold mb-2">Select Product Sector</label>
+            <label className="block text-[#1F3A2E] font-bold uppercase text-[11px] mb-2 font-montserrat">Select Product Sector</label>
             <div className="grid grid-cols-4 gap-2.5">
               {(['LEATHER', 'JUTE', 'TEXTILE', 'CERAMICS'] as ProductSector[]).map((sec) => (
                 <button
@@ -202,16 +202,16 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     if (sec === 'TEXTILE') setHsCode('6302.21.00');
                     if (sec === 'CERAMICS') setHsCode('6912.00.10');
                   }}
-                  className={`p-3 rounded-xl border text-center font-medium transition-all ${
+                  className={`p-3 rounded-xl border text-center font-medium transition-all shadow-sm ${
                     sector === sec
-                      ? 'bg-blue-600/20 border-blue-500 text-white shadow-sm ring-1 ring-blue-500/50'
-                      : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200'
+                      ? 'bg-[#1F3A2E] border-[#1F3A2E] text-white ring-2 ring-[#C8A96A]'
+                      : 'bg-white border-[#DDE3DD] text-[#1A1A1A] hover:bg-[#F8FAF8]'
                   }`}
                 >
                   <div className="text-lg">
                     {sec === 'LEATHER' ? '👞' : sec === 'JUTE' ? '🌾' : sec === 'TEXTILE' ? '🧵' : '🏺'}
                   </div>
-                  <div className="text-xs font-semibold mt-1">{sec}</div>
+                  <div className="text-xs font-bold mt-1 font-montserrat">{sec}</div>
                 </button>
               ))}
             </div>
@@ -220,65 +220,65 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-slate-300 font-medium mb-1">Product Name *</label>
+              <label className="block text-[#1A1A1A] font-semibold mb-1">Product Name *</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Vintage Full-Grain Leather Weekender Bag"
-                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-[#DDE3DD] rounded-lg px-3 py-2 text-[#1A1A1A] placeholder:text-[#6B7269]/60 focus:outline-none focus:border-[#1F3A2E] focus:ring-1 focus:ring-[#1F3A2E]"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-medium mb-1">Category</label>
+              <label className="block text-[#1A1A1A] font-semibold mb-1">Category</label>
               <input
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="e.g. Travel Goods, Tableware, Bedding"
-                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-[#DDE3DD] rounded-lg px-3 py-2 text-[#1A1A1A] placeholder:text-[#6B7269]/60 focus:outline-none focus:border-[#1F3A2E] focus:ring-1 focus:ring-[#1F3A2E]"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-medium mb-1">HS Tariff Code</label>
+              <label className="block text-[#1A1A1A] font-semibold mb-1">HS Tariff Code</label>
               <input
                 type="text"
                 value={hsCode}
                 onChange={(e) => setHsCode(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-[#DDE3DD] rounded-lg px-3 py-2 text-[#1A1A1A] font-mono focus:outline-none focus:border-[#1F3A2E] focus:ring-1 focus:ring-[#1F3A2E]"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-medium mb-1">Description / Spec Summary</label>
+              <label className="block text-[#1A1A1A] font-semibold mb-1">Description / Spec Summary</label>
               <input
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Key export selling points & materials"
-                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-[#DDE3DD] rounded-lg px-3 py-2 text-[#1A1A1A] placeholder:text-[#6B7269]/60 focus:outline-none focus:border-[#1F3A2E] focus:ring-1 focus:ring-[#1F3A2E]"
               />
             </div>
           </div>
 
           {/* Dynamic Sector Attributes Box */}
-          <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-            <div className="font-semibold text-slate-200 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+          <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+            <div className="font-bold text-[#1F3A2E] flex items-center gap-1.5 font-montserrat">
+              <Sparkles className="w-3.5 h-3.5 text-[#C8A96A]" />
               <span>{sector} Sector Technical Manufacturing Attributes</span>
             </div>
 
             {sector === 'LEATHER' && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Leather Type</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Leather Type</label>
                   <select
                     value={leatherType}
                     onChange={(e: any) => setLeatherType(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Full-Grain">Full-Grain</option>
                     <option value="Top-Grain">Top-Grain</option>
@@ -287,11 +287,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Tanning Method</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Tanning Method</label>
                   <select
                     value={tanningMethod}
                     onChange={(e: any) => setTanningMethod(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Vegetable Tanned">Vegetable Tanned</option>
                     <option value="Chrome-Free">Chrome-Free</option>
@@ -299,11 +299,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Hide Origin</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Hide Origin</label>
                   <select
                     value={hideOrigin}
                     onChange={(e: any) => setHideOrigin(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Cowhide">Cowhide</option>
                     <option value="Buffalo">Buffalo</option>
@@ -311,11 +311,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Hardware Finish</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Hardware Finish</label>
                   <select
                     value={hardwareFinish}
                     onChange={(e: any) => setHardwareFinish(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Antique Brass">Antique Brass</option>
                     <option value="Gunmetal">Gunmetal</option>
@@ -328,11 +328,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
             {sector === 'JUTE' && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Construction</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Construction</label>
                   <select
                     value={construction}
                     onChange={(e: any) => setConstruction(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Hessian">Hessian</option>
                     <option value="Sacking">Sacking</option>
@@ -341,20 +341,20 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Fabric Weight (GSM)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Fabric Weight (GSM)</label>
                   <input
                     type="number"
                     value={weightGsm}
                     onChange={(e) => setWeightGsm(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Inner Lamination</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Inner Lamination</label>
                   <select
                     value={lamination}
                     onChange={(e: any) => setLamination(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Biodegradable PLA">Biodegradable PLA</option>
                     <option value="Food-Grade PP">Food-Grade PP</option>
@@ -367,11 +367,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
             {sector === 'TEXTILE' && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Composition</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Composition</label>
                   <select
                     value={composition}
                     onChange={(e: any) => setComposition(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="100% Combed Cotton">100% Combed Cotton</option>
                     <option value="Organic Cotton (GOTS)">Organic Cotton (GOTS)</option>
@@ -379,20 +379,20 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Thread Count (TC)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Thread Count (TC)</label>
                   <input
                     type="number"
                     value={threadCount}
                     onChange={(e) => setThreadCount(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Weave Type</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Weave Type</label>
                   <select
                     value={weaveType}
                     onChange={(e: any) => setWeaveType(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Sateen">Sateen</option>
                     <option value="Percale">Percale</option>
@@ -406,11 +406,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
             {sector === 'CERAMICS' && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Clay Body</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Clay Body</label>
                   <select
                     value={clayBody}
                     onChange={(e: any) => setClayBody(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="High-Fired Stoneware">High-Fired Stoneware</option>
                     <option value="Fine Porcelain">Fine Porcelain</option>
@@ -418,11 +418,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Glaze Treatment</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Glaze Treatment</label>
                   <select
                     value={glazeType}
                     onChange={(e: any) => setGlazeType(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   >
                     <option value="Reactive Mineral Glaze">Reactive Mineral Glaze</option>
                     <option value="Satin Matte">Satin Matte</option>
@@ -430,12 +430,12 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Firing Temp (°C)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Firing Temp (°C)</label>
                   <input
                     type="number"
                     value={firingTemp}
                     onChange={(e) => setFiringTemp(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A]"
                   />
                 </div>
               </div>
@@ -444,72 +444,72 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
 
           {/* Factory & Costing Engine */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-3 p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-              <span className="font-semibold text-slate-200 block">Bangladesh Sourcing Factory</span>
+            <div className="space-y-3 p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
+              <span className="font-bold text-[#1F3A2E] block uppercase text-[11px] font-montserrat">Bangladesh Sourcing Factory</span>
               <div>
-                <label className="text-slate-400 text-[10px] block mb-1">Contracted Vendor Name</label>
+                <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Contracted Vendor Name</label>
                 <input
                   type="text"
                   value={factoryName}
                   onChange={(e) => setFactoryName(e.target.value)}
                   placeholder="e.g. Apex Tannery / Sonar Bangla Mills"
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                  className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Lead Time (Days)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Lead Time (Days)</label>
                   <input
                     type="number"
                     value={leadTime}
                     onChange={(e) => setLeadTime(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">MOQ (Units)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">MOQ (Units)</label>
                   <input
                     type="number"
                     value={moq}
                     onChange={(e) => setMoq(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white"
+                    className="w-full bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-3 p-4 rounded-xl bg-blue-950/20 border border-blue-500/20">
-              <span className="font-semibold text-blue-300 block">Costing & Margin Calculator</span>
+            <div className="space-y-3 p-4 rounded-xl bg-[#FDFBF7] border border-[#C8A96A] shadow-sm">
+              <span className="font-bold text-[#8A6D3B] block uppercase text-[11px] font-montserrat">Costing & Margin Calculator</span>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Factory Cost (BDT)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Factory Cost (BDT)</label>
                   <input
                     type="number"
                     value={factoryCostBdt}
                     onChange={(e) => setFactoryCostBdt(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-mono"
+                    className="w-full bg-white border border-[#DDE3DD] rounded-lg p-2 text-[#1A1A1A] font-mono font-semibold"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-400 text-[10px] block mb-1">Ariel Margin (%)</label>
+                  <label className="text-[#6B7269] text-[10px] block mb-1 uppercase font-medium">Ariel Margin (%)</label>
                   <input
                     type="number"
                     value={marginPct}
                     onChange={(e) => setMarginPct(Number(e.target.value))}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-emerald-400 font-mono font-bold"
+                    className="w-full bg-white border border-[#C8A96A] rounded-lg p-2 text-[#1F3A2E] font-mono font-bold"
                   />
                 </div>
               </div>
-              <div className="pt-2 border-t border-slate-800 space-y-1 text-[11px]">
-                <div className="flex justify-between text-slate-300">
+              <div className="pt-2 border-t border-[#DDE3DD] space-y-1 text-[11px]">
+                <div className="flex justify-between text-[#1A1A1A]">
                   <span>Factory Gate (USD @ 121.5):</span>
-                  <span className="font-mono font-bold text-white">${factoryCostUsd}</span>
+                  <span className="font-mono font-bold text-[#1F3A2E]">${factoryCostUsd}</span>
                 </div>
-                <div className="flex justify-between text-blue-300 font-medium">
+                <div className="flex justify-between text-[#1F3A2E] font-medium">
                   <span>Calculated B2B FOB Chattogram:</span>
-                  <span className="font-mono font-bold text-white">${b2bFobPriceUsd}</span>
+                  <span className="font-mono font-bold text-[#1F3A2E]">${b2bFobPriceUsd}</span>
                 </div>
-                <div className="flex justify-between text-amber-300">
+                <div className="flex justify-between text-[#8A6D3B]">
                   <span>Estimated D2C Retail MSRP:</span>
                   <span className="font-mono font-bold">${d2cRetailPriceUsd}</span>
                 </div>
@@ -518,17 +518,17 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
           </div>
 
           {/* Submit Buttons */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-[#DDE3DD] flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
+              className="px-4 py-2 rounded-lg bg-white border border-[#DDE3DD] hover:bg-slate-100 text-[#1A1A1A] font-semibold transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-600/20"
+              className="px-5 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white font-bold shadow-md shadow-[#1F3A2E]/20 transition-all font-montserrat"
             >
               Save & Register Master SKU
             </button>

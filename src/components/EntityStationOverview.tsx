@@ -29,26 +29,26 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-950/60 via-slate-900 to-indigo-950/40 border border-slate-800 p-6 shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-[#DDE3DD] p-6 shadow-sm">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-400">
-              <Globe2 className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6D3B]">
+              <Globe2 className="w-4 h-4 text-[#C8A96A]" />
               <span>Multi-Entity Corporate Architecture</span>
             </div>
-            <h1 className="text-2xl font-bold text-white mt-1">
+            <h1 className="text-2xl font-bold font-heading text-[#1F3A2E] mt-1">
               Global Operating Stations & Jurisdictions
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl">
+            <p className="text-sm text-[#6B7269] mt-1 max-w-2xl leading-relaxed">
               ArielMC operates across 5 sovereign jurisdictions with localized tax compliance (VAT, GST, Sales Tax, NBR), statutory corporate entities, and regional 3PL/FBA fulfillment networks.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-900/90 border border-slate-700/60 rounded-xl p-3 text-xs">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+          <div className="flex items-center gap-2.5 bg-[#F8FAF8] border border-[#DDE3DD] rounded-xl p-3 text-xs shadow-sm">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-ping" />
             <div>
-              <span className="text-slate-400 block text-[10px]">Active Operational Context</span>
-              <span className="font-bold text-white text-sm flex items-center gap-1.5">
+              <span className="text-[#6B7269] block text-[10px] font-medium">Active Operational Context</span>
+              <span className="font-bold text-[#1F3A2E] text-sm flex items-center gap-1.5">
                 <span>{activeEntity.flag}</span>
                 <span>{activeEntity.legalName}</span>
               </span>
@@ -64,18 +64,18 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
           return (
             <div
               key={comp.code}
-              className={`rounded-xl border transition-all duration-200 relative flex flex-col justify-between overflow-hidden ${
+              className={`rounded-xl border transition-all duration-200 relative flex flex-col justify-between overflow-hidden bg-white text-[#1A1A1A] ${
                 isActive
-                  ? 'bg-slate-900/90 border-blue-500/80 shadow-lg shadow-blue-500/10 ring-1 ring-blue-500/50'
-                  : 'bg-slate-900/50 border-slate-800 hover:border-slate-700 hover:bg-slate-900/70'
+                  ? 'border-[#C8A96A] shadow-md ring-1 ring-[#C8A96A]/60'
+                  : 'border-[#DDE3DD] hover:border-[#C8A96A]/60 hover:shadow-sm'
               }`}
             >
               {/* Top Accent Bar */}
               <div
                 className={`h-1.5 w-full ${
                   isActive
-                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500'
-                    : 'bg-slate-800'
+                    ? 'bg-[#C8A96A]'
+                    : 'bg-[#DDE3DD]'
                 }`}
               />
 
@@ -83,74 +83,74 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
                 {/* Station Title & Flag */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl p-1 rounded-lg bg-slate-800/80 border border-slate-700/60 shadow-inner">
+                    <span className="text-3xl p-1.5 rounded-lg bg-[#F4F6F4] border border-[#DDE3DD]">
                       {comp.flag}
                     </span>
                     <div>
-                      <h3 className="font-bold text-white text-sm leading-snug">
+                      <h3 className="font-bold font-heading text-[#1F3A2E] text-sm leading-snug">
                         {comp.legalName}
                       </h3>
-                      <p className="text-xs text-blue-400 font-medium">
+                      <p className="text-xs text-[#6B7269] font-medium">
                         {comp.city}, {comp.country}
                       </p>
                     </div>
                   </div>
-                  <span className="px-2 py-0.5 rounded font-mono text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+                  <span className="px-2 py-0.5 rounded font-mono text-xs font-bold bg-[#FAF5EC] text-[#8A6D3B] border border-[#C8A96A]/40">
                     {comp.baseCurrency}
                   </span>
                 </div>
 
                 {/* Role & Legal Description */}
-                <div className="bg-slate-950/60 rounded-lg p-3 border border-slate-800/80 text-xs space-y-1.5">
-                  <div className="text-[11px] font-semibold text-slate-400 flex items-center justify-between">
+                <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE3DD] text-xs space-y-1.5">
+                  <div className="text-[11px] font-semibold text-[#6B7269] flex items-center justify-between">
                     <span>Legal Status:</span>
-                    <span className="text-slate-200 text-right">{comp.legalStatus}</span>
+                    <span className="text-[#1A1A1A] text-right font-medium">{comp.legalStatus}</span>
                   </div>
-                  <p className="text-slate-300 text-[11px] leading-relaxed pt-1 border-t border-slate-800/60">
+                  <p className="text-[#1A1A1A] text-[11px] leading-relaxed pt-1 border-t border-[#DDE3DD]">
                     {comp.role}
                   </p>
                 </div>
 
                 {/* Tax & Compliance Identifiers */}
                 <div className="space-y-2 text-xs">
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950/40 border border-slate-800/60">
-                    <span className="text-slate-400 flex items-center gap-1.5">
-                      <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-[#F4F6F4] border border-[#DDE3DD]">
+                    <span className="text-[#6B7269] flex items-center gap-1.5 font-medium">
+                      <FileCheck2 className="w-3.5 h-3.5 text-[#14512C]" />
                       <span>{comp.taxIdentifier.type}:</span>
                     </span>
-                    <span className="font-mono text-slate-200 font-medium text-[11px]">
+                    <span className="font-mono text-[#1F3A2E] font-bold text-[11px]">
                       {comp.taxIdentifier.number}
                     </span>
                   </div>
 
                   {/* Active Banking */}
                   <div className="space-y-1">
-                    <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Landmark className="w-3 h-3 text-blue-400" />
+                    <div className="text-[10px] font-bold text-[#6B7269] uppercase tracking-wider flex items-center gap-1 font-heading">
+                      <Landmark className="w-3 h-3 text-[#1F5FA8]" />
                       <span>Commercial Treasury / Bank</span>
                     </div>
                     {comp.bankAccounts.map((bank, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between text-[11px] px-2 py-1 rounded bg-slate-950/30 text-slate-300"
+                        className="flex items-center justify-between text-[11px] px-2.5 py-1.5 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-[#1A1A1A]"
                       >
-                        <span className="truncate max-w-[170px]">{bank.bankName}</span>
-                        <span className="font-mono text-slate-400">{bank.accountNumberMask}</span>
+                        <span className="truncate max-w-[170px] font-medium">{bank.bankName}</span>
+                        <span className="font-mono text-[#6B7269]">{bank.accountNumberMask}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Active Facilities */}
                   <div className="space-y-1 pt-1">
-                    <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Warehouse className="w-3 h-3 text-amber-400" />
+                    <div className="text-[10px] font-bold text-[#6B7269] uppercase tracking-wider flex items-center gap-1 font-heading">
+                      <Warehouse className="w-3 h-3 text-[#8A6D3B]" />
                       <span>Operating Hubs & Facilities</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {comp.activeFacilities.map((fac, idx) => (
                         <span
                           key={idx}
-                          className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/60"
+                          className="text-[10px] px-2 py-0.5 rounded-full bg-white text-[#1F3A2E] border border-[#DDE3DD] font-medium shadow-xs"
                         >
                           {fac}
                         </span>
@@ -161,20 +161,20 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
               </div>
 
               {/* Action Bar */}
-              <div className="p-3 border-t border-slate-800/80 bg-slate-950/50 flex items-center justify-between">
-                <div className="flex items-center gap-1 text-[11px] text-slate-400">
-                  <Globe2 className="w-3 h-3 text-slate-400" />
+              <div className="p-3 border-t border-[#DDE3DD] bg-[#F8FAF8] flex items-center justify-between">
+                <div className="flex items-center gap-1 text-[11px] text-[#6B7269]">
+                  <Globe2 className="w-3 h-3 text-[#6B7269]" />
                   <span>{comp.domains[0]}</span>
                 </div>
                 {isActive ? (
-                  <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
+                  <span className="flex items-center gap-1 text-xs font-bold text-[#14512C]">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Active Station</span>
                   </span>
                 ) : (
                   <button
                     onClick={() => onSelectEntity(comp.code)}
-                    className="flex items-center gap-1 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors group"
+                    className="flex items-center gap-1 text-xs font-semibold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors group"
                   >
                     <span>Switch Station</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

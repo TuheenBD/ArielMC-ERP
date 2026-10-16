@@ -228,27 +228,27 @@ CREATE TABLE purchase_orders (
   return (
     <div className="space-y-6">
       {/* Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/40 border border-slate-800 p-6 shadow-xl">
+      <div className="rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] p-6 shadow-sm text-white">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className={`p-3.5 rounded-2xl border ${details.color}`}>
+            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/20 text-[#C8A96A]">
               <Icon className="w-8 h-8" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#C8A96A] text-[#0A1A2F] font-bold">
                   NEXT SPRINT ROADMAP
                 </span>
-                <span className="text-xs text-slate-400">Architectural Spec Ready</span>
+                <span className="text-xs text-emerald-100 font-medium">Architectural Spec Ready</span>
               </div>
-              <h1 className="text-2xl font-bold text-white mt-1">{details.title}</h1>
-              <p className="text-sm text-slate-300 mt-1 max-w-2xl">{details.subtitle}</p>
+              <h1 className="text-2xl font-bold text-white mt-1 font-['Montserrat']">{details.title}</h1>
+              <p className="text-sm text-white/80 mt-1 max-w-2xl font-['Open_Sans']">{details.subtitle}</p>
             </div>
           </div>
 
           <button
             onClick={onNavigateToProducts}
-            className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-600/20 transition-all"
+            className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#b59556] text-[#0A1A2F] text-xs font-bold font-['Montserrat'] shadow transition-all"
           >
             <span>Back to Live Product Master</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -259,9 +259,9 @@ CREATE TABLE purchase_orders (
       {/* Deliverables List & Schema Preview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Core Capabilities */}
-        <div className="rounded-xl bg-slate-900/70 border border-slate-800 p-5 space-y-4 shadow-lg">
-          <h3 className="font-bold text-white text-sm flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="rounded-2xl bg-white border border-[#DDE3DD] p-6 space-y-4 shadow-sm">
+          <h3 className="font-bold text-[#1F3A2E] text-sm flex items-center gap-2 font-['Montserrat']">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>Core Capabilities & Workflow Deliverables</span>
           </h3>
 
@@ -269,39 +269,41 @@ CREATE TABLE purchase_orders (
             {details.deliverables.map((item, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs text-slate-300 flex items-start gap-2.5"
+                className="p-3.5 rounded-xl bg-[#F4F6F4] border border-[#DDE3DD] text-xs text-[#1A1A1A] flex items-start gap-3"
               >
-                <div className="w-5 h-5 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center font-mono font-bold text-[10px] shrink-0 mt-0.5">
+                <div className="w-5 h-5 rounded-full bg-[#1F3A2E] text-white flex items-center justify-center font-mono font-bold text-[10px] shrink-0 mt-0.5">
                   {idx + 1}
                 </div>
-                <span className="leading-relaxed">{item}</span>
+                <span className="leading-relaxed font-medium">{item}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Database Schema Architecture */}
-        <div className="rounded-xl bg-slate-900/70 border border-slate-800 p-5 space-y-4 shadow-lg flex flex-col justify-between">
+        <div className="rounded-2xl bg-white border border-[#DDE3DD] p-6 space-y-4 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-400" />
+              <h3 className="font-bold text-[#1F3A2E] text-sm flex items-center gap-2 font-['Montserrat']">
+                <Sparkles className="w-4 h-4 text-[#C8A96A]" />
                 <span>PostgreSQL Relational Schema Blueprint</span>
               </h3>
-              <span className="text-[10px] font-mono text-slate-400">PostgreSQL 16</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#EEF2F6] text-[#475569] border border-[#D5DEE7] font-semibold">
+                PostgreSQL 16
+              </span>
             </div>
-            <p className="text-xs text-slate-400 mb-3">
+            <p className="text-xs text-gray-600 mb-3 font-['Open_Sans']">
               This module integrates directly into the unified PostgreSQL database using relational foreign keys linked to the Phase 1 Company and Product entities.
             </p>
 
-            <pre className="p-4 rounded-xl bg-slate-950 text-blue-300 font-mono text-xs overflow-x-auto border border-slate-800/90 leading-relaxed">
+            <pre className="p-4 rounded-xl bg-[#0A1A2F] text-[#C8A96A] font-mono text-xs overflow-x-auto border border-[#0A1A2F] leading-relaxed shadow-inner">
               {details.schemaPreview}
             </pre>
           </div>
 
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
-            <span className="text-slate-400">Ready to activate when Phase 1 is validated</span>
-            <span className="text-emerald-400 font-medium flex items-center gap-1">
+          <div className="pt-4 border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+            <span className="text-gray-500 font-medium">Ready to activate when Phase 1 is validated</span>
+            <span className="text-emerald-700 font-bold flex items-center gap-1">
               <ShieldCheck className="w-4 h-4" /> Blueprint Locked
             </span>
           </div>
