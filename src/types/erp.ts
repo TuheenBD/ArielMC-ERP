@@ -745,5 +745,102 @@ export interface QuarterlyBatchPlan {
   status: 'COMPLETED' | 'IN_PRODUCTION' | 'SCHEDULED';
 }
 
+// -------------------------------------------------------------
+// Phase 7: Multi-Location Global Inventory & Fulfillment
+// -------------------------------------------------------------
 
+export type WarehouseType = 
+  | 'CENTRAL_TRANSIT' 
+  | 'PORT_BUFFER'
+  | 'ON_WATER_VESSEL' 
+  | 'REGIONAL_3PL' 
+  | 'AMAZON_FBA' 
+  | 'RETAIL_SHOWROOM';
 
+export type InventoryHealthStatus = 
+  | 'OPTIMAL' 
+  | 'LOW_STOCK' 
+  | 'CRITICAL_REORDER' 
+  | 'OVERSTOCKED' 
+  | 'IN_TRANSIT';
+
+export interface WarehouseLocation {
+  id: string;
+  code: string;
+  name: string;
+  type: WarehouseType;
+  country: string;
+  countryCode: string;
+  city: string;
+  flag: string;
+  capacityCbm: number;
+  currentUtilizationPct: number;
+  operator: string;
+  address: string;
+  contactEmail: string;
+  contactPhone: string;
+  climateControlled: boolean;
+  activeShipmentsInbound: number;
+}
+
+export interface StockAllocation {
+  amazonFbaQty: number;
+  shopifyD2cQty: number;
+  b2bWholesaleReservedQty: number;
+  showroomDisplayQty: number;
+}
+
+export interface BatchLotProvenance {
+  batchNumber: string;
+  productionDate: string;
+  factoryCode: string;
+  factoryName: string;
+  cluster: string;
+  rawMaterialLot: string; // e.g. Tannery Lot LWG-092, Nilphamari Jute Lot J-412
+  qcInspectionCertificate: string; // e.g. QC-PASS-AMC-8921
+  inspectorName: string;
+  complianceRating: string; // e.g. LWG Gold, BSCI Grade A, GOTS Organic
+}
+
+export interface InventoryItem {
+  id: string;
+  sku: string;
+  productName: string;
+  sector: ProductSector;
+  category: string;
+  warehouseId: string;
+  warehouseCode: string;
+  warehouseName: string;
+  onHandQty: number;
+  reservedQty: number;
+  availableQty: number; // onHand - reserved
+  inTransitQty: number; // en route via ship/air
+  safetyStockMin: number;
+  reorderPoint: number;
+  unitCostUsd: number;
+  totalValuationUsd: number;
+  dailyRunRate: number; // pieces sold per day
+  daysOfInventoryRemaining: number; // availableQty / dailyRunRate
+  healthStatus: InventoryHealthStatus;
+  allocations: StockAllocation;
+  provenance: BatchLotProvenance;
+  lastPhysicalAuditDate: string;
+}
+
+export interface StockTransferOrder {
+  id: string;
+  transferOrderNumber: string;
+  sku: string;
+  productName: string;
+  sourceWarehouseCode: string;
+  destinationWarehouseCode: string;
+  unitsToTransfer: number;
+  channelDestination: 'AMAZON_FBA' | 'SHOPIFY_D2C' | 'B2B_WHOLESALE' | 'SHOWROOM';
+  modeOfTransport: 'OCEAN_FREIGHT' | 'AIR_CARGO' | 'DOMESTIC_DRAYAGE';
+  carrier: string;
+  trackingOrContainerNumber: string;
+  departureDate: string;
+  estimatedArrivalDate: string;
+  status: 'PENDING' | 'IN_TRANSIT' | 'ARRIVED_3PL' | 'FULFILLED';
+  notes: string;
+}

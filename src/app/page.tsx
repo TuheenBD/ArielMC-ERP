@@ -32,6 +32,7 @@ import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
 import { LogisticsManagement } from '@/components/LogisticsManagement';
 import { FinanceManagement } from '@/components/FinanceManagement';
+import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
@@ -337,6 +338,10 @@ export default function Home() {
             <FinanceManagement />
           )}
 
+          {activeTab === 'INVENTORY' && (
+            <InventoryManagement activeCurrency={activeCurrency} />
+          )}
+
           {activeTab === 'COMMUNICATIONS' && (
             <CommunicationsHub />
           )}
@@ -349,6 +354,7 @@ export default function Home() {
             activeTab !== 'ORDERS' &&
             activeTab !== 'LOGISTICS' &&
             activeTab !== 'FINANCE' &&
+            activeTab !== 'INVENTORY' &&
             activeTab !== 'COMMUNICATIONS' && (
               <PhaseRoadmapPreview
                 activeTab={activeTab}
