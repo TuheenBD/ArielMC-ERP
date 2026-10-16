@@ -90,6 +90,8 @@ export default function Home() {
       const savedTheme = localStorage.getItem('arielmc_erp_theme') as ThemeProfile;
       if (savedTheme && (savedTheme === 'crm-green' || savedTheme === 'royal-blue' || savedTheme === 'heritage-tan')) {
         setTheme(savedTheme);
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
       }
     } catch {
       // ignore
@@ -100,6 +102,8 @@ export default function Home() {
     setTheme(newTheme);
     try {
       localStorage.setItem('arielmc_erp_theme', newTheme);
+      document.documentElement.setAttribute('data-theme', newTheme);
+      document.body.setAttribute('data-theme', newTheme);
     } catch {
       // ignore
     }
@@ -324,7 +328,7 @@ export default function Home() {
     <div 
       id="arielmc-erp-root" 
       data-theme={theme} 
-      className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors`}
+      className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors max-w-full overflow-x-hidden`}
     >
       {/* Sidebar Navigation */}
       <Sidebar
@@ -335,7 +339,7 @@ export default function Home() {
       />
 
       {/* Main Content Pane */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#FAF9F5]">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#FAF9F5] overflow-x-hidden">
         {/* Global Header */}
         <Header
           companies={companies}
