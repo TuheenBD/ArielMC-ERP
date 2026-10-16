@@ -50,7 +50,7 @@ export type ActiveTab =
   | 'POS'
   | 'COMMUNICATIONS';
 
-export type ThemeProfile = 'crm-green' | 'light-clean' | 'heritage-tan';
+export type ThemeProfile = 'crm-green' | 'royal-blue' | 'heritage-tan';
 
 interface SidebarProps {
   activeTab: ActiveTab;
@@ -168,44 +168,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   // Theme-specific styling variables
-  const isLight = theme === 'light-clean';
+  const isRoyal = theme === 'royal-blue';
   const isHeritage = theme === 'heritage-tan';
 
-  const containerBg = isLight
-    ? 'bg-white border-r border-[#DDE3DD]'
+  const containerBg = isRoyal
+    ? 'bg-[#0B132B] border-r border-[#1E293B]'
     : isHeritage
     ? 'bg-[#183124] border-r border-[#2A4837]'
     : 'bg-[#1F3A2E] border-r border-[#2C5240]'; // crm-green default
 
-  const headerBg = isLight
-    ? 'bg-[#F8F6F2] border-b border-[#DDE3DD]'
+  const headerBg = isRoyal
+    ? 'bg-[#0F172A] border-b border-[#1E293B]'
     : isHeritage
     ? 'bg-[#11231A] border-b border-[#2A4837]'
     : 'bg-[#172D24] border-b border-[#2C5240]';
 
-  const brandText = isLight ? 'text-[#1F3A2E]' : 'text-white';
-  const brandSubtext = isLight ? 'text-[#8A6D3B]' : 'text-[#C8A96A]';
+  const brandText = 'text-white';
+  const brandSubtext = isRoyal ? 'text-[#93C5FD]' : 'text-[#C8A96A]';
 
-  const entityBoxBg = isLight
-    ? 'bg-white border border-[#DDE3DD]'
+  const entityBoxBg = isRoyal
+    ? 'bg-[#1E293B] border border-[#334155]'
     : isHeritage
     ? 'bg-[#244232] border border-[#345943]'
     : 'bg-[#28493A] border border-[#3A6B54]';
 
-  const entityTitle = isLight ? 'text-[#1A1A1A]' : 'text-white';
-  const entitySub = isLight ? 'text-[#6B7269]' : 'text-[#CFE0D5]';
+  const entityTitle = 'text-white';
+  const entitySub = isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]';
 
-  const sectionGroupText = isLight
-    ? 'text-[#1F3A2E]'
+  const sectionGroupText = isRoyal
+    ? 'text-[#60A5FA]'
     : 'text-[#C8A96A]';
 
-  const footerBg = isLight
-    ? 'bg-[#F8F6F2] border-t border-[#DDE3DD]'
+  const footerBg = isRoyal
+    ? 'bg-[#0F172A] border-t border-[#1E293B]'
     : isHeritage
     ? 'bg-[#11231A] border-t border-[#2A4837]'
     : 'bg-[#172D24] border-t border-[#2C5240]';
 
-  const footerText = isLight ? 'text-[#6B7269]' : 'text-[#CFE0D5]';
+  const footerText = isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]';
 
   return (
     <aside className={`w-72 ${containerBg} flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl transition-colors`}>
@@ -273,15 +273,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   let iconClass = '';
                   let badgeClass = '';
 
-                  if (isLight) {
+                  if (isRoyal) {
                     if (isActive) {
-                      buttonClass = 'bg-[#1F3A2E] text-white font-bold shadow-sm';
-                      iconClass = 'text-[#C8A96A]';
-                      badgeClass = 'bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40';
+                      buttonClass = 'bg-[#4169E1] text-white font-bold shadow-lg shadow-[#4169E1]/30';
+                      iconClass = 'text-white';
+                      badgeClass = 'bg-white/20 text-white font-bold border border-white/30';
                     } else {
-                      buttonClass = 'text-[#4A5568] hover:bg-[#F0F5F1] hover:text-[#1F3A2E]';
-                      iconClass = isLive ? 'text-[#1F3A2E]' : 'text-gray-400';
-                      badgeClass = 'bg-[#F4F6F4] text-[#6B7269] border border-[#DDE3DD]';
+                      buttonClass = 'text-[#94A3B8] hover:bg-[#1E293B] hover:text-white';
+                      iconClass = isLive ? 'text-[#60A5FA]' : 'text-slate-500';
+                      badgeClass = 'bg-[#1E293B] text-[#94A3B8] border border-[#334155]';
                     }
                   } else {
                     // crm-green or heritage-tan
@@ -322,9 +322,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Supplier & Buyer Communications Card & Footer */}
       <div>
         {/* Quick Channels Card */}
-        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 ${isLight ? 'bg-[#F8F6F2] border-[#DDE3DD]' : 'bg-[#172D24] border-[#2C5240]'}`}>
+        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 ${isRoyal ? 'bg-[#1E293B] border-[#334155]' : isHeritage ? 'bg-[#183124] border-[#2A4837]' : 'bg-[#172D24] border-[#2C5240]'}`}>
           <div className="flex items-center justify-between">
-            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}>
+            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${isRoyal ? 'text-[#60A5FA]' : 'text-[#C8A96A]'}`}>
               <Phone className="w-3 h-3 text-[#C8A96A]" />
               <span>Trade Channels</span>
             </span>
@@ -333,9 +333,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onSelectTab('COMMUNICATIONS')}
                 className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all font-mono ${
                   activeTab === 'COMMUNICATIONS'
-                    ? 'bg-[#C8A96A] text-[#1F3A2E]'
-                    : isLight
-                    ? 'bg-[#1F3A2E] text-white hover:bg-[#15271F]'
+                    ? isRoyal ? 'bg-[#4169E1] text-white' : 'bg-[#C8A96A] text-[#1F3A2E]'
+                    : isRoyal
+                    ? 'bg-[#4169E1]/20 text-[#60A5FA] hover:bg-[#4169E1]/30 border border-[#4169E1]/40'
                     : 'bg-[#C8A96A]/20 text-[#C8A96A] hover:bg-[#C8A96A]/30 border border-[#C8A96A]/40'
                 }`}
                 title="Open Live Communications Hub"
@@ -344,7 +344,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </button>
               <button
                 onClick={() => setIsChannelsModalOpen(true)}
-                className={`text-[10px] font-semibold underline hover:brightness-110 ${isLight ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`}
+                className={`text-[10px] font-semibold underline hover:brightness-110 ${isRoyal ? 'text-[#60A5FA]' : 'text-[#C8A96A]'}`}
                 title="View Full Directory"
               >
                 Directory
@@ -353,7 +353,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           <div className="flex items-center justify-between text-[11px] font-mono">
-            <a href="tel:+8801819273458" className={`font-bold hover:underline ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>
+            <a href="tel:+8801819273458" className="font-bold hover:underline text-white">
               +8801819273458
             </a>
             <a
@@ -369,7 +369,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Virtual Meetings Quick Launcher Bar (Zoom, Meet, Teams, Hostinger, Gmail) */}
-          <div className={`pt-1.5 border-t flex items-center justify-between ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
+          <div className={`pt-1.5 border-t flex items-center justify-between ${isRoyal ? 'border-[#1E293B]' : 'border-[#2C5240]'}`}>
             <a
               href="https://zoom.us/join"
               target="_blank"
@@ -418,7 +418,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Social icons row */}
-          <div className={`flex items-center justify-between pt-1.5 border-t ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
+          <div className={`flex items-center justify-between pt-1.5 border-t ${isRoyal ? 'border-[#1E293B]' : 'border-[#2C5240]'}`}>
             <a
               href="https://www.linkedin.com/company/arielmc/?viewAsMember=true"
               target="_blank"
@@ -474,7 +474,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
             <span className="text-[10px] font-mono text-[#C8A96A]">v1.0.0</span>
           </div>
-          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${isLight ? 'border-[#DDE3DD]' : 'border-[#2C5240]'}`}>
+          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${isRoyal ? 'border-[#1E293B]' : 'border-[#2C5240]'}`}>
             <span>PostgreSQL Active</span>
             <span>Next.js 16</span>
           </div>

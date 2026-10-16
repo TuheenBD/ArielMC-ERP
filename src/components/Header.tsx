@@ -19,7 +19,8 @@ import {
   PhoneCall,
   Video,
   FileText,
-  Database
+  Database,
+  BookOpen
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 
@@ -42,6 +43,7 @@ interface HeaderProps {
   currentUser?: UserProfile;
   onOpenProfileControl?: () => void;
   onOpenAuthModal?: () => void;
+  onOpenUserGuide?: () => void;
 }
 
 const getStationBrandName = (code: EntityCode) => {
@@ -80,32 +82,33 @@ export const Header: React.FC<HeaderProps> = ({
   currentUser,
   onOpenProfileControl,
   onOpenAuthModal,
+  onOpenUserGuide,
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
 
-  const isLight = theme === 'light-clean';
+  const isRoyal = theme === 'royal-blue';
   const isHeritage = theme === 'heritage-tan';
 
-  const headerBg = isLight
-    ? 'bg-white border-b-[3px] border-[#C8A96A] text-[#1A1A1A]'
+  const headerBg = isRoyal
+    ? 'bg-[#0F172A] border-b-[3px] border-[#4169E1] text-white'
     : isHeritage
     ? 'bg-[#183124] border-b-[3px] border-[#C8A96A] text-white'
     : 'bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white';
 
-  const searchBoxBg = isLight
-    ? 'bg-[#F4F6F4] text-[#1A1A1A] placeholder-[#6B7269] border-[#DDE3DD] focus:border-[#1F3A2E]'
+  const searchBoxBg = isRoyal
+    ? 'bg-[#1E293B] text-white placeholder-[#94A3B8] border-[#334155] focus:border-[#4169E1]'
     : 'bg-[#2C5240] text-white placeholder-[#A0B9A8] border-[#3A6B54] focus:border-[#C8A96A]';
 
-  const toolButtonBg = isLight
-    ? 'bg-[#F4F6F4] text-[#1F3A2E] border-[#DDE3DD] hover:border-[#1F3A2E]'
+  const toolButtonBg = isRoyal
+    ? 'bg-[#1E293B] text-white border-[#334155] hover:border-[#4169E1]'
     : 'bg-[#2C5240] text-white border-[#3A6B54] hover:border-[#C8A96A]';
 
-  const tickerBg = isLight
-    ? 'bg-[#F4F6F4] text-[#1A1A1A] border-[#DDE3DD]'
+  const tickerBg = isRoyal
+    ? 'bg-[#1E293B] text-white border-[#334155]'
     : 'bg-[#2C5240] text-white border-[#3A6B54]';
 
-  const tickerText = isLight ? 'text-[#1F3A2E]' : 'text-[#CFE0D5]';
-  const tickerCurrency = isLight ? 'text-[#1A1A1A]' : 'text-[#E8F0EA]';
+  const tickerText = isRoyal ? 'text-[#93C5FD]' : 'text-[#CFE0D5]';
+  const tickerCurrency = isRoyal ? 'text-[#E2E8F0]' : 'text-[#E8F0EA]';
 
   return (
     <header className={`sticky top-0 z-30 ${headerBg} px-6 py-3 transition-colors shadow-md`}>
@@ -113,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Left: Search Bar & Global Scope */}
         <div className="flex items-center gap-4 flex-1 max-w-xl">
           <div className="relative w-full">
-            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${isLight ? 'text-gray-400' : 'text-[#A0B9A8]'}`} />
+            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${isRoyal ? 'text-[#94A3B8]' : 'text-[#A0B9A8]'}`} />
             <input
               id="global-erp-search"
               type="text"
@@ -182,8 +185,8 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="hidden sm:inline">
                 {theme === 'crm-green'
                   ? 'CRM Green'
-                  : theme === 'light-clean'
-                  ? 'Light Executive'
+                  : theme === 'royal-blue'
+                  ? 'Royal Blue'
                   : 'Heritage Tan'}
               </span>
               <ChevronDown className="w-3 h-3 text-[#C8A96A]" />
@@ -215,23 +218,23 @@ export const Header: React.FC<HeaderProps> = ({
                   {theme === 'crm-green' && <Check className="w-3.5 h-3.5 text-[#1F3A2E]" />}
                 </button>
 
-                {/* Option 2: Executive Light */}
+                {/* Option 2: Royal Blue (#4169E1) */}
                 <button
-                  onClick={() => onSelectTheme?.('light-clean')}
+                  onClick={() => onSelectTheme?.('royal-blue')}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors ${
-                    theme === 'light-clean'
-                      ? 'bg-[#E8F0EA] border border-[#C8A96A] text-[#1F3A2E] font-bold'
+                    theme === 'royal-blue'
+                      ? 'bg-[#EBF2FF] border border-[#4169E1] text-[#1E3A8A] font-bold'
                       : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-3.5 h-3.5 rounded-full bg-white border-2 border-[#1F3A2E] shrink-0" />
+                    <span className="w-3.5 h-3.5 rounded-full bg-[#4169E1] border border-[#2563EB] shadow-sm shrink-0" />
                     <div>
-                      <div className="font-semibold text-[#1A1A1A]">Executive Minimal Light</div>
-                      <div className="text-[10px] text-[#6B7269]">Pure White &amp; Crisp Sage</div>
+                      <div className="font-semibold text-[#1E3A8A]">Royal Blue (#4169E1)</div>
+                      <div className="text-[10px] text-[#64748B]">Royal Blue &amp; Deep Midnight Navy</div>
                     </div>
                   </div>
-                  {theme === 'light-clean' && <Check className="w-3.5 h-3.5 text-[#1F3A2E]" />}
+                  {theme === 'royal-blue' && <Check className="w-3.5 h-3.5 text-[#4169E1]" />}
                 </button>
 
                 {/* Option 3: Heritage Tan */}
@@ -265,14 +268,14 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-base leading-none">{activeEntity.flag}</span>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
-                  <span className={`font-heading font-bold tracking-wide ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>
+                  <span className="font-heading font-bold tracking-wide text-white">
                     {getStationBrandName(activeEntity.code)}
                   </span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono font-bold">
                     {activeEntity.baseCurrency}
                   </span>
                 </div>
-                <p className={`text-[10px] leading-tight ${isLight ? 'text-gray-500' : 'text-[#CFE0D5]'}`}>{activeEntity.city}, {activeEntity.country}</p>
+                <p className="text-[10px] leading-tight text-[#CFE0D5]">{activeEntity.city}, {activeEntity.country}</p>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-[#C8A96A] ml-1 group-hover:scale-110 transition-transform" />
             </button>
@@ -346,6 +349,19 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* ArielMC ERP User Guide (PDF) */}
+          {onOpenUserGuide && (
+            <button
+              id="header-user-guide-btn"
+              onClick={onOpenUserGuide}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm ${toolButtonBg}`}
+              title="ArielMC ERP User Guide & Operational Manual (Official PDF & Interactive Reader)"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="hidden xl:inline">User Guide</span>
+            </button>
+          )}
+
           {/* Notifications */}
           <button 
             id="header-notifications-btn"
@@ -388,7 +404,7 @@ export const Header: React.FC<HeaderProps> = ({
             id="header-user-profile-btn"
             onClick={onOpenProfileControl || onOpenAuthModal}
             className={`flex items-center gap-2.5 pl-2 py-1 pr-2 rounded-xl border-l transition-all hover:bg-black/10 group ${
-              isLight ? 'border-gray-200' : 'border-[#2C5240]'
+              isRoyal ? 'border-[#334155]' : isHeritage ? 'border-[#2A4837]' : 'border-[#2C5240]'
             }`}
             title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
           >
@@ -402,10 +418,10 @@ export const Header: React.FC<HeaderProps> = ({
               {currentUser?.avatarInitials || 'AMC'}
             </div>
             <div className="hidden xl:block text-left text-xs">
-              <div className={`font-semibold leading-tight flex items-center gap-1 group-hover:text-[#C8A96A] transition-colors ${isLight ? 'text-[#1A1A1A]' : 'text-white'}`}>
+              <div className="font-semibold leading-tight flex items-center gap-1 group-hover:text-[#C8A96A] transition-colors text-white">
                 <span>{currentUser?.name || 'Syed Akramul Hassan'}</span>
               </div>
-              <div className={`text-[10px] flex items-center gap-1 ${isLight ? 'text-gray-500' : 'text-[#CFE0D5]'}`}>
+              <div className={`text-[10px] flex items-center gap-1 ${isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]'}`}>
                 <ShieldCheck className="w-3 h-3 inline text-[#C8A96A]" /> {currentUser?.designation || 'Managing Director'}
               </div>
             </div>

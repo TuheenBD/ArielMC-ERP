@@ -38,6 +38,8 @@ import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocum
 import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
 import { AuthWelcomeModal } from '@/components/auth/AuthWelcomeModal';
 import { ProfileControlModal } from '@/components/profile/ProfileControlModal';
+import { ArielMCAICopilot } from '@/components/ai/ArielMCAICopilot';
+import { UserGuideModal } from '@/components/UserGuideModal';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
 import { UserProfile } from '@/types/auth';
@@ -86,7 +88,7 @@ export default function Home() {
   React.useEffect(() => {
     try {
       const savedTheme = localStorage.getItem('arielmc_erp_theme') as ThemeProfile;
-      if (savedTheme && (savedTheme === 'crm-green' || savedTheme === 'light-clean' || savedTheme === 'heritage-tan')) {
+      if (savedTheme && (savedTheme === 'crm-green' || savedTheme === 'royal-blue' || savedTheme === 'heritage-tan')) {
         setTheme(savedTheme);
       }
     } catch {
@@ -168,6 +170,7 @@ export default function Home() {
   const [docCenterOrderId, setDocCenterOrderId] = useState<string | undefined>(undefined);
   const [isDbModalOpen, setIsDbModalOpen] = useState(false);
   const [isDbConnected, setIsDbConnected] = useState(false);
+  const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
 
   // Persistent Storage Initial Hydration & Connection Ping
   const loadPersistentData = React.useCallback(async () => {
@@ -310,7 +313,7 @@ export default function Home() {
     products.reduce((acc, curr) => acc + curr.costing.arielSourcingMarginPct, 0) / (totalSkus || 1)
   ).toFixed(1);
 
-  const workspaceBg = theme === 'heritage-tan' ? 'bg-[#FAF7F2]' : theme === 'light-clean' ? 'bg-[#F8FAF8]' : 'bg-[#F4F6F4]';
+  const workspaceBg = theme === 'heritage-tan' ? 'bg-[#FAF7F2]' : theme === 'royal-blue' ? 'bg-[#F0F4FA]' : 'bg-[#F4F6F4]';
 
   return (
     <div className={`flex min-h-screen ${workspaceBg} text-[#1A1A1A] selection:bg-[#C9A86A] selection:text-[#1F3A2E] transition-colors`}>
@@ -344,6 +347,7 @@ export default function Home() {
           currentUser={currentUser}
           onOpenProfileControl={() => setIsProfileModalOpen(true)}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
+          onOpenUserGuide={() => setIsUserGuideModalOpen(true)}
         />
 
         {/* Dashboard Workspace */}
@@ -545,6 +549,31 @@ export default function Home() {
         allUsers={users}
         onUpdateUserList={handleUpdateUserList}
         onSignOut={handleSignOut}
+      />
+
+      {/* Autonomous Enterprise AI Assistant "ArielMC" */}
+      <ArielMCAICopilot
+        activeEntity={activeEntity}
+        activeCurrency={activeCurrency}
+        products={products}
+        factories={factories}
+        samples={samples}
+        orders={orders}
+        consignments={consignments}
+        crmLeads={crmLeads}
+        theme={theme}
+        onNavigateTab={setActiveTab}
+        onOpenDocumentCenter={() => handleOpenDocCenter('COMMERCIAL_INVOICE')}
+        onOpenDatabaseSettings={() => setIsDbModalOpen(true)}
+        onOpenUserGuide={() => setIsUserGuideModalOpen(true)}
+        onOpenProfileControl={() => setIsProfileModalOpen(true)}
+      />
+
+      {/* ArielMC ERP Official User Guide Modal */}
+      <UserGuideModal
+        isOpen={isUserGuideModalOpen}
+        onClose={() => setIsUserGuideModalOpen(false)}
+        theme={theme}
       />
     </div>
   );

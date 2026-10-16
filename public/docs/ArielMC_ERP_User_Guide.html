@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ArielMC ERP User Guide — Official Operations Manual</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 18mm 15mm 20mm 15mm;
+      @bottom-right {
+        content: "Page " counter(page);
+        font-family: 'Inter', sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "ArielMC ERP — Confidential & Proprietary";
+        font-family: 'Inter', sans-serif;
+        font-size: 8pt;
+        color: #64748b;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.55;
+      font-size: 10pt;
+      padding: 20px 25px;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+      margin-top: 30px;
+    }
+
+    /* Official Letterhead Header */
+    .header-table {
+      width: 100%;
+      border-bottom: 3px solid #C8A96A;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 24pt;
+      font-weight: 800;
+      color: #1F3A2E;
+      letter-spacing: 1px;
+    }
+
+    .brand-subtitle {
+      font-size: 9pt;
+      color: #8A6D3B;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: #1F3A2E;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-meta {
+      text-align: right;
+      font-size: 8.5pt;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    /* Chapter Title Styling */
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 18pt;
+      color: #1F3A2E;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin: 24px 0 14px 0;
+    }
+
+    h2 {
+      font-size: 12pt;
+      color: #1F3A2E;
+      margin: 18px 0 8px 0;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 10.5pt;
+      color: #334155;
+      margin: 14px 0 6px 0;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 8px 0 14px 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* High-End Data Tables */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px 0;
+      font-size: 8.5pt;
+    }
+
+    table.data-table th {
+      background: #1F3A2E;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 7px 9px;
+      text-align: left;
+      border: 1px solid #1F3A2E;
+    }
+
+    table.data-table td {
+      padding: 6px 9px;
+      border: 1px solid #e2e8f0;
+    }
+
+    table.data-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      border-left: 4px solid #C8A96A;
+      background: #fdfbf7;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 9pt;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #8A6D3B;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-size: 8pt;
+      letter-spacing: 0.5px;
+    }
+
+    .callout-navy {
+      border-left: 4px solid #4169E1;
+      background: #f0f4fa;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 9pt;
+    }
+
+    .callout-navy .callout-title {
+      color: #1e3a8a;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8pt;
+      color: #0f172a;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-green { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-blue { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge-gold { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+    /* Cover Page */
+    .cover-container {
+      text-align: center;
+      padding: 60px 20px 40px 20px;
+    }
+
+    .cover-logo {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px auto;
+      border: 2px solid #C8A96A;
+      border-radius: 20px;
+      padding: 10px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    }
+
+    .cover-title {
+      font-family: 'Cinzel', serif;
+      font-size: 32pt;
+      font-weight: 800;
+      color: #1F3A2E;
+      margin-bottom: 6px;
+      letter-spacing: 1.5px;
+    }
+
+    .cover-subtitle {
+      font-size: 13pt;
+      font-weight: 600;
+      color: #8A6D3B;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+    }
+
+    .cover-divider {
+      width: 120px;
+      height: 3px;
+      background: #C8A96A;
+      margin: 0 auto 30px auto;
+    }
+
+    .cover-desc {
+      max-width: 580px;
+      margin: 0 auto 40px auto;
+      font-size: 10pt;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    .cover-meta-box {
+      display: inline-block;
+      text-align: left;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 24px;
+      font-size: 9pt;
+      margin-top: 20px;
+    }
+
+    .cover-meta-box td {
+      padding: 3px 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== COVER PAGE ==================== -->
+  <div class="cover-container">
+    <div class="cover-logo">
+      <img src="https://raw.githubusercontent.com/TuheenBD/ArielMC-ERP/main/public/images/ArielMC_Logo.png" alt="ArielMC" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'">
+    </div>
+    <div class="cover-title">ArielMC</div>
+    <div class="cover-subtitle">ENTERPRISE RESOURCE PLANNING (ERP)</div>
+    <div class="cover-divider"></div>
+    <div style="font-size: 15pt; font-weight: 700; color: #1F3A2E; margin-bottom: 12px;">
+      Comprehensive User Guide &amp; Operational Manual
+    </div>
+    <p class="cover-desc">
+      Official end-to-end operational handbook for <strong>ArielMC</strong> multi-entity stations. Covers product master catalogs, Bangladesh compliant factory auditing, R&amp;D tech pack sampling, two-way order pipelines, bonded customs clearance, Mushak 6.3 VAT tax invoices, multi-station finance, user security, and autonomous AI copilot integration.
+    </p>
+
+    <table class="cover-meta-box">
+      <tr>
+        <td style="color: #64748b; font-weight: 600;">Document Ref:</td>
+        <td><code>ArielMC-ERP-UG-2026-V1</code></td>
+      </tr>
+      <tr>
+        <td style="color: #64748b; font-weight: 600;">Publication Date:</td>
+        <td>October 16, 2026</td>
+      </tr>
+      <tr>
+        <td style="color: #64748b; font-weight: 600;">Governing Entity:</td>
+        <td><strong>ArielMC</strong> (Ariel Marketing &amp; Communications Ltd)</td>
+      </tr>
+      <tr>
+        <td style="color: #64748b; font-weight: 600;">Global Operating Stations:</td>
+        <td>🇧🇩 Dhaka (BD) &bull; 🇬🇧 London (UK) &bull; 🇺🇸 New York (US) &bull; 🇪🇺 Frankfurt (EU) &bull; 🇦🇺 Sydney (AU)</td>
+      </tr>
+      <tr>
+        <td style="color: #64748b; font-weight: 600;">Security Classification:</td>
+        <td><span class="badge-pill badge-green">INTERNAL OFFICIAL USE</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ==================== TABLE OF CONTENTS ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Ariel Marketing &amp; Communications Ltd &bull; Global Operations</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">TABLE OF CONTENTS</span><br>
+        Version: 1.0.0 &bull; Release 2026
+      </td>
+    </tr>
+  </table>
+
+  <h1>Table of Contents</h1>
+  <table class="data-table" style="font-size: 9.5pt;">
+    <thead>
+      <tr>
+        <th style="width: 12%;">Chapter</th>
+        <th style="width: 58%;">Module &amp; Operational Domain</th>
+        <th style="width: 15%;">Lifecycle Phase</th>
+        <th style="width: 15%;">Primary Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Section 1</strong></td>
+        <td>Executive Overview &amp; 5-Station Multi-Entity Architecture</td>
+        <td><span class="badge-pill badge-green">Foundation</span></td>
+        <td>Executive &amp; SCM</td>
+      </tr>
+      <tr>
+        <td><strong>Section 2</strong></td>
+        <td>Phase 1: Sector Product Master &amp; Sourcing Margin Engine</td>
+        <td><span class="badge-pill badge-green">Phase 1 (Live)</span></td>
+        <td>Merchandiser</td>
+      </tr>
+      <tr>
+        <td><strong>Section 3</strong></td>
+        <td>Phase 2: Bangladesh Factory Compliance Auditing &amp; Vetting</td>
+        <td><span class="badge-pill badge-green">Phase 2 (Live)</span></td>
+        <td>Compliance Auditor</td>
+      </tr>
+      <tr>
+        <td><strong>Section 4</strong></td>
+        <td>Phase 3: R&amp;D, Tech Packs &amp; SDO Sampling Protocol</td>
+        <td><span class="badge-pill badge-green">Phase 3 (Live)</span></td>
+        <td>R&amp;D / Sampling</td>
+      </tr>
+      <tr>
+        <td><strong>Section 5</strong></td>
+        <td>Phase 4: Two-Way Order Management System (OMS) &amp; Back-to-Back POs</td>
+        <td><span class="badge-pill badge-green">Phase 4 (Live)</span></td>
+        <td>Supply Chain Lead</td>
+      </tr>
+      <tr>
+        <td><strong>Section 6</strong></td>
+        <td>Phase 5: Global CRM Pipeline &amp; Buyer Account Intelligence</td>
+        <td><span class="badge-pill badge-green">Phase 5 (Live)</span></td>
+        <td>Commercial / Sales</td>
+      </tr>
+      <tr>
+        <td><strong>Section 7</strong></td>
+        <td>Phase 6: Logistics, Bonded Warehousing &amp; Bangladesh Customs</td>
+        <td><span class="badge-pill badge-green">Phase 6 (Live)</span></td>
+        <td>Logistics &amp; C&amp;F</td>
+      </tr>
+      <tr>
+        <td><strong>Section 8</strong></td>
+        <td>Phase 7: Bonded Inventory &amp; Raw Material Warehouse Transfers</td>
+        <td><span class="badge-pill badge-green">Phase 7 (Live)</span></td>
+        <td>Warehouse Manager</td>
+      </tr>
+      <tr>
+        <td><strong>Section 9</strong></td>
+        <td>Phase 8: Multi-Currency Finance &amp; Mushak 6.3 Tax Engine</td>
+        <td><span class="badge-pill badge-green">Phase 8 (Live)</span></td>
+        <td>Finance Controller</td>
+      </tr>
+      <tr>
+        <td><strong>Section 10</strong></td>
+        <td>Phase 9: Security, User Profiles, 2SA &amp; Role-Based Access Control</td>
+        <td><span class="badge-pill badge-green">Phase 9 (Live)</span></td>
+        <td>Security / Admin</td>
+      </tr>
+      <tr>
+        <td><strong>Section 11</strong></td>
+        <td>Phase 10: PostgreSQL Persistence &amp; Cloud Synchronization</td>
+        <td><span class="badge-pill badge-green">Phase 10 (Live)</span></td>
+        <td>Data Architect</td>
+      </tr>
+      <tr>
+        <td><strong>Section 12</strong></td>
+        <td>Phase 11: <strong>ArielMC</strong> AI Copilot Operational Reference</td>
+        <td><span class="badge-pill badge-blue">AI Enhanced</span></td>
+        <td>All Users</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== SECTION 1 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Section 1: Multi-Station Architecture</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">ARCHITECTURE</span><br>
+        5 Global Operating Entities
+      </td>
+    </tr>
+  </table>
+
+  <h1>1. Multi-Station Architecture &amp; Global Footprint</h1>
+  <p>
+    <strong>ArielMC</strong> operates as a globally integrated sourcing and manufacturing conglomerate bridging Bangladesh's premier artisan manufacturing facilities with Tier-1 international retail brands across the United Kingdom, United States, European Union, and Australia.
+  </p>
+
+  <h2>1.1 The Five Operating Stations</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Station Name</th>
+        <th>Jurisdiction</th>
+        <th>Base Currency</th>
+        <th>Tax &amp; Regulatory ID</th>
+        <th>Operational Mandate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>ArielMC BD</strong></td>
+        <td>Dhaka, Bangladesh 🇧🇩</td>
+        <td><code>BDT (৳)</code></td>
+        <td>NBR BIN: <code>001928374-0101</code></td>
+        <td>Direct factory contracting, compliance auditing, bonded warehousing (Chattogram), and raw material quality inspection.</td>
+      </tr>
+      <tr>
+        <td><strong>ArielMC UK</strong></td>
+        <td>London, United Kingdom 🇬🇧</td>
+        <td><code>GBP (£)</code></td>
+        <td>HMRC VAT: <code>GB-982-1049-22</code></td>
+        <td>European buyer relations, Marks &amp; Spencer / Harrods account management, UK customs import filing.</td>
+      </tr>
+      <tr>
+        <td><strong>ArielMC US</strong></td>
+        <td>New York, USA 🇺🇸</td>
+        <td><code>USD ($)</code></td>
+        <td>IRS EIN: <code>13-8472910</code></td>
+        <td>North American retail accounts (Ralph Lauren, Crate &amp; Barrel), US bonded distribution, FDA tableware clearance.</td>
+      </tr>
+      <tr>
+        <td><strong>ArielMC EU</strong></td>
+        <td>Frankfurt, Germany 🇩🇪</td>
+        <td><code>EUR (€)</code></td>
+        <td>USt-IdNr: <code>DE-304918274</code></td>
+        <td>EU retail distribution (Zara Home, H&amp;M Home), REACH compliance verification, CE marking.</td>
+      </tr>
+      <tr>
+        <td><strong>ArielMC AU</strong></td>
+        <td>Sydney, Australia 🇦🇺</td>
+        <td><code>AUD (A$)</code></td>
+        <td>ATO ABN: <code>51-829-104-921</code></td>
+        <td>Oceania supply agreements, biosecurity import protocols for raw jute crafts and ceramics.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-title">Operational Rule: Entity Scope Switching</div>
+    In <strong>ArielMC</strong> ERP, switching the active operating entity in the top header immediately re-scopes financial ledgers, local statutory tax identifiers, default invoicing currencies, and applicable bonded export tariffs.
+  </div>
+
+  <!-- ==================== SECTION 2 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Section 2: Sector Product Master</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">PHASE 1: LIVE</span><br>
+        12 Master SKUs &bull; Costing Margins
+      </td>
+    </tr>
+  </table>
+
+  <h1>2. Sector Product Master &amp; Costing Margin Engine</h1>
+  <p>
+    The Product Master catalog serves as the single source of truth for all products engineered and sourced through <strong>ArielMC</strong>. It unifies technical product specifications, international Harmonized System (HS) customs codes, factory ex-work purchase prices, and locked <strong>ArielMC</strong> sourcing margins.
+  </p>
+
+  <h2>2.1 The Four Core Manufacturing Sectors</h2>
+  <ul>
+    <li><strong>Leather Goods</strong>: Full-grain vegetable-tanned bovine leather, chrome-free aniline finishes, solid brass hardware. Audited under LWG Gold standard.</li>
+    <li><strong>Jute &amp; Biodegradable Crafts</strong>: 100% natural golden jute fiber, handwoven braided weaves, certified organic cotton linings.</li>
+    <li><strong>Apparel &amp; Sustainable Textiles</strong>: Heavyweight organic cotton french terry, mercerized pique, OEKO-TEX Standard 100 and GOTS organic certified.</li>
+    <li><strong>Artisan Ceramics &amp; Tableware</strong>: High-fired porcelain, fine bone china, reactive glazes. LFGB and US FDA food contact safe.</li>
+  </ul>
+
+  <h2>2.2 Costing Margin Calculation Protocol</h2>
+  <p>
+    <strong>ArielMC</strong> calculates FOB target pricing via the standard formula:
+  </p>
+  <div style="background: #f1f5f9; padding: 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; margin: 10px 0;">
+    FOB_Target_USD = Factory_ExWorks_USD + (Factory_ExWorks_USD &times; Ariel_Sourcing_Margin_Pct) + Inland_Bonded_Logistics_USD
+  </div>
+  <p>
+    All margins are contractually fixed between <strong>18.0% and 35.0%</strong>, ensuring competitive landed buyer pricing while guaranteeing sustainable margins across our operating stations.
+  </p>
+
+  <!-- ==================== SECTION 3 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Section 3: Factory Compliance</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">PHASE 2: LIVE</span><br>
+        8 Vetted BD Facilities
+      </td>
+    </tr>
+  </table>
+
+  <h1>3. Bangladesh Factory Network &amp; Compliance Auditing</h1>
+  <p>
+    <strong>ArielMC</strong> enforces zero-tolerance compliance standards across all contracted manufacturing facilities in Bangladesh. No production order or SDO sample may be assigned to a factory lacking valid social, environmental, and structural safety audits.
+  </p>
+
+  <h2>3.1 Core Compliance Certifications Required</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Standard</th>
+        <th>Governing Body</th>
+        <th>Key Verification Requirements</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>LWG (Leather Working Group)</strong></td>
+        <td>LWG UK</td>
+        <td>Effluent Treatment Plant (ETP) operation, chromium waste containment, water stewardship.</td>
+      </tr>
+      <tr>
+        <td><strong>amfori BSCI (Grade A/B)</strong></td>
+        <td>amfori Europe</td>
+        <td>Living wage compliance, fair working hours, prohibition of child/forced labor, freedom of association.</td>
+      </tr>
+      <tr>
+        <td><strong>SEDEX SMETA 4-Pillar</strong></td>
+        <td>Sedex Global</td>
+        <td>Labor standards, health &amp; safety, environmental performance, and business integrity.</td>
+      </tr>
+      <tr>
+        <td><strong>OEKO-TEX Standard 100</strong></td>
+        <td>OEKO-TEX Association</td>
+        <td>Zero harmful chemical residues, non-toxic reactive dyeing, skin-safety tests.</td>
+      </tr>
+      <tr>
+        <td><strong>RSC / Nirapon</strong></td>
+        <td>RMG Sustainability Council</td>
+        <td>Structural engineering integrity, electrical fire safety, automated hydrant sprinkler systems.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== SECTION 4 & 5 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Sections 4 &amp; 5: R&amp;D, Sampling &amp; Order Pipeline</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">PHASE 3 &amp; 4: LIVE</span><br>
+        SDOs &bull; Golden Seal &bull; Two-Way OMS
+      </td>
+    </tr>
+  </table>
+
+  <h1>4. R&amp;D, Tech Packs &amp; SDO Sampling Protocol</h1>
+  <p>
+    Before bulk production, every product progresses through the <strong>ArielMC Five-Stage Sample Development Order (SDO)</strong> lifecycle.
+  </p>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th>Stage Name</th>
+        <th>Objective &amp; Deliverables</th>
+        <th>Turnaround</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Stage 1</td>
+        <td><strong>Lab Dip / Material Swatch</strong></td>
+        <td>Color matching, pantone lab dips (Light D65), physical leather strike-offs.</td>
+        <td>5 Business Days</td>
+      </tr>
+      <tr>
+        <td>Stage 2</td>
+        <td><strong>Proto Sample</strong></td>
+        <td>First 3D dimensional mock-up verifying silhouette and pattern ergonomics.</td>
+        <td>8 Business Days</td>
+      </tr>
+      <tr>
+        <td>Stage 3</td>
+        <td><strong>Fit / Size Set Sample</strong></td>
+        <td>Grading verification across complete size run (S to XXL or sizing tiers).</td>
+        <td>10 Business Days</td>
+      </tr>
+      <tr>
+        <td>Stage 4</td>
+        <td><strong>Pre-Production (PP) Sample</strong></td>
+        <td>Created on actual production lines using bulk raw material allocations.</td>
+        <td>12 Business Days</td>
+      </tr>
+      <tr>
+        <td>Stage 5</td>
+        <td><strong>Golden Seal (Approved)</strong></td>
+        <td>Signed, sealed master sample counter-stamped by both buyer and <strong>ArielMC</strong>.</td>
+        <td>Contract Gate</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h1>5. Two-Way Order Management System (OMS)</h1>
+  <p>
+    <strong>ArielMC</strong> utilizes a proprietary <strong>Two-Way Order Execution Model</strong>. When an export Sales Order is finalized with an international retail buyer:
+  </p>
+  <ol>
+    <li><strong>Buyer Contract Gate</strong>: Buyer issues Letter of Credit (L/C) or Sales Contract at the agreed FOB landed rate.</li>
+    <li><strong>Back-to-Back PO Issuance</strong>: <strong>ArielMC BD</strong> automatically issues a back-to-back Bangladesh Factory Purchase Order at the pre-negotiated Ex-Works rate, locking raw material commitments.</li>
+    <li><strong>Bonded Allocation</strong>: Factory registers raw hide or yarn consumption declarations under <strong>ArielMC</strong>'s bonded warehouse quota.</li>
+  </ol>
+
+  <!-- ==================== SECTION 6 & 7 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Sections 6 &amp; 7: Logistics, Customs &amp; Inventory</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">PHASE 6 &amp; 7: LIVE</span><br>
+        Bonded Warehousing &bull; Mushak 6.3
+      </td>
+    </tr>
+  </table>
+
+  <h1>6. Logistics, Bonded Warehousing &amp; Bangladesh Customs</h1>
+  <p>
+    <strong>ArielMC</strong> oversees international ocean and air freight logistics connecting Bangladesh ports to destination hubs worldwide.
+  </p>
+  <ul>
+    <li><strong>Ocean Freight (Chattogram Port - CGP)</strong>: Primary export terminal for bulk containers (20ft / 40ft HC). Transit: 22-26 days to Southampton/Felixstowe (UK), 28-32 days to New York/New Jersey (USA).</li>
+    <li><strong>Air Freight (Hazrat Shahjalal Int'l Airport - DAC)</strong>: High-priority express consignments, fast-fashion replenishment, and Golden Seal courier parcels via DHL / FedEx.</li>
+    <li><strong>Customs Clearance (C&amp;F)</strong>: Automated processing of Bill of Lading, Packing Lists, Certificate of Origin (Export Promotion Bureau - EPB), and GSP Form A.</li>
+  </ul>
+
+  <h1>7. Bonded Inventory &amp; Raw Material Transfers</h1>
+  <p>
+    Under <strong>ArielMC BD</strong>'s National Board of Revenue (NBR) Bond License (<code>NBR-BOND-2024-C882</code>), imported premium raw materials (Italian veg-tan hides, Swiss dyes, YKK zippers) are stored duty-free at <strong>Bonded Depot A-4 (Chattogram)</strong>.
+  </p>
+  <div class="callout-navy">
+    <div class="callout-title">Statutory Rule: Raw Material Utilization Declaration (UD)</div>
+    Every square foot of imported leather and kilogram of organic yarn is tracked against authorized Bangladesh BGMEA / LFMEAB Utilization Declarations. Unauthorized domestic release carries severe statutory penalties.
+  </div>
+
+  <!-- ==================== SECTION 8 & 9 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Sections 8 &amp; 9: Finance, VAT &amp; Security</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">PHASE 8 &amp; 9: LIVE</span><br>
+        Multi-Currency &bull; 2SA &bull; RBAC
+      </td>
+    </tr>
+  </table>
+
+  <h1>8. Multi-Currency Finance &amp; Mushak 6.3 Tax Engine</h1>
+  <p>
+    <strong>ArielMC</strong> ERP provides automated multi-station financial consolidation, FX hedging, and National Board of Revenue (NBR) VAT compliance.
+  </p>
+  <h2>8.1 Mushak 6.3 VAT Tax Invoicing Standards</h2>
+  <p>
+    Under the Bangladesh Value Added Tax and Supplementary Duty Act 2012, all commercial dispatches require an official <strong>Mushak 6.3</strong> tax invoice:
+  </p>
+  <ul>
+    <li><strong>Deemed Exports</strong>: Zero-rated (<code>0% VAT</code>) when backed by an export L/C or authorized bonded supply contract.</li>
+    <li><strong>Domestic Institutional Supply</strong>: Standard <code>15% VAT</code> plus applicable supplementary duties.</li>
+  </ul>
+
+  <h1>9. Enterprise Security, User Profiles &amp; 2SA</h1>
+  <p>
+    To protect sensitive pricing, buyer relationships, and financial records, <strong>ArielMC</strong> enforces strict security layers:
+  </p>
+  <ul>
+    <li><strong>Two-Step Authentication (2SA)</strong>: All staff must enable 2SA via TOTP Authenticator (Google Authenticator) or encrypted WhatsApp OTP to <code>+8801819273458</code>.</li>
+    <li><strong>Role-Based Access Control (RBAC)</strong>:
+      <ul>
+        <li><strong>Managing Director</strong>: Unrestricted global access, entity station configuration, and financial approval gates.</li>
+        <li><strong>VP of Global Sourcing</strong>: Product master creation, factory allocation, and SDO approvals.</li>
+        <li><strong>Chief Compliance Auditor</strong>: Factory audit scoring, ETP verification, and compliance flag toggles.</li>
+        <li><strong>Senior Merchandiser</strong>: SDO sample tracking, courier dispatch, and buyer RFQ conversion.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <!-- ==================== SECTION 10 & 11 ==================== -->
+  <div class="page-break"></div>
+
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="brand-title">ArielMC</div>
+        <div class="brand-subtitle">Sections 10 &amp; 11: PostgreSQL &amp; AI Copilot</div>
+      </td>
+      <td class="doc-meta">
+        <span class="doc-badge">PHASE 10 &amp; 11: LIVE</span><br>
+        Supabase &bull; ArielMC AI Assistant
+      </td>
+    </tr>
+  </table>
+
+  <h1>10. PostgreSQL Database Persistence (Supabase)</h1>
+  <p>
+    The ERP leverages a dual persistence model:
+  </p>
+  <ul>
+    <li><strong>Offline-First Local Cache</strong>: Seamless operations even during temporary network drops in manufacturing zones.</li>
+    <li><strong>Relational PostgreSQL (Supabase)</strong>: Live relational cloud synchronization across <code>ariel_products</code>, <code>ariel_factories</code>, <code>ariel_samples</code>, <code>ariel_orders</code>, <code>ariel_leads</code>, and <code>ariel_consignments</code>.</li>
+  </ul>
+
+  <h1>11. The ArielMC AI Operational Copilot</h1>
+  <p>
+    The ERP incorporates an autonomous artificial intelligence operations copilot, named <strong>ArielMC</strong>. Located in the floating launcher at the bottom-right of the screen, <strong>ArielMC</strong> AI provides real-time operational answers:
+  </p>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Sample AI Query</th>
+        <th>Copilot Capability &amp; Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>"Show highest margin leather products"</code></td>
+        <td>Ranks SKUs by sourcing margin percentage, displays factory ex-work vs. FOB target prices, and offers direct deep-link to Product Master.</td>
+      </tr>
+      <tr>
+        <td><code>"List LWG Gold compliant factories"</code></td>
+        <td>Filters 8 partner facilities, displays audit scores and certifications, and provides contact details for compliance officers.</td>
+      </tr>
+      <tr>
+        <td><code>"How do I generate a Mushak 6.3 invoice?"</code></td>
+        <td>Provides NBR statutory guidelines and triggers 1-click opening of the Official Document Center.</td>
+      </tr>
+      <tr>
+        <td><code>"What is the status of Harrods SDO-2026-002?"</code></td>
+        <td>Retrieves live SDO stage (Pre-Production), status, and DHL airway bill tracking number.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 40px; padding: 20px; background: #f8fafc; border: 1.5px solid #C8A96A; border-radius: 8px; text-align: center;">
+    <div style="font-family: 'Cinzel', serif; font-size: 14pt; font-weight: 700; color: #1F3A2E; margin-bottom: 4px;">ArielMC ERP System Certification</div>
+    <div style="font-size: 8.5pt; color: #64748b; font-family: 'JetBrains Mono', monospace;">
+      DOCUMENT HASH: 9a8f27c81d3e4b509f6e7d8c &bull; AUTHORED BY SYED AKRAMUL HASSAN &bull; MANAGING DIRECTOR
+    </div>
+  </div>
+
+</body>
+</html>
