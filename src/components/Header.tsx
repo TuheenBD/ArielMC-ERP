@@ -17,7 +17,8 @@ import {
   Palette,
   Check,
   PhoneCall,
-  Video
+  Video,
+  FileText
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -33,6 +34,7 @@ interface HeaderProps {
   onSelectTheme?: (t: ThemeProfile) => void;
   activeTab?: ActiveTab;
   onSelectTab?: (tab: ActiveTab) => void;
+  onOpenDocumentCenter?: () => void;
 }
 
 const getStationBrandName = (code: EntityCode) => {
@@ -65,6 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTheme,
   activeTab,
   onSelectTab,
+  onOpenDocumentCenter,
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
 
@@ -301,6 +304,19 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
+
+          {/* Official Documents PDF Generator */}
+          {onOpenDocumentCenter && (
+            <button
+              id="header-official-docs-btn"
+              onClick={onOpenDocumentCenter}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm ${toolButtonBg}`}
+              title="Official ArielMC PDF Document Engine (Commercial Invoices, Proforma Invoices, Mushak 6.3, Purchase Orders)"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="hidden xl:inline">Export Docs</span>
+            </button>
+          )}
 
           {/* Notifications */}
           <button 

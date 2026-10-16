@@ -34,6 +34,7 @@ import { LogisticsManagement } from '@/components/LogisticsManagement';
 import { FinanceManagement } from '@/components/FinanceManagement';
 import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
+import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocumentCenter';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
 import {
@@ -89,6 +90,15 @@ export default function Home() {
   // Modals
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDocCenterOpen, setIsDocCenterOpen] = useState(false);
+  const [docCenterType, setDocCenterType] = useState<DocumentType>('COMMERCIAL_INVOICE');
+  const [docCenterOrderId, setDocCenterOrderId] = useState<string | undefined>(undefined);
+
+  const handleOpenDocCenter = (type?: DocumentType, orderId?: string) => {
+    if (type) setDocCenterType(type);
+    if (orderId) setDocCenterOrderId(orderId);
+    setIsDocCenterOpen(true);
+  };
 
   const activeEntity = companies.find((c) => c.code === activeEntityCode) || companies[0];
   const activeCurrency = currencies.find((c) => c.code === activeCurrencyCode) || currencies[0];
@@ -213,6 +223,7 @@ export default function Home() {
           onSelectTheme={handleSelectTheme}
           activeTab={activeTab}
           onSelectTab={setActiveTab}
+          onOpenDocumentCenter={() => handleOpenDocCenter('COMMERCIAL_INVOICE')}
         />
 
         {/* Dashboard Workspace */}
@@ -323,6 +334,7 @@ export default function Home() {
               onAddOrder={handleAddOrder}
               onUpdateOrderStatus={handleUpdateOrderStatus}
               onUpdateMilestoneStatus={handleUpdateMilestoneStatus}
+              onOpenDocumentCenter={handleOpenDocCenter}
             />
           )}
 
@@ -376,6 +388,16 @@ export default function Home() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAddProduct={handleAddProduct}
+      />
+
+      {/* Official PDF Document Engine Modal */}
+      <OfficialDocumentCenter
+        isOpen={isDocCenterOpen}
+        onClose={() => setIsDocCenterOpen(false)}
+        initialDocumentType={docCenterType}
+        initialOrderId={docCenterOrderId}
+        activeEntity={activeEntity}
+        activeCurrency={activeCurrency}
       />
     </div>
   );

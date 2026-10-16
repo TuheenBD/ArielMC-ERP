@@ -39,6 +39,8 @@ import {
   List,
   Sparkles,
   PhoneCall,
+  FileText,
+  Printer
 } from 'lucide-react';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 
@@ -53,6 +55,10 @@ interface OrderManagementProps {
     orderId: string,
     milestoneId: string,
     newStatus: 'COMPLETED' | 'ON_TRACK' | 'AT_RISK' | 'DELAYED'
+  ) => void;
+  onOpenDocumentCenter?: (
+    docType?: 'COMMERCIAL_INVOICE' | 'PROFORMA_INVOICE' | 'MUSHAK_6_3' | 'PURCHASE_ORDER',
+    orderId?: string
   ) => void;
 }
 
@@ -126,6 +132,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   onAddOrder,
   onUpdateOrderStatus,
   onUpdateMilestoneStatus,
+  onOpenDocumentCenter,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMarket, setSelectedMarket] = useState<'ALL' | 'UK' | 'EU' | 'US' | 'AU'>('ALL');
@@ -188,6 +195,16 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
         </div>
 
         <div className="flex items-center gap-2.5">
+          {onOpenDocumentCenter && (
+            <button
+              onClick={() => onOpenDocumentCenter('COMMERCIAL_INVOICE')}
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 font-semibold text-xs transition-all shadow-sm font-['Montserrat']"
+              title="Official ArielMC PDF Document Engine (Invoices, Mushak 6.3, POs)"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Official PDF Engine</span>
+            </button>
+          )}
           <button
             onClick={() => setIsChannelsModalOpen(true)}
             className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 font-semibold text-xs transition-all shadow-sm font-['Montserrat']"
@@ -589,6 +606,35 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                         <Ship className="w-3.5 h-3.5 text-[#C8A96A]" />
                         <span>Depart Chittagong Port</span>
                       </button>
+                    )}
+
+                    {onOpenDocumentCenter && (
+                      <div className="flex items-center gap-1.5 ml-auto">
+                        <button
+                          onClick={() => onOpenDocumentCenter('COMMERCIAL_INVOICE', selectedOrder.id)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] font-semibold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                          title="Generate Official Commercial Invoice (CI) on ArielMC Letterhead"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-[#C8A96A]" />
+                          <span>Export CI</span>
+                        </button>
+                        <button
+                          onClick={() => onOpenDocumentCenter('PURCHASE_ORDER', selectedOrder.id)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] hover:bg-[#FBE3B0] font-semibold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                          title="Generate Factory Purchase Order (PO)"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-[#7A5508]" />
+                          <span>Factory PO</span>
+                        </button>
+                        <button
+                          onClick={() => onOpenDocumentCenter('MUSHAK_6_3', selectedOrder.id)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#E8F0EA] text-[#1F3A2E] border border-[#BEDDA0] hover:bg-[#D4E4D7] font-semibold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                          title="Generate Bangladesh NBR Mushak 6.3 VAT Challan"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-[#1E6B3A]" />
+                          <span>Mushak 6.3</span>
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
