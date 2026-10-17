@@ -106,7 +106,7 @@ export const DatabaseSettingsModal: React.FC<DatabaseSettingsModalProps> = ({
 
   const handleCopySchema = () => {
     const sqlSchemaCode = `-- ==============================================================================
--- ARIELMC ERP - POSTGRESQL MASTER DATABASE SCHEMA
+-- ArielMC ERP - POSTGRESQL MASTER DATABASE SCHEMA
 -- Automated Table Definitions, Primary Keys, Indexes, Triggers & RLS Policies
 -- ==============================================================================
 
@@ -836,7 +836,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
 
               {/* Code Snippet Preview */}
               <div className={`relative rounded-xl ${terminalBg} p-4 font-mono text-[11px] overflow-x-auto max-h-56 leading-relaxed`}>
-                <pre>{`-- ARIELMC ERP - POSTGRESQL TABLES INCLUDED:
+                <pre>{`-- ArielMC ERP - POSTGRESQL TABLES INCLUDED:
 1. products                  (HS Codes, Costings, Sector Attributes, Compliance)
 2. factories                 (Savar, Gazipur, Narsingdi, Audits, Scorecards)
 3. sample_development_orders (SDOs, Tech Packs, Courier AWB, QA Dossiers)

@@ -56,7 +56,9 @@ const getStationBrandName = (code: EntityCode) => {
     case 'ARIEL_AU':
       return 'ArielMC AU';
     default:
-      return 'ArielMC';
+      return typeof code === 'string' && code.startsWith('ARIEL_')
+        ? `ArielMC ${code.replace('ARIEL_', '')}`
+        : 'ArielMC';
   }
 };
 

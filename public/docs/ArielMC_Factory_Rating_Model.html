@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArielMC Factory Rating Model - Standardized Global B2B Supply Chain Evaluation Matrix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #E2E8F0;
+      color: #1A1A1A;
+      font-size: 11px;
+      line-height: 1.35;
+      padding: 20px;
+    }
+    .page-container {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #FFFFFF;
+      padding: 24px 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+      }
+      .page-container {
+        width: 100%;
+        min-height: auto;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Print action bar */
+    .action-bar {
+      width: 210mm;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #162B22;
+      border: 1px solid #2C5240;
+      border-bottom: 2px solid #C8A96A;
+      padding: 12px 20px;
+      border-radius: 12px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-print {
+      background: #C8A96A;
+      color: #12231B;
+      border: none;
+      padding: 8px 18px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-print:hover {
+      background: #d4b576;
+    }
+
+    /* Header styling */
+    .top-accent-bar {
+      width: 100%;
+      height: 6px;
+      display: flex;
+      margin-bottom: 12px;
+    }
+    .accent-navy {
+      width: 67%;
+      height: 100%;
+      background: #0F2C59;
+    }
+    .accent-amber {
+      width: 33%;
+      height: 100%;
+      background: #E87722;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #CBD5E1;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-emblem {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    .brand-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.5px;
+      color: #0F2C59;
+    }
+    .brand-subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8.5px;
+      font-weight: 700;
+      color: #E87722;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 3px;
+    }
+    .brand-subtext {
+      font-size: 7.5px;
+      color: #64748B;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+    .contact-section {
+      text-align: right;
+      font-size: 7.5px;
+      color: #475569;
+      line-height: 1.35;
+    }
+    .contact-hq {
+      font-weight: 700;
+      color: #0F2C59;
+    }
+    .confidential-badge {
+      display: inline-block;
+      margin-top: 4px;
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* Document Title */
+    .doc-title-block {
+      text-align: center;
+      border-bottom: 2px solid #0F2C59;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .doc-title-main {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: #0F2C59;
+      letter-spacing: 0.5px;
+    }
+    .doc-title-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      color: #E87722;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-top: 2px;
+    }
+
+    /* Section Banner */
+    .section-banner {
+      background: #0F2C59;
+      color: #FFFFFF;
+      padding: 5px 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 2px;
+      margin-bottom: 6px;
+    }
+    .section-banner.red {
+      background: #991B1B;
+    }
+    .section-banner .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 700;
+      color: #E87722;
+    }
+    .section-banner.red .badge {
+      background: #FFFFFF;
+      color: #991B1B;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* Tables */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #94A3B8;
+    }
+    table.data-table th {
+      background: #0F2C59;
+      color: #FFFFFF;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      text-align: left;
+      padding: 6px 8px;
+      border-right: 1px solid #1E3A8A;
+      font-size: 8px;
+    }
+    table.data-table td {
+      padding: 6px 8px;
+      border-top: 1px solid #CBD5E1;
+      border-right: 1px solid #CBD5E1;
+      vertical-align: middle;
+      color: #1E293B;
+    }
+    table.data-table tr:last-child td {
+      border-bottom: 1px solid #94A3B8;
+    }
+
+    /* Tier row custom colors with HIGH CONTRAST */
+    .tier-row-1 {
+      background-color: #FCF8EE;
+    }
+    .tier-row-1 .tier-label {
+      color: #785412;
+      font-weight: 800;
+      font-size: 9px;
+    }
+    .tier-row-2 {
+      background-color: #F8FAFC;
+    }
+    .tier-row-2 .tier-label {
+      color: #1E293B;
+      font-weight: 800;
+      font-size: 9px;
+    }
+    .tier-row-3 {
+      background-color: #FFFBEB;
+    }
+    .tier-row-3 .tier-label {
+      color: #9A3412;
+      font-weight: 800;
+      font-size: 9px;
+    }
+    .tier-row-4 {
+      background-color: #FEF2F2;
+    }
+    .tier-row-4 .tier-label {
+      color: #991B1B;
+      font-weight: 800;
+      font-size: 9px;
+    }
+
+    .badge-icon {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 15px;
+      font-size: 8.5px;
+      font-weight: 800;
+      color: white;
+      margin-right: 6px;
+    }
+    .badge-gold { background: #E87722; }
+    .badge-silver { background: #64748B; }
+    .badge-bronze { background: #D97706; }
+    .badge-critical { background: #DC2626; }
+
+    .score-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      text-align: center;
+      font-size: 9px;
+    }
+
+    /* Section 3: Zero Tolerance */
+    .zero-tolerance-box {
+      border: 1px solid #FECACA;
+      background: #FEF2F2;
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      font-size: 7.5px;
+    }
+    .zero-tolerance-intro {
+      font-style: italic;
+      color: #4B5563;
+      margin-bottom: 6px;
+    }
+    .zero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .zero-card {
+      background: #FFFFFF;
+      border: 1px solid #FCA5A5;
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .zero-icon {
+      font-size: 10px;
+      line-height: 1;
+      margin-top: 1px;
+    }
+    .zero-card-title {
+      font-weight: 800;
+      color: #991B1B;
+      font-size: 8px;
+      margin-bottom: 1px;
+    }
+    .zero-card-desc {
+      color: #374151;
+      font-size: 7.5px;
+      line-height: 1.25;
+    }
+
+    /* Section 4: Sign-off */
+    .signoff-box {
+      border: 1px solid #CBD5E1;
+      background: #F8FAFC;
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+    }
+    .facility-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1.2fr;
+      gap: 12px;
+      border-bottom: 1px solid #E2E8F0;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      font-size: 8px;
+    }
+    .facility-field-label {
+      font-weight: 700;
+      color: #64748B;
+      text-transform: uppercase;
+      font-size: 7px;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .facility-field-val {
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: #0F2C59;
+      border-bottom: 1px solid #94A3B8;
+      padding-bottom: 2px;
+      font-size: 8.5px;
+    }
+
+    .sign-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .sign-card {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 4px;
+      padding: 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 90px;
+    }
+    .sign-role-top {
+      font-size: 7px;
+      font-weight: 600;
+      color: #64748B;
+      text-transform: uppercase;
+    }
+    .sign-line {
+      border-bottom: 1.5px dashed #94A3B8;
+      margin: 18px 8px 4px 8px;
+    }
+    .sign-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 8px;
+      color: #0F2C59;
+    }
+    .sign-desc {
+      font-size: 7px;
+      color: #64748B;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid #CBD5E1;
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7.5px;
+      color: #64748B;
+    }
+    .footer-brand {
+      font-weight: 700;
+      color: #0F2C59;
+    }
+    .footer-brand .amber {
+      color: #E87722;
+    }
+    .footer-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls (Hidden during print) -->
+  <div class="action-bar no-print">
+    <div>
+      <strong style="font-family: 'Montserrat', sans-serif; font-size: 14px;">ArielMC Factory Rating Model</strong>
+      <div style="font-size: 11px; color: #94A3B8;">Standardized Global B2B Supply Chain Evaluation Matrix (A4 Vector PDF)</div>
+    </div>
+    <button class="btn-print" onclick="window.print()">
+      🖨️ Print / Save as PDF
+    </button>
+  </div>
+
+  <!-- A4 Printable Canvas -->
+  <div class="page-container">
+    <div>
+      <!-- Top Dual Accent Stripe -->
+      <div class="top-accent-bar">
+        <div class="accent-navy"></div>
+        <div class="accent-amber"></div>
+      </div>
+
+      <!-- Letterhead -->
+      <div class="header">
+        <div class="logo-section">
+          <img src="/images/ArielMC_Emblem_Square.png" alt="ArielMC Emblem" class="logo-emblem" onerror="this.style.display='none'">
+          <div>
+            <div class="brand-title">ArielMC</div>
+            <div class="brand-subtitle">Ariel Marketing &amp; Communications Limited</div>
+            <div class="brand-subtext">Global B2B Sourcing, Compliance &amp; Supply Chain Management</div>
+          </div>
+        </div>
+
+        <div class="contact-section">
+          <div class="contact-hq">House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan, Dhaka-1212, Bangladesh</div>
+          <div>Tel: +880 2410 811 91 | Mob: +880 1818273458</div>
+          <div>Email: info@arielmc.com | Web: www.arielmc.com</div>
+          <div class="confidential-badge">CONFIDENTIAL EVALUATION SYSTEM &bull; DOC REF: AMC-FRM-2026</div>
+        </div>
+      </div>
+
+      <!-- Document Title -->
+      <div class="doc-title-block">
+        <div class="doc-title-main">
+          ArielMC FACTORY RATING MODEL
+        </div>
+        <div class="doc-title-sub">
+          Standardized Global B2B Supply Chain Evaluation Matrix
+        </div>
+      </div>
+
+      <!-- 1. STRATEGIC EVALUATION PILLARS & WEIGHTS -->
+      <div>
+        <div class="section-banner">
+          <span>1. STRATEGIC EVALUATION PILLARS &amp; WEIGHTS</span>
+          <span class="badge">TOTAL CUMULATIVE: 100%</span>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Evaluation Pillar</th>
+              <th style="width: 12%; text-align: center;">Weight</th>
+              <th style="width: 60%;">Core Verification Criteria &amp; Global Standards Aligned</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700; color: #0F2C59; background: #F8FAFC;">
+                Social Governance &amp; Labor Compliance
+              </td>
+              <td class="score-cell" style="color: #0F2C59; background: #F1F5F9;">
+                25%
+              </td>
+              <td>
+                <strong>Sedex (SMETA) &amp; Amfori BSCI standards.</strong> Evaluation of child labor elimination, fair compensation, structural safety, safe working hours, and operational employee welfare infrastructure.
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: #0F2C59; background: #F8FAFC;">
+                Technical Capacity &amp; Automation
+              </td>
+              <td class="score-cell" style="color: #0F2C59; background: #F1F5F9;">
+                25%
+              </td>
+              <td>
+                <strong>Raw material throughput capabilities</strong>, factory floor equipment inventory (modern ceramic kilns, automated textile looms), in-house quality labs, and supply reliability history.
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: #0F2C59; background: #F8FAFC;">
+                Material, Chemical &amp; Safety Compliance
+              </td>
+              <td class="score-cell" style="color: #0F2C59; background: #F1F5F9;">
+                20%
+              </td>
+              <td>
+                <strong>Sector global certifications:</strong> Leather Working Group (LWG) environmental checks, GOTS / OEKO-TEX Standard 100 for textiles, and food-grade heavy-metal leaching tests for ceramics.
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: #0F2C59; background: #F8FAFC;">
+                Logistics, Security &amp; Trade Stability
+              </td>
+              <td class="score-cell" style="color: #0F2C59; background: #F1F5F9;">
+                30%
+              </td>
+              <td>
+                <strong>CTPAT supply chain safety alignment</strong>, international export scaling readiness, customs tracking capability (ASYCUDA World), and Bangladesh Bank foreign currency monitoring system clearance.
+              </td>
+            </tr>
+            <tr style="background: #F1F5F9; font-weight: 700;">
+              <td style="text-align: right; text-transform: uppercase; font-size: 7.5px; color: #0F2C59;">
+                Cumulative Total Weight:
+              </td>
+              <td class="score-cell" style="color: #E87722; font-size: 9.5px;">
+                100%
+              </td>
+              <td style="font-size: 7.5px; color: #64748B; font-style: italic;">
+                Combined multi-pillar evaluation index for global supply chain qualification.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2. PERFORMANCE CLASSIFICATION & RATING TIERS (FIXED COLOR & READABILITY) -->
+      <div>
+        <div class="section-banner">
+          <span>2. PERFORMANCE CLASSIFICATION &amp; RATING TIERS</span>
+          <span class="badge" style="color: #CBD5E1;">B2B ONBOARDING PRIVILEGES</span>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Tier Rank</th>
+              <th style="width: 18%; text-align: center;">Score Band</th>
+              <th style="width: 60%;">Operational Status &amp; Procurement Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- TIER 1 (GOLD) -->
+            <tr class="tier-row-1">
+              <td>
+                <span class="badge-icon badge-gold">★</span>
+                <span class="tier-label">Tier 1 (Gold)</span>
+              </td>
+              <td class="score-cell" style="color: #0F2C59;">
+                90% &ndash; 100%
+              </td>
+              <td>
+                <strong style="color: #065F46;">Approved Preferred Partner.</strong> Unrestricted export volume onboarding; automatic purchase order execution privileges.
+              </td>
+            </tr>
+
+            <!-- TIER 2 (SILVER) -->
+            <tr class="tier-row-2">
+              <td>
+                <span class="badge-icon badge-silver">✓</span>
+                <span class="tier-label">Tier 2 (Silver)</span>
+              </td>
+              <td class="score-cell" style="color: #0F2C59;">
+                75% &ndash; 89%
+              </td>
+              <td>
+                <strong style="color: #1E3A8A;">Approved Regular Vendor.</strong> Standard operational volume placement; minor process gaps managed via a conditional Corrective Action Plan (CAP).
+              </td>
+            </tr>
+
+            <!-- TIER 3 (BRONZE) -->
+            <tr class="tier-row-3">
+              <td>
+                <span class="badge-icon badge-bronze">!</span>
+                <span class="tier-label">Tier 3 (Bronze)</span>
+              </td>
+              <td class="score-cell" style="color: #0F2C59;">
+                60% &ndash; 74%
+              </td>
+              <td>
+                <strong style="color: #92400E;">Restricted Supplier Status.</strong> Micro trial orders only; strict 90-day physical remediation verification window to avoid offboarding.
+              </td>
+            </tr>
+
+            <!-- TIER 4 (CRITICAL) -->
+            <tr class="tier-row-4">
+              <td>
+                <span class="badge-icon badge-critical">✕</span>
+                <span class="tier-label">Tier 4 (Critical)</span>
+              </td>
+              <td class="score-cell" style="color: #991B1B;">
+                Below 60%
+              </td>
+              <td>
+                <strong style="color: #B91C1C;">Blacklisted / Onboarding Barred.</strong> Immediate cessation of all commercial engagement; current active orders suspended.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 3. MANDATORY ZERO-TOLERANCE CRITERIA -->
+      <div>
+        <div class="section-banner red">
+          <span>3. MANDATORY ZERO-TOLERANCE CRITERIA (IMMEDIATE TIER 4 FAILURE)</span>
+          <span class="badge">NON-NEGOTIABLE</span>
+        </div>
+
+        <div class="zero-tolerance-box">
+          <div class="zero-tolerance-intro">
+            Certain compliance breaches bypass numerical scores and trigger an instant blacklisting to safeguard international supply chain channels against standard liability claims:
+          </div>
+
+          <div class="zero-grid">
+            <div class="zero-card">
+              <div class="zero-icon">⛔</div>
+              <div>
+                <div class="zero-card-title">Child or Forced Labor</div>
+                <div class="zero-card-desc">Any identified instance of underage workers or forced labor environments.</div>
+              </div>
+            </div>
+
+            <div class="zero-card">
+              <div class="zero-icon">⛔</div>
+              <div>
+                <div class="zero-card-title">Environmental Bypass</div>
+                <div class="zero-card-desc">Deliberate avoidance or complete absence of an active Effluent Treatment Plant (ETP) for heavy industrial waste.</div>
+              </div>
+            </div>
+
+            <div class="zero-card">
+              <div class="zero-icon">⛔</div>
+              <div>
+                <div class="zero-card-title">Shadow Subcontracting</div>
+                <div class="zero-card-desc">Outsourcing active product runs to unauthorized, un-audited shadow workshops.</div>
+              </div>
+            </div>
+
+            <div class="zero-card">
+              <div class="zero-icon">⛔</div>
+              <div>
+                <div class="zero-card-title">Unauthorized Transparency</div>
+                <div class="zero-card-desc">Falsifying structural safety reports, regulatory certificates, or facility logs.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. REMEDIATION ROADMAP & AUTHORIZED PANEL SIGN-OFF -->
+      <div>
+        <div class="section-banner">
+          <span>4. REMEDIATION ROADMAP &amp; AUTHORIZED PANEL SIGN-OFF</span>
+          <span class="badge">OFFICIAL VALIDATION</span>
+        </div>
+
+        <div class="signoff-box">
+          <div class="facility-row">
+            <div>
+              <span class="facility-field-label">Audited Facility Name:</span>
+              <div class="facility-field-val">_______________________________________________</div>
+            </div>
+            <div>
+              <span class="facility-field-label">Audit Date:</span>
+              <div class="facility-field-val">_______ / _______ / 2026</div>
+            </div>
+            <div>
+              <span class="facility-field-label">Final Score / Tier:</span>
+              <div class="facility-field-val">__________ %  /  Tier: ____________</div>
+            </div>
+          </div>
+
+          <div class="sign-grid">
+            <div class="sign-card">
+              <div class="sign-role-top">Field Audit Lead</div>
+              <div class="sign-line"></div>
+              <div>
+                <div class="sign-name">Lead Supply Chain Auditor</div>
+                <div class="sign-desc">Social &amp; Technical Audits</div>
+              </div>
+            </div>
+
+            <div class="sign-card">
+              <div class="sign-role-top">Technical Assurance</div>
+              <div class="sign-line"></div>
+              <div>
+                <div class="sign-name">Head of Quality &amp; Operations</div>
+                <div class="sign-desc">Engineering &amp; Capacity Verification</div>
+              </div>
+            </div>
+
+            <div class="sign-card">
+              <div class="sign-role-top">Executive Approval</div>
+              <div class="sign-line"></div>
+              <div>
+                <div class="sign-name">Chief Procurement Officer (CPO)</div>
+                <div class="sign-desc">Executive Sourcing Board</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-brand">
+        <strong>ArielMC</strong> Marketing &amp; Communications Limited &bull; Global B2B Supply Chain Evaluation Matrix
+      </div>
+      <div class="footer-meta">
+        <span>Form Ref: AMC-FRM-2026-V1 &bull; Confidential &bull; Page 1 of 1</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -339,8 +339,8 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({ initialLeads }) => {
           className="bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg px-2.5 py-1 text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
         >
           <option value="ALL">All Sourcing Interests</option>
-          <option value="Jute">🌾 Jute & Natural Fibre</option>
-          <option value="Leather">👞 Leather Goods</option>
+          <option value="Jute">🛍️ Jute & Natural Fibre</option>
+          <option value="Leather">💼 Leather Goods</option>
           <option value="Pottery">🏺 Pottery & Ceramics</option>
           <option value="Textile">🧵 Home Textiles</option>
         </select>

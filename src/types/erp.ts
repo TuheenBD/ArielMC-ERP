@@ -1,6 +1,46 @@
-export type EntityCode = 'ARIEL_BD' | 'ARIEL_UK' | 'ARIEL_US' | 'ARIEL_EU' | 'ARIEL_AU';
+export * from './techPack';
+import { StandardFactoryTechPack } from './techPack';
 
-export type CurrencyCode = 'BDT' | 'GBP' | 'USD' | 'EUR' | 'AUD';
+export type EntityCode = 'ARIEL_BD' | 'ARIEL_UK' | 'ARIEL_US' | 'ARIEL_EU' | 'ARIEL_AU' | (string & {});
+
+export type CurrencyCode = 'BDT' | 'GBP' | 'USD' | 'EUR' | 'AUD' | (string & {});
+
+export interface StationBankAccount {
+  id?: string;
+  bankName: string;
+  accountNumberMask: string;
+  currency: CurrencyCode;
+  type: string;
+  branch?: string;
+  swiftBic?: string;
+  routingOrSortCode?: string;
+  purpose?: string;
+  isPrimary?: boolean;
+  isErq?: boolean;
+}
+
+export interface StatutoryOfficer {
+  id: string;
+  name: string;
+  designation: string;
+  nationalIdOrTin?: string;
+  signingAuthority: 'SOLO_A_SIGNATORY' | 'JOINT_SIGNATORY' | 'AUTHORIZED_REPRESENTATIVE';
+  email?: string;
+  phone?: string;
+  status: 'ACTIVE' | 'EMERITUS';
+  notes?: string;
+}
+
+export interface InterEntityRoute {
+  sourceStation: EntityCode;
+  destinationStation: EntityCode;
+  incoterm: 'FOB' | 'CIF' | 'DDP' | 'CFR';
+  customsRegime: string;
+  freightCorridor: string;
+  destination3PL: string;
+  currencyRepatriation: string;
+  regulatoryCircular?: string;
+}
 
 export interface CompanyEntity {
   id: string;
@@ -20,12 +60,9 @@ export interface CompanyEntity {
   role: string;
   domains: string[];
   activeFacilities: string[];
-  bankAccounts: {
-    bankName: string;
-    accountNumberMask: string;
-    currency: CurrencyCode;
-    type: string;
-  }[];
+  bankAccounts: StationBankAccount[];
+  statutoryOfficers?: StatutoryOfficer[];
+  interEntityRoute?: InterEntityRoute;
 }
 
 export interface CorporateCommunication {
@@ -96,7 +133,7 @@ export interface CorporateCommunication {
   };
 }
 
-export type ProductSector = 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS';
+export type ProductSector = 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS' | 'POTTERY';
 
 export interface LeatherAttributes {
   leatherType: 'Full-Grain' | 'Top-Grain' | 'Split' | 'Nubuck' | 'Suede';
@@ -138,17 +175,30 @@ export interface CeramicAttributes {
   thermalShockResistance: string;
 }
 
+export interface PotteryAttributes {
+  clayType: 'Indigenous Earthen Clay' | 'Red Terracotta' | 'Black Earthen Clay' | 'Porous Terracotta';
+  firingTempCelsius: number;
+  evaporativeCoolingRating?: string;
+  finishStyle: 'Raw Natural Terra' | 'Smoked / Carbon Fired' | 'Hand-Burnished' | 'Waxed Breathable';
+  frostResistance: 'Indoor & Sheltered' | 'Frost Resistant to -10°C';
+  foodSafeUse: 'Lead & Cadmium Free (Traditional Cooking Grade)' | 'Decorative & Planters Only';
+}
+
 export type SectorAttributes = 
   | { sector: 'LEATHER'; data: LeatherAttributes }
   | { sector: 'JUTE'; data: JuteAttributes }
   | { sector: 'TEXTILE'; data: TextileAttributes }
-  | { sector: 'CERAMICS'; data: CeramicAttributes };
+  | { sector: 'CERAMICS'; data: CeramicAttributes }
+  | { sector: 'POTTERY'; data: PotteryAttributes };
 
 export interface ProductItem {
   id: string;
   sku: string;
   eanBarcode?: string; // GS1 GTIN-13 (053 Country Prefix for Bangladesh)
-  styleCode?: string; // JCT, BLM, LT2, LT3
+  styleCode?: string; // JCT, BLM, LT2, LT3, etc.
+  prodtId?: number; // 1 to 74 from Product Road Map
+  roadmapCode?: string; // e.g. LD-EDC-1, CT-DNT-49, PT-BNG-62
+  subCategory?: string; // e.g. Wallets & Small Leather Goods, Tableware Suites
   packagingMode?: string; // Flat poly-sleeve, 1pc | Dustbag + E-com box | Stuffed, Dustbag + Box
   name: string;
   sector: ProductSector;
@@ -170,6 +220,12 @@ export interface ProductItem {
     b2bDdpPriceUsd?: number;
     d2cRetailPriceUsd: number;
   };
+  volumePricing?: {
+    tier1: { qty: string; sellPriceUsd: number; targetBuyUsd: number };
+    tier2: { qty: string; sellPriceUsd: number; targetBuyUsd: number };
+    tier3: { qty: string; sellPriceUsd: number; targetBuyUsd: number };
+    tier4: { qty: string; sellPriceUsd: number; targetBuyUsd: number };
+  };
   attributes: SectorAttributes;
   complianceCertificates: string[];
   partnerFactory: {
@@ -182,6 +238,7 @@ export interface ProductItem {
   sampleStatus: 'PROTO_REQUESTED' | 'DEVELOPMENT_PASSED' | 'BUYER_APPROVED' | 'IN_BULK_PRODUCTION';
   images: string[];
   createdDate: string;
+  standardTechPack?: StandardFactoryTechPack;
 }
 
 export interface CurrencyRate {
@@ -267,8 +324,151 @@ export interface SupplierFactory {
     bankName: string;
     branch: string;
     routingNumber: string;
+    accountNumber?: string;
+    swiftCode?: string;
+    adBranchCode?: string;
   };
   associatedSkus: string[];
+  vendorType?: VendorClassification;
+  website?: string;
+  facebookUrl?: string;
+  linkedInUrl?: string;
+  vendorProfile?: VendorB2bProfile;
+  enlistmentDocuments?: VendorEnlistmentDocument[];
+}
+
+export type VendorClassification = 
+  | 'FULL_FLEDGED_FACTORY'  // Own Raw materials (Such as Tannery) & Make the production to produce finished goods
+  | 'FACTORY'               // Manufacturer (Raw Material Source from Open Market) - Make the production to produce finished goods
+  | 'SUPPLIER';             // Collect Finished goods & Supply
+
+export type VendorEnlistmentDocType = 
+  | 'TRADE_LICENSE'
+  | 'CERTIFICATE_OF_INCORPORATION'
+  | 'NID_CERTIFICATE'
+  | 'BIN_CERTIFICATE'
+  | 'BANK_SOLVENCY'
+  | 'BANK_DETAIL'
+  | 'CHEQUE_SCAN';
+
+export interface VendorEnlistmentDocument {
+  id: string;
+  docType: VendorEnlistmentDocType;
+  title: string;
+  fileName: string;
+  fileSize: string;
+  uploadedAt: string;
+  status: 'VERIFIED' | 'PENDING_REVIEW' | 'REJECTED';
+  fileUrl?: string;
+  mandatory: boolean;
+  notes?: string;
+  documentNumber?: string;
+  validUntil?: string;
+  issuingAuthority?: string;
+}
+
+export interface VendorB2bProfile {
+  // 1. Company Basic Identity & Legal Profile
+  vendorType?: VendorClassification;
+  registeredCompanyName: string;
+  tradeLicenseNo: string;
+  ercNumber?: string;
+  customsBin13Digit: string;
+  tinNumber?: string;
+  registeredOfficeAddress: string;
+  factoryPlantAddress: string;
+  managingDirectorName: string;
+  yearOfEstablishment?: string;
+  websiteUrl?: string;
+  corporateEmail?: string;
+  facebookUrl?: string;
+  linkedInUrl?: string;
+  primaryContact: {
+    name: string;
+    designation: string;
+    email: string;
+    mobile: string;
+  };
+  authorizedSignatory: {
+    name: string;
+    designation: string;
+    email: string;
+    mobile: string;
+  };
+
+  // 2. Core Production Categories & Capacity Segmentation
+  selectedSectors: ProductSector[];
+  factoryFloorAreaSqFt?: number;
+  workforce: {
+    management: number;
+    skilledLabor: number;
+    total: number;
+  };
+  capacities: {
+    leather?: { rawFinishes: string; annualCapacitySqFt: number; leadTimeDays: number };
+    jute?: { rawFibers: string; annualCapacityMetricTons: number; leadTimeDays: number };
+    textile?: { beddingLinens: string; annualCapacityPcs: number; leadTimeDays: number };
+    ceramics?: { tablewareArt: string; annualCapacityPcs: number; leadTimeDays: number };
+  };
+  leadTimes: {
+    initialOrderDays: number;
+    repeatOrderDays: number;
+  };
+
+  // 3. Logistics, Packaging & Shipping Data
+  preferredIncoterms: ('FOB' | 'CIF' | 'CFR' | 'EXW')[];
+  loadingPortLocations: string[];
+  dailyDispatchCapacity: string;
+  containerLoadingAbility: ('20ft FCL' | '40ft HQ' | 'LCL')[];
+
+  // 4. Global Compliance, Audits & Regulatory Frameworks
+  complianceFrameworks: {
+    ukEu: {
+      sedexSmeta: { certified: boolean; idExpiry?: string };
+      bsci: { certified: boolean; idExpiry?: string };
+      oekoTex: { certified: boolean; idExpiry?: string };
+      gots: { certified: boolean; idExpiry?: string };
+    };
+    usa: {
+      ctpat: { certified: boolean; status?: string };
+      fdaLeaching: { certified: boolean; reportNo?: string };
+      lwg: { certified: boolean; grade?: 'Gold' | 'Silver' | 'Bronze' | 'Audited' };
+    };
+    australia: {
+      aqis: { compliant: boolean; regNo?: string };
+      fumigation: { approved: boolean; facilityCode?: string };
+    };
+  };
+
+  // 5. International Banking & Remittance Channels (AD Branch Only)
+  banking: {
+    beneficiaryBankName: string;
+    branchName: string;
+    adBranchCode: string;
+    swiftCode: string;
+    routingNumber: string;
+    accountNumber: string;
+    supportedCurrencies: ('USD' | 'EUR' | 'GBP' | 'AUD' | 'BDT')[];
+    paymentMethodsAccepted: ('Confirmed L/C at sight' | 'TT (Advance/Deferred)')[];
+    exportFootprintPct: {
+      usa: number;
+      uk: number;
+      eu: number;
+      aus: number;
+    };
+  };
+
+  // 6. Vendor Solemn Declaration & Authorized Sign-off
+  declaration: {
+    signatoryFullName: string;
+    designation: string;
+    date: string;
+    placeOfSigning: string;
+    isSigned: boolean;
+  };
+
+  // 7. Mandatory Documents Checklist
+  documents: VendorEnlistmentDocument[];
 }
 
 // -------------------------------------------------------------
@@ -419,6 +619,7 @@ export interface SampleDevelopmentOrder {
   waybillLabelling?: string;
   feedbacks: BuyerFeedback[];
   tags: string[];
+  standardTechPack?: StandardFactoryTechPack;
 }
 
 // -------------------------------------------------------------

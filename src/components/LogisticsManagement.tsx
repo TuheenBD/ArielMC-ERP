@@ -33,8 +33,11 @@ import {
   Info,
   Layers,
   Search,
-  Filter
+  Filter,
+  Share2
 } from 'lucide-react';
+import { ShareDocumentModal } from '@/components/ShareDocumentModal';
+import { OfficialDocument } from '@/types/documentPortal';
 
 interface LogisticsManagementProps {
   consignments: LogisticsConsignment[];
@@ -53,6 +56,37 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
   const [activeConsignment, setActiveConsignment] = useState<LogisticsConsignment>(consignments[0]);
   const [documentPreviewType, setDocumentPreviewType] = useState<'INVOICE' | 'PACKING_LIST' | 'FORM_EXP' | 'EDI_MANIFEST'>('INVOICE');
   const [showDocModal, setShowDocModal] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const exportDoc: OfficialDocument = {
+    id: `DOC-EXP-${activeConsignment?.id || '2026'}`,
+    docCode: `EXP-${activeConsignment?.consignmentNumber || '2026'}`,
+    documentNumber: activeConsignment?.billOfLadingNo || `BL-AMC-${activeConsignment?.id || '2026'}`,
+    title: `ArielMC Official Export Shipping Document - ${documentPreviewType}`,
+    category: 'Commercial Export & Maritime Bill of Lading',
+    section: 'LOGISTICS_CUSTOMS',
+    issuingAuthority: 'ArielMC Global Logistics & Port Customs Directorate',
+    station: 'ARIEL_BD',
+    countryCode: 'BD',
+    issueDate: activeConsignment?.etdCtg || new Date().toISOString().split('T')[0],
+    expiryDate: '2026-12-31',
+    renewalLeadDays: 14,
+    status: 'ACTIVE',
+    verificationUrl: `https://erp.arielmc.com/verify-doc?code=${activeConsignment?.consignmentNumber || activeConsignment?.id || '2026'}&ack=true`,
+    qrCodeData: `${activeConsignment?.consignmentNumber || activeConsignment?.id}|${documentPreviewType}|VERIFIED`,
+    fileUrl: '/docs/ArielMC_Compliance_Dossier.pdf',
+    fileFormat: 'PDF',
+    fileSize: '1.6 MB',
+    version: '2026.1',
+    verified: true,
+    uploadedBy: 'Tuheen (Logistics & Customs Desk)',
+    uploadedAt: new Date().toISOString(),
+    tags: ['Logistics', 'Bill of Lading', 'Commercial Invoice', 'Port Freight', 'Verified'],
+    notes: `Official maritime shipment documentation under Bangladesh Ministry of Commerce & HMRC/EU Customs rules for consignment ${activeConsignment?.consignmentNumber || activeConsignment?.id}.`,
+    isStatutoryRequirement: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
 
   // Status badge styling - Authentic Website & CRM Pastel Theme
   const getShipmentStatusBadge = (status: LogisticsConsignment['status']) => {
@@ -116,16 +150,25 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
         </div>
 
         {/* Global Quick Action */}
-        <div className="flex items-center gap-2 self-start md:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
           <button
             onClick={() => {
               setDocumentPreviewType('INVOICE');
               setShowDocModal(true);
             }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold text-xs shadow-md transition-all font-['Montserrat']"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold text-xs shadow-md transition-all font-['Montserrat'] cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Generate Official Export Docs</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md transition-all font-['Montserrat'] cursor-pointer"
+            title="Share Export Shipping Documents for Verification & Acknowledgement"
+          >
+            <Share2 className="w-4 h-4" />
+            <span>Share (Verify / Ack)</span>
           </button>
         </div>
       </div>
@@ -1276,19 +1319,37 @@ ${activeConsignment.items
               <span className="text-gray-500">
                 Official document format verified under Bangladesh Ministry of Commerce &amp; HMRC/EU Customs rules.
               </span>
-              <button
-                onClick={() => {
-                  window.print();
-                }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold shadow-md transition-all font-['Montserrat']"
-              >
-                <Printer className="w-4 h-4" />
-                <span>Print Document</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    window.print();
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold shadow-md transition-all font-['Montserrat'] cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print Document</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-md transition-all font-['Montserrat'] cursor-pointer"
+                  title="Share Document for Verification & Acknowledgement"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span>Share (Verify / Ack)</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Share Document Modal */}
+      <ShareDocumentModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        document={exportDoc}
+      />
     </div>
   );
 };

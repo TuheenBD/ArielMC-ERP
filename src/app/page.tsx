@@ -14,6 +14,7 @@ import {
   BuyerSalesOrder,
   OrderStatus,
   LogisticsConsignment,
+  StandardFactoryTechPack,
 } from '@/types/erp';
 import { INITIAL_COMPANIES, INITIAL_CURRENCIES, INITIAL_PRODUCTS } from '@/data/initialData';
 import { INITIAL_FACTORIES } from '@/data/initialFactories';
@@ -22,6 +23,7 @@ import { INITIAL_ORDERS } from '@/data/initialOrders';
 import crmLeadsData from '@/data/crmLeads.json';
 import { Header } from '@/components/Header';
 import { Sidebar, ActiveTab, ThemeProfile } from '@/components/Sidebar';
+import { ExecutiveDashboard } from '@/components/ExecutiveDashboard';
 import { EntityStationOverview } from '@/components/EntityStationOverview';
 import { ProductCatalog } from '@/components/ProductCatalog';
 import { FactoryManagement } from '@/components/FactoryManagement';
@@ -30,10 +32,14 @@ import { OrderManagement } from '@/components/OrderManagement';
 import { CrmPipeline } from '@/components/CrmPipeline';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { AddProductModal } from '@/components/AddProductModal';
+import { StandardFactoryTechPackModal } from '@/components/StandardFactoryTechPackModal';
 import { LogisticsManagement } from '@/components/LogisticsManagement';
 import { FinanceManagement } from '@/components/FinanceManagement';
+import { ExecutiveReportsSuite } from '@/components/ExecutiveReportsSuite';
 import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
+import { DocumentPortal } from '@/components/DocumentPortal';
+import { OmnichannelPosSuite } from '@/components/OmnichannelPosSuite';
 import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocumentCenter';
 import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
 import { AuthWelcomeModal } from '@/components/auth/AuthWelcomeModal';
@@ -71,7 +77,55 @@ import {
 } from 'lucide-react';
 
 export default function Home() {
-  const [companies] = useState<CompanyEntity[]>(INITIAL_COMPANIES);
+  const [companies, setCompanies] = useState<CompanyEntity[]>(INITIAL_COMPANIES);
+
+  // Load and hydrate operating stations from localStorage
+  React.useEffect(() => {
+    try {
+      const savedStations = localStorage.getItem('arielmc_erp_operating_stations_v1');
+      if (savedStations) {
+        const parsed = JSON.parse(savedStations);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCompanies(parsed);
+        }
+      }
+    } catch {}
+  }, []);
+
+  const handleUpdateCompaniesList = (updated: CompanyEntity[]) => {
+    setCompanies(updated);
+    try {
+      localStorage.setItem('arielmc_erp_operating_stations_v1', JSON.stringify(updated));
+    } catch {}
+  };
+
+  const handleAddCompany = (newCompany: CompanyEntity) => {
+    const updated = [...companies, newCompany];
+    handleUpdateCompaniesList(updated);
+  };
+
+  const handleEditCompany = (updatedCompany: CompanyEntity) => {
+    const updated = companies.map((c) => (c.code === updatedCompany.code ? updatedCompany : c));
+    handleUpdateCompaniesList(updated);
+  };
+
+  const handleDeleteCompany = (codeToDelete: EntityCode) => {
+    if (companies.length <= 1) {
+      alert('Cannot delete the only remaining operating station. At least one sovereign station must remain active.');
+      return;
+    }
+    const updated = companies.filter((c) => c.code !== codeToDelete);
+    if (activeEntityCode === codeToDelete && updated.length > 0) {
+      setActiveEntityCode(updated[0].code);
+    }
+    handleUpdateCompaniesList(updated);
+  };
+
+  const handleResetCompanies = () => {
+    handleUpdateCompaniesList(INITIAL_COMPANIES);
+    setActiveEntityCode('ARIEL_BD');
+  };
+
   const [activeEntityCode, setActiveEntityCode] = useState<EntityCode>('ARIEL_BD');
   const [currencies] = useState<CurrencyRate[]>(INITIAL_CURRENCIES);
   const [activeCurrencyCode, setActiveCurrencyCode] = useState<string>('USD');
@@ -81,7 +135,7 @@ export default function Home() {
   const [orders, setOrders] = useState<BuyerSalesOrder[]>(INITIAL_ORDERS);
   const [consignments, setConsignments] = useState<LogisticsConsignment[]>(initialConsignments);
   const [crmLeads] = useState<CrmLead[]>(crmLeadsData as CrmLead[]);
-  const [activeTab, setActiveTab] = useState<ActiveTab>('PRODUCTS');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('DASHBOARD');
   const [searchQuery, setSearchQuery] = useState('');
   const [theme, setTheme] = useState<ThemeProfile>('crm-green');
 
@@ -169,6 +223,7 @@ export default function Home() {
   // Modals
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [viewingTechPack, setViewingTechPack] = useState<StandardFactoryTechPack | null>(null);
   const [isDocCenterOpen, setIsDocCenterOpen] = useState(false);
   const [docCenterType, setDocCenterType] = useState<DocumentType>('COMMERCIAL_INVOICE');
   const [docCenterOrderId, setDocCenterOrderId] = useState<string | undefined>(undefined);
@@ -214,6 +269,9 @@ export default function Home() {
   const handleAddProduct = (newProd: ProductItem) => {
     setProducts((prev) => [newProd, ...prev]);
     persistProduct(newProd).catch(console.error);
+    if (newProd.standardTechPack) {
+      setViewingTechPack(newProd.standardTechPack);
+    }
   };
 
   const handleAddFactory = (newFactory: SupplierFactory) => {
@@ -224,6 +282,9 @@ export default function Home() {
   const handleAddSample = (newSample: SampleDevelopmentOrder) => {
     setSamples((prev) => [newSample, ...prev]);
     persistSample(newSample).catch(console.error);
+    if (newSample.standardTechPack) {
+      setViewingTechPack(newSample.standardTechPack);
+    }
   };
 
   const handleUpdateSampleStatus = (
@@ -365,67 +426,32 @@ export default function Home() {
 
         {/* Dashboard Workspace (Independent Smooth Scroll) */}
         <main className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
-          {/* Top Key KPI Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
-              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
-                <span>Operating Stations</span>
-                <Globe2 className="w-4 h-4 text-[#1F5FA8]" />
-              </div>
-              <div className="text-2xl font-bold font-mono text-[#1F3A2E] mt-1">
-                5 <span className="text-xs text-[#6B7269] font-sans font-normal">Entities</span>
-              </div>
-              <div className="text-[11px] text-[#6B7269] mt-1 flex items-center gap-1 font-mono">
-                <span>🇧🇩 BD, 🇬🇧 UK, 🇺🇸 US, 🇪🇺 EU, 🇦🇺 AU</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
-              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
-                <span>Master Product SKUs</span>
-                <Package className="w-4 h-4 text-[#1E6B3A]" />
-              </div>
-              <div className="text-2xl font-bold font-mono text-[#1E6B3A] mt-1">
-                {totalSkus} <span className="text-xs text-[#6B7269] font-sans font-normal">Registered</span>
-              </div>
-              <div className="text-[11px] text-[#1E6B3A] mt-1 flex items-center gap-1 font-medium">
-                <span>Leather, Jute, Textiles, Ceramics</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
-              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
-                <span>Partner Factories</span>
-                <Factory className="w-4 h-4 text-[#8A5A00]" />
-              </div>
-              <div className="text-2xl font-bold font-mono text-[#8A5A00] mt-1">
-                {totalFactories} <span className="text-xs text-[#6B7269] font-sans font-normal">Facilities</span>
-              </div>
-              <div className="text-[11px] text-[#6B7269] mt-1">
-                <span>Savar, Gazipur, Narsingdi, Dhamrai</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
-              <div className="flex items-center justify-between text-[#6B7269] text-xs font-semibold uppercase tracking-wider">
-                <span>Global B2B Leads</span>
-                <Users2 className="w-4 h-4 text-[#7B1FA2]" />
-              </div>
-              <div className="text-2xl font-bold font-mono text-[#7B1FA2] mt-1">
-                {totalLeads} <span className="text-xs text-[#6B7269] font-sans font-normal">Accounts</span>
-              </div>
-              <div className="text-[11px] text-[#6B7269] mt-1 font-mono">
-                <span>UK (96), EU (57), USA (56), AU (45)</span>
-              </div>
-            </div>
-          </div>
-
           {/* Active View Content */}
+          {activeTab === 'DASHBOARD' && (
+            <ExecutiveDashboard
+              companies={companies}
+              activeEntity={activeEntity}
+              onSelectEntity={setActiveEntityCode}
+              totalProducts={totalSkus}
+              totalFactories={totalFactories}
+              totalLeads={totalLeads}
+              totalOrders={orders.length}
+              onNavigate={setActiveTab}
+              theme={theme}
+              activeCurrency={activeCurrency}
+            />
+          )}
           {activeTab === 'STATIONS' && (
             <EntityStationOverview
               companies={companies}
               activeEntity={activeEntity}
               onSelectEntity={setActiveEntityCode}
+              onAddCompany={handleAddCompany}
+              onEditCompany={handleEditCompany}
+              onDeleteCompany={handleDeleteCompany}
+              onResetCompanies={handleResetCompanies}
+              onNavigateToDocuments={() => setActiveTab('DOCUMENTS')}
+              theme={theme}
             />
           )}
 
@@ -459,6 +485,7 @@ export default function Home() {
               onAddSample={handleAddSample}
               onUpdateSampleStatus={handleUpdateSampleStatus}
               onAdvanceSampleStage={handleAdvanceSampleStage}
+              theme={theme}
             />
           )}
 
@@ -487,6 +514,14 @@ export default function Home() {
             <FinanceManagement />
           )}
 
+          {activeTab === 'REPORTS' && (
+            <ExecutiveReportsSuite
+              activeEntity={activeEntity}
+              activeCurrency={activeCurrency}
+              theme={theme}
+            />
+          )}
+
           {activeTab === 'INVENTORY' && (
             <InventoryManagement activeCurrency={activeCurrency} />
           )}
@@ -495,7 +530,25 @@ export default function Home() {
             <CommunicationsHub />
           )}
 
+          {activeTab === 'DOCUMENTS' && (
+            <DocumentPortal
+              companies={companies}
+              activeEntity={activeEntity}
+              theme={theme}
+            />
+          )}
+
+          {activeTab === 'POS' && (
+            <OmnichannelPosSuite
+              products={products}
+              theme={theme}
+              onNavigateToOrders={() => setActiveTab('ORDERS')}
+            />
+          )}
+
           {activeTab !== 'STATIONS' &&
+            activeTab !== 'DOCUMENTS' &&
+            activeTab !== 'POS' &&
             activeTab !== 'PRODUCTS' &&
             activeTab !== 'FACTORIES' &&
             activeTab !== 'CRM' &&
@@ -503,6 +556,7 @@ export default function Home() {
             activeTab !== 'ORDERS' &&
             activeTab !== 'LOGISTICS' &&
             activeTab !== 'FINANCE' &&
+            activeTab !== 'REPORTS' &&
             activeTab !== 'INVENTORY' &&
             activeTab !== 'COMMUNICATIONS' && (
               <PhaseRoadmapPreview
@@ -525,6 +579,13 @@ export default function Home() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAddProduct={handleAddProduct}
+      />
+
+      {/* Standard Factory Tech-Pack Official Document Modal */}
+      <StandardFactoryTechPackModal
+        isOpen={!!viewingTechPack}
+        onClose={() => setViewingTechPack(null)}
+        techPack={viewingTechPack}
       />
 
       {/* Official PDF Document Engine Modal */}

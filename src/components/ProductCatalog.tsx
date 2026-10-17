@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import { ProductItem, ProductSector, CurrencyRate } from '@/types/erp';
+import { StandardFactoryTechPack } from '@/types/techPack';
+import { StandardFactoryTechPackModal } from '@/components/StandardFactoryTechPackModal';
+import { ProductRoadmapModal } from '@/components/ProductRoadmapModal';
+import { buildStandardFactoryTechPack } from '@/data/standardTechPacks';
 import {
   Package,
   Plus,
@@ -19,7 +23,8 @@ import {
   Sparkles,
   Search,
   ExternalLink,
-  Barcode
+  Barcode,
+  BookOpen
 } from 'lucide-react';
 
 interface ProductCatalogProps {
@@ -40,6 +45,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedMarket, setSelectedMarket] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'TABLE'>('GRID');
+  const [viewingTechPack, setViewingTechPack] = useState<StandardFactoryTechPack | null>(null);
+  const [isRoadmapModalOpen, setIsRoadmapModalOpen] = useState(false);
 
   // Filter products by sector, market, and search query
   const filteredProducts = products.filter((prod) => {
@@ -70,26 +77,32 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       case 'LEATHER':
         return {
           label: 'Leather Goods',
-          icon: '👞',
+          icon: '💼',
           color: 'bg-[#FAF5EC] text-[#8A6D3B] border-[#C8A96A]',
         };
       case 'JUTE':
         return {
-          label: 'Jute & Diversified',
-          icon: '🌾',
+          label: 'Jute Products',
+          icon: '🛍️',
           color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]',
         };
       case 'TEXTILE':
         return {
-          label: 'Home Textiles',
+          label: 'Apparel & Home Textiles',
           icon: '🧵',
           color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]',
         };
       case 'CERAMICS':
         return {
-          label: 'Ceramics & Pottery',
-          icon: '🏺',
+          label: 'Ceramics & Tableware',
+          icon: '🍽️',
           color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
+        };
+      case 'POTTERY':
+        return {
+          label: 'Pottery & Terracotta',
+          icon: '🏺',
+          color: 'bg-[#FDF3E7] text-[#9A3412] border-[#FDBA74]',
         };
     }
   };
@@ -154,6 +167,16 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             </button>
           </div>
 
+          {/* Official 5-Division Road Map Modal Trigger */}
+          <button
+            onClick={() => setIsRoadmapModalOpen(true)}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-xs font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+            title="Browse official 74 product lines across all 5 industrial divisions"
+          >
+            <BookOpen className="w-4 h-4 text-[#8A6D3B]" />
+            <span>5-Division Road Map (74 Lines)</span>
+          </button>
+
           {/* Add New Master Product */}
           <button
             id="add-new-sku-btn"
@@ -177,10 +200,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border border-[#DDE3DD]'
             }`}
           >
-            All Sectors ({products.length})
+            All 5 Sectors ({products.length})
           </button>
 
-          {(['LEATHER', 'JUTE', 'TEXTILE', 'CERAMICS'] as ProductSector[]).map((sector) => {
+          {(['LEATHER', 'JUTE', 'TEXTILE', 'CERAMICS', 'POTTERY'] as ProductSector[]).map((sector) => {
             const badge = getSectorBadge(sector);
             const count = products.filter((p) => p.sector === sector).length;
             const isSelected = selectedSector === sector;
@@ -257,6 +280,11 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       <span className="font-mono text-[#1F3A2E] font-semibold text-xs bg-[#F4F6F4] px-2 py-0.5 rounded border border-[#DDE3DD]">
                         {prod.sku}
                       </span>
+                      {prod.roadmapCode && (
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FAF5EC] text-[#8A6D3B] border border-[#C8A96A] font-bold">
+                          Ref #{prod.prodtId} • {prod.roadmapCode}
+                        </span>
+                      )}
                       {prod.styleCode && (
                         <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-semibold">
                           Style {prod.styleCode}
@@ -274,6 +302,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     </h3>
                     <div className="flex items-center gap-2 mt-1.5 text-xs text-[#6B7269] flex-wrap">
                       <span>HS {prod.hsCode}</span>
+                      {prod.subCategory && (
+                        <>
+                          <span>•</span>
+                          <span className="text-[11px] text-[#1A1A1A] font-medium">
+                            {prod.subCategory}
+                          </span>
+                        </>
+                      )}
                       {prod.packagingMode && (
                         <>
                           <span>•</span>
@@ -373,6 +409,23 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                         </div>
                       </>
                     )}
+
+                    {prod.sector === 'POTTERY' && prod.attributes.sector === 'POTTERY' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-[#6B7269]">Clay & Firing:</span>
+                          <span className="font-medium text-[#1A1A1A]">
+                            {prod.attributes.data.clayType} • {prod.attributes.data.firingTempCelsius}°C
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#6B7269]">Finish & Cooling:</span>
+                          <span className="font-medium text-[#1A1A1A]">
+                            {prod.attributes.data.finishStyle} • {prod.attributes.data.evaporativeCoolingRating}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Multi-Tier Commercial Pricing Matrix */}
@@ -395,6 +448,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                         {formatPrice(prod.costing.b2bFobPriceUsd)}
                       </span>
                     </div>
+                    {prod.volumePricing && (
+                      <div className="flex items-center justify-between text-[11px] font-mono text-[#14512C] px-2 py-1 rounded bg-[#F4F6F4] border border-[#DDE3DD]">
+                        <span className="text-[#6B7269]">Tier 1 Buying Target:</span>
+                        <span className="font-bold">
+                          ${prod.volumePricing.tier1.targetBuyUsd} (FOB ${prod.volumePricing.tier1.sellPriceUsd})
+                        </span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between text-[11px] text-[#6B7269] px-1">
                       <span>D2C Retail (Amazon/Shopify):</span>
                       <span className="font-mono text-[#8A6D3B] font-bold">
@@ -417,13 +478,37 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     ))}
                   </div>
 
-                  <button
-                    onClick={() => onSelectProduct(prod)}
-                    className="flex items-center gap-1.5 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
-                  >
-                    <span>View Tech Specs & BOM</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#DDE3DD]">
+                    <button
+                      onClick={() => onSelectProduct(prod)}
+                      className="flex items-center gap-1.5 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
+                    >
+                      <span>Tech Specs</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        setViewingTechPack(
+                          prod.standardTechPack ||
+                            buildStandardFactoryTechPack({
+                              modelName: prod.name,
+                              styleCode: prod.styleCode,
+                              sector: prod.sector,
+                              category: prod.category,
+                              referencePictureUrl: prod.images?.[0],
+                              originHub: prod.partnerFactory?.location,
+                              factoryName: prod.partnerFactory?.factoryName,
+                            })
+                        )
+                      }
+                      className="px-2.5 py-1 rounded-md bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-[11px] font-bold flex items-center gap-1 transition-all shadow-sm"
+                      title="Open Official Standard Factory Tech-Pack (PDF Format)"
+                    >
+                      <FileText className="w-3 h-3" />
+                      <span>Tech-Pack</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -457,6 +542,11 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       <div className="font-bold text-[#1F3A2E] text-xs">{prod.name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                         <span className="font-mono text-[#1F3A2E] font-semibold text-[11px] bg-[#F4F6F4] px-1.5 py-0.5 rounded border border-[#DDE3DD]">{prod.sku}</span>
+                        {prod.roadmapCode && (
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FAF5EC] text-[#8A6D3B] border border-[#C8A96A] font-bold">
+                            Ref #{prod.prodtId} • {prod.roadmapCode}
+                          </span>
+                        )}
                         {prod.styleCode && (
                           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-semibold">
                             Style {prod.styleCode}
@@ -500,12 +590,35 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <button
-                        onClick={() => onSelectProduct(prod)}
-                        className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-semibold shadow-sm transition-all"
-                      >
-                        Inspect
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() =>
+                            setViewingTechPack(
+                              prod.standardTechPack ||
+                                buildStandardFactoryTechPack({
+                                  modelName: prod.name,
+                                  styleCode: prod.styleCode,
+                                  sector: prod.sector,
+                                  category: prod.category,
+                                  referencePictureUrl: prod.images?.[0],
+                                  originHub: prod.partnerFactory?.location,
+                                  factoryName: prod.partnerFactory?.factoryName,
+                                })
+                            )
+                          }
+                          className="px-2 py-1 rounded bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-xs font-semibold shadow-sm transition-all flex items-center gap-1"
+                          title="Open Official Standard Factory Tech-Pack (PDF Format)"
+                        >
+                          <FileText className="w-3 h-3" />
+                          <span>Tech-Pack</span>
+                        </button>
+                        <button
+                          onClick={() => onSelectProduct(prod)}
+                          className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-semibold shadow-sm transition-all"
+                        >
+                          Inspect
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -514,6 +627,24 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           </table>
         </div>
       )}
+
+      {/* Official Factory Tech-Pack Viewer & Printable Modal */}
+      <StandardFactoryTechPackModal
+        isOpen={!!viewingTechPack}
+        onClose={() => setViewingTechPack(null)}
+        techPack={viewingTechPack}
+      />
+
+      {/* Official 5-Division Product Road Map Directory Modal */}
+      <ProductRoadmapModal
+        isOpen={isRoadmapModalOpen}
+        onClose={() => setIsRoadmapModalOpen(false)}
+        activeCurrency={activeCurrency}
+        onSelectRoadmapItem={() => {
+          setIsRoadmapModalOpen(false);
+          onOpenAddModal();
+        }}
+      />
     </div>
   );
 };

@@ -23,7 +23,10 @@ import {
   MessageSquare,
   Mail,
   Share2,
-  Video
+  Video,
+  BarChart3,
+  FolderLock,
+  LayoutDashboard
 } from 'lucide-react';
 import {
   LinkedinIcon as Linkedin,
@@ -38,7 +41,9 @@ import {
 } from '@/components/SocialIcons';
 
 export type ActiveTab = 
+  | 'DASHBOARD'
   | 'STATIONS' 
+  | 'DOCUMENTS'
   | 'PRODUCTS' 
   | 'FACTORIES' 
   | 'RND' 
@@ -47,7 +52,8 @@ export type ActiveTab =
   | 'LOGISTICS' 
   | 'INVENTORY' 
   | 'FINANCE' 
-  | 'POS'
+  | 'REPORTS'
+  | 'POS' 
   | 'COMMUNICATIONS';
 
 export type ThemeProfile = 'crm-green' | 'royal-blue' | 'heritage-tan';
@@ -69,6 +75,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const navSections = [
     {
+      group: 'Executive Command',
+      items: [
+        {
+          id: 'DASHBOARD' as ActiveTab,
+          label: 'Executive Dashboard',
+          icon: LayoutDashboard,
+          badge: 'Overview',
+          phase: 'Command Hub',
+        },
+      ],
+    },
+    {
       group: 'Phase 1: Foundation (Live)',
       items: [
         {
@@ -77,6 +95,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Building2,
           badge: '5 Stations',
           phase: 'Phase 1',
+        },
+        {
+          id: 'DOCUMENTS' as ActiveTab,
+          label: 'Document Portal',
+          icon: FolderLock,
+          badge: 'All Stations',
+          phase: 'Statutory Hub',
         },
         {
           id: 'PRODUCTS' as ActiveTab,
@@ -157,6 +182,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           phase: 'Phase 8',
         },
         {
+          id: 'REPORTS' as ActiveTab,
+          label: 'Executive Reports Suite',
+          icon: BarChart3,
+          badge: 'Executive',
+          phase: 'Live Hub',
+        },
+        {
           id: 'POS' as ActiveTab,
           label: 'Omnichannel Store POS',
           icon: Store,
@@ -214,9 +246,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className={`p-3.5 ${headerBg}`}>
           {/* Executive Official ArielMC Logo Card */}
           <div
-            onClick={() => onSelectTab('STATIONS')}
+            onClick={() => onSelectTab('DASHBOARD')}
             className="group cursor-pointer bg-white/95 hover:bg-white rounded-xl p-2.5 shadow-md border border-[#C8A96A]/60 flex items-center justify-between gap-2.5 transition-all hover:shadow-lg hover:border-[#C8A96A]"
-            title="ArielMC Global Sourcing & Supply Chain ERP"
+            title="ArielMC Global Sourcing & Supply Chain ERP — Go to Executive Dashboard"
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="relative w-11 h-11 rounded-2xl overflow-hidden shrink-0 flex items-center justify-center p-0.5 bg-white shadow-md border border-[#C8A96A]/60">

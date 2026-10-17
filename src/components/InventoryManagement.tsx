@@ -208,6 +208,11 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
           label: 'Ceramics & Tableware',
           color: 'bg-[#E3F2FD] text-[#0D47A1] border-[#BBDEFB]',
         };
+      case 'POTTERY':
+        return {
+          label: 'Pottery & Terracotta',
+          color: 'bg-[#FDF3E7] text-[#9A3412] border-[#FDBA74]',
+        };
       default:
         return {
           label: 'Other Sector',
@@ -599,11 +604,12 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
                 onChange={(e) => setSelectedSectorFilter(e.target.value as any)}
                 className="text-xs border border-[#DDE3DD] rounded-lg px-2.5 py-2 bg-white text-[#1A1A1A] focus:outline-none focus:border-[#C8A96A]"
               >
-                <option value="ALL">All Sectors (4)</option>
-                <option value="LEATHER">Leather Goods</option>
-                <option value="JUTE">Jute &amp; Fiber</option>
-                <option value="TEXTILE">Handloom &amp; Textiles</option>
-                <option value="CERAMICS">Ceramics &amp; Tableware</option>
+                <option value="ALL">All Sectors (5 Divisions)</option>
+                <option value="LEATHER">💼 Leather Goods</option>
+                <option value="JUTE">🛍️ Jute Products</option>
+                <option value="TEXTILE">🧵 Apparel &amp; Home Textiles</option>
+                <option value="CERAMICS">🍽️ Ceramics &amp; Tableware</option>
+                <option value="POTTERY">🏺 Pottery &amp; Terracotta</option>
               </select>
 
               {/* Status Filter */}

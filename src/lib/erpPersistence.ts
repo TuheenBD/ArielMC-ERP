@@ -20,6 +20,11 @@ import {
   INITIAL_STOCK_TRANSFERS
 } from '@/data/initialInventory';
 
+import { StandardVoucher } from '@/types/voucher';
+import { INITIAL_STANDARD_VOUCHERS } from '@/data/initialVouchers';
+import { AccountHead } from '@/types/accountHead';
+import { INITIAL_ACCOUNT_HEADS } from '@/data/initialAccountHeads';
+
 const LOCAL_STORAGE_KEYS = {
   PRODUCTS: 'arielmc_erp_products_v1',
   FACTORIES: 'arielmc_erp_factories_v1',
@@ -29,6 +34,8 @@ const LOCAL_STORAGE_KEYS = {
   INVENTORY: 'arielmc_erp_inventory_v1',
   WAREHOUSES: 'arielmc_erp_warehouses_v1',
   TRANSFERS: 'arielmc_erp_transfers_v1',
+  VOUCHERS: 'arielmc_vouchers_db',
+  ACCOUNT_HEADS: 'arielmc_erp_account_heads_v1',
 };
 
 // ==============================================================================
@@ -748,6 +755,202 @@ export const syncAllSeedDataToSupabase = async (): Promise<{
       message: `Database sync failed: ${error?.message || error}`,
       error: error?.message || String(error),
     };
+  }
+};
+
+// ==============================================================================
+// 7.5. VOUCHERS PERSISTENCE (Cash Purchase & Money Receive Dual-Flow Engine)
+// ==============================================================================
+
+export const fetchVouchers = async (): Promise<StandardVoucher[]> => {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('vouchers').select('*').order('date', { ascending: false });
+      if (!error && data && data.length > 0) {
+        return data.map((row: any) => ({
+          id: row.id,
+          voucherNumber: row.voucher_number || row.voucherNumber,
+          type: row.type,
+          date: row.date,
+          mainAccountHead: row.main_account_head || row.mainAccountHead,
+          subCategoryHead: row.sub_category_head || row.subCategoryHead,
+          currency: row.currency || 'BDT',
+          exchangeRateToBdt: Number(row.exchange_rate_to_bdt || row.exchangeRateToBdt) || 1.0,
+          partyName: row.party_name || row.partyName,
+          partyDetails: row.party_details || row.partyDetails,
+          linkedOrderNumber: row.linked_order_number || row.linkedOrderNumber,
+          paymentMode: row.payment_mode || row.paymentMode,
+          bankReference: row.bank_reference || row.bankReference,
+          taxChalanRef: row.tax_chalan_ref || row.taxChalanRef,
+          items: row.items || [],
+          totalAmount: Number(row.total_amount || row.totalAmount) || 0,
+          totalAmountBdt: Number(row.total_amount_bdt || row.totalAmountBdt) || 0,
+          amountInWords: row.amount_in_words || row.amountInWords,
+          preparedBy: row.prepared_by || row.preparedBy,
+          verifiedBy: row.verified_by || row.verifiedBy,
+          approvedBy: row.approved_by || row.approvedBy,
+          claimantOrDepositor: row.claimant_or_depositor || row.claimantOrDepositor,
+          physicalAttachment: row.physical_attachment || row.physicalAttachment,
+          auditStatus: row.audit_status || row.auditStatus || 'VERIFIED',
+          isLocalValueAddition: row.is_local_value_addition ?? row.isLocalValueAddition ?? true,
+          notes: row.notes,
+          createdAt: row.created_at || row.createdAt || new Date().toISOString(),
+          updatedAt: row.updated_at || row.updatedAt || new Date().toISOString(),
+        }));
+      }
+    } catch (e) {
+      console.warn('Supabase vouchers fetch failed, falling back to local cache:', e);
+    }
+  }
+
+  // LocalStorage / Seed Fallback
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.VOUCHERS);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+  }
+  return INITIAL_STANDARD_VOUCHERS;
+};
+
+export const persistVoucher = async (voucher: StandardVoucher): Promise<void> => {
+  // 1. Dual persistence to LocalStorage cache
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.VOUCHERS);
+      let list: StandardVoucher[] = cached ? JSON.parse(cached) : INITIAL_STANDARD_VOUCHERS;
+      const idx = list.findIndex((v) => v.id === voucher.id);
+      if (idx >= 0) {
+        list[idx] = voucher;
+      } else {
+        list = [voucher, ...list];
+      }
+      localStorage.setItem(LOCAL_STORAGE_KEYS.VOUCHERS, JSON.stringify(list));
+    } catch (err) {
+      console.error('LocalStorage voucher persistence error:', err);
+    }
+  }
+
+  // 2. Dual persistence to Supabase PostgreSQL (if connected)
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from('vouchers').upsert({
+        id: voucher.id,
+        voucher_number: voucher.voucherNumber,
+        type: voucher.type,
+        date: voucher.date,
+        main_account_head: voucher.mainAccountHead,
+        sub_category_head: voucher.subCategoryHead,
+        currency: voucher.currency,
+        exchange_rate_to_bdt: voucher.exchangeRateToBdt,
+        party_name: voucher.partyName,
+        party_details: voucher.partyDetails,
+        linked_order_number: voucher.linkedOrderNumber,
+        payment_mode: voucher.paymentMode,
+        bank_reference: voucher.bankReference,
+        tax_chalan_ref: voucher.taxChalanRef,
+        items: voucher.items,
+        total_amount: voucher.totalAmount,
+        total_amount_bdt: voucher.totalAmountBdt,
+        amount_in_words: voucher.amountInWords,
+        prepared_by: voucher.preparedBy,
+        verified_by: voucher.verifiedBy,
+        approved_by: voucher.approvedBy,
+        claimant_or_depositor: voucher.claimantOrDepositor,
+        physical_attachment: voucher.physicalAttachment,
+        audit_status: voucher.auditStatus,
+        is_local_value_addition: voucher.isLocalValueAddition,
+        notes: voucher.notes,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Supabase optional voucher cloud sync skipped (offline mode active):', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 7.6. ACCOUNT HEADS PERSISTENCE (Custom & Statutory Ledger Chart of Accounts)
+// ==============================================================================
+
+export const getCachedAccountHeads = (): AccountHead[] => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.ACCOUNT_HEADS);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch {}
+  }
+  return INITIAL_ACCOUNT_HEADS;
+};
+
+export const fetchAccountHeads = async (): Promise<AccountHead[]> => {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('account_heads').select('*').order('created_at', { ascending: true });
+      if (!error && data && data.length > 0) {
+        const mapped = data.map((row: any) => ({
+          id: row.id,
+          name: row.name,
+          code: row.code,
+          type: row.type,
+          description: row.description,
+          subCategories: row.sub_categories || row.subCategories || [],
+          isDefault: row.is_default ?? row.isDefault ?? false,
+          createdAt: row.created_at || row.createdAt,
+          updatedAt: row.updated_at || row.updatedAt,
+        }));
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.ACCOUNT_HEADS, JSON.stringify(mapped));
+          } catch {}
+        }
+        return mapped;
+      }
+    } catch (e) {
+      console.warn('Supabase account_heads fetch failed, falling back to local cache:', e);
+    }
+  }
+
+  // LocalStorage / Seed Fallback
+  return getCachedAccountHeads();
+};
+
+export const persistAccountHeads = async (heads: AccountHead[]): Promise<void> => {
+  // 1. Dual persistence to LocalStorage
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.ACCOUNT_HEADS, JSON.stringify(heads));
+    } catch (err) {
+      console.error('LocalStorage account_heads persistence error:', err);
+    }
+  }
+
+  // 2. Dual persistence to Supabase PostgreSQL (if connected)
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const payload = heads.map((h) => ({
+        id: h.id,
+        name: h.name,
+        code: h.code,
+        type: h.type,
+        description: h.description,
+        sub_categories: h.subCategories,
+        is_default: h.isDefault,
+        updated_at: new Date().toISOString(),
+      }));
+      await supabase.from('account_heads').upsert(payload);
+    } catch (e) {
+      console.warn('Supabase optional account_heads cloud sync skipped (offline mode active):', e);
+    }
   }
 };
 

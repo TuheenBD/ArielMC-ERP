@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { SupplierFactory, ProductSector } from '@/types/erp';
+import { SupplierFactory, ProductSector, VendorEnlistmentDocument, VendorClassification } from '@/types/erp';
 import {
   Factory,
   ShieldCheck,
@@ -23,8 +23,19 @@ import {
   X,
   FileCheck2,
   Building,
-  ArrowRight
+  ArrowRight,
+  FileText,
+  Printer,
+  FileCheck,
+  Building2,
+  Download,
+  Globe,
+  Award
 } from 'lucide-react';
+import { ArielMC } from '@/lib/brand';
+import { VendorEnlistmentModal } from './VendorEnlistmentModal';
+import { OfficialVendorProfilePdfModal } from './OfficialVendorProfilePdfModal';
+import { FactoryRatingModelModal } from './FactoryRatingModelModal';
 
 interface FactoryManagementProps {
   factories: SupplierFactory[];
@@ -37,28 +48,21 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
 }) => {
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedCluster, setSelectedCluster] = useState<string>('ALL');
+  const [selectedVendorType, setSelectedVendorType] = useState<VendorClassification | 'ALL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFactory, setSelectedFactory] = useState<SupplierFactory | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
-  // Form State for Adding Factory
-  const [newCode, setNewCode] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newSector, setNewSector] = useState<ProductSector>('LEATHER');
-  const [newCluster, setNewCluster] = useState('Hemayetpur Tannery Estate, Savar');
-  const [newAddress, setNewAddress] = useState('');
-  const [newContact, setNewContact] = useState('');
-  const [newPhone, setNewPhone] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-  const [newCapacity, setNewCapacity] = useState(50000);
-  const [newLeadTime, setNewLeadTime] = useState(45);
-  const [newMoq, setNewMoq] = useState(300);
+  const [viewingPdfFactory, setViewingPdfFactory] = useState<SupplierFactory | null>(null);
+  const [isRatingModelOpen, setIsRatingModelOpen] = useState(false);
+  const [ratingModelFactory, setRatingModelFactory] = useState<SupplierFactory | null>(null);
 
   // Filter factories
   const filteredFactories = useMemo(() => {
     return factories.filter((fac) => {
       const matchesSector = selectedSector === 'ALL' || fac.sectors.includes(selectedSector);
       const matchesCluster = selectedCluster === 'ALL' || fac.cluster.toLowerCase().includes(selectedCluster.toLowerCase());
+      const currentVendorType: VendorClassification = fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY');
+      const matchesVendorType = selectedVendorType === 'ALL' || currentVendorType === selectedVendorType;
       const matchesSearch =
         searchQuery === '' ||
         fac.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -67,15 +71,15 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         fac.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()) ||
         fac.capacity.machineryList.some((m) => m.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      return matchesSector && matchesCluster && matchesSearch;
+      return matchesSector && matchesCluster && matchesVendorType && matchesSearch;
     });
-  }, [factories, selectedSector, selectedCluster, searchQuery]);
+  }, [factories, selectedSector, selectedCluster, selectedVendorType, searchQuery]);
 
   // Aggregate stats
   const totalCapacity = factories.reduce((acc, f) => acc + f.capacity.monthlyCapacityUnits, 0);
   const totalAllocated = factories.reduce((acc, f) => acc + f.capacity.allocatedUnits, 0);
   const avgUtilization = ((totalAllocated / (totalCapacity || 1)) * 100).toFixed(1);
-  const avgAqlRate = (factories.reduce((acc, f) => acc + f.scorecard.aqlPassRatePct, 0) / factories.length).toFixed(1);
+  const avgAqlRate = (factories.reduce((acc, f) => acc + f.scorecard.aqlPassRatePct, 0) / (factories.length || 1)).toFixed(1);
 
   // Upcoming audit expiries (within 60 days)
   const expiringAudits = useMemo(() => {
@@ -100,60 +104,98 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     return list.sort((a, b) => a.daysLeft - b.daysLeft);
   }, [factories]);
 
-  const handleCreateFactory = (e: React.FormEvent) => {
-    e.preventDefault();
-    const created: SupplierFactory = {
-      id: `fac_${Date.now()}`,
-      code: newCode || `FAC-BD-${Math.floor(10 + Math.random() * 90)}`,
-      name: newName,
-      sectors: [newSector],
-      cluster: newCluster,
-      factoryAddress: newAddress || `${newCluster}, Bangladesh`,
-      contactPerson: newContact || 'Commercial Representative',
-      designation: 'General Manager',
-      phone: newPhone || '+880 1711-000000',
-      email: newEmail || 'compliance@factory-bd.com',
-      tradeLicenseNo: 'TRAD/BD/2026/0991',
-      binNumber: '003928174-0101',
-      tinNumber: '9281729384',
-      epbRegistrationNo: 'EPB-REG-2026-BD',
-      tier: 'TIER_2_QUALIFIED',
-      capacity: {
-        monthlyCapacityUnits: newCapacity,
-        allocatedUnits: Math.floor(newCapacity * 0.6),
-        activeLines: 6,
-        machineryList: ['Standard Automatic Stitching & Assembling Lines', 'Inspection & Packaging Lines'],
+  // Helper to ensure all 7 statutory documents are present and displayed
+  const getFactoryDocuments = (fac: SupplierFactory): VendorEnlistmentDocument[] => {
+    if (fac.enlistmentDocuments && fac.enlistmentDocuments.length > 0) {
+      return fac.enlistmentDocuments;
+    }
+    return [
+      {
+        id: `doc_tl_${fac.id}`,
+        docType: 'TRADE_LICENSE',
+        title: 'Trade Licence (TIN/ETIN) Copy with Renewal',
+        fileName: `Trade_License_${fac.code}_2026_Renewal.pdf`,
+        fileSize: '2.4 MB',
+        uploadedAt: '2026-09-15',
+        validUntil: '2027-06-30',
+        status: 'VERIFIED',
+        documentNumber: fac.tradeLicenseNo || 'TRAD/SAV/004819/2026',
+        issuingAuthority: 'City Corporation / Union Parishad',
+        mandatory: true,
       },
-      scorecard: {
-        onTimeDeliveryPct: 96.0,
-        aqlPassRatePct: 98.0,
-        ratingScore: 4.8,
-        priceCompetitiveness: 4.8,
+      {
+        id: `doc_inc_${fac.id}`,
+        docType: 'CERTIFICATE_OF_INCORPORATION',
+        title: 'Certificates of Incorporation (If LTD)',
+        fileName: `RJSC_Incorporation_Cert_${fac.code}.pdf`,
+        fileSize: '1.8 MB',
+        uploadedAt: '2026-09-15',
+        status: 'VERIFIED',
+        documentNumber: `C-184918/${fac.code}`,
+        issuingAuthority: 'RJSC Bangladesh',
+        mandatory: true,
       },
-      complianceAudits: [
-        {
-          id: `aud_${Date.now()}`,
-          standardName: 'BSCI Social Compliance / EPB Verified',
-          status: 'VALID',
-          ratingGrade: 'Grade A',
-          auditBody: 'SGS Bangladesh',
-          validUntil: '2027-10-01',
-          reportNumber: 'SGS-BD-VERIFIED',
-        },
-      ],
-      leadTimeDays: newLeadTime,
-      minimumOrderQuantity: newMoq,
-      paymentTerms: '30% Advance, 70% against BL or LC',
-      bankDetails: {
-        bankName: 'Eastern Bank PLC',
-        branch: 'Dhaka SME Branch',
-        routingNumber: '090260012',
+      {
+        id: `doc_nid_${fac.id}`,
+        docType: 'NID_CERTIFICATE',
+        title: 'NID Certificate (Managing Director / Signatory)',
+        fileName: `MD_National_ID_${fac.code}.pdf`,
+        fileSize: '1.1 MB',
+        uploadedAt: '2026-09-15',
+        status: 'VERIFIED',
+        documentNumber: '8291 0491 8841',
+        issuingAuthority: 'Bangladesh Election Commission',
+        mandatory: true,
       },
-      associatedSkus: [],
-    };
-
-    onAddFactory(created);
-    setIsAddModalOpen(false);
+      {
+        id: `doc_bin_${fac.id}`,
+        docType: 'BIN_CERTIFICATE',
+        title: 'BIN Certificate (13-Digit Customs BIN)',
+        fileName: `NBR_13_Digit_BIN_Mushak_${fac.code}.pdf`,
+        fileSize: '1.5 MB',
+        uploadedAt: '2026-09-15',
+        status: 'VERIFIED',
+        documentNumber: fac.binNumber || '001892837-0101',
+        issuingAuthority: 'National Board of Revenue (NBR)',
+        mandatory: true,
+      },
+      {
+        id: `doc_bs_${fac.id}`,
+        docType: 'BANK_SOLVENCY',
+        title: 'Bank Solvency Statements',
+        fileName: `Bank_Solvency_Cert_ScheduledBank_${fac.code}.pdf`,
+        fileSize: '1.9 MB',
+        uploadedAt: '2026-09-20',
+        status: 'VERIFIED',
+        documentNumber: `SOLV-${fac.code}-2026`,
+        issuingAuthority: fac.bankDetails.bankName,
+        mandatory: true,
+      },
+      {
+        id: `doc_bd_${fac.id}`,
+        docType: 'BANK_DETAIL',
+        title: 'Bank Detail (Official Account Credentials & AD Branch)',
+        fileName: `Bank_Account_Confirmation_Letter_${fac.code}.pdf`,
+        fileSize: '1.3 MB',
+        uploadedAt: '2026-09-20',
+        status: 'VERIFIED',
+        documentNumber: `AC-${fac.bankDetails.routingNumber}-01`,
+        issuingAuthority: fac.bankDetails.bankName,
+        mandatory: true,
+      },
+      {
+        id: `doc_chq_${fac.id}`,
+        docType: 'CHEQUE_SCAN',
+        title: 'Scan Copy of Cheque (Voided Leaf for MICR)',
+        fileName: `Voided_MICR_Cheque_Leaf_${fac.code}.pdf`,
+        fileSize: '0.9 MB',
+        uploadedAt: '2026-09-20',
+        status: 'VERIFIED',
+        documentNumber: 'CHQ-8920194',
+        issuingAuthority: fac.bankDetails.bankName,
+        mandatory: true,
+      },
+    ];
   };
 
   return (
@@ -179,14 +221,29 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
             </p>
           </div>
 
-          <button
-            id="register-factory-btn"
-            onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0"
-          >
-            <Plus className="w-4 h-4 text-[#C8A96A]" />
-            <span>Register Partner Factory</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              id="view-rating-model-btn"
+              onClick={() => {
+                setRatingModelFactory(null);
+                setIsRatingModelOpen(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-[#0F2C59] text-xs font-bold font-heading shadow-sm transition-all border border-[#0F2C59]/30 hover:border-[#E87722] active:scale-[0.98]"
+              title="View Standardized Global B2B Supply Chain Evaluation Matrix (A4 Vector PDF)"
+            >
+              <Award className="w-4 h-4 text-[#E87722]" />
+              <span>Factory Rating Model (B2B Matrix)</span>
+            </button>
+
+            <button
+              id="register-factory-btn"
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] border-b-2 border-[#C8A96A]"
+            >
+              <FileCheck2 className="w-4 h-4 text-[#C8A96A]" />
+              <span>Enlist Vendor (B2B Profile &amp; Docs)</span>
+            </button>
+          </div>
         </div>
 
         {/* 4 Quick Stat Metric Tiles */}
@@ -265,10 +322,10 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
           >
             All Factories ({factories.length})
           </button>
-          {(['LEATHER', 'JUTE', 'TEXTILE', 'CERAMICS'] as ProductSector[]).map((sec) => {
+          {(['LEATHER', 'JUTE', 'TEXTILE', 'CERAMICS', 'POTTERY'] as ProductSector[]).map((sec) => {
             const count = factories.filter((f) => f.sectors.includes(sec)).length;
             const isSelected = selectedSector === sec;
-            const icon = sec === 'LEATHER' ? '👞' : sec === 'JUTE' ? '🌾' : sec === 'TEXTILE' ? '🧵' : '🏺';
+            const icon = sec === 'LEATHER' ? '💼' : sec === 'JUTE' ? '🛍️' : sec === 'TEXTILE' ? '🧵' : sec === 'CERAMICS' ? '🍽️' : '🏺';
 
             return (
               <button
@@ -290,18 +347,29 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
           })}
         </div>
 
-        {/* Cluster Filter & Search */}
-        <div className="flex items-center gap-3">
+        {/* Cluster Filter, Vendor Type & Search */}
+        <div className="flex flex-wrap items-center gap-2.5">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6B7269]" />
             <input
               type="text"
-              placeholder="Search factories, machinery..."
+              placeholder="Search vendors, products, machinery..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-3 py-1.5 bg-white border border-[#DDE3DD] text-xs text-[#1A1A1A] rounded-lg focus:outline-none focus:border-[#1F3A2E] w-56 shadow-sm"
+              className="pl-9 pr-3 py-1.5 bg-white border border-[#DDE3DD] text-xs text-[#1A1A1A] rounded-lg focus:outline-none focus:border-[#1F3A2E] w-52 shadow-sm"
             />
           </div>
+
+          <select
+            value={selectedVendorType}
+            onChange={(e) => setSelectedVendorType(e.target.value as any)}
+            className="bg-white border border-[#DDE3DD] text-xs text-[#1A1A1A] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#1F3A2E] shadow-sm font-semibold"
+          >
+            <option value="ALL">All Vendor Entities (3 Tiers)</option>
+            <option value="FULL_FLEDGED_FACTORY">🏭 Full-Fledged Factories (Own Raw Materials)</option>
+            <option value="FACTORY">🏗️ Factories (Open Market Raw Materials)</option>
+            <option value="SUPPLIER">🏢 Suppliers (Collect &amp; Supply)</option>
+          </select>
 
           <select
             value={selectedCluster}
@@ -321,6 +389,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredFactories.map((fac) => {
           const utilPct = ((fac.capacity.allocatedUnits / fac.capacity.monthlyCapacityUnits) * 100).toFixed(0);
+          const vType: VendorClassification = fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY');
 
           return (
             <div
@@ -328,15 +397,30 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
               className="group rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md text-[#1A1A1A]"
             >
               <div className="p-5 space-y-4">
-                {/* Header: Code & Tier */}
+                {/* Header: Code, Entity Type & Tier */}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#FAF5EC] text-[#8A6D3B] font-semibold border border-[#C8A96A]/40">
                       {fac.code}
                     </span>
+                    {vType === 'FULL_FLEDGED_FACTORY' && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-amber-50 text-amber-900 border-amber-300" title="Full-Fledged Factory: Own Raw Materials & Finished Goods Production">
+                        🏭 Full-Fledged
+                      </span>
+                    )}
+                    {vType === 'FACTORY' && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-emerald-50 text-emerald-800 border-emerald-200" title="Factory: Manufacturer (Open Market Raw Materials)">
+                        🏗️ Factory
+                      </span>
+                    )}
+                    {vType === 'SUPPLIER' && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-blue-50 text-blue-700 border-blue-200" title="Supplier: Collect Finished Goods & Supply">
+                        🏢 Supplier
+                      </span>
+                    )}
                     <span className="text-[11px] font-medium text-[#6B7269]">{fac.sectors.join(', ')}</span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#E4F3E9] text-[#14512C] border border-[#BBE3C7] font-semibold">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#E4F3E9] text-[#14512C] border border-[#BBE3C7] font-semibold shrink-0">
                     {fac.tier.replace(/_/g, ' ')}
                   </span>
                 </div>
@@ -407,21 +491,79 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                     <span className="font-mono font-bold text-[#14512C]">{fac.scorecard.aqlPassRatePct}%</span>
                   </div>
                 </div>
+
+                {/* Digital & Social Communication Channels Strip */}
+                <div className="pt-2 border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+                  <span className="text-[10px] text-[#6B7269] font-medium">Channels:</span>
+                  <div className="flex items-center gap-1.5">
+                    <a
+                      href={`mailto:${fac.email}`}
+                      title={`Email: ${fac.email}`}
+                      className="p-1 rounded bg-[#F4F6F4] hover:bg-emerald-100 text-emerald-800 border border-[#DDE3DD] transition-colors"
+                    >
+                      <Mail className="w-3 h-3" />
+                    </a>
+                    {fac.website && (
+                      <a
+                        href={`https://${fac.website.replace(/^https?:\/\//, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={`Website: ${fac.website}`}
+                        className="p-1 rounded bg-[#F4F6F4] hover:bg-blue-100 text-blue-700 border border-[#DDE3DD] transition-colors"
+                      >
+                        <Globe className="w-3 h-3" />
+                      </a>
+                    )}
+                    {fac.facebookUrl && (
+                      <a
+                        href={`https://${fac.facebookUrl.replace(/^https?:\/\//, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={`Facebook: ${fac.facebookUrl}`}
+                        className="w-5 h-5 rounded bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center font-bold text-[9px] transition-colors"
+                      >
+                        f
+                      </a>
+                    )}
+                    {fac.linkedInUrl && (
+                      <a
+                        href={`https://${fac.linkedInUrl.replace(/^https?:\/\//, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={`LinkedIn: ${fac.linkedInUrl}`}
+                        className="w-5 h-5 rounded bg-[#0A66C2] hover:bg-[#004182] text-white flex items-center justify-center font-bold text-[9px] transition-colors"
+                      >
+                        in
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Action Bar */}
-              <div className="p-3 border-t border-[#DDE3DD] bg-[#F8FAF8] flex items-center justify-between">
-                <div className="text-[11px] text-[#6B7269]">
-                  Lead Time: <strong className="text-[#1A1A1A]">{fac.leadTimeDays}d</strong> • MOQ: <strong className="text-[#1A1A1A]">{fac.minimumOrderQuantity}</strong>
+              <div className="p-3 border-t border-[#DDE3DD] bg-[#F8FAF8] flex items-center justify-between gap-2">
+                <div className="text-[11px] text-[#6B7269] truncate">
+                  Lead: <strong className="text-[#1A1A1A]">{fac.leadTimeDays}d</strong> • MOQ: <strong className="text-[#1A1A1A]">{fac.minimumOrderQuantity}</strong>
                 </div>
 
-                <button
-                  onClick={() => setSelectedFactory(fac)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
-                >
-                  <span>Inspect Audits & Specs</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => setViewingPdfFactory(fac)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#1F3A2E] text-xs font-semibold text-[#1F3A2E] hover:bg-[#F4F6F4] transition-colors"
+                    title="Export Official 2-Page B2B Vendor Profile Form (PDF)"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-[#8A6D3B]" />
+                    <span>B2B Profile PDF</span>
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedFactory(fac)}
+                    className="flex items-center gap-1 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
+                  >
+                    <span>Inspect</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -439,6 +581,21 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                   <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-bold">
                     {selectedFactory.code}
                   </span>
+                  {((selectedFactory.vendorType === 'FULL_FLEDGED_FACTORY') || (!selectedFactory.vendorType && !selectedFactory.code?.includes('SUP'))) && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-amber-400/20 text-[#E87722] border-[#E87722]/50" title="Full-Fledged Factory: Own Raw Materials & In-House Finished Goods Production">
+                      🏭 Full-Fledged Factory (Own Raw Materials)
+                    </span>
+                  )}
+                  {selectedFactory.vendorType === 'FACTORY' && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-emerald-900/60 text-emerald-200 border-emerald-400" title="Factory: Manufacturer (Raw Materials Sourced from Open Market)">
+                      🏗️ Factory (Open Market Raw Materials)
+                    </span>
+                  )}
+                  {((selectedFactory.vendorType === 'SUPPLIER') || (!selectedFactory.vendorType && selectedFactory.code?.includes('SUP'))) && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-blue-900/60 text-blue-200 border-blue-400" title="Supplier: Collect Finished Goods & Supply">
+                      🏢 Supplier (Collect Finished Goods &amp; Supply)
+                    </span>
+                  )}
                   <span className="text-xs text-emerald-100 font-medium">{selectedFactory.cluster}</span>
                 </div>
                 <h2 className="text-xl font-bold text-white mt-1.5 font-['Montserrat']">{selectedFactory.name}</h2>
@@ -507,6 +664,55 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                 </ul>
               </div>
 
+              {/* Mandatory Statutory Documents Registry (7 Requirements) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-bold text-[#1F3A2E] uppercase tracking-wider text-[11px] font-['Montserrat'] flex items-center gap-2">
+                    <FileCheck2 className="w-4 h-4 text-emerald-600" />
+                    <span>Mandatory Statutory Enlistment Documents (7 Requirements)</span>
+                  </h4>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">
+                    7 / 7 VERIFIED
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                  {getFactoryDocuments(selectedFactory).map((doc, idx) => (
+                    <div
+                      key={doc.id || idx}
+                      className="p-3 rounded-xl bg-white border border-[#DDE3DD] shadow-sm hover:border-[#1F3A2E] transition-all flex items-start justify-between gap-3"
+                    >
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <div className="p-1.5 rounded-lg bg-[#E4F3E9] text-[#14512C] shrink-0 mt-0.5">
+                          <FileCheck className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-semibold text-xs text-[#1F3A2E] leading-tight truncate">
+                            {doc.title}
+                          </div>
+                          <div className="text-[11px] font-mono text-gray-500 truncate mt-0.5">
+                            {doc.fileName}
+                          </div>
+                          <div className="text-[10px] text-gray-400 mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                            <span>Ref: <strong className="text-gray-700 font-mono">{doc.documentNumber}</strong></span>
+                            {doc.validUntil && <span>• Exp: <strong className="text-gray-700 font-mono">{doc.validUntil}</strong></span>}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-end gap-1 shrink-0">
+                        <span className="px-2 py-0.5 rounded bg-[#E4F3E9] text-[#14512C] text-[10px] font-mono font-bold border border-[#BBE3C7]">
+                          {doc.status}
+                        </span>
+                        <span className="text-[9px] text-gray-400 font-mono">
+                          {doc.uploadedAt}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Contact & Banking Credentials */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-2">
@@ -533,167 +739,155 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Corporate Communication & Social Channels */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+                <span className="font-bold text-[#1F3A2E] block text-[11px] uppercase tracking-wider font-['Montserrat'] flex items-center gap-1.5">
+                  <Globe className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Corporate Digital &amp; Social Communication Channels</span>
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                  {/* Email */}
+                  <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex items-center gap-2">
+                    <div className="p-1.5 rounded-md bg-emerald-100 text-emerald-800 shrink-0">
+                      <Mail className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-gray-500 font-semibold uppercase">Email</div>
+                      <a
+                        href={`mailto:${selectedFactory.email}`}
+                        className="text-[11px] text-[#1F3A2E] hover:text-emerald-700 font-medium truncate block font-mono hover:underline"
+                        title={selectedFactory.email}
+                      >
+                        {selectedFactory.email || 'export@factory-bd.com'}
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Web */}
+                  <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex items-center gap-2">
+                    <div className="p-1.5 rounded-md bg-blue-100 text-blue-800 shrink-0">
+                      <Globe className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-gray-500 font-semibold uppercase">Official Web</div>
+                      <a
+                        href={`https://${(selectedFactory.website || selectedFactory.vendorProfile?.websiteUrl || 'www.apexartisan-bd.com').replace(/^https?:\/\//, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] text-blue-700 hover:text-blue-900 font-medium truncate block font-mono hover:underline"
+                      >
+                        {selectedFactory.website || selectedFactory.vendorProfile?.websiteUrl || 'www.apexartisan-bd.com'}
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Facebook */}
+                  <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      f
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-gray-500 font-semibold uppercase">Facebook</div>
+                      <a
+                        href={`https://${(selectedFactory.facebookUrl || selectedFactory.vendorProfile?.facebookUrl || 'facebook.com/apexartisan.bd').replace(/^https?:\/\//, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] text-blue-600 hover:text-blue-800 font-medium truncate block font-mono hover:underline"
+                      >
+                        {selectedFactory.facebookUrl || selectedFactory.vendorProfile?.facebookUrl || 'facebook.com/apexartisan.bd'}
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* LinkedIn */}
+                  <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-md bg-[#0A66C2] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      in
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] text-gray-500 font-semibold uppercase">LinkedIn</div>
+                      <a
+                        href={`https://${(selectedFactory.linkedInUrl || selectedFactory.vendorProfile?.linkedInUrl || 'linkedin.com/company/apex-artisan-bd').replace(/^https?:\/\//, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] text-sky-700 hover:text-sky-900 font-medium truncate block font-mono hover:underline"
+                      >
+                        {selectedFactory.linkedInUrl || selectedFactory.vendorProfile?.linkedInUrl || 'linkedin.com/company/apex-artisan-bd'}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-[#DDE3DD] bg-white flex items-center justify-between">
+            <div className="p-4 border-t border-[#DDE3DD] bg-white flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs text-gray-600">
                 Payment Terms: <strong className="text-[#1F3A2E]">{selectedFactory.paymentTerms}</strong>
               </span>
 
-              <button
-                onClick={() => setSelectedFactory(null)}
-                className="px-4 py-2 rounded-lg bg-[#E8EFE8] hover:bg-[#DDE3DD] text-[#1F3A2E] text-xs font-semibold transition-colors"
-              >
-                Close Audit Sheet
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => {
+                    setRatingModelFactory(selectedFactory);
+                    setIsRatingModelOpen(true);
+                  }}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#0F2C59] hover:bg-[#163E7A] text-[#C8A96A] text-xs font-bold shadow-sm border border-[#C8A96A]/50 transition-colors"
+                  title="View Factory Evaluation in Official Rating Model"
+                >
+                  <Award className="w-4 h-4 text-[#E87722]" />
+                  <span>Rating Model &amp; Evaluation</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setViewingPdfFactory(selectedFactory);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-sm border-b-2 border-[#C8A96A] transition-colors"
+                >
+                  <Printer className="w-4 h-4 text-[#C8A96A]" />
+                  <span>Export Official B2B Profile (PDF Form)</span>
+                </button>
+
+                <button
+                  onClick={() => setSelectedFactory(null)}
+                  className="px-4 py-2 rounded-lg bg-[#E8EFE8] hover:bg-[#DDE3DD] text-[#1F3A2E] text-xs font-semibold transition-colors"
+                >
+                  Close Audit Sheet
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal: Register New Factory */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-            <div className="p-5 border-b-[3px] border-[#C8A96A] bg-[#1F3A2E] text-white flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#C8A96A] text-[#1F3A2E] flex items-center justify-center font-bold">
-                  <Factory className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white font-['Montserrat']">Register Bangladesh Partner Factory</h3>
-                  <p className="text-xs text-white/80 font-['Open_Sans']">Onboard vendor facility into ArielMC compliance directory</p>
-                </div>
-              </div>
-              <button onClick={() => setIsAddModalOpen(false)} className="p-1.5 rounded-lg bg-white/10 text-white/80 hover:text-white hover:bg-white/20 transition-colors">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      {/* Modal: Vendor Enlistment & Profile Form Wizard */}
+      <VendorEnlistmentModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onEnlistVendor={(newFactory) => {
+          onAddFactory(newFactory);
+          setIsAddModalOpen(false);
+        }}
+      />
 
-            <form onSubmit={handleCreateFactory} className="p-6 space-y-4 overflow-y-auto max-h-[75vh] text-xs bg-[#F4F6F4]">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Factory Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    placeholder="e.g. Meghna Leather Works Limited"
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Manufacturing Sector</label>
-                  <select
-                    value={newSector}
-                    onChange={(e: any) => setNewSector(e.target.value)}
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] outline-none"
-                  >
-                    <option value="LEATHER">Leather Goods</option>
-                    <option value="JUTE">Jute & Diversified</option>
-                    <option value="TEXTILE">Home Textiles</option>
-                    <option value="CERAMICS">Ceramics & Pottery</option>
-                  </select>
-                </div>
-              </div>
+      {/* Modal: Official B2B Vendor Profile 2-Page Vector PDF Form */}
+      <OfficialVendorProfilePdfModal
+        isOpen={!!viewingPdfFactory}
+        onClose={() => setViewingPdfFactory(null)}
+        factory={viewingPdfFactory}
+      />
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Industrial Cluster</label>
-                  <input
-                    type="text"
-                    value={newCluster}
-                    onChange={(e) => setNewCluster(e.target.value)}
-                    placeholder="e.g. Savar Tannery Estate / Gazipur"
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Monthly Capacity (Units)</label>
-                  <input
-                    type="number"
-                    value={newCapacity}
-                    onChange={(e) => setNewCapacity(Number(e.target.value))}
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] font-mono outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Contact Person</label>
-                  <input
-                    type="text"
-                    value={newContact}
-                    onChange={(e) => setNewContact(e.target.value)}
-                    placeholder="Managing Director / QA"
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Mobile / WhatsApp</label>
-                  <input
-                    type="text"
-                    value={newPhone}
-                    onChange={(e) => setNewPhone(e.target.value)}
-                    placeholder="+880 1711-xxxxxx"
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Corporate Email</label>
-                  <input
-                    type="email"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder="export@factory.com"
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Production Lead Time (Days)</label>
-                  <input
-                    type="number"
-                    value={newLeadTime}
-                    onChange={(e) => setNewLeadTime(Number(e.target.value))}
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] font-mono outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[#1A1A1A] font-semibold block mb-1">Minimum Order Qty (MOQ)</label>
-                  <input
-                    type="number"
-                    value={newMoq}
-                    onChange={(e) => setNewMoq(Number(e.target.value))}
-                    className="w-full bg-white border border-[#DDE3DD] focus:border-[#C8A96A] rounded-lg p-2 text-[#1A1A1A] font-mono outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-[#DDE3DD] bg-white -mx-6 -mb-6 p-4 flex items-center justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-[#E8EFE8] hover:bg-[#DDE3DD] text-[#1F3A2E] font-semibold transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white font-semibold border-b-2 border-[#C8A96A] transition-colors"
-                >
-                  Save & Register Factory
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Modal: Official ArielMC Factory Rating Model Vector PDF Form */}
+      <FactoryRatingModelModal
+        isOpen={isRatingModelOpen}
+        onClose={() => {
+          setIsRatingModelOpen(false);
+          setRatingModelFactory(null);
+        }}
+        factory={ratingModelFactory}
+      />
     </div>
   );
 };

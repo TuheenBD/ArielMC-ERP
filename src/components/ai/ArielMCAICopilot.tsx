@@ -28,7 +28,8 @@ import {
   Clock,
   Search,
   MessageSquare,
-  Boxes
+  Boxes,
+  LayoutDashboard
 } from 'lucide-react';
 import {
   CompanyEntity,
@@ -102,7 +103,38 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
+            return parsed.map((m: any) => {
+              const isWelcome = m.id === 'welcome-msg' || (typeof m.id === 'string' && m.id.startsWith('welcome-'));
+              return {
+                id: m.id || `msg-${Date.now()}`,
+                sender: m.sender || 'arielmc',
+                text: m.text || '',
+                timestamp: m.timestamp || 'Just now',
+                quickActions: isWelcome
+                  ? [
+                      {
+                        label: 'Highest Margin SKUs',
+                        action: () => handleSendPrompt('Show the highest margin products in our catalog')
+                      },
+                      {
+                        label: 'LWG Gold Factories',
+                        action: () => handleSendPrompt('Which factories have LWG Gold & BSCI Grade A compliance?')
+                      },
+                      {
+                        label: 'Mushak 6.3 Guide',
+                        action: () => handleSendPrompt('How do I generate an official Mushak 6.3 VAT invoice in ArielMC ERP?')
+                      },
+                      {
+                        label: 'Open User Guide',
+                        action: () => {
+                          if (onOpenUserGuide) onOpenUserGuide();
+                        },
+                        icon: BookOpen
+                      }
+                    ]
+                  : undefined
+              };
+            });
           }
         }
       } catch {
@@ -142,7 +174,13 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
 
   useEffect(() => {
     try {
-      localStorage.setItem('arielmc_ai_copilot_history_v1', JSON.stringify(messages));
+      const safeToStore = messages.map((m) => ({
+        id: m.id,
+        sender: m.sender,
+        text: m.text,
+        timestamp: m.timestamp
+      }));
+      localStorage.setItem('arielmc_ai_copilot_history_v1', JSON.stringify(safeToStore));
     } catch {
       // ignore
     }
@@ -207,6 +245,20 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             label: 'Export Official Documents',
             action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
             icon: FileText
+          }
+        ]
+      };
+    }
+
+    // 1b. Executive Dashboard
+    if (q.includes('dashboard') || q.includes('overview') || q.includes('home') || q.includes('kpi')) {
+      return {
+        text: `### **ArielMC** Executive Command Center & Dashboard\n\nThe **Executive Dashboard** aggregates real-time metrics across all 5 operating sovereign stations:\n- **Operating Stations**: 5 Entities (BD, UK, US, EU, AU)\n- **Master Product SKUs**: Leather, Jute, Textiles, Ceramics\n- **Partner Factories**: 8 Audited Facilities (Savar, Gazipur, Narsingdi, Dhamrai)\n- **Global B2B Leads**: 254 Buyer Accounts (UK, EU, USA, AU)\n\nClick the button below to launch the Executive Dashboard.`,
+        actions: [
+          {
+            label: 'Open Executive Dashboard',
+            action: () => { if (onNavigateTab) onNavigateTab('DASHBOARD'); },
+            icon: LayoutDashboard
           }
         ]
       };
@@ -679,11 +731,22 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                     {msg.quickActions && msg.quickActions.length > 0 && (
                       <div className="pt-2 border-t border-gray-100 flex flex-wrap gap-1.5">
                         {msg.quickActions.map((qa, qIdx) => {
-                          const Icon = qa.icon || ChevronRight;
+                          const isComponent = Boolean(
+                            qa.icon &&
+                              (typeof qa.icon === 'function' ||
+                                (typeof qa.icon === 'object' && Boolean((qa.icon as any).$$typeof)))
+                          );
+                          const Icon = isComponent ? qa.icon : ChevronRight;
                           return (
                             <button
                               key={qIdx}
-                              onClick={qa.action}
+                              onClick={() => {
+                                if (typeof qa.action === 'function') {
+                                  qa.action();
+                                } else if (qa.label) {
+                                  handleSendPrompt(qa.label);
+                                }
+                              }}
                               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all shadow-xs ${
                                 isRoyal
                                   ? 'bg-[#4169E1]/10 text-[#4169E1] hover:bg-[#4169E1] hover:text-white border border-[#4169E1]/30'

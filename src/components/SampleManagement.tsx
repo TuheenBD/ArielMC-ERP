@@ -46,8 +46,16 @@ import {
   Award,
   Barcode,
   PackageCheck,
+  Package,
+  Share2,
 } from 'lucide-react';
 import { SAMPLE_PRICING_MATRIX } from '@/data/samplePricingMatrix';
+import { ThemeProfile } from '@/components/Sidebar';
+import { StandardFactoryTechPack } from '@/types/techPack';
+import { StandardFactoryTechPackModal } from './StandardFactoryTechPackModal';
+import { buildStandardFactoryTechPack } from '@/data/standardTechPacks';
+import { ShareDocumentModal } from '@/components/ShareDocumentModal';
+import { OfficialDocument } from '@/types/documentPortal';
 
 interface SampleManagementProps {
   samples: SampleDevelopmentOrder[];
@@ -57,6 +65,7 @@ interface SampleManagementProps {
   onAddSample: (newSample: SampleDevelopmentOrder) => void;
   onUpdateSampleStatus: (sdoId: string, newStatus: SampleStatus, feedbackComments?: string) => void;
   onAdvanceSampleStage: (sdoId: string, nextStage: SampleStage) => void;
+  theme?: ThemeProfile;
 }
 
 const STAGE_CONFIG: Record<
@@ -66,13 +75,13 @@ const STAGE_CONFIG: Record<
   PROTO: {
     label: 'Proto (1st Fit)',
     desc: 'Pattern & initial mould feasibility test',
-    badgeColor: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
+    badgeColor: 'bg-[#E8F0EA] text-[#1F3A2E] border-[#BBE3C7]',
     order: 1,
   },
   FIT: {
     label: 'Fit & Styling',
     desc: 'Measurement, contour, and aesthetic adjustments',
-    badgeColor: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
+    badgeColor: 'bg-[#E8F0EA] text-[#1F3A2E] border-[#BBE3C7]',
     order: 2,
   },
   SIZE_SET: {
@@ -136,9 +145,9 @@ const STATUS_CONFIG: Record<
   },
   DELIVERED_TO_BUYER: {
     label: 'Delivered to Buyer',
-    bg: 'bg-[#EDE7F6]',
-    text: 'text-[#4A2E7A]',
-    border: 'border-[#D6C7EC]',
+    bg: 'bg-[#E8F0EA]',
+    text: 'text-[#1F3A2E]',
+    border: 'border-[#BBE3C7]',
     icon: Truck,
   },
   APPROVED: {
@@ -179,7 +188,10 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   onAddSample,
   onUpdateSampleStatus,
   onAdvanceSampleStage,
+  theme = 'crm-green',
 }) => {
+  const isRoyal = theme === 'royal-blue';
+  const isHeritage = theme === 'heritage-tan';
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedStage, setSelectedStage] = useState<SampleStage | 'ALL'>('ALL');
@@ -188,6 +200,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   const [selectedSample, setSelectedSample] = useState<SampleDevelopmentOrder | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'TECHPACK' | 'COURIER' | 'COSTING' | 'FEEDBACK'>('TECHPACK');
+  const [viewingTechPack, setViewingTechPack] = useState<StandardFactoryTechPack | null>(null);
   const [activeModuleTab, setActiveSampleModuleTab] = useState<'TRACKER' | 'SOP_POLICY' | 'PRICING_MATRIX' | 'REIMBURSEMENT_CALC'>('TRACKER');
   const [showSopModal, setShowSopModal] = useState(false);
   const [calcPoQty, setCalcPoQty] = useState(1200);
@@ -254,7 +267,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       id: 'REVIEW',
       title: 'Buyer Review & Revision',
       statuses: ['REVISION_REQUIRED'] as SampleStatus[],
-      color: 'border-purple-500/40 bg-purple-500/5',
+      color: 'border-amber-500/40 bg-amber-500/5',
     },
     {
       id: 'APPROVED',
@@ -462,11 +475,12 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
             onChange={(e) => setSelectedSector(e.target.value as any)}
             className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
-            <option value="ALL">All Sectors</option>
-            <option value="LEATHER">Leather Goods</option>
-            <option value="JUTE">Jute Crafts</option>
-            <option value="TEXTILE">Home Textiles</option>
-            <option value="CERAMICS">Ceramics & Pottery</option>
+            <option value="ALL">All Sectors (5 Divisions)</option>
+            <option value="LEATHER">💼 Leather Goods</option>
+            <option value="JUTE">🛍️ Jute Products</option>
+            <option value="TEXTILE">🧵 Apparel & Home Textiles</option>
+            <option value="CERAMICS">🍽️ Ceramics & Tableware</option>
+            <option value="POTTERY">🏺 Pottery & Terracotta</option>
           </select>
 
           {/* Status Filter */}
@@ -636,15 +650,37 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       </td>
 
                       <td className="py-3 px-4 text-right">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedSample(sample);
-                          }}
-                          className="px-2.5 py-1 rounded bg-white hover:bg-[#1F3A2E] hover:text-white text-[#1A1A1A] text-[11px] transition-colors border border-[#DDE3DD] font-semibold shadow-sm"
-                        >
-                          Inspect SDO
-                        </button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setViewingTechPack(
+                                sample.standardTechPack ||
+                                  buildStandardFactoryTechPack({
+                                    modelName: sample.styleName,
+                                    styleCode: sample.styleCode,
+                                    sector: sample.sector,
+                                    originHub: 'Dhaka / Narayanganj / Savar Export Cluster',
+                                    factoryName: sample.factoryName,
+                                  })
+                              );
+                            }}
+                            className="px-2 py-1 rounded bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-[11px] font-bold shadow-sm transition-all flex items-center gap-1"
+                            title="Open Standard Factory Tech-Pack (PDF Format)"
+                          >
+                            <FileText className="w-3 h-3" />
+                            <span>Tech-Pack</span>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedSample(sample);
+                            }}
+                            className="px-2.5 py-1 rounded bg-white hover:bg-[#1F3A2E] hover:text-white text-[#1A1A1A] text-[11px] transition-colors border border-[#DDE3DD] font-semibold shadow-sm"
+                          >
+                            Inspect SDO
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -746,13 +782,24 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                 </p>
               </div>
 
-              <button
-                onClick={() => setShowSopModal(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold text-xs shadow-md transition-all font-['Montserrat'] shrink-0"
-              >
-                <Printer className="w-4 h-4" />
-                <span>Print Official Agreement</span>
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => setShowSopModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C8A96A] hover:bg-[#b59557] text-[#1F3A2E] font-bold text-xs shadow-md transition-all font-['Montserrat']"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print Official Agreement</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSopModal(true)}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md transition-all font-['Montserrat'] cursor-pointer"
+                  title="Share Sourcing SOP & Sampling SLA for Verification & Acknowledgement"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span>Share (Verify / Ack)</span>
+                </button>
+              </div>
             </div>
 
             {/* 5-Step Visual Progression */}
@@ -964,7 +1011,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
-                <span>👞</span>
+                <span>💼</span>
                 <span>Division 01: The Leather Compendium (Everyday Carry, Tech & Executive Bags)</span>
               </h3>
               <span className="text-xs text-slate-400 font-mono">8 SKUs</span>
@@ -992,7 +1039,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       <td className="py-3 px-4">
                         <strong className="text-white block">{item.skuDescription}</strong>
                         {item.techPackRef && (
-                          <span className="text-[10px] text-purple-400 font-mono">Ref: {item.techPackRef}</span>
+                          <span className="text-[10px] text-emerald-400 font-mono">Ref: {item.techPackRef}</span>
                         )}
                       </td>
                       <td className="py-3 px-4 font-mono font-bold text-white">
@@ -1010,7 +1057,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={() => setIsAddModalOpen(true)}
-                          className="px-2.5 py-1 rounded bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white border border-purple-500/30 text-xs font-medium transition-all"
+                          className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                            isRoyal
+                              ? 'bg-blue-600/20 text-blue-300 hover:bg-blue-600 hover:text-white border border-blue-500/30'
+                              : isHeritage
+                              ? 'bg-[#8A6D3B]/20 text-[#C8A96A] hover:bg-[#8A6D3B] hover:text-white border border-[#C8A96A]/40'
+                              : 'bg-[#1F3A2E] text-[#C8A96A] hover:bg-[#2C5240] hover:text-white border border-[#C8A96A]/40 shadow-sm'
+                          }`}
                         >
                           Request SDO
                         </button>
@@ -1026,7 +1079,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           <div className="space-y-3 pt-4">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
-                <span>🌾</span>
+                <span>🛍️</span>
                 <span>Division 02: The Golden Fiber Edit (Jute, Jute-Cotton & Natural Fibers)</span>
               </h3>
               <span className="text-xs text-slate-400 font-mono">7 SKUs</span>
@@ -1121,7 +1174,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                           : 'bg-slate-950 text-slate-400 border-slate-800'
                       }`}
                     >
-                      🌾 Jute & Golden Fiber (MOQ ≥ 1,000)
+                      🛍️ Jute & Golden Fiber (MOQ ≥ 1,000)
                     </button>
                     <button
                       type="button"
@@ -1132,7 +1185,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                           : 'bg-slate-950 text-slate-400 border-slate-800'
                       }`}
                     >
-                      👞 Leather Compendium (MOQ ≥ 300)
+                      💼 Leather Compendium (MOQ ≥ 300)
                     </button>
                   </div>
                 </div>
@@ -1266,13 +1319,23 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       {/* SDO Detail Drawer */}
       {selectedSample && (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl bg-[#090d1a] border-l border-slate-800 h-full overflow-y-auto flex flex-col justify-between p-6 shadow-2xl">
+          <div className={`w-full max-w-2xl h-full overflow-y-auto flex flex-col justify-between p-6 shadow-2xl transition-colors ${
+            isRoyal
+              ? 'bg-[#0B132B] border-l border-slate-700 text-slate-100'
+              : isHeritage
+              ? 'bg-[#1C160C] border-l border-[#8A6D3B]/60 text-[#F5EEDC]'
+              : 'bg-[#0E1A14] border-l border-[#2C5240] text-white'
+          }`}>
             {/* Drawer Header */}
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+              <div className={`flex items-center justify-between pb-4 border-b ${
+                isRoyal ? 'border-slate-800' : isHeritage ? 'border-[#8A6D3B]/50' : 'border-[#2C5240]'
+              }`}>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-mono text-purple-400 font-bold">
+                    <span className={`text-sm font-mono font-bold ${
+                      isRoyal ? 'text-blue-400' : isHeritage ? 'text-[#C8A96A]' : 'text-emerald-400'
+                    }`}>
                       {selectedSample.sdoNumber}
                     </span>
                     <span
@@ -1360,7 +1423,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                           status: 'DELIVERED_TO_BUYER',
                         });
                       }}
-                      className="px-3 py-1 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium text-[11px] transition-all flex items-center gap-1"
+                      className={`px-3 py-1 rounded-lg text-white font-medium text-[11px] transition-all flex items-center gap-1 ${
+                        isRoyal
+                          ? 'bg-blue-600 hover:bg-blue-500'
+                          : isHeritage
+                          ? 'bg-[#8A6D3B] hover:bg-[#9E7D43]'
+                          : 'bg-emerald-600 hover:bg-emerald-500'
+                      }`}
                     >
                       <Truck className="w-3.5 h-3.5" />
                       <span>Confirm Buyer Receipt</span>
@@ -1370,12 +1439,18 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
               </div>
 
               {/* Drawer Tabs */}
-              <div className="flex items-center gap-2 border-b border-slate-800 text-xs mb-4">
+              <div className={`flex items-center gap-2 border-b text-xs mb-4 ${
+                isRoyal ? 'border-slate-800' : isHeritage ? 'border-[#8A6D3B]/40' : 'border-[#2C5240]'
+              }`}>
                 <button
                   onClick={() => setActiveDrawerTab('TECHPACK')}
                   className={`pb-2 px-2 border-b-2 font-medium transition-all ${
                     activeDrawerTab === 'TECHPACK'
-                      ? 'border-purple-500 text-purple-400 font-semibold'
+                      ? isRoyal
+                        ? 'border-blue-500 text-blue-400 font-semibold'
+                        : isHeritage
+                        ? 'border-[#C8A96A] text-[#C8A96A] font-semibold'
+                        : 'border-emerald-500 text-emerald-400 font-semibold'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1385,7 +1460,11 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   onClick={() => setActiveDrawerTab('COURIER')}
                   className={`pb-2 px-2 border-b-2 font-medium transition-all ${
                     activeDrawerTab === 'COURIER'
-                      ? 'border-purple-500 text-purple-400 font-semibold'
+                      ? isRoyal
+                        ? 'border-blue-500 text-blue-400 font-semibold'
+                        : isHeritage
+                        ? 'border-[#C8A96A] text-[#C8A96A] font-semibold'
+                        : 'border-emerald-500 text-emerald-400 font-semibold'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1395,7 +1474,11 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   onClick={() => setActiveDrawerTab('COSTING')}
                   className={`pb-2 px-2 border-b-2 font-medium transition-all ${
                     activeDrawerTab === 'COSTING'
-                      ? 'border-purple-500 text-purple-400 font-semibold'
+                      ? isRoyal
+                        ? 'border-blue-500 text-blue-400 font-semibold'
+                        : isHeritage
+                        ? 'border-[#C8A96A] text-[#C8A96A] font-semibold'
+                        : 'border-emerald-500 text-emerald-400 font-semibold'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1405,7 +1488,11 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   onClick={() => setActiveDrawerTab('FEEDBACK')}
                   className={`pb-2 px-2 border-b-2 font-medium transition-all ${
                     activeDrawerTab === 'FEEDBACK'
-                      ? 'border-purple-500 text-purple-400 font-semibold'
+                      ? isRoyal
+                        ? 'border-blue-500 text-blue-400 font-semibold'
+                        : isHeritage
+                        ? 'border-[#C8A96A] text-[#C8A96A] font-semibold'
+                        : 'border-emerald-500 text-emerald-400 font-semibold'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1416,6 +1503,44 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
               {/* Tab 1: Tech Pack Specifications */}
               {activeDrawerTab === 'TECHPACK' && (
                 <div className="space-y-4 text-xs">
+                  {/* Standard Factory Tech-Pack Official Document Banner */}
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-[#1F3A2E] to-[#12231B] border border-[#C8A96A]/60 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-white/10 text-[#C8A96A] border border-white/20 flex items-center justify-center font-bold shrink-0">
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A]/25 text-[#F4E3B8] border border-[#C8A96A]/40 uppercase">
+                            {selectedSample.standardTechPack?.documentRef || `TP-AMC-${selectedSample.styleCode}`}
+                          </span>
+                          <span className="text-[11px] text-[#C8A96A] font-semibold">Standard Factory Protocol</span>
+                        </div>
+                        <div className="text-xs font-bold text-white mt-1">
+                          Official Sampling Tech-Pack with Picture & BOM Tables
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setViewingTechPack(
+                          selectedSample.standardTechPack ||
+                            buildStandardFactoryTechPack({
+                              modelName: selectedSample.styleName,
+                              styleCode: selectedSample.styleCode,
+                              sector: selectedSample.sector,
+                              originHub: 'Dhaka / Narayanganj / Savar Export Cluster',
+                              factoryName: selectedSample.factoryName,
+                            })
+                        )
+                      }
+                      className="px-3.5 py-2 rounded-lg bg-[#C8A96A] hover:bg-[#D8BA7B] text-[#12231B] text-xs font-bold transition-all shadow-md flex items-center gap-1.5 shrink-0"
+                    >
+                      <Printer className="w-4 h-4" />
+                      <span>Open Factory PDF</span>
+                    </button>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800">
                       <div className="text-[10px] text-slate-400 uppercase font-mono">
@@ -1489,9 +1614,17 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   </div>
 
                   {selectedSample.techPack.artworkOrDxfUrl && (
-                    <div className="p-3 rounded-lg bg-purple-950/30 border border-purple-800/40 flex items-center justify-between">
+                    <div className={`p-3 rounded-lg flex items-center justify-between ${
+                      isRoyal
+                        ? 'bg-blue-950/30 border border-blue-800/40'
+                        : isHeritage
+                        ? 'bg-[#261E10] border border-[#8A6D3B]/40'
+                        : 'bg-emerald-950/30 border border-emerald-800/40'
+                    }`}>
                       <div>
-                        <div className="font-semibold text-purple-300 text-xs">
+                        <div className={`font-semibold text-xs ${
+                          isRoyal ? 'text-blue-300' : isHeritage ? 'text-[#C8A96A]' : 'text-emerald-300'
+                        }`}>
                           CAD / DXF Pattern File Attached
                         </div>
                         <div className="text-[10px] text-slate-400">
@@ -1502,7 +1635,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                         href={selectedSample.techPack.artworkOrDxfUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium text-[11px] flex items-center gap-1"
+                        className={`px-3 py-1.5 rounded-lg text-white font-medium text-[11px] flex items-center gap-1 ${
+                          isRoyal
+                            ? 'bg-blue-600 hover:bg-blue-500'
+                            : isHeritage
+                            ? 'bg-[#8A6D3B] hover:bg-[#9E7D43]'
+                            : 'bg-emerald-600 hover:bg-emerald-500'
+                        }`}
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
                         <span>Download DXF</span>
@@ -1715,8 +1854,16 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                   ))}
 
                   {/* Log New Buyer Feedback Form */}
-                  <div className="p-4 rounded-xl bg-purple-950/20 border border-purple-800/40 space-y-3">
-                    <div className="font-semibold text-purple-300 flex items-center gap-1.5 text-xs">
+                  <div className={`p-4 rounded-xl space-y-3 ${
+                    isRoyal
+                      ? 'bg-blue-950/20 border border-blue-800/40'
+                      : isHeritage
+                      ? 'bg-[#261E10] border border-[#8A6D3B]/40'
+                      : 'bg-emerald-950/20 border border-emerald-800/40'
+                  }`}>
+                    <div className={`font-semibold flex items-center gap-1.5 text-xs ${
+                      isRoyal ? 'text-blue-300' : isHeritage ? 'text-[#C8A96A]' : 'text-emerald-300'
+                    }`}>
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>Log Buyer Review Verdict</span>
                     </div>
@@ -1725,7 +1872,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       <select
                         value={feedbackVerdict}
                         onChange={(e) => setFeedbackVerdict(e.target.value as any)}
-                        className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white"
+                        className={`px-3 py-1.5 rounded-lg text-xs text-white ${
+                          isRoyal
+                            ? 'bg-slate-900 border border-slate-700'
+                            : isHeritage
+                            ? 'bg-[#1C160C] border border-[#8A6D3B]/60'
+                            : 'bg-[#0A140F] border border-[#2C5240]'
+                        }`}
                       >
                         <option value="APPROVED">Approved (Advance to Bulk)</option>
                         <option value="APPROVED_WITH_COMMENTS">Approved w/ Minor Comments</option>
@@ -1745,7 +1898,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                           );
                           setSelectedSample(null);
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs transition-all"
+                        className={`px-3 py-1.5 rounded-lg text-white font-medium text-xs transition-all ${
+                          isRoyal
+                            ? 'bg-blue-600 hover:bg-blue-500'
+                            : isHeritage
+                            ? 'bg-[#8A6D3B] hover:bg-[#9E7D43]'
+                            : 'bg-emerald-600 hover:bg-emerald-500'
+                        }`}
                       >
                         Submit Verdict & Update Status
                       </button>
@@ -1756,7 +1915,13 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                       value={feedbackNotes}
                       onChange={(e) => setFeedbackNotes(e.target.value)}
                       rows={2}
-                      className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                      className={`w-full p-2.5 rounded-lg text-xs text-white placeholder-slate-400 focus:outline-none ${
+                        isRoyal
+                          ? 'bg-slate-900 border border-slate-700 focus:border-blue-500'
+                          : isHeritage
+                          ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                          : 'bg-[#0A140F] border border-[#2C5240] focus:border-emerald-500'
+                      }`}
                     />
                   </div>
                 </div>
@@ -1807,12 +1972,23 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           onAddSample={(sdo) => {
             onAddSample(sdo);
             setIsAddModalOpen(false);
+            if (sdo.standardTechPack) {
+              setViewingTechPack(sdo.standardTechPack);
+            }
           }}
           factories={factories}
           products={products}
           crmLeads={crmLeads}
+          theme={theme}
         />
       )}
+
+      {/* Standard Factory Tech-Pack Official Document Modal */}
+      <StandardFactoryTechPackModal
+        isOpen={!!viewingTechPack}
+        onClose={() => setViewingTechPack(null)}
+        techPack={viewingTechPack}
+      />
     </div>
   );
 };
@@ -1831,8 +2007,36 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
   const [buyerSigned, setBuyerSigned] = useState(false);
   const [signedName, setSignedName] = useState('Authorized Buyer Signatory');
   const [signedCompany, setSignedCompany] = useState('Global Sourcing Client Ltd');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   if (!isOpen) return null;
+
+  const sopDoc: OfficialDocument = {
+    id: 'DOC-SOP-SMP-2026',
+    docCode: 'SOP-B2B-SMP-2026-V1',
+    documentNumber: 'SOP-B2B-SMP-2026-V1',
+    title: 'Official Sourcing SOP & Buyer Sampling Portal Agreement',
+    category: 'RND_SAMPLING',
+    section: 'RND_SAMPLING',
+    issuingAuthority: 'ArielMC Commercial Sourcing & Merchant Directorate',
+    station: 'ARIEL_BD',
+    countryCode: 'BD',
+    entityCode: 'BD_HUB',
+    issueDate: '2026-01-01',
+    expiryDate: '2027-12-31',
+    status: 'ACTIVE',
+    verificationUrl: 'https://erp.arielmc.com/verify-doc?code=SOP-B2B-SMP-2026-V1&ack=true',
+    qrCodeData: 'SOP-B2B-SMP-2026-V1|ARIELMC_SAMPLING_AGREEMENT',
+    fileUrl: '/docs/ArielMC_Sampling_Agreement.pdf',
+    fileType: 'PDF',
+    fileSize: '1.4 MB',
+    version: '2026.1',
+    tags: ['SOP', 'Sampling Agreement', 'Specimen Kit', 'SLA', 'Verified'],
+    notes: 'Official Service Level Agreement governing specimen kits, counter samples, BOM validations, and escrow protections.',
+    isStatutoryRequirement: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
@@ -1854,8 +2058,17 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors border border-slate-700"
               title="Print Agreement"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5 text-[#C9A86A]" />
               <span>Print / PDF</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsShareModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+              title="Share SOP Agreement for Verification & Acknowledgement"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Share (Verify / Ack)</span>
             </button>
             <button
               onClick={onClose}
@@ -1924,8 +2137,8 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
               Sample and prototype execution operates strictly under ArielMC's 5-Step Sourcing Workflow:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
-              <div className="p-3 rounded-xl bg-slate-900 border border-purple-500/30">
-                <div className="text-[10px] font-mono font-bold text-purple-400">Step 1 (1–2 Days)</div>
+              <div className="p-3 rounded-xl bg-slate-900 border border-emerald-500/30">
+                <div className="text-[10px] font-mono font-bold text-emerald-400">Step 1 (1–2 Days)</div>
                 <div className="font-bold text-white text-xs mt-0.5">Brief & Feasibility</div>
                 <p className="text-[11px] text-slate-400 mt-1">Tech pack review, BOM validation, target FOB costing, factory slot allocation.</p>
               </div>
@@ -2005,7 +2218,7 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
               <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
                 <div className="flex items-center justify-between">
                   <h3 className="font-bold text-white text-xs">Tier C: Corporate Specimen Kits (Strategic Outbound Account Sampling)</h3>
-                  <span className="font-mono text-[10px] text-purple-400 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-800/40">PROSPECTING</span>
+                  <span className="font-mono text-[10px] text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">PROSPECTING</span>
                 </div>
                 <p className="text-slate-300 text-[11px]">
                   <strong>Standard Policy:</strong> Specimen presentation boxes are invoiced at a flat administrative fee of $50.00 USD (inclusive of specimen merchandise and door-to-door express courier dispatch), OR dispatched freight-collect using the Buyer's corporate DHL/FedEx account.
@@ -2243,6 +2456,13 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
           </button>
         </div>
       </div>
+
+      {/* Share Document Modal */}
+      <ShareDocumentModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        document={sopDoc}
+      />
     </div>
   );
 };
@@ -2258,6 +2478,7 @@ interface CreateSdoModalProps {
   factories: SupplierFactory[];
   products: ProductItem[];
   crmLeads: CrmLead[];
+  theme?: ThemeProfile;
 }
 
 const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
@@ -2267,7 +2488,11 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
   factories,
   products,
   crmLeads,
+  theme = 'crm-green',
 }) => {
+  const isRoyal = theme === 'royal-blue';
+  const isHeritage = theme === 'heritage-tan';
+
   const [sector, setSector] = useState<ProductSector>('LEATHER');
   const [styleName, setStyleName] = useState('');
   const [styleCode, setStyleCode] = useState('');
@@ -2281,6 +2506,49 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
   const [targetDate, setTargetDate] = useState('2026-11-15');
   const [costUsd, setCostUsd] = useState(150);
   const [courierProvider, setCourierProvider] = useState<CourierProvider>('DHL Express');
+  const [referencePictureUrl, setReferencePictureUrl] = useState('/images/techpacks/blm-ref-photo.png');
+  const [originHub, setOriginHub] = useState('Dhaka / Narayanganj / Savar');
+  const [targetDeviceOrFit, setTargetDeviceOrFit] = useState('Up to 15.6" Laptop / 16" MacBook Pro');
+
+  const handleSectorChange = (newSector: ProductSector) => {
+    setSector(newSector);
+    if (newSector === 'JUTE') {
+      setReferencePictureUrl('/images/techpacks/jct-ref-photo.png');
+      setOriginHub('Dhaka / Narayanganj Textile & Jute Cluster');
+      setTargetDeviceOrFit('A4 Folios & 15" Laptops / Commuter Goods');
+      setPrimaryMaterial('Heavyweight Jute-Cotton blend fabric (320-350 GSM)');
+      setDimensions('16"W x 12"H x 6"D (40.6 x 30.5 x 15.2 cm)');
+      setColorway('Natural Beige / Navy / Crimson');
+    } else if (newSector === 'LEATHER') {
+      setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
+      setOriginHub('Dhaka / Narayanganj / Savar Tannery Cluster');
+      setTargetDeviceOrFit('Up to 15.6" Laptop / 16" MacBook Pro');
+      setPrimaryMaterial('12-14 oz Heavyweight Cotton Denim & 1.4-1.6 mm Full-Grain Cowhide');
+      setDimensions('16"W x 12"H x 4.75"D (40.5 x 30.5 x 12.0 cm)');
+      setColorway('Deep Indigo Navy / Classic Cognac Tan (#A85724)');
+    } else if (newSector === 'TEXTILE') {
+      setReferencePictureUrl('/images/techpacks/jct-ref-photo.png');
+      setOriginHub('Narayanganj & Gazipur Knit/Weave Cluster');
+      setTargetDeviceOrFit('Standard Queen / Double Bedding & Living');
+      setPrimaryMaterial('300 TC 100% Organic Combed Cotton Sateen');
+      setDimensions('230 cm x 220 cm (Duvet) + 50x75 cm (Pillow)');
+      setColorway('Crisp Optical White / Slate Grey');
+    } else if (newSector === 'CERAMICS') {
+      setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
+      setOriginHub('Mirpur / Gazipur Ceramic Ware Cluster');
+      setTargetDeviceOrFit('Commercial Tableware / Vitrified Stoneware');
+      setPrimaryMaterial('High-grade vitrified stoneware body (1280°C firing)');
+      setDimensions('Dia: 27.0 cm x H: 2.6 cm (Coupe)');
+      setColorway('Reactive Matte Mineral Glaze / Slate');
+    } else {
+      setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
+      setOriginHub('Dhamrai / Savar Traditional Pottery Cluster');
+      setTargetDeviceOrFit('Thermodynamic Evaporative Cooling / Earthen Accents');
+      setPrimaryMaterial('100% Non-Toxic Indigenous Earthen Clay / Terracotta');
+      setDimensions('Dia: 16.0 cm x H: 24.0 cm');
+      setColorway('Natural Raw Terracotta / Smoked Charcoal');
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -2289,6 +2557,17 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
     const selectedFactory = factories.find((f) => f.id === factoryId) || factories[0];
     const newId = `sdo-${Date.now()}`;
     const sdoNumber = `SDO-2026-${sector.substring(0, 3)}-${Math.floor(100 + Math.random() * 900)}`;
+
+    const generatedTechPack = buildStandardFactoryTechPack({
+      modelName: styleName || 'Custom Client Design',
+      styleCode: styleCode || `AM-${sector.substring(0, 3)}-${Math.floor(100 + Math.random() * 900)}`,
+      sector,
+      referencePictureUrl: referencePictureUrl || (sector === 'JUTE' ? '/images/techpacks/jct-ref-photo.png' : '/images/techpacks/blm-ref-photo.png'),
+      targetDeviceOrFit,
+      originHub: originHub || 'Dhaka / Narayanganj / Savar Export Cluster',
+      factoryName: selectedFactory?.name,
+      factoryLocation: selectedFactory ? `${selectedFactory.cluster}, Bangladesh` : undefined,
+    });
 
     const newSample: SampleDevelopmentOrder = {
       id: newId,
@@ -2347,20 +2626,54 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
       },
       feedbacks: [],
       tags: ['New SDO', targetMarket, sector],
+      standardTechPack: generatedTechPack,
     };
 
     onAddSample(newSample);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <FlaskConical className="w-5 h-5 text-purple-400" />
-            <h2 className="text-base font-bold text-white">Create Sample Development Order (SDO)</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div 
+        id="create-sdo-modal"
+        className={`w-full max-w-2xl rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto transition-colors ${
+          isRoyal
+            ? 'bg-[#0B132B] border border-slate-700/80 text-slate-100'
+            : isHeritage
+            ? 'bg-[#1C160C] border border-[#8A6D3B]/60 text-[#F5EEDC]'
+            : 'bg-[#12231B] border border-[#2C5240] text-white'
+        }`}
+      >
+        <div className={`flex items-center justify-between pb-4 border-b ${
+          isRoyal
+            ? 'border-slate-800 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#0F172A]'
+            : isHeritage
+            ? 'border-[#8A6D3B]/60 bg-gradient-to-r from-[#261E10] via-[#332815] to-[#261E10]'
+            : 'border-[#2C5240] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22]'
+        } -mx-6 -mt-6 p-6 mb-2 rounded-t-2xl`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+              isRoyal
+                ? 'bg-blue-500/20 border border-blue-500/30 text-blue-400'
+                : isHeritage
+                ? 'bg-[#C8A96A]/20 border border-[#C8A96A]/40 text-[#C8A96A]'
+                : 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400'
+            }`}>
+              <FlaskConical className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-white font-heading tracking-wide">
+                Create Sample Development Order (SDO)
+              </h2>
+              <p className={`text-[11px] ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4AF37]/70' : 'text-[#CFE0D5]'}`}>
+                Phase 3 Prototyping & Technical Dossier
+              </p>
+            </div>
           </div>
-          <button onClick={onClose} className="p-1 rounded text-slate-400 hover:text-white">
+          <button 
+            onClick={onClose} 
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -2368,25 +2681,42 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 mb-1">Product Sector</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Product Sector
+              </label>
               <select
                 value={sector}
-                onChange={(e) => setSector(e.target.value as any)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                onChange={(e) => handleSectorChange(e.target.value as any)}
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               >
-                <option value="LEATHER">Leather Goods</option>
-                <option value="JUTE">Jute Crafts</option>
-                <option value="TEXTILE">Home Textiles</option>
-                <option value="CERAMICS">Ceramics & Pottery</option>
+                <option value="LEATHER">💼 Leather Goods</option>
+                <option value="JUTE">🛍️ Jute Products & Bags</option>
+                <option value="TEXTILE">🧵 Apparel & Home Textiles</option>
+                <option value="CERAMICS">🍽️ Ceramics & Tableware</option>
+                <option value="POTTERY">🏺 Pottery & Terracotta</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Sample Stage</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Sample Stage
+              </label>
               <select
                 value={stage}
                 onChange={(e) => setStage(e.target.value as any)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               >
                 <option value="PROTO">Proto Sample (1st Fit & Pattern)</option>
                 <option value="FIT">Fit & Styling Sample</option>
@@ -2399,47 +2729,79 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 mb-1">Style Name / Description</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Style Name / Description
+              </label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Full-Grain Duffle Bag"
                 value={styleName}
                 onChange={(e) => setStyleName(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Style Code</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Style Code
+              </label>
               <input
                 type="text"
                 placeholder="e.g. AM-LTH-009"
                 value={styleCode}
                 onChange={(e) => setStyleCode(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 mb-1">Buyer / Client Company</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Buyer / Client Company
+              </label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Harrods, Zara Home, Pottery Barn"
                 value={buyerCompany}
                 onChange={(e) => setBuyerCompany(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               />
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Target Market Zone</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Target Market Zone
+              </label>
               <select
                 value={targetMarket}
                 onChange={(e) => setTargetMarket(e.target.value as any)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               >
                 <option value="UK">United Kingdom (GBP)</option>
                 <option value="US">United States (USD)</option>
@@ -2451,11 +2813,19 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 mb-1">Partner Factory (Bangladesh)</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Partner Factory (Bangladesh)
+              </label>
               <select
                 value={factoryId}
                 onChange={(e) => setFactoryId(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               >
                 <option value="">Select Partner Factory...</option>
                 {factories.map((f) => (
@@ -2467,50 +2837,190 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-400 mb-1">Target Sample Delivery Date</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Target Sample Delivery Date
+              </label>
               <input
                 type="date"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               />
             </div>
           </div>
 
-          {/* Tech Pack Specs Preview */}
-          <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2.5">
-            <div className="text-[10px] text-slate-400 uppercase font-mono">
-              Core Tech Pack Specifications
+          {/* Standard Factory Tech Pack Configuration & Reference Picture */}
+          <div className={`p-4 rounded-xl space-y-3 ${
+            isRoyal
+              ? 'bg-[#070D1F]/90 border border-slate-700'
+              : isHeritage
+              ? 'bg-[#140F09] border border-[#8A6D3B]/60'
+              : 'bg-[#0E1A14] border border-[#2C5240]'
+          }`}>
+            <div className={`text-[11px] uppercase font-mono font-bold tracking-wider flex items-center justify-between ${
+              isRoyal ? 'text-blue-400' : isHeritage ? 'text-[#C8A96A]' : 'text-[#C8A96A]'
+            }`}>
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Standard Factory Tech-Pack Dossier</span>
+              </div>
+              <span className="text-[10px] text-slate-400 font-normal">Auto-built with photo upon submit</span>
             </div>
+
+            {/* Reference Picture Selection & Thumbnail */}
+            <div className="flex items-center gap-3 p-2.5 rounded-lg bg-black/30 border border-white/5">
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-slate-900 border border-white/10 shrink-0 relative flex items-center justify-center">
+                {referencePictureUrl ? (
+                  <img
+                    src={referencePictureUrl}
+                    alt="Reference"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <Package className="w-6 h-6 text-slate-500" />
+                )}
+              </div>
+              <div className="flex-1 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className={`block text-[10px] font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                    Tech-Pack Reference Picture URL
+                  </label>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setReferencePictureUrl('/images/techpacks/jct-ref-photo.png')}
+                      className="px-2 py-0.5 rounded text-[10px] bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 transition-colors"
+                    >
+                      🛍️ JCT Tote
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReferencePictureUrl('/images/techpacks/blm-ref-photo.png')}
+                      className="px-2 py-0.5 rounded text-[10px] bg-white/5 hover:bg-white/15 border border-white/10 text-slate-300 transition-colors"
+                    >
+                      💼 Bloom Tote
+                    </button>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  value={referencePictureUrl}
+                  onChange={(e) => setReferencePictureUrl(e.target.value)}
+                  placeholder="/images/techpacks/jct-ref-photo.png"
+                  className={`w-full p-1.5 rounded text-xs text-white focus:outline-none font-mono text-[11px] ${
+                    isRoyal
+                      ? 'bg-[#0B132B] border border-slate-700 focus:border-blue-500'
+                      : isHeritage
+                      ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                      : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A]'
+                  }`}
+                />
+              </div>
+            </div>
+
+            {/* Origin Hub & Target Fit */}
+            <div className="grid grid-cols-2 gap-2.5">
+              <div>
+                <label className={`block text-[10px] mb-0.5 ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4AF37]/80' : 'text-[#CFE0D5]'}`}>
+                  Origin Production Hub
+                </label>
+                <input
+                  type="text"
+                  value={originHub}
+                  onChange={(e) => setOriginHub(e.target.value)}
+                  placeholder="e.g. Dhaka / Narayanganj Textile Cluster"
+                  className={`w-full p-2 rounded text-xs text-white focus:outline-none ${
+                    isRoyal
+                      ? 'bg-[#0B132B] border border-slate-700 focus:border-blue-500'
+                      : isHeritage
+                      ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                      : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A]'
+                  }`}
+                />
+              </div>
+              <div>
+                <label className={`block text-[10px] mb-0.5 ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4AF37]/80' : 'text-[#CFE0D5]'}`}>
+                  Target Device / Dimension Fit
+                </label>
+                <input
+                  type="text"
+                  value={targetDeviceOrFit}
+                  onChange={(e) => setTargetDeviceOrFit(e.target.value)}
+                  placeholder={'e.g. Up to 15.6" Laptop / A4 Folios'}
+                  className={`w-full p-2 rounded text-xs text-white focus:outline-none ${
+                    isRoyal
+                      ? 'bg-[#0B132B] border border-slate-700 focus:border-blue-500'
+                      : isHeritage
+                      ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                      : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A]'
+                  }`}
+                />
+              </div>
+            </div>
+
+            {/* Spec Fields */}
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className="block text-slate-400 text-[10px] mb-0.5">Dimensions</label>
+                <label className={`block text-[10px] mb-0.5 ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4AF37]/80' : 'text-[#CFE0D5]'}`}>
+                  Dimensions
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. 40x30x10 cm"
                   value={dimensions}
                   onChange={(e) => setDimensions(e.target.value)}
-                  className="w-full p-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white"
+                  className={`w-full p-2 rounded text-xs text-white focus:outline-none ${
+                    isRoyal
+                      ? 'bg-[#0B132B] border border-slate-700 focus:border-blue-500'
+                      : isHeritage
+                      ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                      : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A]'
+                  }`}
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-[10px] mb-0.5">Primary Material</label>
+                <label className={`block text-[10px] mb-0.5 ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4AF37]/80' : 'text-[#CFE0D5]'}`}>
+                  Primary Material
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Full-Grain Cowhide"
                   value={primaryMaterial}
                   onChange={(e) => setPrimaryMaterial(e.target.value)}
-                  className="w-full p-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white"
+                  className={`w-full p-2 rounded text-xs text-white focus:outline-none ${
+                    isRoyal
+                      ? 'bg-[#0B132B] border border-slate-700 focus:border-blue-500'
+                      : isHeritage
+                      ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                      : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A]'
+                  }`}
                 />
               </div>
               <div>
-                <label className="block text-slate-400 text-[10px] mb-0.5">Pantone / Color</label>
+                <label className={`block text-[10px] mb-0.5 ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4AF37]/80' : 'text-[#CFE0D5]'}`}>
+                  Pantone / Color
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Cognac Saddle"
                   value={colorway}
                   onChange={(e) => setColorway(e.target.value)}
-                  className="w-full p-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white"
+                  className={`w-full p-2 rounded text-xs text-white focus:outline-none ${
+                    isRoyal
+                      ? 'bg-[#0B132B] border border-slate-700 focus:border-blue-500'
+                      : isHeritage
+                      ? 'bg-[#1C160C] border border-[#8A6D3B]/60 focus:border-[#C8A96A]'
+                      : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A]'
+                  }`}
                 />
               </div>
             </div>
@@ -2518,11 +3028,19 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-slate-400 mb-1">Express Courier</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Express Courier
+              </label>
               <select
                 value={courierProvider}
                 onChange={(e) => setCourierProvider(e.target.value as any)}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               >
                 <option value="DHL Express">DHL Express Priority</option>
                 <option value="FedEx Priority">FedEx International Priority</option>
@@ -2531,29 +3049,52 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Development Cost ($USD)</label>
+              <label className={`block mb-1 font-semibold ${isRoyal ? 'text-slate-300' : isHeritage ? 'text-[#FAF6EE]' : 'text-[#CFE0D5]'}`}>
+                Development Cost ($USD)
+              </label>
               <input
                 type="number"
                 value={costUsd}
                 onChange={(e) => setCostUsd(Number(e.target.value))}
-                className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white"
+                className={`w-full p-2.5 rounded-lg text-white transition-colors focus:outline-none ${
+                  isRoyal
+                    ? 'bg-[#070D1F] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                    : isHeritage
+                    ? 'bg-[#120E08] border border-[#8A6D3B]/60 focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                    : 'bg-[#0A140F] border border-[#2C5240] focus:border-[#C8A96A] focus:ring-1 focus:ring-[#C8A96A]'
+                }`}
               />
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
+          <div className={`pt-3 border-t flex items-center justify-end gap-3 ${
+            isRoyal ? 'border-slate-800' : isHeritage ? 'border-[#8A6D3B]/50' : 'border-[#2C5240]'
+          }`}>
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium"
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                isRoyal
+                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                  : isHeritage
+                  ? 'bg-[#261E10] hover:bg-[#332815] text-[#F5EEDC] border border-[#8A6D3B]/50'
+                  : 'bg-[#1F3A2E]/50 hover:bg-[#1F3A2E] text-slate-300 border border-[#2C5240]'
+              }`}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold transition-all shadow-lg shadow-purple-600/30"
+              className={`px-5 py-2.5 rounded-lg text-white font-bold transition-all shadow-lg flex items-center gap-2 ${
+                isRoyal
+                  ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-600/30'
+                  : isHeritage
+                  ? 'bg-[#8A6D3B] hover:bg-[#9E7D43] shadow-[#8A6D3B]/30'
+                  : 'bg-gradient-to-r from-[#1E6B3A] to-[#14512C] hover:from-[#258247] hover:to-[#1a6637] shadow-emerald-950/50 border border-emerald-500/40'
+              }`}
             >
-              Issue SDO & Dispatch Tech Pack
+              <FlaskConical className="w-4 h-4 text-[#C8A96A]" />
+              <span>Issue SDO & Dispatch Tech Pack</span>
             </button>
           </div>
         </form>

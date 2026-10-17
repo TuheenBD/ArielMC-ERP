@@ -3,6 +3,14 @@
 import React, { useState } from 'react';
 import { ProductItem, CurrencyRate } from '@/types/erp';
 import {
+  StandardFactoryTechPack,
+  TechPackBomItem,
+  TechPackMeasurementItem,
+  TechPackQcClearance,
+} from '@/types/techPack';
+import { StandardFactoryTechPackModal } from '@/components/StandardFactoryTechPackModal';
+import { buildStandardFactoryTechPack } from '@/data/standardTechPacks';
+import {
   X,
   Package,
   Factory,
@@ -18,7 +26,8 @@ import {
   Barcode,
   Box,
   Truck,
-  ShieldAlert
+  ShieldAlert,
+  Ruler,
 } from 'lucide-react';
 
 interface ProductDetailModalProps {
@@ -34,7 +43,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   if (!product) return null;
 
-  const [activeTab, setActiveTab] = useState<'SPECS' | 'COSTING' | 'FACTORY' | 'COMPLIANCE' | 'PACKAGING'>('SPECS');
+  const [activeTab, setActiveTab] = useState<'SPECS' | 'TECHPACK' | 'COSTING' | 'FACTORY' | 'COMPLIANCE' | 'PACKAGING'>('SPECS');
+  const [isTechPackModalOpen, setIsTechPackModalOpen] = useState(false);
+
+  const productTechPack: StandardFactoryTechPack = product.standardTechPack || buildStandardFactoryTechPack({
+    modelName: product.name,
+    styleCode: product.styleCode,
+    sector: product.sector,
+    category: product.category,
+    referencePictureUrl: product.images?.[0],
+    originHub: product.partnerFactory?.location,
+    factoryName: product.partnerFactory?.factoryName,
+  });
 
   const formatPrice = (usdAmount: number) => {
     const converted = usdAmount * activeCurrency.rateToUsd;
@@ -79,12 +99,22 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             )}
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setIsTechPackModalOpen(true)}
+              className="px-3.5 py-2 rounded-lg bg-[#C8A96A] hover:bg-[#D8BA7B] text-[#12231B] text-xs font-bold transition-all flex items-center gap-1.5 shadow-md"
+              title="Open Official Sampling Tech-Pack (PDF Format)"
+            >
+              <FileCheck2 className="w-4 h-4" />
+              <span>Standard Factory Tech-Pack</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Tab Bar */}
@@ -98,6 +128,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             }`}
           >
             Technical Specs & Attributes
+          </button>
+          <button
+            onClick={() => setActiveTab('TECHPACK')}
+            className={`py-3 border-b-2 transition-colors shrink-0 flex items-center gap-1.5 font-montserrat ${
+              activeTab === 'TECHPACK'
+                ? 'border-[#1F3A2E] text-[#1F3A2E] font-bold'
+                : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
+            }`}
+          >
+            <FileCheck2 className="w-3.5 h-3.5 text-[#8A6D3B]" />
+            <span>Standard Factory Tech-Pack</span>
           </button>
           <button
             onClick={() => setActiveTab('PACKAGING')}
@@ -311,6 +352,189 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     </div>
                   </div>
                 )}
+
+                {product.attributes.sector === 'POTTERY' && (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-sm">
+                      <span className="text-[#6B7269] text-[10px] block">Clay Formulation</span>
+                      <span className="font-semibold text-[#9A3412]">{product.attributes.data.clayType}</span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-sm">
+                      <span className="text-[#6B7269] text-[10px] block">Finish & Surface</span>
+                      <span className="font-medium text-[#1A1A1A]">{product.attributes.data.finishStyle}</span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-sm">
+                      <span className="text-[#6B7269] text-[10px] block">Firing Temperature</span>
+                      <span className="font-medium text-[#1A1A1A]">{product.attributes.data.firingTempCelsius}°C</span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-sm">
+                      <span className="text-[#6B7269] text-[10px] block">Frost Resistance</span>
+                      <span className="font-medium text-[#1A1A1A]">{product.attributes.data.frostResistance}</span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-sm col-span-2">
+                      <span className="text-[#6B7269] text-[10px] block">Food Contact & Safety Grade</span>
+                      <span className="font-semibold text-[#14512C]">{product.attributes.data.foodSafeUse}</span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-sm col-span-2">
+                      <span className="text-[#6B7269] text-[10px] block">Evaporative Cooling Rating</span>
+                      <span className="font-semibold text-[#1F3A2E]">{product.attributes.data.evaporativeCoolingRating}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'TECHPACK' && (
+            <div className="space-y-6">
+              {/* Header Banner */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-[#1F3A2E] to-[#12231B] border border-[#C8A96A]/60 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#C8A96A]/25 text-[#F4E3B8] border border-[#C8A96A]/40 font-bold uppercase">
+                      {productTechPack.documentRef}
+                    </span>
+                    <span className="text-xs text-[#C8A96A] font-semibold">Standard Factory Protocol</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-white mt-1 font-montserrat">
+                    {productTechPack.companyHeader}
+                  </h3>
+                  <div className="text-[11px] text-white/70 mt-0.5">
+                    Origin Hub: {productTechPack.originHub} • Sourcing Factory: {productTechPack.factoryName || product.partnerFactory.factoryName}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsTechPackModalOpen(true)}
+                  className="px-4 py-2 rounded-lg bg-[#C8A96A] hover:bg-[#D8BA7B] text-[#12231B] text-xs font-bold transition-all shadow-md flex items-center gap-1.5 shrink-0"
+                >
+                  <FileCheck2 className="w-4 h-4" />
+                  <span>Open Printable Document</span>
+                </button>
+              </div>
+
+              {/* Reference Picture Hero */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-col md:flex-row items-center gap-5">
+                <div className="w-full md:w-56 h-48 rounded-lg border border-[#DDE3DD] bg-[#FAFCFA] overflow-hidden flex items-center justify-center p-2 shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={productTechPack.referencePictures?.[0] || product.images?.[0] || '/images/ArielMC_Logo.png'}
+                    alt={product.name}
+                    className="max-h-full max-w-full object-contain rounded"
+                  />
+                </div>
+                <div className="flex-1 space-y-2 text-xs">
+                  <div className="font-bold text-[#1F3A2E] text-sm font-montserrat">
+                    Official Sampling Reference Picture
+                  </div>
+                  <p className="text-[#6B7269] leading-relaxed">
+                    {productTechPack.referencePictureCaptions?.[0] || 'Standard factory photo specifying shape, proportions, handle drop, stitching tension, and colorway.'}
+                  </p>
+                  <div className="p-2.5 rounded-lg bg-[#F4F6F4] border border-[#DDE3DD] space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-[#6B7269]">Target Device / Fit:</span>
+                      <span className="font-semibold text-[#1F3A2E]">{productTechPack.targetDeviceOrFit || 'Standard Commercial Fit'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#6B7269]">Spec Version:</span>
+                      <span className="font-mono font-medium text-[#1A1A1A]">{productTechPack.version}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bill of Materials Table */}
+              <div className="space-y-2">
+                <div className="font-bold text-[#1F3A2E] text-xs uppercase font-montserrat flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-[#8A6D3B]" />
+                  <span>Bill of Materials (BOM)</span>
+                </div>
+                <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#1F3A2E] text-white uppercase text-[10px] font-semibold">
+                      <tr>
+                        <th className="py-2.5 px-3">Component</th>
+                        <th className="py-2.5 px-3">Material & Construction</th>
+                        <th className="py-2.5 px-3">Specification / Grade</th>
+                        <th className="py-2.5 px-3">Colorway</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E8EDE8]">
+                      {productTechPack.billOfMaterials.map((row: TechPackBomItem, idx: number) => (
+                        <tr key={row.id || idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFCFA]'}>
+                          <td className="py-2 px-3 font-semibold text-[#1F3A2E]">{row.component}</td>
+                          <td className="py-2 px-3 text-[#1A1A1A]">{row.materialAndConstruction}</td>
+                          <td className="py-2 px-3 text-[#1A1A1A] font-medium">{row.specificationOrGrade}</td>
+                          <td className="py-2 px-3 text-[#6B7269]">{row.colorwayOptions}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Finished Measurements Table */}
+              <div className="space-y-2">
+                <div className="font-bold text-[#1F3A2E] text-xs uppercase font-montserrat flex items-center gap-1.5">
+                  <Ruler className="w-3.5 h-3.5 text-[#8A6D3B]" />
+                  <span>Finished Measurement Specifications</span>
+                </div>
+                <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#1F3A2E] text-white uppercase text-[10px] font-semibold">
+                      <tr>
+                        <th className="py-2.5 px-3">Measurement Point</th>
+                        <th className="py-2.5 px-3">Inches</th>
+                        <th className="py-2.5 px-3">Metric</th>
+                        <th className="py-2.5 px-3">Tolerance</th>
+                        <th className="py-2.5 px-3">Critical Function</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E8EDE8]">
+                      {productTechPack.measurementSpecs.map((row: TechPackMeasurementItem, idx: number) => (
+                        <tr key={row.id || idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#FAFCFA]'}>
+                          <td className="py-2 px-3 font-semibold text-[#1F3A2E]">{row.measurementPoint}</td>
+                          <td className="py-2 px-3 font-mono text-[#1A1A1A]">{row.specInches}</td>
+                          <td className="py-2 px-3 font-mono font-bold text-[#1F3A2E]">{row.specMetric}</td>
+                          <td className="py-2 px-3 font-mono text-[#8A6D3B]">{row.tolerance}</td>
+                          <td className="py-2 px-3 text-[#6B7269] text-[11px]">{row.productionPurpose}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Construction & Assembly Details */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-2">
+                <div className="font-bold text-[#1F3A2E] text-xs font-montserrat">
+                  Construction & Assembly Details
+                </div>
+                <div className="space-y-1.5 text-xs text-[#1A1A1A]">
+                  {productTechPack.constructionDetails.map((detail: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <span className="text-[#8A6D3B] font-bold">•</span>
+                      <span>{detail}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quality Control & Export Clearances */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-2">
+                <div className="font-bold text-[#1F3A2E] text-xs font-montserrat flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#14512C]" />
+                  <span>Quality Control & Compliance Clearances</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {productTechPack.qualityControlClearances.map((qc: TechPackQcClearance, idx: number) => (
+                    <div key={qc.id || idx} className="p-3 rounded-lg bg-[#FAFCFA] border border-[#DDE3DD] space-y-1">
+                      <div className="font-bold text-[#1F3A2E]">{qc.testName}</div>
+                      <div className="text-[11px] text-[#1A1A1A] font-medium">{qc.standardOrRequirement}</div>
+                      <div className="text-[10px] text-[#6B7269]">{qc.passCriteria}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -401,6 +625,75 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                     </span>
                   </div>
                 </div>
+
+                {/* 4-Tier Volume Buying Line (Min 25%–30% Margin & B2B 40%–50% < D2C) */}
+                {product.volumePricing && (
+                  <div className="p-4 rounded-xl bg-[#FAF5EC] border border-[#C8A96A] shadow-sm space-y-3 md:col-span-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div>
+                        <span className="text-[#8A6D3B] font-bold text-xs uppercase tracking-wider font-montserrat block">
+                          Official Catalog 4-Tier Buying Line &amp; Profit Margin Guardrail
+                        </span>
+                        <p className="text-[11px] text-[#6B7269] mt-0.5 font-mono">
+                          Policy: Min 25%–30% Margin (Max Target Buy = FOB Sell × 0.70–0.75) • B2B Wholesale is 40%–50% below D2C Retail MSRP
+                        </p>
+                      </div>
+                      <span className="text-xs font-mono px-2.5 py-1 rounded bg-[#1F3A2E] text-white font-bold">
+                        Min 25%–30% Margin Policy
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                      <div className="p-2.5 rounded-lg bg-white border border-[#DDE3DD] space-y-1">
+                        <span className="text-[10px] text-[#6B7269] font-semibold uppercase block">
+                          Tier 1 ({product.volumePricing.tier1.qty})
+                        </span>
+                        <div className="text-xs text-[#1A1A1A]">
+                          FOB Sell: <strong className="font-mono">${product.volumePricing.tier1.sellPriceUsd}</strong>
+                        </div>
+                        <div className="text-xs text-[#14512C] font-bold">
+                          Target Buy: <strong className="font-mono">${product.volumePricing.tier1.targetBuyUsd}</strong>
+                        </div>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-white border border-[#DDE3DD] space-y-1">
+                        <span className="text-[10px] text-[#6B7269] font-semibold uppercase block">
+                          Tier 2 ({product.volumePricing.tier2.qty})
+                        </span>
+                        <div className="text-xs text-[#1A1A1A]">
+                          FOB Sell: <strong className="font-mono">${product.volumePricing.tier2.sellPriceUsd}</strong>
+                        </div>
+                        <div className="text-xs text-[#14512C] font-bold">
+                          Target Buy: <strong className="font-mono">${product.volumePricing.tier2.targetBuyUsd}</strong>
+                        </div>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-white border border-[#DDE3DD] space-y-1">
+                        <span className="text-[10px] text-[#6B7269] font-semibold uppercase block">
+                          Tier 3 ({product.volumePricing.tier3.qty})
+                        </span>
+                        <div className="text-xs text-[#1A1A1A]">
+                          FOB Sell: <strong className="font-mono">${product.volumePricing.tier3.sellPriceUsd}</strong>
+                        </div>
+                        <div className="text-xs text-[#14512C] font-bold">
+                          Target Buy: <strong className="font-mono">${product.volumePricing.tier3.targetBuyUsd}</strong>
+                        </div>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-white border border-[#DDE3DD] space-y-1">
+                        <span className="text-[10px] text-[#6B7269] font-semibold uppercase block">
+                          Tier 4 ({product.volumePricing.tier4.qty})
+                        </span>
+                        <div className="text-xs text-[#1A1A1A]">
+                          FOB Sell: <strong className="font-mono">${product.volumePricing.tier4.sellPriceUsd}</strong>
+                        </div>
+                        <div className="text-xs text-[#14512C] font-bold">
+                          Target Buy: <strong className="font-mono">${product.volumePricing.tier4.targetBuyUsd}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -606,15 +899,22 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               Close
             </button>
             <button
-              onClick={() => alert(`Exporting Tech Pack PDF & BOM for SKU: ${product.sku}`)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-md shadow-[#1F3A2E]/20 transition-all"
+              onClick={() => setIsTechPackModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-md shadow-[#1F3A2E]/20 transition-all font-montserrat"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Download Tech Pack & BOM</span>
+              <span>Standard Factory Tech-Pack (PDF)</span>
             </button>
           </div>
         </div>
       </div>
+
+      {/* Official Factory Tech-Pack Viewer Modal */}
+      <StandardFactoryTechPackModal
+        isOpen={isTechPackModalOpen}
+        onClose={() => setIsTechPackModalOpen(false)}
+        techPack={productTechPack}
+      />
     </div>
   );
 };

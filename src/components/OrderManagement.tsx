@@ -40,9 +40,14 @@ import {
   Sparkles,
   PhoneCall,
   FileText,
-  Printer
+  Printer,
+  Package,
+  Award
 } from 'lucide-react';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
+import { TimeAndActionGanttCalendar } from '@/components/TimeAndActionGanttCalendar';
+import { ArielMC } from '@/lib/brand';
+import { DocumentType } from '@/components/OfficialDocumentCenter';
 
 interface OrderManagementProps {
   orders: BuyerSalesOrder[];
@@ -57,7 +62,7 @@ interface OrderManagementProps {
     newStatus: 'COMPLETED' | 'ON_TRACK' | 'AT_RISK' | 'DELAYED'
   ) => void;
   onOpenDocumentCenter?: (
-    docType?: 'COMMERCIAL_INVOICE' | 'PROFORMA_INVOICE' | 'MUSHAK_6_3' | 'PURCHASE_ORDER',
+    docType?: DocumentType,
     orderId?: string
   ) => void;
 }
@@ -142,6 +147,8 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'OVERVIEW' | 'MARGIN' | 'TNA' | 'AQL'>('OVERVIEW');
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
+  const [mainView, setMainView] = useState<'ORDERS' | 'TNA_GANTT'>('ORDERS');
+  const [selectedGanttOrderId, setSelectedGanttOrderId] = useState<string | null>(null);
 
   // Filter calculations
   const filteredOrders = orders.filter((order) => {
@@ -194,15 +201,48 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Main View Mode Switcher */}
+          <div className="flex items-center gap-1 p-1 bg-white/10 rounded-xl border border-white/20">
+            <button
+              onClick={() => setMainView('ORDERS')}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                mainView === 'ORDERS'
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] shadow-sm'
+                  : 'text-white/80 hover:text-white'
+              }`}
+            >
+              <Repeat className="w-3.5 h-3.5" />
+              <span>Orders &amp; POs</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setSelectedGanttOrderId(null);
+                setMainView('TNA_GANTT');
+              }}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                mainView === 'TNA_GANTT'
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] shadow-sm'
+                  : 'text-white/80 hover:text-white'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>T&amp;A Production Gantt</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white font-mono text-[9px]">
+                Live
+              </span>
+            </button>
+          </div>
+
           {onOpenDocumentCenter && (
             <button
               onClick={() => onOpenDocumentCenter('COMMERCIAL_INVOICE')}
               className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 font-semibold text-xs transition-all shadow-sm font-['Montserrat']"
-              title="Official ArielMC PDF Document Engine (Invoices, Mushak 6.3, POs)"
+              title="Official Export PDF Document Engine (Invoices, Packing List, CoO, Form EXP, Mushak 6.3, POs)"
             >
               <FileText className="w-4 h-4" />
-              <span>Official PDF Engine</span>
+              <span>Export PDF Engine</span>
             </button>
           )}
           <button
@@ -223,7 +263,17 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
         </div>
       </div>
 
-      {/* KPI Stats Strip */}
+      {mainView === 'TNA_GANTT' ? (
+        <TimeAndActionGanttCalendar
+          orders={orders}
+          onUpdateMilestoneStatus={onUpdateMilestoneStatus}
+          selectedOrderId={selectedGanttOrderId}
+          onSelectOrder={setSelectedGanttOrderId}
+          onBackToOrders={() => setMainView('ORDERS')}
+        />
+      ) : (
+        <>
+          {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
         <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
           <div className="text-[11px] text-[#6B7269] uppercase font-medium">Total Pipeline Value</div>
@@ -318,11 +368,12 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
             onChange={(e) => setSelectedSector(e.target.value as any)}
             className="px-3 py-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg text-xs text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E]"
           >
-            <option value="ALL">All Sectors</option>
-            <option value="LEATHER">Leather Goods</option>
-            <option value="JUTE">Jute Crafts</option>
-            <option value="TEXTILE">Home Textiles</option>
-            <option value="CERAMICS">Ceramics & Pottery</option>
+            <option value="ALL">All Sectors (5 Divisions)</option>
+            <option value="LEATHER">💼 Leather Goods</option>
+            <option value="JUTE">🛍️ Jute Products</option>
+            <option value="TEXTILE">🧵 Apparel & Home Textiles</option>
+            <option value="CERAMICS">🍽️ Ceramics & Tableware</option>
+            <option value="POTTERY">🏺 Pottery & Terracotta</option>
           </select>
 
           {/* Order Status */}
@@ -473,15 +524,29 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                     </td>
 
                     <td className="py-3 px-4 text-right">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedOrder(order);
-                        }}
-                        className="px-2.5 py-1 rounded bg-slate-800 hover:bg-sky-600 hover:text-white text-slate-300 text-[11px] transition-colors border border-slate-700"
-                      >
-                        Inspect OMS
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedGanttOrderId(order.id);
+                            setMainView('TNA_GANTT');
+                          }}
+                          className="px-2 py-1 rounded bg-[#E8F0EA] hover:bg-[#1F3A2E] text-[#1F3A2E] hover:text-[#C8A96A] text-[11px] font-bold transition-colors border border-[#BDE3CA] flex items-center gap-1 cursor-pointer"
+                          title="Open Time & Action Production Gantt Chart"
+                        >
+                          <Calendar className="w-3 h-3" />
+                          <span className="hidden sm:inline">T&amp;A Gantt</span>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedOrder(order);
+                          }}
+                          className="px-2.5 py-1 rounded bg-slate-800 hover:bg-sky-600 hover:text-white text-slate-300 text-[11px] transition-colors border border-slate-700 cursor-pointer"
+                        >
+                          Inspect OMS
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -490,6 +555,8 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           </table>
         </div>
       </div>
+        </>
+      )}
 
       {/* Two-Way Order Detail Drawer */}
       {selectedOrder && (
@@ -577,7 +644,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           onUpdateOrderStatus(selectedOrder.id, 'QUALITY_INSPECTION');
                           setSelectedOrder({ ...selectedOrder, status: 'QUALITY_INSPECTION' });
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-800 text-white font-semibold text-[11px] transition-all shadow-sm"
+                        className="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-[11px] transition-all shadow-sm"
                       >
                         Schedule AQL Inspection
                       </button>
@@ -609,18 +676,42 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                     )}
 
                     {onOpenDocumentCenter && (
-                      <div className="flex items-center gap-1.5 ml-auto">
+                      <div className="flex flex-wrap items-center gap-1.5 ml-auto">
                         <button
                           onClick={() => onOpenDocumentCenter('COMMERCIAL_INVOICE', selectedOrder.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] font-semibold text-[11px] flex items-center gap-1 shadow-sm transition-all"
-                          title="Generate Official Commercial Invoice (CI) on ArielMC Letterhead"
+                          className="px-2.5 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] font-semibold text-[11px] flex items-center gap-1 shadow-xs transition-all"
+                          title="Generate Official Commercial Invoice (CI)"
                         >
                           <FileText className="w-3.5 h-3.5 text-[#C8A96A]" />
                           <span>Export CI</span>
                         </button>
                         <button
+                          onClick={() => onOpenDocumentCenter('PACKING_LIST', selectedOrder.id)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#1F3A2E] text-white hover:bg-[#2C5240] font-semibold text-[11px] flex items-center gap-1 shadow-xs transition-all"
+                          title="Generate Export Packing List & Weight Certificate (PL)"
+                        >
+                          <Package className="w-3.5 h-3.5 text-[#C8A96A]" />
+                          <span>Packing List</span>
+                        </button>
+                        <button
+                          onClick={() => onOpenDocumentCenter('CERTIFICATE_OF_ORIGIN', selectedOrder.id)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#F8F5EE] text-[#6B5328] border border-[#E5D5B3] hover:bg-[#EFE8D6] font-semibold text-[11px] flex items-center gap-1 shadow-xs transition-all"
+                          title="Generate DCCI / EPB Certificate of Origin (CoO)"
+                        >
+                          <Award className="w-3.5 h-3.5 text-[#8A6D3B]" />
+                          <span>CoO</span>
+                        </button>
+                        <button
+                          onClick={() => onOpenDocumentCenter('FORM_EXP', selectedOrder.id)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#EFF6FF] text-[#1E40AF] border border-[#BFDBFE] hover:bg-[#DBEAFE] font-semibold text-[11px] flex items-center gap-1 shadow-xs transition-all"
+                          title="Generate Bangladesh Bank Form EXP Declaration"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                          <span>Form EXP</span>
+                        </button>
+                        <button
                           onClick={() => onOpenDocumentCenter('PURCHASE_ORDER', selectedOrder.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] hover:bg-[#FBE3B0] font-semibold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                          className="px-2.5 py-1.5 rounded-lg bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] hover:bg-[#FBE3B0] font-semibold text-[11px] flex items-center gap-1 shadow-xs transition-all"
                           title="Generate Factory Purchase Order (PO)"
                         >
                           <FileText className="w-3.5 h-3.5 text-[#7A5508]" />
@@ -628,7 +719,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                         </button>
                         <button
                           onClick={() => onOpenDocumentCenter('MUSHAK_6_3', selectedOrder.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-[#E8F0EA] text-[#1F3A2E] border border-[#BEDDA0] hover:bg-[#D4E4D7] font-semibold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                          className="px-2.5 py-1.5 rounded-lg bg-[#E8F0EA] text-[#1F3A2E] border border-[#BEDDA0] hover:bg-[#D4E4D7] font-semibold text-[11px] flex items-center gap-1 shadow-xs transition-all"
                           title="Generate Bangladesh NBR Mushak 6.3 VAT Challan"
                         >
                           <FileText className="w-3.5 h-3.5 text-[#1E6B3A]" />
@@ -861,7 +952,11 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                       </div>
 
                       <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-between text-base font-bold">
-                        <span className="text-[#1F3A2E] font-['Montserrat']">Net ArielMC Gross Profit:</span>
+                        <span className="text-[#1F3A2E] font-['Montserrat'] flex items-center gap-1">
+                          <span>Net</span>
+                          <ArielMC />
+                          <span>Gross Profit:</span>
+                        </span>
                         <span className="font-mono text-emerald-700 text-lg">
                           +${selectedOrder.marginProtection.netMarginUsd.toLocaleString()} USD (
                           {selectedOrder.marginProtection.marginPercentage}%)
@@ -876,7 +971,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           Margin Protection Status: LOCKED &amp; VERIFIED
                         </div>
                         <p className="text-[11px] text-[#14512C] mt-0.5">
-                          Gross margin is above corporate hurdle rate of 20%. Price fluctuation risk is covered by back-to-back fixed L/C covenants with Bangladesh factories.
+                          Gross margin is above corporate hurdle rate of minimum 25%–30%. Price fluctuation risk is covered by back-to-back fixed L/C covenants with Bangladesh factories.
                         </p>
                       </div>
                     </div>
@@ -886,7 +981,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                 {/* Tab 3: Time & Action (T&A) Calendar */}
                 {activeDrawerTab === 'TNA' && (
                   <div className="space-y-4 text-xs font-['Open_Sans']">
-                    <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex items-center justify-between">
+                    <div className="p-3.5 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex flex-wrap items-center justify-between gap-3">
                       <span className="text-[#1A1A1A]">
                         Critical Path Progress:{' '}
                         <b className="text-[#1F3A2E]">
@@ -894,9 +989,23 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           {selectedOrder.timeAndAction.length} Milestones
                         </b>
                       </span>
-                      <span className="text-[10px] text-[#6B7269] font-mono">
-                        Target Ex-Factory: {selectedOrder.targetExFactoryDate}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedGanttOrderId(selectedOrder.id);
+                            setSelectedOrder(null);
+                            setMainView('TNA_GANTT');
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-[#1F3A2E] text-[#C8A96A] text-[10px] font-bold hover:bg-[#2C5240] transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
+                        >
+                          <Calendar className="w-3 h-3" />
+                          <span>Open Full Gantt Board</span>
+                        </button>
+                        <span className="text-[10px] text-[#6B7269] font-mono">
+                          Target Ex-Factory: {selectedOrder.targetExFactoryDate}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="space-y-2.5">
