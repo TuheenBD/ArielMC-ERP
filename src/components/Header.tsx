@@ -219,6 +219,66 @@ export const Header: React.FC<HeaderProps> = ({
     ? 'text-[#BDDDFC]'
     : 'text-[#E8F0EA]';
 
+  const currencySelectBg = isRoyal
+    ? 'bg-[#1E293B] text-white border-[#334155] focus:border-[#4169E1]'
+    : isHeritage
+    ? 'bg-[#244232] text-white border-[#345943] focus:border-[#C8A96A]'
+    : isCalifornia
+    ? 'bg-[#1B2F3B] text-white border-[#2B4B5C] focus:border-[#66C4FF]'
+    : isMossy
+    ? 'bg-[#343823] text-white border-[#4E5434] focus:border-[#D4DE95]'
+    : isInkWash
+    ? 'bg-[#303438] text-white border-[#4A4F55] focus:border-[#6D8196]'
+    : isPeach
+    ? 'bg-[#382622] text-white border-[#543A34] focus:border-[#E39A7B]'
+    : isStormy
+    ? 'bg-[#283542] text-white border-[#3E5164] focus:border-[#88BDF2]'
+    : 'bg-[#2C5240] text-white border-[#3A6B54] focus:border-[#C8A96A]';
+
+  const profileBtnBg = isRoyal
+    ? 'border-[#334155] bg-[#1E293B]'
+    : isHeritage
+    ? 'border-[#345943] bg-[#244232]'
+    : isCalifornia
+    ? 'border-[#2B4B5C] bg-[#1B2F3B]'
+    : isMossy
+    ? 'border-[#4E5434] bg-[#343823]'
+    : isInkWash
+    ? 'border-[#4A4F55] bg-[#303438]'
+    : isPeach
+    ? 'border-[#543A34] bg-[#382622]'
+    : isStormy
+    ? 'border-[#3E5164] bg-[#283542]'
+    : 'border-[#3A6B54] bg-[#2C5240]';
+
+  const searchIconColor = isRoyal
+    ? 'text-[#94A3B8]'
+    : isCalifornia
+    ? 'text-[#66C4FF]'
+    : isMossy
+    ? 'text-[#BAC095]'
+    : isInkWash
+    ? 'text-[#CBCBCB]'
+    : isPeach
+    ? 'text-[#FFD3AC]'
+    : isStormy
+    ? 'text-[#88BDF2]'
+    : 'text-[#A0B9A8]';
+
+  const profileSubText = isRoyal
+    ? 'text-[#94A3B8]'
+    : isCalifornia
+    ? 'text-[#BACDD6]'
+    : isMossy
+    ? 'text-[#BAC095]'
+    : isInkWash
+    ? 'text-[#CBCBCB]'
+    : isPeach
+    ? 'text-[#FFD3AC]'
+    : isStormy
+    ? 'text-[#BDDDFC]'
+    : 'text-[#CFE0D5]';
+
   return (
     <header className={`sticky top-0 z-30 ${headerBg} px-6 py-2.5 transition-colors shadow-md`}>
       {/* ========================================================
@@ -307,11 +367,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="currency-selector"
               value={activeCurrency.code}
               onChange={(e) => onSelectCurrency(e.target.value)}
-              className={`h-9 text-xs font-mono border rounded-lg px-2.5 focus:outline-none focus:border-[#C8A96A] text-center cursor-pointer font-bold shadow-xs ${
-                isRoyal
-                  ? 'bg-[#1E293B] text-white border-[#334155]'
-                  : 'bg-[#2C5240] text-white border-[#3A6B54]'
-              }`}
+              className={`h-9 text-xs font-mono border rounded-lg px-2.5 focus:outline-none text-center cursor-pointer font-bold shadow-xs ${currencySelectBg}`}
               title="Display Currency"
             >
               {currencies.map((curr) => (
@@ -763,7 +819,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Left: Prominent Search Input + Live FX Ticker */}
         <div className="flex items-center gap-3 flex-1 max-w-3xl">
           <div className="relative flex-1">
-            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${isRoyal ? 'text-[#94A3B8]' : 'text-[#A0B9A8]'}`} />
+            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${searchIconColor}`} />
             <input
               id="global-erp-search"
               type="text"
@@ -825,9 +881,7 @@ export const Header: React.FC<HeaderProps> = ({
           id="header-user-profile-btn"
           type="button"
           onClick={onOpenProfileControl || onOpenAuthModal}
-          className={`h-10 flex items-center gap-3 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 ${
-            isRoyal ? 'border-[#334155] bg-[#1E293B]' : isHeritage ? 'border-[#2A4837] bg-[#2C5240]' : 'border-[#3A6B54] bg-[#2C5240]'
-          }`}
+          className={`h-10 flex items-center gap-3 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 ${profileBtnBg}`}
           title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
         >
           <div 
@@ -854,7 +908,7 @@ export const Header: React.FC<HeaderProps> = ({
                 SUPER ADMIN
               </span>
             </div>
-            <div className={`text-[10px] flex items-center gap-1 ${isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]'}`}>
+            <div className={`text-[10px] flex items-center gap-1 ${profileSubText}`}>
               <ShieldCheck className="w-3 h-3 text-[#C8A96A]" />
               <span>{currentUser?.designation || 'Managing Director & Founder'}</span>
             </div>

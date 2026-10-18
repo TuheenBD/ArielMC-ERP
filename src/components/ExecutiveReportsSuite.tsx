@@ -161,6 +161,59 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 }) => {
   const isRoyal = theme === 'royal-blue';
   const isHeritage = theme === 'heritage-tan';
+  const isCalifornia = theme === 'california-beaches';
+  const isMossy = theme === 'mossy-hollow';
+  const isInkWash = theme === 'ink-wash';
+  const isPeach = theme === 'fresh-peach';
+  const isStormy = theme === 'stormy-morning';
+
+  const activeTabClass = isRoyal
+    ? 'bg-[#1E293B] text-white shadow-2xs'
+    : isHeritage
+    ? 'bg-[#244232] text-white shadow-2xs'
+    : isCalifornia
+    ? 'bg-[#1B2F3B] text-white shadow-2xs'
+    : isMossy
+    ? 'bg-[#343823] text-white shadow-2xs'
+    : isInkWash
+    ? 'bg-[#303438] text-white shadow-2xs'
+    : isPeach
+    ? 'bg-[#382622] text-white shadow-2xs'
+    : isStormy
+    ? 'bg-[#283542] text-white shadow-2xs'
+    : 'bg-[#1F3A2E] text-white shadow-2xs';
+
+  const generateReportBtnBg = isRoyal
+    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500'
+    : isHeritage
+    ? 'bg-gradient-to-r from-[#8A6D3B] to-[#735626] hover:from-[#9C7B43] hover:to-[#85652D]'
+    : isCalifornia
+    ? 'bg-gradient-to-r from-[#2B6B88] to-[#1E526B] hover:from-[#357F9F] hover:to-[#2B6B88]'
+    : isMossy
+    ? 'bg-gradient-to-r from-[#636B2F] to-[#4D5324] hover:from-[#717A35] hover:to-[#5E662D]'
+    : isInkWash
+    ? 'bg-gradient-to-r from-[#4A5568] to-[#2D3748] hover:from-[#5A6678] hover:to-[#3E4B5B]'
+    : isPeach
+    ? 'bg-gradient-to-r from-[#C87552] to-[#A3593B] hover:from-[#D98764] hover:to-[#C87552]'
+    : isStormy
+    ? 'bg-gradient-to-r from-[#486581] to-[#334E68] hover:from-[#5E7B98] hover:to-[#415C76]'
+    : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500';
+
+  const generateStatementBtnBg = isRoyal
+    ? 'bg-blue-600 hover:bg-blue-700'
+    : isHeritage
+    ? 'bg-[#8A6D3B] hover:bg-[#735626]'
+    : isCalifornia
+    ? 'bg-[#2B6B88] hover:bg-[#20526B]'
+    : isMossy
+    ? 'bg-[#636B2F] hover:bg-[#515826]'
+    : isInkWash
+    ? 'bg-[#4A5568] hover:bg-[#374151]'
+    : isPeach
+    ? 'bg-[#C87552] hover:bg-[#B56543]'
+    : isStormy
+    ? 'bg-[#486581] hover:bg-[#384E66]'
+    : 'bg-[#007A4D] hover:bg-[#00633e]';
 
   // Navigation State
   const [currentView, setCurrentView] = useState<ReportView>(initialView);
@@ -405,7 +458,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
             onClick={() => setCurrentView('DIRECTORY')}
             className={`px-3 py-1.5 rounded-lg transition-colors font-semibold ${
               currentView === 'DIRECTORY'
-                ? 'bg-[#1F3A2E] text-white shadow-2xs'
+                ? activeTabClass
                 : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
             }`}
           >
@@ -417,7 +470,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
             onClick={() => setCurrentView('CASH_FLOW')}
             className={`px-3 py-1.5 rounded-lg transition-colors font-semibold ${
               currentView === 'CASH_FLOW'
-                ? 'bg-[#1F3A2E] text-white shadow-2xs'
+                ? activeTabClass
                 : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
             }`}
           >
@@ -428,7 +481,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
             onClick={() => setCurrentView('PNL')}
             className={`px-3 py-1.5 rounded-lg transition-colors font-semibold ${
               currentView === 'PNL'
-                ? 'bg-[#1F3A2E] text-white shadow-2xs'
+                ? activeTabClass
                 : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
             }`}
           >
@@ -439,7 +492,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
             onClick={() => setCurrentView('INVOICES')}
             className={`px-3 py-1.5 rounded-lg transition-colors font-semibold ${
               currentView === 'INVOICES'
-                ? 'bg-[#1F3A2E] text-white shadow-2xs'
+                ? activeTabClass
                 : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
             }`}
           >
@@ -450,7 +503,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
             onClick={() => setCurrentView('ACCOUNTS_PAYABLE')}
             className={`px-3 py-1.5 rounded-lg transition-colors font-semibold ${
               currentView === 'ACCOUNTS_PAYABLE'
-                ? 'bg-[#1F3A2E] text-white shadow-2xs'
+                ? activeTabClass
                 : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
             }`}
           >
@@ -463,7 +516,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
           <button
             type="button"
             onClick={() => handleOpenReportModal('CASHFLOW_DAILY', 'BUILDER')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-sm transition-all cursor-pointer font-['Montserrat']"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${generateReportBtnBg} text-white font-bold text-xs shadow-sm transition-all cursor-pointer font-['Montserrat']`}
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-[#C8A96A]" />
             <span>+ Generate Report</span>
@@ -1349,7 +1402,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                     setSelectedGenReportType('CASHFLOW_DAILY');
                     setIsReportGenModalOpen(true);
                   }}
-                  className="px-3.5 py-1.5 rounded-lg bg-[#007A4D] hover:bg-[#00633e] text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors font-['Montserrat']"
+                  className={`px-3.5 py-1.5 rounded-lg ${generateStatementBtnBg} text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors font-['Montserrat']`}
                   title="Generate Formal Cash Flow Statement"
                 >
                   <FileSpreadsheet className="w-4 h-4 text-[#C8A96A]" />
@@ -1720,7 +1773,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsSharePnlOpen(true)}
-                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  className={`px-3.5 py-2 rounded-xl ${generateReportBtnBg} text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer`}
                   title="Share P&L Statement for Verification & Acknowledgement"
                 >
                   <Share2 className="w-3.5 h-3.5" />
@@ -1826,7 +1879,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                   setSelectedGenReportType('COMMERCIAL_INVOICES');
                   setIsReportGenModalOpen(true);
                 }}
-                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer font-['Montserrat']"
+                className={`px-3.5 py-2 rounded-xl ${generateReportBtnBg} text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer font-['Montserrat']`}
               >
                 <FileSpreadsheet className="w-3.5 h-3.5 text-[#C8A96A]" />
                 <span>+ Generate Invoice Statement</span>
@@ -2089,6 +2142,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
         initialReportType={selectedGenReportType}
         initialViewMode={genReportViewMode}
         activeEntity={activeEntity}
+        theme={theme}
       />
     </div>
   );

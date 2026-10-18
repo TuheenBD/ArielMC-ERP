@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { CompanyEntity } from '@/types/erp';
 import { OfficialDocument } from '@/types/documentPortal';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
+import { ThemeProfile } from '@/components/Sidebar';
 import Image from 'next/image';
 import {
   FileText,
@@ -33,6 +34,7 @@ interface StationComplianceDossierModalProps {
   isOpen: boolean;
   onClose: () => void;
   onShareDossier?: (station: CompanyEntity) => void;
+  theme?: ThemeProfile;
 }
 
 export const StationComplianceDossierModal: React.FC<StationComplianceDossierModalProps> = ({
@@ -41,6 +43,7 @@ export const StationComplianceDossierModal: React.FC<StationComplianceDossierMod
   isOpen,
   onClose,
   onShareDossier,
+  theme = 'crm-green',
 }) => {
   const printRef = useRef<HTMLDivElement>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -99,7 +102,7 @@ export const StationComplianceDossierModal: React.FC<StationComplianceDossierMod
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200" data-theme={theme}>
       <div className="w-full max-w-5xl max-h-[96vh] flex flex-col rounded-2xl bg-[#12231B] border border-[#2C5240] text-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Top Action Bar */}
         <div className="p-4 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between gap-3 shrink-0 no-print">

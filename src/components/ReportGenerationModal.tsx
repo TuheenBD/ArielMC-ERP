@@ -45,6 +45,8 @@ import {
   SYED_AKRAMUL_HASSAN_SIGNATURE_PATH
 } from '@/lib/brandLogoData';
 
+import { ThemeProfile } from '@/components/Sidebar';
+
 export type ReportType =
   | 'CASHFLOW_DAILY'
   | 'B2B_ORDER_PNL'
@@ -61,6 +63,7 @@ export interface ReportGenerationModalProps {
   initialReportType?: ReportType;
   initialViewMode?: 'BUILDER' | 'PREVIEW';
   activeEntity?: CompanyEntity;
+  theme?: ThemeProfile;
 }
 
 interface ReportOptionMeta {
@@ -144,6 +147,7 @@ export const ReportGenerationModal: React.FC<ReportGenerationModalProps> = ({
   initialReportType = 'ANNUAL_FINANCIAL_MATRIX',
   initialViewMode = 'BUILDER',
   activeEntity,
+  theme = 'crm-green',
 }) => {
   // View Stage State: 'BUILDER' (Configuration) vs 'PREVIEW' (Dedicated Preview Screen)
   const [viewMode, setViewMode] = useState<'BUILDER' | 'PREVIEW'>(initialViewMode || 'BUILDER');
@@ -1654,7 +1658,10 @@ export const ReportGenerationModal: React.FC<ReportGenerationModalProps> = ({
   const currentMeta = REPORT_OPTIONS.find((o) => o.type === selectedType) || REPORT_OPTIONS[0];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn"
+      data-theme={theme}
+    >
       <div className="bg-[#12231B] border-2 border-[#2C5240] rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-white">
         
         {/* =========================================================

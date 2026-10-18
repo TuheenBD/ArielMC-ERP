@@ -563,7 +563,7 @@ export default function Home() {
           )}
 
           {activeTab === 'FINANCE' && (
-            <FinanceManagement />
+            <FinanceManagement theme={theme} />
           )}
 
           {activeTab === 'REPORTS' && (

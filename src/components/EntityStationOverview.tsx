@@ -72,6 +72,43 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
 }) => {
   const isRoyal = theme === 'royal-blue';
   const isHeritage = theme === 'heritage-tan';
+  const isCalifornia = theme === 'california-beaches';
+  const isMossy = theme === 'mossy-hollow';
+  const isInkWash = theme === 'ink-wash';
+  const isPeach = theme === 'fresh-peach';
+  const isStormy = theme === 'stormy-morning';
+
+  const addBtnGradient = isRoyal
+    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-blue-950/20'
+    : isHeritage
+    ? 'bg-gradient-to-r from-[#8A6D3B] to-[#735626] hover:from-[#9C7B43] hover:to-[#85652D] shadow-[#735626]/20'
+    : isCalifornia
+    ? 'bg-gradient-to-r from-[#2B6B88] to-[#1E526B] hover:from-[#357F9F] hover:to-[#2B6B88] shadow-[#1E526B]/20'
+    : isMossy
+    ? 'bg-gradient-to-r from-[#636B2F] to-[#4D5324] hover:from-[#717A35] hover:to-[#5E662D] shadow-[#4D5324]/20'
+    : isInkWash
+    ? 'bg-gradient-to-r from-[#4A5568] to-[#2D3748] hover:from-[#5A6678] hover:to-[#3E4B5B] shadow-[#2D3748]/20'
+    : isPeach
+    ? 'bg-gradient-to-r from-[#C87552] to-[#A3593B] hover:from-[#D98764] hover:to-[#C87552] shadow-[#A3593B]/20'
+    : isStormy
+    ? 'bg-gradient-to-r from-[#486581] to-[#334E68] hover:from-[#5E7B98] hover:to-[#415C76] shadow-[#334E68]/20'
+    : 'bg-gradient-to-r from-[#1E6B3A] to-[#14512C] hover:from-[#258247] hover:to-[#1a6637] shadow-emerald-950/20';
+
+  const dossierBtnBg = isRoyal
+    ? 'bg-[#1E293B] hover:bg-[#0F172A] text-blue-300 border-blue-400/60'
+    : isHeritage
+    ? 'bg-[#244232] hover:bg-[#1A3326] text-[#D4AF37] border-[#D4AF37]/60'
+    : isCalifornia
+    ? 'bg-[#1B2F3B] hover:bg-[#13232C] text-amber-200 border-amber-300/60'
+    : isMossy
+    ? 'bg-[#343823] hover:bg-[#252819] text-lime-200 border-lime-300/60'
+    : isInkWash
+    ? 'bg-[#303438] hover:bg-[#1E2124] text-slate-200 border-slate-400/60'
+    : isPeach
+    ? 'bg-[#382622] hover:bg-[#261A17] text-orange-200 border-orange-300/60'
+    : isStormy
+    ? 'bg-[#283542] hover:bg-[#1C2630] text-sky-200 border-sky-300/60'
+    : 'bg-[#1F3A2E] hover:bg-[#12231B] text-[#C8A96A] border-[#C8A96A]/60';
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -405,7 +442,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-theme={theme}>
       {/* Header Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-white border border-[#DDE3DD] p-6 shadow-sm">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
@@ -439,7 +476,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => setIsDossierModalOpen(true)}
-                className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#1F3A2E] hover:bg-[#12231B] text-[#C8A96A] border border-[#C8A96A]/60 text-xs font-bold transition-all shadow-sm cursor-pointer"
+                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl ${dossierBtnBg} text-xs font-bold transition-all shadow-sm cursor-pointer`}
                 title="View & Print Official Station Statutory Dossier"
               >
                 <Printer className="w-4 h-4 text-[#C8A96A]" />
@@ -450,7 +487,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
                 <button
                   id="btn-add-operating-station"
                   onClick={handleOpenAddModal}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#1E6B3A] to-[#14512C] hover:from-[#258247] hover:to-[#1a6637] text-white text-xs font-bold transition-all shadow-md shadow-emerald-950/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl ${addBtnGradient} text-white text-xs font-bold transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer`}
                 >
                   <Plus className="w-4 h-4 text-[#C8A96A]" />
                   <span>Add Operating Station</span>
@@ -1638,7 +1675,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
 
       {/* Add / Edit Station Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200" data-theme={theme}>
           <div className="w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl bg-[#12231B] border border-[#2C5240] text-white shadow-2xl overflow-hidden">
             {/* Modal Header */}
             <div className="p-5 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between shrink-0">
@@ -1961,7 +1998,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
 
       {/* Delete Station Confirmation Safeguard Modal */}
       {deleteConfirmStation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200" data-theme={theme}>
           <div className="w-full max-w-md rounded-2xl bg-[#12231B] border border-rose-800 text-white shadow-2xl overflow-hidden p-6 space-y-4">
             <div className="w-12 h-12 rounded-xl bg-rose-950/80 border border-rose-600 flex items-center justify-center text-rose-400">
               <AlertTriangle className="w-6 h-6" />
@@ -2019,7 +2056,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
 
       {/* Station Certificate Detail & Audit Inspection Modal */}
       {stationPreviewDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200" data-theme={theme}>
           <div className="w-full max-w-3xl max-h-[92vh] flex flex-col rounded-2xl bg-[#12231B] border border-[#2C5240] text-white shadow-2xl overflow-hidden">
             <div className="p-5 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
@@ -2251,6 +2288,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
         documents={stationDocs}
         isOpen={isDossierModalOpen}
         onClose={() => setIsDossierModalOpen(false)}
+        theme={theme}
       />
     </div>
   );

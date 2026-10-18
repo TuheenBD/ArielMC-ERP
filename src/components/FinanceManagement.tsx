@@ -43,6 +43,7 @@ import { B2CLotShipmentWisePnlSection } from '@/components/B2CLotShipmentWisePnl
 import { ReportGenerationModal } from '@/components/ReportGenerationModal';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
+import { ThemeProfile } from '@/components/Sidebar';
 import {
   INITIAL_DUAL_TRACK_PNL,
   B2C_UNIT_ECONOMICS,
@@ -65,7 +66,13 @@ type FinanceTab =
   | 'SHIPPING_CADENCE'
   | 'SPECIMEN_ROI';
 
-export const FinanceManagement: React.FC = () => {
+interface FinanceManagementProps {
+  theme?: ThemeProfile;
+}
+
+export const FinanceManagement: React.FC<FinanceManagementProps> = ({
+  theme = 'crm-green',
+}) => {
   const [activeTab, setActiveTab] = useState<FinanceTab>('OVERVIEW');
   const [copiedScript, setCopiedScript] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -456,6 +463,7 @@ arielmc.com | arielmc.co.uk`;
             bankAccounts: []
           }}
           activeCurrency={{ code: 'USD', name: 'US Dollar', symbol: '$', rateToUsd: 1.0, symbolPosition: 'before' }}
+          theme={theme}
         />
       )}
 
@@ -2698,6 +2706,7 @@ arielmc.com | arielmc.co.uk`;
         onClose={() => setIsReportGenModalOpen(false)}
         initialReportType="ANNUAL_FINANCIAL_MATRIX"
         initialViewMode={reportGenInitialView}
+        theme={theme}
       />
     </div>
   );
