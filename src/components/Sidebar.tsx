@@ -141,7 +141,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         {
           id: 'MARKETING' as ActiveTab,
-          label: 'Brand & Marketing',
+          label: 'Marketing & Collaterals',
           icon: Megaphone,
           badge: 'Campaigns Live',
           phase: 'Live Hub',
