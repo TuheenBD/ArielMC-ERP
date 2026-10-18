@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   FileText,
   Printer,
@@ -427,7 +428,7 @@ export const StandardVoucherModal: React.FC<StandardVoucherModalProps> = ({
       <div className="bg-[#12231B] border-2 border-[#2C5240] rounded-2xl w-full max-w-4xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden text-white print:border-none print:shadow-none print:max-h-none print:w-full print:bg-white print:text-black">
         
         {/* Top Control Header Bar (Hidden during Print) */}
-        <div className="px-6 py-4 bg-[#0A140F] border-b border-[#2C5240] flex flex-wrap items-center justify-between gap-3 shrink-0 print:hidden">
+        <div className="px-6 py-4 bg-[#0A140F] border-b border-[#2C5240] flex flex-wrap items-center justify-between gap-3 shrink-0 print:hidden no-print">
           <div className="flex items-center gap-3">
             <div className={`p-2.5 rounded-xl border ${voucherType === 'CASH_PURCHASE' ? 'bg-amber-950/40 border-amber-500/30 text-[#C8A96A]' : 'bg-emerald-950/40 border-emerald-500/30 text-emerald-400'}`}>
               {voucherType === 'CASH_PURCHASE' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownLeft className="w-5 h-5" />}
@@ -1068,10 +1069,10 @@ export const StandardVoucherModal: React.FC<StandardVoucherModalProps> = ({
                2. CLEAN & STANDARD PRINTABLE VOUCHER VIEW
                (Exact match to physical scan PDF provided by user)
                ========================================================= */
-            <div className="max-w-3xl mx-auto space-y-6">
+            <div className="printable-content max-w-3xl mx-auto space-y-6">
               
               {/* Optional 2-Per-Sheet Toggle for Printing */}
-              <div className="flex items-center justify-between p-3 rounded-xl bg-[#12231B] border border-[#2C5240] print:hidden">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-[#12231B] border border-[#2C5240] print:hidden no-print">
                 <span className="text-xs text-gray-300 font-mono">
                   Print Format: Clean Standard A4 Sheet (Matches ArielMC Official Printed Pad)
                 </span>
@@ -1289,8 +1290,19 @@ export const StandardVoucherModal: React.FC<StandardVoucherModalProps> = ({
                   </div>
 
                   <div className="space-y-1">
-                    <div className="border-b border-dotted border-gray-800 pb-1 font-bold text-gray-900 min-h-[18px]">
-                      {approvedBy.split('(')[0]}
+                    <div className="border-b border-dotted border-gray-800 pb-1 font-bold text-gray-900 min-h-[30px] flex flex-col items-center justify-end">
+                      {approvedBy.toLowerCase().includes('syed akramul hassan') ? (
+                        <div className="h-7 w-28 relative">
+                          <Image
+                            src="/images/syed_akramul_hassan_signature.png"
+                            alt="Syed Akramul Hassan Signature"
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <span>{approvedBy.split('(')[0]}</span>
+                      )}
                     </div>
                     <div className="font-bold uppercase text-[9px] text-gray-800">Approved By</div>
                     <div className="text-[8px] text-gray-500">Managing Director / CEO</div>
@@ -1412,7 +1424,7 @@ export const StandardVoucherModal: React.FC<StandardVoucherModalProps> = ({
         </div>
 
         {/* Modal Footer Controls */}
-        <div className="px-6 py-3 bg-[#0A140F] border-t border-[#2C5240] flex items-center justify-between text-xs shrink-0 print:hidden">
+        <div className="px-6 py-3 bg-[#0A140F] border-t border-[#2C5240] flex items-center justify-between text-xs shrink-0 print:hidden no-print">
           <div className="flex items-center gap-2 text-gray-400 font-mono text-[11px]">
             <span>Status:</span>
             <span className="font-bold text-emerald-400 flex items-center gap-1.5">

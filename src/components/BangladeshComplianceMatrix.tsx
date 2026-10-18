@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { CompanyEntity, EntityCode } from '@/types/erp';
 import { OfficialDocument, DocumentSection, ComplianceChecklistItem } from '@/types/documentPortal';
 import {
@@ -1852,7 +1853,7 @@ export const BangladeshComplianceMatrix: React.FC<BangladeshComplianceMatrixProp
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="w-full max-w-3xl max-h-[92vh] flex flex-col rounded-2xl bg-white border border-[#DDE3DD] shadow-2xl overflow-hidden text-slate-900">
             {/* Modal Header */}
-            <div className="p-4 bg-[#1F3A2E] text-white flex items-center justify-between gap-3 shrink-0">
+            <div className="p-4 bg-[#1F3A2E] text-white flex items-center justify-between gap-3 shrink-0 no-print">
               <div className="flex items-center gap-2.5">
                 <FileText className="w-5 h-5 text-[#C8A96A]" />
                 <div>
@@ -1918,7 +1919,7 @@ export const BangladeshComplianceMatrix: React.FC<BangladeshComplianceMatrixProp
             </div>
 
             {/* Modal Scrollable Content */}
-            <div className="p-5 md:p-8 overflow-y-auto space-y-4 font-serif text-xs md:text-sm leading-relaxed text-slate-800 bg-[#FAF9F5]">
+            <div className="printable-content p-5 md:p-8 overflow-y-auto space-y-4 font-serif text-xs md:text-sm leading-relaxed text-slate-800 bg-[#FAF9F5]">
               {activeTemplateModal === 'SOURCING_DEED' && (
                 <div className="bg-white p-6 md:p-8 rounded-xl border border-slate-200 shadow-sm space-y-4">
                   <div className="text-center border-b-2 border-slate-800 pb-3">
@@ -1966,7 +1967,15 @@ export const BangladeshComplianceMatrix: React.FC<BangladeshComplianceMatrixProp
                   <div className="grid grid-cols-2 gap-4 pt-6 border-t border-slate-300 font-sans text-xs">
                     <div>
                       <span className="block text-gray-500">For and on behalf of First Party:</span>
-                      <div className="mt-8 border-t border-slate-400 pt-1 font-bold">
+                      <div className="h-10 w-36 relative mt-2">
+                        <Image
+                          src="/images/syed_akramul_hassan_signature.png"
+                          alt="Syed Akramul Hassan Signature"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="border-t border-slate-400 pt-1 font-bold">
                         Syed Akramul Hassan<br />
                         <span className="text-[10px] text-gray-500 font-normal">Managing Director, ArielMC Ltd</span>
                       </div>
@@ -2030,7 +2039,15 @@ export const BangladeshComplianceMatrix: React.FC<BangladeshComplianceMatrixProp
 
                   <div className="pt-4">
                     <span className="font-bold block">Yours Faithfully,</span>
-                    <div className="mt-6 border-t border-slate-300 pt-1 w-48 font-bold">
+                    <div className="h-10 w-36 relative mt-2">
+                      <Image
+                        src="/images/syed_akramul_hassan_signature.png"
+                        alt="Syed Akramul Hassan Signature"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="border-t border-slate-300 pt-1 w-48 font-bold">
                       Syed Akramul Hassan<br />
                       <span className="text-[10px] text-gray-500 font-normal">Managing Director, ArielMC Ltd</span>
                     </div>

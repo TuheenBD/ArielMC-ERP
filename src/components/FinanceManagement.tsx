@@ -70,6 +70,7 @@ export const FinanceManagement: React.FC = () => {
   const [copiedScript, setCopiedScript] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isReportGenModalOpen, setIsReportGenModalOpen] = useState(false);
+  const [reportGenInitialView, setReportGenInitialView] = useState<'BUILDER' | 'PREVIEW'>('BUILDER');
 
   // Dynamic simulation state
   const [b2cVolumeMultiplier, setB2cVolumeMultiplier] = useState(1.0);
@@ -170,7 +171,10 @@ arielmc.com | arielmc.co.uk`;
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
-              onClick={() => setIsReportGenModalOpen(true)}
+              onClick={() => {
+                setReportGenInitialView('BUILDER');
+                setIsReportGenModalOpen(true);
+              }}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer border border-emerald-400/40 font-['Montserrat']"
               title="Generate comprehensive financial statements and reports"
             >
@@ -178,8 +182,12 @@ arielmc.com | arielmc.co.uk`;
               <span>+ Generate Statement</span>
             </button>
             <button
-              onClick={() => window.print()}
+              onClick={() => {
+                setReportGenInitialView('PREVIEW');
+                setIsReportGenModalOpen(true);
+              }}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-medium transition-all cursor-pointer"
+              title="Open Official Consolidated P&L Statement Preview Screen"
             >
               <Printer className="w-4 h-4 text-[#C8A96A]" />
               <span>Export P&L</span>
@@ -2689,6 +2697,7 @@ arielmc.com | arielmc.co.uk`;
         isOpen={isReportGenModalOpen}
         onClose={() => setIsReportGenModalOpen(false)}
         initialReportType="ANNUAL_FINANCIAL_MATRIX"
+        initialViewMode={reportGenInitialView}
       />
     </div>
   );

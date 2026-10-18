@@ -50,7 +50,7 @@ export const PhysicalMemoViewerModal: React.FC<PhysicalMemoViewerModalProps> = (
       <div className="bg-[#12231B] border-2 border-[#2C5240] rounded-2xl w-full max-w-4xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden text-white">
         
         {/* Header Bar */}
-        <div className="px-5 py-4 bg-[#0A140F] border-b border-[#2C5240] flex items-center justify-between shrink-0">
+        <div className="px-5 py-4 bg-[#0A140F] border-b border-[#2C5240] flex items-center justify-between shrink-0 no-print">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-[#C8A96A] shadow-inner">
               <Paperclip className="w-5 h-5" />
@@ -125,7 +125,7 @@ export const PhysicalMemoViewerModal: React.FC<PhysicalMemoViewerModalProps> = (
         </div>
 
         {/* Metadata Strip */}
-        <div className="px-5 py-3 bg-[#162B22]/80 border-b border-[#2C5240] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs shrink-0">
+        <div className="px-5 py-3 bg-[#162B22]/80 border-b border-[#2C5240] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs shrink-0 no-print">
           <div>
             <span className="text-gray-400 text-[10px] uppercase font-mono block">Physical Memo No.</span>
             <span className="font-mono font-bold text-[#C8A96A] text-xs">
@@ -156,7 +156,7 @@ export const PhysicalMemoViewerModal: React.FC<PhysicalMemoViewerModalProps> = (
         {/* Document Viewing Canvas */}
         <div className="flex-1 overflow-auto p-4 sm:p-6 bg-[#060D09] flex items-center justify-center min-h-[350px]">
           <div
-            className="transition-transform duration-200 shadow-2xl rounded-xl border border-white/10 bg-white overflow-hidden p-6 max-w-2xl text-gray-900"
+            className="printable-content transition-transform duration-200 shadow-2xl rounded-xl border border-white/10 bg-white overflow-hidden p-6 max-w-2xl text-gray-900"
             style={{
               transform: `scale(${zoomLevel / 100}) rotate(${rotation}deg)`,
               transformOrigin: 'center center',
@@ -223,7 +223,7 @@ export const PhysicalMemoViewerModal: React.FC<PhysicalMemoViewerModalProps> = (
         </div>
 
         {/* Footer Bar */}
-        <div className="px-5 py-3 bg-[#0A140F] border-t border-[#2C5240] flex items-center justify-between text-xs shrink-0">
+        <div className="px-5 py-3 bg-[#0A140F] border-t border-[#2C5240] flex items-center justify-between text-xs shrink-0 no-print">
           <span className="text-gray-400 font-mono text-[11px]">
             File: {attachment.fileName} ({attachment.fileSize})
           </span>

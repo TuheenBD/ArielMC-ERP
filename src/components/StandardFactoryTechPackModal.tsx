@@ -239,7 +239,7 @@ Issued by: ArielMC Technical Sourcing Team (tuheen@arielmc.com / +8801819273458)
           
           {/* TAB 1: OFFICIAL FACTORY TECH-PACK DOCUMENT */}
           {activeTab === 'DOCUMENT' && (
-            <div className="max-w-4xl mx-auto bg-white rounded-xl border border-[#DDE3DD] shadow-sm p-6 sm:p-8 space-y-8 text-[#1A1A1A] print:shadow-none print:border-none print:p-0 print:space-y-6">
+            <div className="printable-content max-w-4xl mx-auto bg-white rounded-xl border border-[#DDE3DD] shadow-sm p-6 sm:p-8 space-y-8 text-[#1A1A1A] print:shadow-none print:border-none print:p-0 print:space-y-6">
               
               {/* DOCUMENT HEADER */}
               <div className="border-b-2 border-[#1F3A2E] pb-5 space-y-3">

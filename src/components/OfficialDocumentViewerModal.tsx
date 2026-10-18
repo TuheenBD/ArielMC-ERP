@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
+import Image from 'next/image';
 import { OfficialDocument } from '@/types/documentPortal';
 import {
   FileText,
@@ -51,6 +52,200 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
     window.print();
   };
 
+  const handleOpenExternalPrintWindow = () => {
+    const printEl = printRef.current;
+    if (!printEl) return;
+
+    const printWin = window.open(
+      '',
+      '_blank',
+      'width=1120,height=920,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
+    );
+
+    if (!printWin) {
+      alert('Please allow pop-ups for this site to open the external print preview window.');
+      return;
+    }
+
+    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${document.title} - ArielMC Official Statutory Document Print</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0f172a;
+      color: #0f172a;
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .print-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #111827;
+      color: #f9fafb;
+      border-bottom: 1px solid #374151;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .print-toolbar .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .print-toolbar .toolbar-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #ffffff;
+    }
+    .print-toolbar .toolbar-ref {
+      font-family: monospace;
+      font-size: 11px;
+      background: #064e3b;
+      color: #6ee7b7;
+      border: 1px solid #059669;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .print-toolbar .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #059669, #0d9488);
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #10b981, #14b8a6);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #1f2937;
+      color: #e5e7eb;
+      border: 1px solid #4b5563;
+    }
+    .btn-secondary:hover {
+      background: #374151;
+      color: #ffffff;
+    }
+    .paper-stage {
+      padding: 30px 16px 60px;
+      display: flex;
+      justify-content: center;
+      background: #0f172a;
+    }
+    .a4-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      background: #FFFDF9 !important;
+      color: #0f172a !important;
+      padding: 16mm 14mm;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      border: 4px solid #C8A96A;
+      position: relative;
+    }
+    .a4-sheet svg {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 8mm;
+      }
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .paper-stage {
+        padding: 0 !important;
+        background: transparent !important;
+      }
+      .a4-sheet {
+        width: 100% !important;
+        min-height: auto !important;
+        box-shadow: none !important;
+        border: 4px solid #C8A96A !important;
+        padding: 8mm !important;
+        margin: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-toolbar no-print">
+    <div class="toolbar-left">
+      <div style="font-size: 20px;">📜</div>
+      <div>
+        <div class="toolbar-title">${document.title}</div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+          <span class="toolbar-ref">${document.docCode}</span>
+          <span style="font-size: 11px; color: #9ca3af; font-family: monospace;">Station: ${document.station} • Authority: ${document.issuingAuthority}</span>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn btn-secondary" onclick="window.close()">
+        <span>✕ Close Window</span>
+      </button>
+      <button class="btn btn-primary" onclick="window.print()">
+        <span>🖨️ Print / Save as PDF</span>
+      </button>
+    </div>
+  </div>
+  <div class="paper-stage">
+    <div class="a4-sheet">
+      ${printEl.innerHTML}
+    </div>
+  </div>
+</body>
+</html>`;
+
+    printWin.document.open();
+    printWin.document.write(htmlContent);
+    printWin.document.close();
+    printWin.focus();
+  };
+
   // Get Authority Emblem
   const getAuthorityEmblem = () => {
     const auth = document.issuingAuthority.toLowerCase();
@@ -97,7 +292,7 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-4xl max-h-[95vh] flex flex-col rounded-2xl bg-[#12231B] border border-[#2C5240] text-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Top Control Bar */}
-        <div className="p-4 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between gap-3 shrink-0">
+        <div className="p-4 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between gap-3 shrink-0 no-print">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-[#1F3A2E] border border-[#C8A96A]/60 flex items-center justify-center text-[#C8A96A] text-lg font-bold shadow-md">
               {document.fileFormat}
@@ -122,6 +317,18 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
           </div>
 
           <div className="flex items-center gap-2">
+            {/* External Window Print Version */}
+            <button
+              type="button"
+              onClick={handleOpenExternalPrintWindow}
+              className="px-3 py-1.5 rounded-xl bg-[#1F3A2E] hover:bg-[#2C5240] text-emerald-300 hover:text-white font-bold text-xs border border-[#C8A96A]/60 transition-all flex items-center gap-1.5 cursor-pointer"
+              title="Open document preview in an external window formatted for standard A4 printing"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="hidden sm:inline">External Window (Print)</span>
+              <span className="sm:hidden">External ↗</span>
+            </button>
+
             {/* Share Document Button */}
             <button
               type="button"
@@ -159,7 +366,7 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
         <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#0C1712]">
           <div
             ref={printRef}
-            className="max-w-3xl mx-auto bg-[#FFFDF9] text-slate-900 rounded-xl p-6 md:p-10 border-4 border-[#C8A96A] shadow-2xl relative overflow-hidden"
+            className="printable-content max-w-3xl mx-auto bg-[#FFFDF9] text-slate-900 rounded-xl p-6 md:p-10 border-4 border-[#C8A96A] shadow-2xl relative overflow-hidden"
           >
             {/* Watermark Crest */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
@@ -293,15 +500,20 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
 
               {/* Authorized Signature */}
               <div className="space-y-1 text-right">
-                <div className="font-serif italic font-bold text-base text-[#1F3A2E]">
-                  Syed Akramul Hassan
+                <div className="h-10 w-36 ml-auto relative">
+                  <Image
+                    src="/images/syed_akramul_hassan_signature.png"
+                    alt="Syed Akramul Hassan Signature"
+                    fill
+                    className="object-contain"
+                  />
                 </div>
                 <div className="h-0.5 w-36 ml-auto bg-slate-800"></div>
                 <p className="text-[10px] font-bold text-slate-900 uppercase">
-                  Managing Director
+                  Syed Akramul Hassan
                 </p>
                 <p className="text-[9px] text-gray-500">
-                  Ariel Marketing &amp; Communications Ltd
+                  Managing Director, Ariel Marketing &amp; Communications Ltd
                 </p>
               </div>
             </div>
@@ -320,6 +532,17 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
           </button>
 
           <div className="flex items-center gap-2">
+            {/* External Window Print Version */}
+            <button
+              type="button"
+              onClick={handleOpenExternalPrintWindow}
+              className="px-4 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#2C5240] border border-emerald-500/60 text-emerald-300 hover:text-white transition-colors text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title="Preview document in dedicated external window as print version"
+            >
+              <ExternalLink className="w-4 h-4 text-[#C8A96A]" />
+              <span>External Window (Print) ↗</span>
+            </button>
+
             {/* Renew for 1 Year */}
             <button
               type="button"

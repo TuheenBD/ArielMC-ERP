@@ -283,7 +283,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
       <div className={`${docShell} rounded-2xl shadow-2xl w-full max-w-7xl h-[95vh] flex flex-col overflow-hidden`}>
         
         {/* Header Bar */}
-        <div className={`px-6 py-4 ${docHeaderBg} flex items-center justify-between shrink-0`}>
+        <div className={`px-6 py-4 ${docHeaderBg} flex items-center justify-between shrink-0 no-print`}>
           <div className="flex items-center gap-3">
             <div className={`p-2.5 rounded-xl ${docIconBox} shadow-xs`}>
               <FileText className="w-6 h-6" />
@@ -345,7 +345,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           
           {/* LEFT: Controls & Customizer Sidebar */}
-          <div className={`w-full lg:w-96 ${sidebarBg} p-5 overflow-y-auto shrink-0 space-y-4 text-xs`}>
+          <div className={`w-full lg:w-96 ${sidebarBg} p-5 overflow-y-auto shrink-0 space-y-4 text-xs no-print`}>
             
             {/* Document Type Selector */}
             <div>
@@ -1478,11 +1478,17 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                     {/* Dual Certification Boxes */}
                     <div className="grid grid-cols-2 gap-3 pt-1 text-[8.5px]">
                       <div className="p-2 border border-gray-300 rounded bg-gray-50/50 text-center">
-                        <div className="h-7 border-b border-dashed border-gray-400 flex items-end justify-center pb-0.5 font-heading font-bold text-[#1F3A2E]">
-                          Syed Akramul Hassan
+                        <div className="h-9 border-b border-dashed border-gray-400 flex items-center justify-center pb-0.5">
+                          <Image
+                            src="/images/syed_akramul_hassan_signature.png"
+                            alt="Syed Akramul Hassan Signature"
+                            width={110}
+                            height={32}
+                            className="object-contain"
+                          />
                         </div>
-                        <div className="mt-1 font-bold text-[#1F3A2E]">Managing Director</div>
-                        <div className="text-[7.5px] text-gray-500">Ariel Marketing &amp; Communications Ltd.</div>
+                        <div className="mt-1 font-bold text-[#1F3A2E]">Syed Akramul Hassan</div>
+                        <div className="text-[7.5px] text-gray-500">Managing Director &bull; ArielMC Ltd</div>
                       </div>
 
                       <div className="p-2 border border-gray-300 rounded bg-gray-50/50 text-center">
@@ -1807,8 +1813,14 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                       </div>
                     )}
 
-                    <div className="h-8 border-b border-dashed border-gray-400 flex items-end justify-center pb-0.5 font-heading font-bold text-[#1F3A2E] text-sm">
-                      Syed Akramul Hassan
+                    <div className="h-9 border-b border-dashed border-gray-400 flex items-center justify-center pb-0.5">
+                      <Image
+                        src="/images/syed_akramul_hassan_signature.png"
+                        alt="Syed Akramul Hassan Signature"
+                        width={120}
+                        height={34}
+                        className="object-contain"
+                      />
                     </div>
                     <div className="mt-1 font-bold text-[#1F3A2E]">
                       Syed Akramul Hassan

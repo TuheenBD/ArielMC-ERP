@@ -1348,7 +1348,7 @@ export const DailyExpensesEntrySection: React.FC = () => {
           VIEW 1: DAILY CASHFLOW LEDGER (INCOME & EXPENDITURE TABLE)
           ========================================================= */}
       {activeLedgerView === 'CASHFLOW_LEDGER' && (
-        <div className="bg-white rounded-2xl border border-[#DDE3DD] shadow-sm overflow-hidden">
+        <div className="printable-content bg-white rounded-2xl border border-[#DDE3DD] shadow-sm overflow-hidden">
           {/* Ledger Header Bar */}
           <div className="p-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 border-b border-[#DDE3DD] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
@@ -1370,7 +1370,7 @@ export const DailyExpensesEntrySection: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 no-print">
               <button
                 type="button"
                 onClick={handleExportCashflowCSV}

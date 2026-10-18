@@ -215,7 +215,7 @@ export const TimeAndActionGanttCalendar: React.FC<TimeAndActionGanttCalendarProp
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="printable-content space-y-6 animate-in fade-in duration-200">
       {/* Top Strategic Header */}
       <div className="p-6 rounded-2xl bg-gradient-to-r from-[#1F3A2E] via-[#172D24] to-[#12231B] border-b-[3px] border-[#C8A96A] text-white shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="space-y-1.5">
@@ -243,7 +243,7 @@ export const TimeAndActionGanttCalendar: React.FC<TimeAndActionGanttCalendarProp
         </div>
 
         {/* Top Control Buttons */}
-        <div className="flex items-center gap-2 flex-wrap shrink-0">
+        <div className="flex items-center gap-2 flex-wrap shrink-0 no-print">
           {onBackToOrders && (
             <button
               onClick={onBackToOrders}

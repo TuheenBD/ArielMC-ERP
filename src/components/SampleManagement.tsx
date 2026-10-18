@@ -2042,7 +2042,7 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="w-full max-w-4xl bg-slate-950 border border-[#C9A86A]/40 rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         {/* Document Header Controls */}
-        <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between shrink-0">
+        <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between shrink-0 no-print">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-1 rounded bg-[#C9A86A]/20 text-[#C9A86A] font-mono text-xs font-bold border border-[#C9A86A]/40">
               SOP-B2B-SMP-2026-V1
@@ -2080,7 +2080,7 @@ const SopAgreementModal: React.FC<SopAgreementModalProps> = ({ isOpen, onClose }
         </div>
 
         {/* Scrollable Printable Document Body */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-8 bg-[#0a1120] text-slate-200 font-['Open_Sans'] text-xs leading-relaxed selection:bg-[#C9A86A]/30">
+        <div className="printable-content flex-1 overflow-y-auto p-6 sm:p-10 space-y-8 bg-[#0a1120] text-slate-200 font-['Open_Sans'] text-xs leading-relaxed selection:bg-[#C9A86A]/30">
           {/* Official Letterhead */}
           <div className="border-b border-[#C9A86A]/40 pb-6 text-center space-y-2">
             <div className="flex items-center justify-center gap-2">

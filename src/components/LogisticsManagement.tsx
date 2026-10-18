@@ -1027,7 +1027,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-4xl max-h-[92vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
             {/* Header */}
-            <div className="p-5 border-b-[3px] border-[#C8A96A] bg-[#1F3A2E] flex items-center justify-between text-white">
+            <div className="p-5 border-b-[3px] border-[#C8A96A] bg-[#1F3A2E] flex items-center justify-between text-white no-print">
               <div className="flex items-center gap-2.5">
                 <FileText className="w-5 h-5 text-[#C8A96A]" />
                 <h2 className="text-base font-bold font-['Montserrat']">
@@ -1043,7 +1043,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
             </div>
 
             {/* Document Type Selector Bar */}
-            <div className="flex items-center px-6 py-2.5 bg-[#F4F6F4] border-b border-[#DDE3DD] gap-2 text-xs overflow-x-auto">
+            <div className="flex items-center px-6 py-2.5 bg-[#F4F6F4] border-b border-[#DDE3DD] gap-2 text-xs overflow-x-auto no-print">
               <button
                 onClick={() => setDocumentPreviewType('INVOICE')}
                 className={`px-3.5 py-1.5 rounded-lg transition-colors font-bold ${
@@ -1087,7 +1087,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
             </div>
 
             {/* Document Body (Clean Ivory Paper Theme for Printing) */}
-            <div className="p-8 overflow-y-auto flex-1 bg-[#F8F6F2] text-[#1F3A2E] font-['Open_Sans']">
+            <div className="printable-content p-8 overflow-y-auto flex-1 bg-white text-[#1F3A2E] font-['Open_Sans']">
               {documentPreviewType === 'INVOICE' && (
                 <div className="space-y-6 max-w-3xl mx-auto">
                   {/* Official Letterhead Header */}
@@ -1315,7 +1315,7 @@ ${activeConsignment.items
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-[#DDE3DD] bg-white flex items-center justify-between text-xs">
+            <div className="p-4 border-t border-[#DDE3DD] bg-white flex items-center justify-between text-xs no-print">
               <span className="text-gray-500">
                 Official document format verified under Bangladesh Ministry of Commerce &amp; HMRC/EU Customs rules.
               </span>

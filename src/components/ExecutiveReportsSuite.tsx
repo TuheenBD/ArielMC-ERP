@@ -200,6 +200,13 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
   // Report Generation Modal State
   const [isReportGenModalOpen, setIsReportGenModalOpen] = useState(false);
   const [selectedGenReportType, setSelectedGenReportType] = useState<ReportType>('CASHFLOW_DAILY');
+  const [genReportViewMode, setGenReportViewMode] = useState<'BUILDER' | 'PREVIEW'>('PREVIEW');
+
+  const handleOpenReportModal = (type: ReportType, mode: 'BUILDER' | 'PREVIEW' = 'PREVIEW') => {
+    setSelectedGenReportType(type);
+    setGenReportViewMode(mode);
+    setIsReportGenModalOpen(true);
+  };
 
   // Cash Flow Statement Interactive Controls & Filter States
   const [cashFlowMode, setCashFlowMode] = useState<'CATEGORIES' | 'ACTIVITIES'>('CATEGORIES');
@@ -455,10 +462,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => {
-              setSelectedGenReportType('CASHFLOW_DAILY');
-              setIsReportGenModalOpen(true);
-            }}
+            onClick={() => handleOpenReportModal('CASHFLOW_DAILY', 'BUILDER')}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-sm transition-all cursor-pointer font-['Montserrat']"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-[#C8A96A]" />
@@ -1705,7 +1709,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                   Organization: <strong className="text-[#1F3A2E]">{activeEntity.legalName}</strong> | Period: 2026-01-01 - 2026-12-31 | Period Breakdown: By Month
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 no-print">
                 <button
                   onClick={() => window.print()}
                   className="px-4 py-2 rounded-xl border border-[#DDE3DD] hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer"
@@ -1727,7 +1731,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
           </div>
 
           {/* Detailed Statement Table matching the PDF */}
-          <div className="bg-white border border-[#DDE3DD] rounded-2xl shadow-sm overflow-x-auto p-4">
+          <div className="printable-content bg-white border border-[#DDE3DD] rounded-2xl shadow-sm overflow-x-auto p-4">
             <table className="w-full text-left text-xs">
               <thead className="bg-[#FAFBF9] border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269]">
                 <tr>
@@ -1815,7 +1819,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 no-print">
               <button
                 type="button"
                 onClick={() => {
@@ -1863,7 +1867,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
           </div>
 
           {/* Invoices Table */}
-          <div className="bg-white border border-[#DDE3DD] rounded-2xl shadow-sm overflow-x-auto p-4">
+          <div className="printable-content bg-white border border-[#DDE3DD] rounded-2xl shadow-sm overflow-x-auto p-4">
             <table className="w-full text-left text-xs font-['Open_Sans']">
               <thead className="bg-[#FAFBF9] border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269]">
                 <tr>
@@ -2083,6 +2087,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
         isOpen={isReportGenModalOpen}
         onClose={() => setIsReportGenModalOpen(false)}
         initialReportType={selectedGenReportType}
+        initialViewMode={genReportViewMode}
         activeEntity={activeEntity}
       />
     </div>

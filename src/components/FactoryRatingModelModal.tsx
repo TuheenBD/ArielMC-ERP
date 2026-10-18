@@ -86,7 +86,7 @@ export const FactoryRatingModelModal: React.FC<FactoryRatingModelModalProps> = (
       <div className="bg-[#12231B] border-2 border-[#2C5240] rounded-2xl shadow-2xl w-full max-w-5xl h-[94vh] flex flex-col overflow-hidden text-white">
         
         {/* Top Control Header Bar */}
-        <div className="px-6 py-4 bg-[#162B22] border-b-2 border-[#C8A96A] flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 bg-[#162B22] border-b-2 border-[#C8A96A] flex items-center justify-between shrink-0 no-print">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-[#C8A96A]/20 border border-[#C8A96A]/40 text-[#C8A96A] shadow-md">
               <Award className="w-6 h-6 text-[#C8A96A]" />

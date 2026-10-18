@@ -135,37 +135,266 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     margin: 8mm 8mm 8mm 8mm;
   }
 
+  /* Reset document root to full clean white flow */
   html, body {
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-  }
-
-  body * {
-    visibility: hidden;
-  }
-
-  #official-printable-canvas,
-  #official-printable-canvas * {
-    visibility: visible;
-  }
-
-  #official-printable-canvas {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100% !important;
-    max-width: 100% !important;
+    min-height: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-    background: #ffffff !important;
+    position: static !important;
   }
 
-  .no-print {
+  /* When any modal is active on screen, completely remove the background dashboard page from print flow */
+  body:has(.fixed.inset-0) main,
+  body:has([class*="fixed inset-0"]) main,
+  body:has(.fixed.inset-0) > div:first-child > header,
+  body:has(.fixed.inset-0) > div:first-child > nav,
+  body:has(.fixed.inset-0) > div:first-child > aside,
+  body:has([class*="fixed inset-0"]) > div:first-child > header,
+  body:has([class*="fixed inset-0"]) > div:first-child > nav,
+  body:has([class*="fixed inset-0"]) > div:first-child > aside {
     display: none !important;
+  }
+
+  /* Explicitly suppress UI chrome, navigation, headers, footers, and all buttons */
+  nav,
+  aside,
+  header:not(.printable-header),
+  footer:not(.printable-footer),
+  button,
+  .no-print,
+  .no-print *,
+  [data-no-print="true"],
+  .print\:hidden {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Neutralize all modal fixed overlays, backdrops, and scroll clipping wrappers into normal flow */
+  .fixed,
+  [class*="fixed"],
+  .overflow-hidden,
+  .overflow-y-auto,
+  .overflow-x-auto,
+  [class*="max-h-"],
+  [class*="backdrop-blur"],
+  [class*="bg-black/"] {
+    position: static !important;
+    inset: auto !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Universal printable targets in natural document flow */
+  #official-printable-canvas,
+  .printable-content,
+  .printable-document,
+  #factory-rating-model-page,
+  [id^="vendor-profile-page"],
+  #pos-thermal-receipt,
+  [data-printable="true"] {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Ensure all nested elements inside printable targets are visible and have clean contrast */
+  #official-printable-canvas *,
+  .printable-content *,
+  .printable-document *,
+  #factory-rating-model-page *,
+  [id^="vendor-profile-page"] *,
+  #pos-thermal-receipt *,
+  [data-printable="true"] * {
+    visibility: visible !important;
+  }
+
+  /* Ensure typography inside printable content has crisp contrast on white paper */
+  .printable-content,
+  .printable-content p,
+  .printable-content span,
+  .printable-content div,
+  .printable-content td,
+  .printable-content th,
+  .printable-content h1,
+  .printable-content h2,
+  .printable-content h3,
+  .printable-content strong,
+  #official-printable-canvas,
+  #official-printable-canvas p,
+  #official-printable-canvas span,
+  #official-printable-canvas div,
+  #official-printable-canvas td,
+  #official-printable-canvas th,
+  #official-printable-canvas h1,
+  #official-printable-canvas h2,
+  #official-printable-canvas h3,
+  #official-printable-canvas strong {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+
+  .printable-content .text-white,
+  #official-printable-canvas .text-white {
+    color: #0f172a !important;
+  }
+
+  .printable-content .text-gray-200,
+  .printable-content .text-gray-300,
+  .printable-content .text-gray-400,
+  .printable-content .text-slate-200,
+  .printable-content .text-slate-300,
+  .printable-content .text-slate-400,
+  #official-printable-canvas .text-gray-200,
+  #official-printable-canvas .text-gray-300,
+  #official-printable-canvas .text-gray-400 {
+    color: #475569 !important;
+  }
+
+  .printable-content .text-emerald-400,
+  .printable-content .text-emerald-300,
+  #official-printable-canvas .text-emerald-400,
+  #official-printable-canvas .text-emerald-300 {
+    color: #047857 !important;
+    font-weight: 700 !important;
+  }
+
+  .printable-content .text-rose-400,
+  .printable-content .text-rose-300,
+  #official-printable-canvas .text-rose-400,
+  #official-printable-canvas .text-rose-300 {
+    color: #b91c1c !important;
+    font-weight: 700 !important;
+  }
+
+  .printable-content .text-cyan-400,
+  .printable-content .text-cyan-300,
+  #official-printable-canvas .text-cyan-400,
+  #official-printable-canvas .text-cyan-300 {
+    color: #0369a1 !important;
+    font-weight: 700 !important;
+  }
+
+  .printable-content .text-\[\#C8A96A\],
+  .printable-content .text-\[\#C9A86A\],
+  #official-printable-canvas .text-\[\#C8A96A\],
+  #official-printable-canvas .text-\[\#C9A86A\] {
+    color: #92400e !important;
+    font-weight: 700 !important;
+  }
+
+  /* Convert dark background boxes into crisp corporate white/light surfaces */
+  .printable-content div[class*="bg-["],
+  #official-printable-canvas div[class*="bg-["] {
+    background-color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  .printable-content .bg-\[\#12231B\],
+  .printable-content .bg-\[\#0A140F\],
+  .printable-content .bg-\[\#070E0A\],
+  .printable-content .bg-\[\#162B22\],
+  .printable-content .bg-\[\#1F3A2E\],
+  .printable-content .bg-\[\#060D09\],
+  .printable-content .bg-\[\#0C1712\],
+  .printable-content .bg-\[\#0a1120\],
+  #official-printable-canvas .bg-\[\#12231B\],
+  #official-printable-canvas .bg-\[\#0A140F\],
+  #official-printable-canvas .bg-\[\#070E0A\],
+  #official-printable-canvas .bg-\[\#162B22\],
+  #official-printable-canvas .bg-\[\#1F3A2E\],
+  #official-printable-canvas .bg-\[\#060D09\],
+  #official-printable-canvas .bg-\[\#0C1712\],
+  #official-printable-canvas .bg-\[\#0a1120\] {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  /* Table borders and styling */
+  .printable-content table,
+  #official-printable-canvas table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #cbd5e1 !important;
+    margin: 8px 0 !important;
+  }
+
+  .printable-content tr,
+  #official-printable-canvas tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .printable-content thead,
+  #official-printable-canvas thead {
+    background-color: #f1f5f9 !important;
+  }
+
+  .printable-content th,
+  #official-printable-canvas th {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    font-weight: 700 !important;
+    padding: 6px 8px !important;
+  }
+
+  .printable-content td,
+  #official-printable-canvas td {
+    border: 1px solid #e2e8f0 !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    padding: 6px 8px !important;
+  }
+
+  /* Prevent awkward card page breaks */
+  .printable-content .grid > div,
+  #official-printable-canvas .grid > div {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    border: 1px solid #cbd5e1 !important;
+    background-color: #f8fafc !important;
+  }
+
+  /* Multi-page separation for vendor profile */
+  #vendor-profile-page-1 {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  /* Thermal receipt formatting */
+  #pos-thermal-receipt {
+    max-width: 80mm !important;
+    margin: 0 auto !important;
+    border: 1px solid #e2e8f0 !important;
   }
 }
 

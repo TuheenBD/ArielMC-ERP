@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { CompanyEntity } from '@/types/erp';
 import { OfficialDocument } from '@/types/documentPortal';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
+import Image from 'next/image';
 import {
   FileText,
   Printer,
@@ -101,7 +102,7 @@ export const StationComplianceDossierModal: React.FC<StationComplianceDossierMod
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-5xl max-h-[96vh] flex flex-col rounded-2xl bg-[#12231B] border border-[#2C5240] text-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Top Action Bar */}
-        <div className="p-4 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between gap-3 shrink-0">
+        <div className="p-4 border-b border-[#2C5240] bg-[#162B22] flex items-center justify-between gap-3 shrink-0 no-print">
           <div className="flex items-center gap-3">
             <span className="text-2xl p-1.5 rounded-xl bg-[#1F3A2E] border border-[#C8A96A]/60 shadow-md">
               {station.flag}
@@ -180,7 +181,7 @@ export const StationComplianceDossierModal: React.FC<StationComplianceDossierMod
         <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#0C1712]">
           <div
             ref={printRef}
-            className="max-w-4xl mx-auto bg-[#FFFDF9] text-slate-900 rounded-xl p-6 md:p-10 border-4 border-[#C8A96A] shadow-2xl space-y-6 relative overflow-hidden"
+            className="printable-content max-w-4xl mx-auto bg-[#FFFDF9] text-slate-900 rounded-xl p-6 md:p-10 border-4 border-[#C8A96A] shadow-2xl space-y-6 relative overflow-hidden"
           >
             {/* Watermark Crest */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
@@ -502,15 +503,20 @@ export const StationComplianceDossierModal: React.FC<StationComplianceDossierMod
 
               {/* Authorized Managing Director Signature */}
               <div className="space-y-1 text-right">
-                <div className="font-serif italic font-bold text-base text-[#1F3A2E]">
-                  Syed Akramul Hassan
+                <div className="h-10 w-36 ml-auto relative">
+                  <Image
+                    src="/images/syed_akramul_hassan_signature.png"
+                    alt="Syed Akramul Hassan Signature"
+                    fill
+                    className="object-contain"
+                  />
                 </div>
                 <div className="h-0.5 w-36 ml-auto bg-slate-800"></div>
                 <p className="text-[10px] font-bold text-slate-900 uppercase">
-                  Managing Director
+                  Syed Akramul Hassan
                 </p>
                 <p className="text-[9px] text-gray-500">
-                  Ariel Marketing &amp; Communications Ltd
+                  Managing Director, Ariel Marketing &amp; Communications Ltd
                 </p>
               </div>
             </div>
