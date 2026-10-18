@@ -80,13 +80,25 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
   });
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
-  const [transferFormData, setTransferFormData] = useState({
+  const [transferFormData, setTransferFormData] = useState<{
+    sku: string;
+    sourceWarehouseCode: string;
+    destinationWarehouseCode: string;
+    unitsToTransfer: number;
+    channelDestination: 'AMAZON_FBA' | 'SHOPIFY_D2C' | 'B2B_WHOLESALE' | 'SHOWROOM';
+    modeOfTransport: 'OCEAN_FREIGHT' | 'AIR_CARGO' | 'DOMESTIC_DRAYAGE';
+    carrier: string;
+    trackingOrContainerNumber: string;
+    departureDate: string;
+    estimatedArrivalDate: string;
+    notes: string;
+  }>({
     sku: 'AMC-LEA-1612',
     sourceWarehouseCode: 'WH-BD-DAC',
     destinationWarehouseCode: 'WH-UK-FLX',
     unitsToTransfer: 300,
-    channelDestination: 'AMAZON_FBA' as const,
-    modeOfTransport: 'OCEAN_FREIGHT' as const,
+    channelDestination: 'AMAZON_FBA',
+    modeOfTransport: 'OCEAN_FREIGHT',
     carrier: 'Maersk Line / Ocean Escort',
     trackingOrContainerNumber: 'MSKU-781920-5',
     departureDate: new Date().toISOString().split('T')[0],
@@ -259,6 +271,32 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
       )
     );
     setEditingAllocationItem(null);
+  };
+
+  // 1-Click Hybrid Amazon FBA Prime Drip Replenishment Trigger
+  const handleTriggerFbaDrip = (item: InventoryItem) => {
+    const isUk = item.warehouseCode.includes('UK');
+    const isEu = item.warehouseCode.includes('EU');
+    const destWarehouse = isUk ? 'WH-UK-FBA-LCY2' : isEu ? 'WH-EU-HAM' : 'WH-US-FBA-ONT8';
+    const dripQty = Math.min(
+      Math.max(100, Math.round((item.dailyRunRate || 10) * 30)),
+      item.availableQty > 0 ? item.availableQty : 200
+    );
+
+    setTransferFormData({
+      sku: item.sku,
+      sourceWarehouseCode: item.warehouseCode,
+      destinationWarehouseCode: destWarehouse,
+      unitsToTransfer: dripQty,
+      channelDestination: 'AMAZON_FBA',
+      modeOfTransport: 'DOMESTIC_DRAYAGE',
+      carrier: isUk ? 'Palletline UK / Davies Turner' : 'Dachser European Logistics',
+      trackingOrContainerNumber: `PL-FBA-${Date.now().toString().slice(-6)}`,
+      departureDate: new Date().toISOString().split('T')[0],
+      estimatedArrivalDate: new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0],
+      notes: `Automated Hybrid Amazon FBA Prime Drip replenishment (30 days run-rate).`,
+    });
+    setIsTransferModalOpen(true);
   };
 
   // Submit Stock Transfer
@@ -458,7 +496,7 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
             }`}
           >
             <SlidersHorizontal className="w-3.5 h-3.5 text-[#C8A96A]" />
-            <span>Omnichannel Allocation Matrix</span>
+            <span>Dual-Hub &amp; Hybrid Allocation (FBA / FBM / B2B)</span>
           </button>
 
           <button
@@ -941,101 +979,224 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
         </div>
       )}
 
-      {/* VIEW 3: OMNICHANNEL ALLOCATION MATRIX */}
+      {/* VIEW 3: DUAL-HUB & HYBRID ALLOCATION MATRIX (FBA / FBM / B2B) */}
       {activeSubTab === 'ALLOCATIONS' && (
-        <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
-            <h3 className="font-heading font-bold text-sm text-[#1F3A2E] flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-[#C8A96A]" />
-              Omnichannel Stock Balancing Strategy
-            </h3>
-            <p className="text-xs text-[#6B7269] mt-1">
-              Distribute physical landed inventory across Amazon FBA fulfillment channels, direct high-margin Shopify luxury store (`arielmc.shop`), B2B Wholesale pre-allocated buyer contracts, and flagship showroom displays.
-            </p>
+        <div className="space-y-5">
+          {/* Strategic Hybrid Architecture Cards Strip */}
+          <div className="p-5 rounded-2xl bg-linear-to-r from-[#1F3A2E] via-[#244537] to-[#1F3A2E] border border-white/10 shadow-lg text-white space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-[10px] font-bold">
+                    HYBRID STOCK REPLENISHMENT
+                  </span>
+                  <span className="text-xs text-[#CFE0D5] font-mono">
+                    Part 6: Operational Handbook Architecture
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-base text-white flex items-center gap-2 mt-1">
+                  <SlidersHorizontal className="w-4 h-4 text-[#C8A96A]" />
+                  Dual-Hub Allocation &amp; Hybrid Amazon Strategy Monitor
+                </h3>
+              </div>
+              <div className="text-xs text-white/80 max-w-md text-right hidden md:block">
+                Balancing next-day Prime conversion velocity against Amazon aged-inventory storage surcharges ($&gt;180$ days) and return liquidation risks.
+              </div>
+            </div>
+
+            {/* 3 Pillar Strategy Cards from Handbook */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              {/* Card 1: Leather Totes */}
+              <div className="p-3.5 rounded-xl bg-black/25 border border-white/10 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-white">Full-Grain Leather Totes</span>
+                  <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-200 border border-blue-400/30 text-[10px] font-mono font-bold">
+                    100% 3PL FBM
+                  </span>
+                </div>
+                <p className="text-[11px] text-white/75 leading-relaxed">
+                  Protected from automated Amazon liquidation. Stored in non-woven dustbags with acid-free tissue at WH-UK &amp; WH-DE for white-glove direct dispatch.
+                </p>
+              </div>
+
+              {/* Card 2: Bloom Denim Tote */}
+              <div className="p-3.5 rounded-xl bg-black/25 border border-white/10 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-white">Bloom Denim-Leather Laptop</span>
+                  <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-200 border border-amber-400/30 text-[10px] font-mono font-bold">
+                    30–45d FBA Drip
+                  </span>
+                </div>
+                <p className="text-[11px] text-white/75 leading-relaxed">
+                  Small-batch transfers to Amazon FCs capture Prime Buy Box velocity ($3\times$ volume multiplier) with zero aged-inventory penalties.
+                </p>
+              </div>
+
+              {/* Card 3: Jute Shoppers */}
+              <div className="p-3.5 rounded-xl bg-black/25 border border-white/10 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-white">Structured Jute-Cotton Shoppers</span>
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-[10px] font-mono font-bold">
+                    Prime + B2B Reserve
+                  </span>
+                </div>
+                <p className="text-[11px] text-white/75 leading-relaxed">
+                  High-velocity daily volume driver on Amazon, with guaranteed bulk pallets ring-fenced at the 3PL for corporate wholesale contracts.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="rounded-xl bg-white border border-[#DDE3DD] shadow-sm overflow-hidden">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-[#DDE3DD] bg-[#F8F6F2] text-[11px] font-semibold text-[#6B7269] uppercase tracking-wider">
-                  <th className="py-3 px-4">SKU / Product</th>
-                  <th className="py-3 px-4">Warehouse</th>
-                  <th className="py-3 px-4 text-center">Total On Hand</th>
-                  <th className="py-3 px-4 text-center text-[#D97706]">Amazon FBA</th>
-                  <th className="py-3 px-4 text-center text-[#7C3AED]">Shopify D2C</th>
-                  <th className="py-3 px-4 text-center text-[#1E6B3A]">B2B Wholesale</th>
-                  <th className="py-3 px-4 text-center text-[#0284C7]">Showroom</th>
-                  <th className="py-3 px-4 text-center">Free Unallocated</th>
-                  <th className="py-3 px-4 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#DDE3DD] text-xs">
-                {inventoryItems.map((item) => {
-                  const totalAlloc =
-                    item.allocations.amazonFbaQty +
-                    item.allocations.shopifyD2cQty +
-                    item.allocations.b2bWholesaleReservedQty +
-                    item.allocations.showroomDisplayQty;
-                  const freeUnallocated = item.onHandQty - totalAlloc;
+          {/* Allocation Table */}
+          <div className="rounded-2xl bg-white border border-[#DDE3DD] shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-[#DDE3DD] bg-[#FAF9F5] text-[11px] font-mono font-semibold text-[#6B7269] uppercase tracking-wider">
+                    <th className="py-3 px-4">SKU / Product Line</th>
+                    <th className="py-3 px-4">Warehouse Node</th>
+                    <th className="py-3 px-4 text-center">Landed On Hand</th>
+                    <th className="py-3 px-4 text-center">Amazon FBA Prime Drip</th>
+                    <th className="py-3 px-4 text-center">3PL Direct FBM (Shopify/Etsy)</th>
+                    <th className="py-3 px-4 text-center">B2B Wholesale Reserve</th>
+                    <th className="py-3 px-4 text-center">Free Unallocated</th>
+                    <th className="py-3 px-4 text-right">Hybrid Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#DDE3DD]">
+                  {inventoryItems.map((item) => {
+                    const totalAlloc =
+                      item.allocations.amazonFbaQty +
+                      item.allocations.shopifyD2cQty +
+                      item.allocations.b2bWholesaleReservedQty +
+                      item.allocations.showroomDisplayQty;
+                    const freeUnallocated = item.onHandQty - totalAlloc;
 
-                  return (
-                    <tr key={item.id} className="hover:bg-[#F4F6F4]/60 transition-colors">
-                      <td className="py-3.5 px-4">
-                        <div className="font-mono font-bold text-[#1F3A2E] text-xs">
-                          {item.sku}
-                        </div>
-                        <div className="font-medium text-[#1A1A1A] line-clamp-1">
-                          {item.productName}
-                        </div>
-                      </td>
+                    const isLeather = item.sector === 'LEATHER';
+                    const runRate = item.dailyRunRate || 12;
+                    const fbaDaysRemaining = item.allocations.amazonFbaQty > 0 ? Math.round(item.allocations.amazonFbaQty / runRate) : 0;
+                    const isFbaReplenishmentDue = !isLeather && item.allocations.amazonFbaQty > 0 && fbaDaysRemaining < 20;
 
-                      <td className="py-3.5 px-4 font-mono font-medium text-gray-700">
-                        {item.warehouseCode}
-                      </td>
+                    return (
+                      <tr key={item.id} className="hover:bg-[#F4F6F4]/60 transition-colors group">
+                        {/* SKU & Product */}
+                        <td className="py-3.5 px-4">
+                          <div className="font-mono font-bold text-[#1F3A2E] text-xs flex items-center gap-1.5">
+                            <span>{item.sku}</span>
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-slate-100 text-slate-600">
+                              {item.sector}
+                            </span>
+                          </div>
+                          <div className="font-medium text-[#1A1A1A] line-clamp-1 mt-0.5">
+                            {item.productName}
+                          </div>
+                          <div className="text-[10px] text-slate-500 font-mono">
+                            Daily Run Rate: <strong>{runRate} pcs/day</strong>
+                          </div>
+                        </td>
 
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-[#1A1A1A]">
-                        {item.onHandQty.toLocaleString()}
-                      </td>
+                        {/* Warehouse Node */}
+                        <td className="py-3.5 px-4 font-mono font-medium text-slate-700">
+                          <div className="flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="font-bold">{item.warehouseCode}</span>
+                          </div>
+                          <div className="text-[10px] text-slate-500 line-clamp-1 max-w-[130px]">
+                            {item.warehouseName.split('(')[0]}
+                          </div>
+                        </td>
 
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-[#D97706] bg-amber-50/30">
-                        {item.allocations.amazonFbaQty.toLocaleString()}
-                      </td>
+                        {/* Total Physical On Hand */}
+                        <td className="py-3.5 px-4 text-center font-mono font-bold text-slate-900">
+                          {item.onHandQty.toLocaleString()} pcs
+                        </td>
 
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-[#7C3AED] bg-purple-50/30">
-                        {item.allocations.shopifyD2cQty.toLocaleString()}
-                      </td>
+                        {/* Amazon FBA Drip Pool */}
+                        <td className="py-3.5 px-4 text-center font-mono">
+                          {isLeather ? (
+                            <div className="space-y-0.5">
+                              <span className="font-bold text-slate-400">0 pcs</span>
+                              <div>
+                                <span className="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-800 text-[10px] font-sans font-bold border border-blue-200">
+                                  FBM Only (Protected)
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-0.5">
+                              <span className="font-bold text-amber-700 text-xs">
+                                {item.allocations.amazonFbaQty.toLocaleString()} pcs
+                              </span>
+                              <div>
+                                <span
+                                  className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-sans font-bold border ${
+                                    isFbaReplenishmentDue
+                                      ? 'bg-amber-100 text-amber-900 border-amber-300 animate-pulse'
+                                      : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                  }`}
+                                >
+                                  {fbaDaysRemaining}d Supply ({isFbaReplenishmentDue ? 'Drip Due!' : 'Optimal'})
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </td>
 
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-[#1E6B3A] bg-emerald-50/30">
-                        {item.allocations.b2bWholesaleReservedQty.toLocaleString()}
-                      </td>
+                        {/* 3PL Direct FBM (Shopify/Etsy) */}
+                        <td className="py-3.5 px-4 text-center font-mono font-bold text-purple-700 bg-purple-50/20">
+                          {item.allocations.shopifyD2cQty.toLocaleString()} pcs
+                          <div className="text-[10px] font-sans text-purple-600 font-normal">
+                            Domestic Post
+                          </div>
+                        </td>
 
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-[#0284C7] bg-sky-50/30">
-                        {item.allocations.showroomDisplayQty.toLocaleString()}
-                      </td>
+                        {/* B2B Wholesale Protected Reserve */}
+                        <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-800 bg-emerald-50/20">
+                          {item.allocations.b2bWholesaleReservedQty.toLocaleString()} pcs
+                          <div className="text-[10px] font-sans text-emerald-700 font-semibold flex items-center justify-center gap-0.5">
+                            <ShieldCheck className="w-3 h-3" />
+                            <span>Ring-Fenced</span>
+                          </div>
+                        </td>
 
-                      <td className="py-3.5 px-4 text-center font-mono font-bold">
-                        {freeUnallocated > 0 ? (
-                          <span className="text-emerald-700 font-bold">
-                            {freeUnallocated.toLocaleString()} free
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">0</span>
-                        )}
-                      </td>
+                        {/* Free Unallocated Buffer */}
+                        <td className="py-3.5 px-4 text-center font-mono">
+                          {freeUnallocated > 0 ? (
+                            <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">
+                              {freeUnallocated.toLocaleString()} free
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 font-bold">0</span>
+                          )}
+                        </td>
 
-                      <td className="py-3.5 px-4 text-right">
-                        <button
-                          onClick={() => handleOpenAllocationModal(item)}
-                          className="px-3 py-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-semibold shadow-sm transition-all"
-                        >
-                          Re-Balance
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                        {/* Hybrid Actions */}
+                        <td className="py-3.5 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {!isLeather && (
+                              <button
+                                onClick={() => handleTriggerFbaDrip(item)}
+                                title="1-Click: Create 30-Day Pallet Drip Transfer from 3PL to Amazon FC"
+                                className="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-bold shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                              >
+                                <Truck className="w-3 h-3" />
+                                <span>+ Drip FBA</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleOpenAllocationModal(item)}
+                              className="px-2.5 py-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-[11px] font-bold shadow-2xs transition-all cursor-pointer active:scale-95"
+                            >
+                              Re-Balance
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
