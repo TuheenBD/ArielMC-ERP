@@ -1,7 +1,15 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { CrmLead, CrmActivity, CrmTask, CompanyEntity, CurrencyRate } from '@/types/erp';
+import {
+  CrmLead,
+  CrmActivity,
+  CrmTask,
+  CompanyEntity,
+  CurrencyRate,
+  BuyerSalesOrder,
+  SampleDevelopmentOrder
+} from '@/types/erp';
 import { ThemeProfile } from '@/components/Sidebar';
 import initialActivitiesData from '@/data/initialCrmActivities.json';
 import initialTasksData from '@/data/initialCrmTasks.json';
@@ -74,6 +82,8 @@ export interface CrmPipelineProps {
   activeEntity?: CompanyEntity;
   activeCurrency?: CurrencyRate;
   onNavigateTab?: (tab: any) => void;
+  onAddOrder?: (newOrder: BuyerSalesOrder) => void;
+  onAddSample?: (newSample: SampleDevelopmentOrder) => void;
 }
 
 export const CRM_STAGES = [
@@ -124,7 +134,9 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
   theme = 'crm-green',
   activeEntity,
   activeCurrency,
-  onNavigateTab
+  onNavigateTab,
+  onAddOrder,
+  onAddSample,
 }) => {
   // Theme Flags
   const isRoyal = theme === 'royal-blue';
@@ -565,6 +577,291 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
       persistActivities([newAct, ...activities]);
       persistCrmActivity(newAct);
       showToast(`Stage updated to ${CRM_STAGES[nextIdx].short} for ${lead.company}`);
+    }
+  };
+
+  // Auto-Convert CRM Lead to Sample Development Order (SDO)
+  const handleConvertLeadToSdo = (lead: CrmLead) => {
+    const interest = (lead.interest || lead.focus || '').toLowerCase();
+    let sector: 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS' = 'JUTE';
+    let factoryId = 'fac_jut_01';
+    let factoryName = 'Sonali Eco Jute Diversified Mills Ltd';
+    let styleName = `${lead.company} Eco Sourcing Prototype`;
+    let styleCode = `SDO-JUT-${Date.now().toString(36).toUpperCase().slice(-4)}`;
+
+    if (interest.includes('leather')) {
+      sector = 'LEATHER';
+      factoryId = 'fac_lth_01';
+      factoryName = 'Apex Artisan Leatherworks Ltd';
+      styleName = `${lead.company} Premium Leather Specimen`;
+      styleCode = `SDO-LTH-${Date.now().toString(36).toUpperCase().slice(-4)}`;
+    } else if (interest.includes('ceramic') || interest.includes('pottery') || interest.includes('porcelain')) {
+      sector = 'CERAMICS';
+      factoryId = 'fac_cer_01';
+      factoryName = 'Shinepukur Monno Fine Porcelain Ltd';
+      styleName = `${lead.company} Fine Tableware Specimen`;
+      styleCode = `SDO-CER-${Date.now().toString(36).toUpperCase().slice(-4)}`;
+    } else if (interest.includes('textile') || interest.includes('garment') || interest.includes('linen') || interest.includes('denim')) {
+      sector = 'TEXTILE';
+      factoryId = 'fac_tex_01';
+      factoryName = 'Pioneer Denim & RMG Complex Ltd';
+      styleName = `${lead.company} Certified Export Swatch & Proto`;
+      styleCode = `SDO-TEX-${Date.now().toString(36).toUpperCase().slice(-4)}`;
+    }
+
+    const sdoNum = `SDO-2026-${sector.slice(0, 3)}-${Date.now().toString().slice(-4)}`;
+    const today = new Date().toISOString().slice(0, 10);
+    const targetDelivery = new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10);
+    const targetMarket: 'UK' | 'EU' | 'US' | 'AU' = lead.market === 'USA' ? 'US' : ((lead.market as any) || 'UK');
+
+    const newSdo: SampleDevelopmentOrder = {
+      id: `sdo-${Date.now()}`,
+      sdoNumber: sdoNum,
+      sector,
+      styleName,
+      styleCode,
+      buyerCompany: lead.company,
+      buyerContact: lead.contact || 'Commercial Buying Office',
+      targetMarket,
+      factoryId,
+      factoryName,
+      stage: 'PROTO',
+      roundNumber: 1,
+      status: 'IN_FABRICATION',
+      requestDate: today,
+      targetDeliveryDate: targetDelivery,
+      techPack: {
+        dimensions: 'Standard Export Buyer Specifications',
+        tolerances: '± 2mm standard European tolerance',
+        primaryMaterial: `Certified 100% Export Grade ${sector === 'JUTE' ? 'Organic Jute Fibres' : sector === 'LEATHER' ? 'Full-Grain Cowhide' : sector === 'CERAMICS' ? 'Fine Bone China & Clay' : 'Organic BCI Cotton'}`,
+        materialDetails: 'Sourced under sovereign ArielMC supply chain guarantee',
+        liningOrFinish: 'Eco-friendly biodegradable / OEKO-TEX compliant finish',
+        hardwareOrGlaze: 'Heavy-duty certified fittings / Food-grade non-toxic glaze',
+        trimsAndPackaging: 'Custom embossed buyer seal with ArielMC export tracking barcode',
+        careInstructions: 'Standard international export care label',
+        artworkOrDxfUrl: '',
+        barcodeEan: `5060${Date.now().toString().slice(-9)}`,
+        colorwayPantone: 'Natural Eco / Buyer Pantone Specification',
+        weightTargetGrams: 450,
+      },
+      courier: {
+        courier: 'DHL Express',
+        awbNumber: `DHL-${Date.now().toString().slice(-10)}`,
+        dispatchDate: today,
+        estimatedDeliveryDate: targetDelivery,
+        originAirport: 'DAC (Hazrat Shahjalal Intl, Dhaka)',
+        destinationAirport: targetMarket === 'UK' ? 'LHR (London Heathrow)' : targetMarket === 'US' ? 'JFK (New York JFK)' : targetMarket === 'EU' ? 'FRA (Frankfurt)' : 'SYD (Sydney)',
+        currentLocation: 'Dhaka Central Sampling Desk — In Fabrication',
+        transitStatus: 'LABEL_CREATED',
+        costUsd: 120,
+        trackingUrl: 'https://www.dhl.com',
+      },
+      costing: {
+        developmentCostBdt: 12500,
+        developmentCostUsd: 105,
+        courierCostUsd: 120,
+        totalCostUsd: 225,
+        billingParty: 'ARIEL_MARKETING_INVESTMENT',
+        paymentStatus: 'WAIVED',
+      },
+      feedbacks: [],
+      tags: ['CRM Generated', 'Direct Buyer Sampling', lead.market],
+    };
+
+    if (onAddSample) {
+      onAddSample(newSdo);
+    }
+
+    // Advance lead stage to '5 Sample sent'
+    const updatedLead: CrmLead = {
+      ...lead,
+      stage: '5 Sample sent',
+      touches: (lead.touches || 0) + 1,
+      lastContact: today,
+      nextAction: `Follow up on prototype delivery ${sdoNum}`,
+      nextDate: targetDelivery,
+    };
+    persistLeads(leads.map((l) => (l.id === lead.id ? updatedLead : l)));
+    persistCrmLead(updatedLead);
+    if (selectedLead?.id === lead.id) setSelectedLead(updatedLead);
+
+    // Record activity
+    const newAct: CrmActivity = {
+      id: `A-${Date.now().toString(36).toUpperCase()}`,
+      date: new Date().toISOString(),
+      leadId: lead.id,
+      company: lead.company,
+      type: 'Sample shipped',
+      outcome: `Sampling SDO Dispatched: ${sdoNum}`,
+      note: `Generated Sample Development Order ${sdoNum} allocated to ${factoryName}.`,
+      stage: '5 Sample sent',
+      ts: new Date().toISOString(),
+      user: 'Syed Akramul Hassan',
+    };
+    persistActivities([newAct, ...activities]);
+    persistCrmActivity(newAct);
+
+    showToast(`Dispatched SDO ${sdoNum} for ${lead.company}! Opening R&D...`);
+    if (onNavigateTab) {
+      setTimeout(() => onNavigateTab('RND'), 600);
+    }
+  };
+
+  // Auto-Convert CRM Lead to Confirmed B2B Production PO
+  const handleConvertLeadToOrder = (lead: CrmLead) => {
+    const interest = (lead.interest || lead.focus || '').toLowerCase();
+    let sector: 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS' = 'JUTE';
+    let factoryId = 'fac_jut_01';
+    let factoryName = 'Sonali Eco Jute Diversified Mills Ltd';
+
+    if (interest.includes('leather')) {
+      sector = 'LEATHER';
+      factoryId = 'fac_lth_01';
+      factoryName = 'Apex Artisan Leatherworks Ltd';
+    } else if (interest.includes('ceramic') || interest.includes('pottery') || interest.includes('porcelain')) {
+      sector = 'CERAMICS';
+      factoryId = 'fac_cer_01';
+      factoryName = 'Shinepukur Monno Fine Porcelain Ltd';
+    } else if (interest.includes('textile') || interest.includes('garment') || interest.includes('linen') || interest.includes('denim')) {
+      sector = 'TEXTILE';
+      factoryId = 'fac_tex_01';
+      factoryName = 'Pioneer Denim & RMG Complex Ltd';
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    const exFactory = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
+    const portCutOff = new Date(Date.now() + 50 * 86400000).toISOString().slice(0, 10);
+    const delivery = new Date(Date.now() + 75 * 86400000).toISOString().slice(0, 10);
+    const targetMarket: 'UK' | 'EU' | 'US' | 'AU' = lead.market === 'USA' ? 'US' : ((lead.market as any) || 'UK');
+
+    const soNum = `SO-2026-${targetMarket}-${Date.now().toString().slice(-4)}`;
+    const poNum = `PO-2026-FAC-${Date.now().toString().slice(-4)}`;
+    const dealValueUsd = lead.value ? Number(lead.value) : 48500;
+    const orderQty = Math.max(1000, Math.round(dealValueUsd / (lead.price || 35)));
+    const unitPrice = Number((dealValueUsd / orderQty).toFixed(2));
+    const factoryUnitCostBdt = Math.round((unitPrice * 120) * 0.72);
+    const factoryTotalCostBdt = factoryUnitCostBdt * orderQty;
+    const factoryCostUsd = Math.round(factoryTotalCostBdt / 120);
+
+    const newOrder: BuyerSalesOrder = {
+      id: `so-${Date.now()}`,
+      soNumber: soNum,
+      buyerCompany: lead.company,
+      buyerContact: lead.contact || 'Head of Commercial Sourcing',
+      targetMarket,
+      operatingEntity: targetMarket === 'UK' ? 'ARIEL_UK' : targetMarket === 'US' ? 'ARIEL_US' : targetMarket === 'EU' ? 'ARIEL_EU' : targetMarket === 'AU' ? 'ARIEL_AU' : 'ARIEL_BD',
+      currency: (lead.cur as any) || (targetMarket === 'UK' ? 'GBP' : targetMarket === 'EU' ? 'EUR' : 'USD'),
+      incoterm: 'FOB Chittagong Sea Port',
+      status: 'CONFIRMED',
+      orderDate: today,
+      targetExFactoryDate: exFactory,
+      targetPortCutOffDate: portCutOff,
+      targetDeliveryDate: delivery,
+      paymentTerms: 'Irrevocable 90-Day Confirmed L/C at Sight',
+      masterLcNumber: `LC-${targetMarket}-${Date.now().toString().slice(-6)}`,
+      totalQuantity: orderQty,
+      totalAmountBuyerCurrency: dealValueUsd,
+      totalAmountUsd: dealValueUsd,
+      items: [
+        {
+          id: `item-${Date.now()}`,
+          productId: `prod-${sector.toLowerCase()}-01`,
+          sku: `AM-${sector.slice(0, 3)}-${Date.now().toString().slice(-3)}`,
+          styleName: `${lead.company} Dedicated ${sector} Line`,
+          sector,
+          quantity: orderQty,
+          unitPrice,
+          totalPrice: dealValueUsd,
+          factoryUnitCost: factoryUnitCostBdt,
+          factoryTotalCost: factoryTotalCostBdt,
+        },
+      ],
+      linkedPo: {
+        id: `po-${Date.now()}`,
+        poNumber: poNum,
+        factoryId,
+        factoryName,
+        currency: 'BDT',
+        status: 'IN_LINE_SEWING',
+        issueDate: today,
+        targetExFactoryDate: exFactory,
+        totalQuantity: orderQty,
+        totalCostBdt: factoryTotalCostBdt,
+        totalCostUsd: factoryCostUsd,
+        paymentTerms: 'Back-to-Back Export Letter of Credit (Bangladesh Bank Compliant)',
+        backToBackLcNumber: `B2B-EBL-${Date.now().toString().slice(-6)}`,
+        items: [
+          {
+            id: `po-item-${Date.now()}`,
+            productId: `prod-${sector.toLowerCase()}-01`,
+            sku: `AM-${sector.slice(0, 3)}-${Date.now().toString().slice(-3)}`,
+            styleName: `${lead.company} Dedicated ${sector} Line`,
+            sector,
+            quantity: orderQty,
+            unitPrice,
+            totalPrice: dealValueUsd,
+            factoryUnitCost: factoryUnitCostBdt,
+            factoryTotalCost: factoryTotalCostBdt,
+          },
+        ],
+      },
+      marginProtection: {
+        buyerRevenueUsd: dealValueUsd,
+        factoryCostUsd,
+        freightAllowanceUsd: Math.round(dealValueUsd * 0.05),
+        complianceBufferUsd: Math.round(dealValueUsd * 0.02),
+        netMarginUsd: Math.round(dealValueUsd * 0.21),
+        marginPercentage: 21.0,
+        status: 'LOCKED_HEALTHY',
+      },
+      timeAndAction: [
+        { id: 'm1', name: 'Purchase Order & L/C Validation', code: 'PO_LC_VALIDATION', plannedDate: today, actualDate: today, status: 'COMPLETED', responsibleParty: 'BUYER' },
+        { id: 'm2', name: 'Factory Raw Material & Yarn Booking', code: 'RM_BOOKING', plannedDate: new Date(Date.now() + 10 * 86400000).toISOString().slice(0, 10), status: 'ON_TRACK', responsibleParty: 'ARIEL_MERCHANDISER' },
+        { id: 'm3', name: 'Pre-Production (PP) Meeting & Pilot Run', code: 'PP_SAMPLE_RUN', plannedDate: new Date(Date.now() + 20 * 86400000).toISOString().slice(0, 10), status: 'ON_TRACK', responsibleParty: 'SUPPLIER_FACTORY' },
+        { id: 'm4', name: 'Bulk Assembly & Line Stitching', code: 'BULK_SEWING', plannedDate: new Date(Date.now() + 35 * 86400000).toISOString().slice(0, 10), status: 'ON_TRACK', responsibleParty: 'SUPPLIER_FACTORY' },
+        { id: 'm5', name: 'Final QA AQL 1.5 Third-Party Inspection', code: 'FINAL_AQL_INSPECTION', plannedDate: exFactory, status: 'ON_TRACK', responsibleParty: 'ARIEL_QA_TEAM' },
+        { id: 'm6', name: 'Customs Clearance & Chittagong Port Cutoff', code: 'PORT_DISPATCH', plannedDate: portCutOff, status: 'ON_TRACK', responsibleParty: 'LOGISTICS_PARTNER' },
+      ],
+      inspections: [],
+    };
+
+    if (onAddOrder) {
+      onAddOrder(newOrder);
+    }
+
+    // Advance lead stage to '8 Won'
+    const updatedLead: CrmLead = {
+      ...lead,
+      stage: '8 Won',
+      touches: (lead.touches || 0) + 1,
+      lastContact: today,
+      value: dealValueUsd,
+      nextAction: `Execute Factory PO ${poNum} for ${soNum}`,
+      nextDate: exFactory,
+    };
+    persistLeads(leads.map((l) => (l.id === lead.id ? updatedLead : l)));
+    persistCrmLead(updatedLead);
+    if (selectedLead?.id === lead.id) setSelectedLead(updatedLead);
+
+    // Record activity
+    const newAct: CrmActivity = {
+      id: `A-${Date.now().toString(36).toUpperCase()}`,
+      date: new Date().toISOString(),
+      leadId: lead.id,
+      company: lead.company,
+      type: 'Quote issued',
+      outcome: `Order Won: Confirmed PO ${soNum}`,
+      note: `Commercial B2B Order ${soNum} confirmed for $${dealValueUsd.toLocaleString()} (${orderQty} units). Factory PO ${poNum} issued to ${factoryName}.`,
+      stage: '8 Won',
+      ts: new Date().toISOString(),
+      user: 'Syed Akramul Hassan',
+    };
+    persistActivities([newAct, ...activities]);
+    persistCrmActivity(newAct);
+
+    showToast(`Converted ${lead.company} to Confirmed Order ${soNum}! Opening Order Management...`);
+    if (onNavigateTab) {
+      setTimeout(() => onNavigateTab('ORDERS'), 600);
     }
   };
 
@@ -1721,6 +2018,20 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
                               Dossier
                             </button>
                             <button
+                              onClick={() => handleConvertLeadToSdo(lead)}
+                              title="1-Click: Dispatch R&D Sample Order (SDO)"
+                              className="px-2 py-1 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-bold shadow-2xs transition-all"
+                            >
+                              + SDO
+                            </button>
+                            <button
+                              onClick={() => handleConvertLeadToOrder(lead)}
+                              title="1-Click: Convert to Confirmed Production PO"
+                              className="px-2 py-1 rounded bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-300 text-[11px] font-bold shadow-2xs transition-all"
+                            >
+                              + PO
+                            </button>
+                            <button
                               onClick={() => handleOpenEditModal(lead)}
                               className="p-1.5 rounded hover:bg-slate-100 text-slate-600 transition-colors"
                               title="Edit Lead"
@@ -1887,7 +2198,7 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
 
                               {/* Card Transition Action Buttons */}
                               <div
-                                className="flex items-center justify-between pt-1 border-t border-slate-100"
+                                className="flex items-center justify-between pt-1 border-t border-slate-100 gap-1"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <button
@@ -1898,9 +2209,22 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
                                   <ArrowLeft className="w-3.5 h-3.5" />
                                 </button>
 
-                                <span className="text-[10px] text-gray-400 font-mono">
-                                  {lead.touches || 0} touches
-                                </span>
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    onClick={() => handleConvertLeadToSdo(lead)}
+                                    title="1-Click: Dispatch Sample SDO (R&D)"
+                                    className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors"
+                                  >
+                                    +SDO
+                                  </button>
+                                  <button
+                                    onClick={() => handleConvertLeadToOrder(lead)}
+                                    title="1-Click: Convert to Confirmed Production PO"
+                                    className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 transition-colors"
+                                  >
+                                    +PO
+                                  </button>
+                                </div>
 
                                 <button
                                   onClick={() => handleAdvanceStage(lead.id, 'forward')}
@@ -2514,40 +2838,36 @@ POST /api/crm
                 </div>
               </div>
 
-              {/* Cross-ERP Quick Jumps */}
-              <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 flex flex-wrap items-center justify-between gap-3">
+              {/* 1-Click Cross-ERP Conversion Engine */}
+              <div className="p-4 rounded-xl border border-emerald-300 bg-linear-to-r from-emerald-50 via-teal-50/50 to-emerald-50 flex flex-wrap items-center justify-between gap-3 shadow-xs">
                 <div className="space-y-0.5">
-                  <span className="font-bold text-xs text-emerald-900 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>Direct ERP Operational Synergy</span>
+                  <span className="font-bold text-xs text-emerald-950 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-emerald-700 animate-pulse" />
+                    <span>1-Click Cross-ERP Conversion Engine</span>
                   </span>
                   <p className="text-[11px] text-emerald-800">
-                    Connect this buyer directly to production sampling or export order processing.
+                    Instantly convert this buyer lead into a live factory-allocated R&D Sample Development Order (SDO) or confirmed B2B Production PO.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <button
                     onClick={() => {
-                      if (onNavigateTab) {
-                        onNavigateTab('RND');
-                        setSelectedLead(null);
-                      }
+                      handleConvertLeadToSdo(selectedLead);
+                      setSelectedLead(null);
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-white text-emerald-800 border border-emerald-300 font-bold hover:bg-emerald-50 transition-colors shadow-2xs"
+                    className="px-3.5 py-2 rounded-xl bg-white text-emerald-900 border border-emerald-300 font-bold hover:bg-emerald-100 hover:border-emerald-400 text-xs transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
                   >
-                    Open R&D Sampling (SDO) →
+                    <span>🔬 Dispatch Sample SDO (R&D)</span>
                   </button>
                   <button
                     onClick={() => {
-                      if (onNavigateTab) {
-                        onNavigateTab('ORDERS');
-                        setSelectedLead(null);
-                      }
+                      handleConvertLeadToOrder(selectedLead);
+                      setSelectedLead(null);
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-bold hover:bg-emerald-800 transition-colors shadow-2xs"
+                    className="px-3.5 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#2C5240] text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
                   >
-                    Generate Export PO →
+                    <span>💼 Convert to Confirmed Production PO</span>
                   </button>
                 </div>
               </div>

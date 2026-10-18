@@ -531,6 +531,8 @@ export default function Home() {
               activeEntity={activeEntity}
               activeCurrency={activeCurrency}
               onNavigateTab={setActiveTab}
+              onAddOrder={handleAddOrder}
+              onAddSample={handleAddSample}
             />
           )}
 
