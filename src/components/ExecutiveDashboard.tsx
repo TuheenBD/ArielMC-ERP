@@ -23,7 +23,10 @@ import {
   CheckCircle2,
   ChevronRight,
   LayoutDashboard,
-  ExternalLink
+  ExternalLink,
+  FileSpreadsheet,
+  Zap,
+  Globe
 } from 'lucide-react';
 
 interface ExecutiveDashboardProps {
@@ -124,7 +127,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
     {
       tab: 'STATIONS' as ActiveTab,
       title: 'Multi-Entity Stations',
-      phase: 'Phase 1 (Live)',
+      phase: 'Foundation (Live)',
       description: '5 Sovereign operating stations (BD, UK, US, EU, AU) with local banking, AD Dealer mandates, and legal compliance.',
       icon: Building2,
       badge: '5 Stations',
@@ -146,13 +149,24 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
     {
       tab: 'PRODUCTS' as ActiveTab,
       title: 'Sector Product Master',
-      phase: 'Phase 1 & 2',
+      phase: 'Foundation (Live)',
       description: 'Centralized product catalogue covering Leather, Jute, Textiles, and Ceramics with multi-tier BOM costing.',
       icon: Package,
       badge: `${totalProducts} SKUs`,
       color: 'text-[#1E6B3A]',
       bg: 'bg-emerald-50/70',
       border: 'border-emerald-200',
+    },
+    {
+      tab: 'CRM' as ActiveTab,
+      title: 'Global CRM & B2B Leads',
+      phase: 'CRM Suite (Live)',
+      description: '254 qualified buyer accounts across UK, EU, USA, and Australia with stage pipeline and communication logs.',
+      icon: Users2,
+      badge: `${totalLeads} Leads`,
+      color: 'text-[#7B1FA2]',
+      bg: 'bg-purple-50/70',
+      border: 'border-purple-200',
     },
     {
       tab: 'FACTORIES' as ActiveTab,
@@ -175,17 +189,6 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       color: 'text-teal-700',
       bg: 'bg-teal-50/70',
       border: 'border-teal-200',
-    },
-    {
-      tab: 'CRM' as ActiveTab,
-      title: 'Global CRM & B2B Leads',
-      phase: 'Phase 4 (Live)',
-      description: '254 qualified buyer accounts across UK, EU, USA, and Australia with stage pipeline and communication logs.',
-      icon: Users2,
-      badge: `${totalLeads} Leads`,
-      color: 'text-[#7B1FA2]',
-      bg: 'bg-purple-50/70',
-      border: 'border-purple-200',
     },
     {
       tab: 'ORDERS' as ActiveTab,
@@ -431,6 +434,62 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* 3 Important Enterprise Links Bar */}
+      <div className="p-4 rounded-xl bg-gradient-to-r from-[#FAF5EC] via-white to-[#FAF5EC] border border-[#C8A96A]/60 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#C8A96A]/20 flex items-center justify-center text-[#8A6D3B] shrink-0 border border-[#C8A96A]/40">
+            <Sparkles className="w-4 h-4 text-[#C8A96A]" />
+          </div>
+          <div>
+            <h4 className="text-xs font-bold text-[#1F3A2E] flex items-center gap-2">
+              <span>Important Enterprise Quick Links</span>
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C8A96A]/20 text-[#8A6D3B] font-mono font-bold">3 Portals</span>
+            </h4>
+            <p className="text-[11px] text-[#6B7269]">
+              Direct 1-click cloud synchronization &amp; external commercial management portals.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <a
+            href="https://docs.google.com/spreadsheets/d/1BpXNvribNccFzBIKY7FlV1mVaT3c8t3Hr6xCUWVxy30/edit?gid=625671773#gid=625671773"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold transition-colors shadow-2xs"
+            title="1. Master CRM Google Sheet Database (254 Accounts)"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Master Google Sheet</span>
+            <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
+
+          <a
+            href="https://script.google.com/macros/s/AKfycbwB14a61CTXDxtH5m-yzgqPDtSLrmtLor_z43P_SzfXLAVCeGaNWlb2PRO-E8FgTC1r/exec"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold transition-colors shadow-2xs"
+            title="2. Live CRM Cloud WebApp (Google Apps Script Live Deployment)"
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-600" />
+            <span>Live CRM WebApp</span>
+            <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
+
+          <a
+            href="https://www.arielmc.com/portal.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 font-semibold transition-colors shadow-2xs"
+            title="3. ArielMC Official Enterprise Portal & Staff Gateway"
+          >
+            <Globe className="w-3.5 h-3.5 text-sky-600" />
+            <span>ArielMC Portal</span>
+            <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
         </div>
       </div>
 

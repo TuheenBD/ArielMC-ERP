@@ -49,7 +49,9 @@ import {
   Copy,
   Check,
   ShieldCheck,
-  Share2
+  Share2,
+  Zap,
+  Globe
 } from 'lucide-react';
 
 export type CrmViewTab = 'DASHBOARD' | 'LEADS' | 'PIPELINE' | 'TASKS' | 'ACTIVITY' | 'DATA';
@@ -869,17 +871,47 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
               <span>+ Log Touchpoint</span>
             </button>
 
-            <a
-              href="https://docs.google.com/spreadsheets/d/1BpXNvribNccFzBIKY7FlV1mVaT3c8t3Hr6xCUWVxy30/edit?gid=625671773#gid=625671773"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#FAF5EC] hover:bg-[#F3EAD7] text-[#8A6D3B] border border-[#C8A96A]/60 text-xs font-bold shadow-2xs transition-all"
-              title="Open Live Master Google Sheet in new tab"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span>Google Sheet</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
+            {/* 3 Important Enterprise Links */}
+            <div className="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+              <a
+                href="https://docs.google.com/spreadsheets/d/1BpXNvribNccFzBIKY7FlV1mVaT3c8t3Hr6xCUWVxy30/edit?gid=625671773#gid=625671773"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#FAF5EC] hover:bg-[#F3EAD7] text-[#8A6D3B] border border-[#C8A96A]/60 text-xs font-bold shadow-2xs transition-all"
+                title="1. Master CRM Google Sheet (Live 254-Account Database)"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-[#C8A96A]" />
+                <span className="hidden sm:inline">Google Sheet</span>
+                <span className="text-[10px] px-1 py-0.2 rounded bg-[#C8A96A]/20 text-[#8A6D3B] font-mono">DB</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+              </a>
+
+              <a
+                href="https://script.google.com/macros/s/AKfycbwB14a61CTXDxtH5m-yzgqPDtSLrmtLor_z43P_SzfXLAVCeGaNWlb2PRO-E8FgTC1r/exec"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold shadow-2xs transition-all"
+                title="2. Live CRM Cloud WebApp (Google Apps Script Live Deployment)"
+              >
+                <Zap className="w-3.5 h-3.5 text-amber-600" />
+                <span className="hidden sm:inline">CRM WebApp</span>
+                <span className="text-[10px] px-1 py-0.2 rounded bg-amber-200/60 text-amber-800 font-mono">Live</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+              </a>
+
+              <a
+                href="https://www.arielmc.com/portal.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 text-xs font-bold shadow-2xs transition-all"
+                title="3. ArielMC Official Enterprise Portal & Staff Gateway"
+              >
+                <Globe className="w-3.5 h-3.5 text-sky-600" />
+                <span className="hidden sm:inline">Portal</span>
+                <span className="text-[10px] px-1 py-0.2 rounded bg-sky-200/60 text-sky-800 font-mono">Web</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -2070,10 +2102,36 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
                 href="https://docs.google.com/spreadsheets/d/1BpXNvribNccFzBIKY7FlV1mVaT3c8t3Hr6xCUWVxy30/edit?gid=625671773#gid=625671773"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FAF5EC] hover:bg-[#F3EAD7] text-[#8A6D3B] border border-[#C8A96A] font-bold text-xs shadow-2xs transition-all"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#FAF5EC] hover:bg-[#F3EAD7] text-[#8A6D3B] border border-[#C8A96A] font-bold text-xs shadow-2xs transition-all"
+                title="Master CRM Google Sheet Database"
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <FileSpreadsheet className="w-3.5 h-3.5" />
                 <span>Open Google Sheet</span>
+                <ExternalLink className="w-3 h-3 opacity-60" />
+              </a>
+
+              <a
+                href="https://script.google.com/macros/s/AKfycbwB14a61CTXDxtH5m-yzgqPDtSLrmtLor_z43P_SzfXLAVCeGaNWlb2PRO-E8FgTC1r/exec"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs shadow-2xs transition-all"
+                title="Google Apps Script Live WebApp"
+              >
+                <Zap className="w-3.5 h-3.5 text-amber-600" />
+                <span>Live CRM WebApp</span>
+                <ExternalLink className="w-3 h-3 opacity-60" />
+              </a>
+
+              <a
+                href="https://www.arielmc.com/portal.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 font-bold text-xs shadow-2xs transition-all"
+                title="ArielMC Official Enterprise Portal"
+              >
+                <Globe className="w-3.5 h-3.5 text-sky-600" />
+                <span>Enterprise Portal</span>
+                <ExternalLink className="w-3 h-3 opacity-60" />
               </a>
 
               <button
