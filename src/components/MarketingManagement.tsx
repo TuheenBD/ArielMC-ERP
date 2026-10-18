@@ -24,6 +24,8 @@ import { ArielMC } from '@/lib/brand';
 import { LookbookViewerModal } from '@/components/LookbookViewerModal';
 import { CreateCampaignModal } from '@/components/CreateCampaignModal';
 import { LetterheadStudioModal } from '@/components/LetterheadStudioModal';
+import { B2bRoiCalculatorSection } from '@/components/B2bRoiCalculatorSection';
+import { MarketingStrategyPlaybookSection } from '@/components/MarketingStrategyPlaybookSection';
 import {
   Megaphone,
   BookOpen,
@@ -51,7 +53,9 @@ import {
   Check,
   Printer,
   Copy,
-  Users2
+  Users2,
+  Calculator,
+  Target
 } from 'lucide-react';
 
 interface MarketingManagementProps {
@@ -62,7 +66,15 @@ interface MarketingManagementProps {
   onNavigateTab?: (tab: any) => void;
 }
 
-type MarketingSubTab = 'CAMPAIGNS' | 'COLLATERALS' | 'SECTORS' | 'STATIONERY' | 'TRADE_SHOWS' | 'ANALYTICS';
+type MarketingSubTab = 
+  | 'ROI_CALCULATOR'
+  | 'STRATEGY_PLAYBOOK'
+  | 'CAMPAIGNS' 
+  | 'COLLATERALS' 
+  | 'SECTORS' 
+  | 'STATIONERY' 
+  | 'TRADE_SHOWS' 
+  | 'ANALYTICS';
 
 export const MarketingManagement: React.FC<MarketingManagementProps> = ({
   activeEntity,
@@ -72,7 +84,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
   onNavigateTab,
 }) => {
   // State
-  const [activeSubTab, setActiveSubTab] = useState<MarketingSubTab>('CAMPAIGNS');
+  const [activeSubTab, setActiveSubTab] = useState<MarketingSubTab>('ROI_CALCULATOR');
   const [campaigns, setCampaigns] = useState<MarketingCampaign[]>(INITIAL_MARKETING_CAMPAIGNS);
   const [collaterals, setCollaterals] = useState<DigitalCollateral[]>(INITIAL_DIGITAL_COLLATERALS);
   const [tradeShows] = useState<TradeShowExhibition[]>(INITIAL_TRADE_SHOWS);
@@ -293,6 +305,8 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
           ========================================================================= */}
       <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-white">
         {[
+          { id: 'ROI_CALCULATOR' as MarketingSubTab, label: 'B2B ROI & TCO Engine', icon: Calculator, badge: 'CFO Model' },
+          { id: 'STRATEGY_PLAYBOOK' as MarketingSubTab, label: '12-Mo Strategy & Playbooks', icon: Target, badge: 'Deliverable 2' },
           { id: 'CAMPAIGNS' as MarketingSubTab, label: 'B2B Campaigns & Outreach', icon: Megaphone, count: campaigns.length },
           { id: 'COLLATERALS' as MarketingSubTab, label: 'Digital Collaterals & Lookbooks', icon: BookOpen, count: collaterals.length },
           { id: 'SECTORS' as MarketingSubTab, label: '5 Pride Sectors Showcase', icon: Layers },
@@ -332,6 +346,20 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
           );
         })}
       </div>
+
+      {/* =========================================================================
+          SUB-TAB: B2B INTERACTIVE ROI & TCO CALCULATOR (Deliverable 1 & Appendix D)
+          ========================================================================= */}
+      {activeSubTab === 'ROI_CALCULATOR' && (
+        <B2bRoiCalculatorSection theme={theme} />
+      )}
+
+      {/* =========================================================================
+          SUB-TAB: HYBRID MARKETING POLICY & 12-MONTH STRATEGY (Deliverable 2 & Appendices A–C)
+          ========================================================================= */}
+      {activeSubTab === 'STRATEGY_PLAYBOOK' && (
+        <MarketingStrategyPlaybookSection theme={theme} />
+      )}
 
       {/* =========================================================================
           SUB-TAB 1: CAMPAIGNS & OUTREACH
