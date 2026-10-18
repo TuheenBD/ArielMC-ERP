@@ -521,45 +521,6 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
 
   return (
     <>
-      {/* Floating Launcher Beacon Button (Bottom Right) */}
-      {!isOpen && (
-        <button
-          id="arielmc-ai-copilot-launcher-btn"
-          onClick={() => setIsOpen(true)}
-          className={`fixed bottom-6 right-6 z-40 group flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 ${
-            isRoyal
-              ? 'bg-[#0F172A] border-2 border-[#4169E1] text-white shadow-[#4169E1]/30 ring-4 ring-[#4169E1]/20'
-              : isHeritage
-              ? 'bg-[#183124] border-2 border-[#C8A96A] text-white shadow-[#C8A96A]/30 ring-4 ring-[#C8A96A]/20'
-              : 'bg-[#1F3A2E] border-2 border-[#C8A96A] text-white shadow-[#C8A96A]/30 ring-4 ring-[#C8A96A]/20'
-          }`}
-          title="Open ArielMC AI Assistant"
-        >
-          <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-white p-1 text-[#1F3A2E] flex items-center justify-center font-bold text-sm shadow-md border border-[#C8A96A]">
-              <Image
-                src="/images/ArielMC_Emblem_Square.png"
-                alt="ArielMC AI Copilot"
-                width={32}
-                height={32}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#1F3A2E] animate-pulse" />
-          </div>
-          <div className="text-left hidden sm:block pr-1">
-            <div className="flex items-center gap-1.5 font-heading font-bold text-sm text-white">
-              <span>ArielMC</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono">AI</span>
-            </div>
-            <div className="text-[11px] text-[#C8A96A] font-medium flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span>Online Assistant</span>
-            </div>
-          </div>
-        </button>
-      )}
-
       {/* AI Chat Drawer & Modal */}
       {isOpen && (
         <div
