@@ -629,3 +629,263 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   color: #8A6D3B !important;
   border-color: #E6DCB8 !important;
 }
+
+/* ========================================================
+   CALIFORNIA BEACHES THEME SYSTEM (#FFC067, #66F4FF, #66C4FF, #7D99AA)
+   ======================================================== */
+[data-theme="california-beaches"] {
+  --primary: #2B6B88;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EBF8FF;
+  --secondary-foreground: #14232C;
+  --accent: #FFC067;
+  --border: #B2D8E5;
+  --ring: #66C4FF;
+}
+
+[data-theme="california-beaches"] .bg-\[\#1F3A2E\],
+[data-theme="california-beaches"] [class*="bg-[#1F3A2E]"],
+[data-theme="california-beaches"] .bg-\[\#1E6B3A\],
+[data-theme="california-beaches"] [class*="bg-[#1E6B3A]"] {
+  background-color: #2B6B88 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="california-beaches"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="california-beaches"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #22566E !important;
+}
+
+[data-theme="california-beaches"] .text-\[\#1F3A2E\],
+[data-theme="california-beaches"] [class*="text-[#1F3A2E]"],
+[data-theme="california-beaches"] .text-\[\#1E6B3A\],
+[data-theme="california-beaches"] [class*="text-[#1E6B3A]"] {
+  color: #20556D !important;
+}
+
+[data-theme="california-beaches"] .border-\[\#1F3A2E\],
+[data-theme="california-beaches"] [class*="border-[#1F3A2E]"],
+[data-theme="california-beaches"] .border-\[\#BBE3C7\],
+[data-theme="california-beaches"] [class*="border-[#BBE3C7]"] {
+  border-color: #B2D8E5 !important;
+}
+
+[data-theme="california-beaches"] .bg-\[\#E8F0EA\],
+[data-theme="california-beaches"] [class*="bg-[#E8F0EA]"],
+[data-theme="california-beaches"] .bg-\[\#E4F3E9\],
+[data-theme="california-beaches"] [class*="bg-[#E4F3E9]"],
+[data-theme="california-beaches"] .bg-\[\#F0F4F1\],
+[data-theme="california-beaches"] [class*="bg-[#F0F4F1]"],
+[data-theme="california-beaches"] .badge-good {
+  background-color: #EBF8FF !important;
+  color: #1F5F7A !important;
+  border-color: #B2D8E5 !important;
+}
+
+/* ========================================================
+   MOSSY HOLLOW THEME SYSTEM (#636B2F, #BAC095, #D4DE95, #3D4127)
+   ======================================================== */
+[data-theme="mossy-hollow"] {
+  --primary: #636B2F;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F4F6EA;
+  --secondary-foreground: #282B1B;
+  --accent: #D4DE95;
+  --border: #BAC095;
+  --ring: #636B2F;
+}
+
+[data-theme="mossy-hollow"] .bg-\[\#1F3A2E\],
+[data-theme="mossy-hollow"] [class*="bg-[#1F3A2E]"],
+[data-theme="mossy-hollow"] .bg-\[\#1E6B3A\],
+[data-theme="mossy-hollow"] [class*="bg-[#1E6B3A]"] {
+  background-color: #636B2F !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="mossy-hollow"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="mossy-hollow"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #515826 !important;
+}
+
+[data-theme="mossy-hollow"] .text-\[\#1F3A2E\],
+[data-theme="mossy-hollow"] [class*="text-[#1F3A2E]"],
+[data-theme="mossy-hollow"] .text-\[\#1E6B3A\],
+[data-theme="mossy-hollow"] [class*="text-[#1E6B3A]"] {
+  color: #515826 !important;
+}
+
+[data-theme="mossy-hollow"] .border-\[\#1F3A2E\],
+[data-theme="mossy-hollow"] [class*="border-[#1F3A2E]"],
+[data-theme="mossy-hollow"] .border-\[\#BBE3C7\],
+[data-theme="mossy-hollow"] [class*="border-[#BBE3C7]"] {
+  border-color: #BAC095 !important;
+}
+
+[data-theme="mossy-hollow"] .bg-\[\#E8F0EA\],
+[data-theme="mossy-hollow"] [class*="bg-[#E8F0EA]"],
+[data-theme="mossy-hollow"] .bg-\[\#E4F3E9\],
+[data-theme="mossy-hollow"] [class*="bg-[#E4F3E9]"],
+[data-theme="mossy-hollow"] .bg-\[\#F0F4F1\],
+[data-theme="mossy-hollow"] [class*="bg-[#F0F4F1]"],
+[data-theme="mossy-hollow"] .badge-good {
+  background-color: #F4F6EA !important;
+  color: #3D4127 !important;
+  border-color: #BAC095 !important;
+}
+
+/* ========================================================
+   INK WASH THEME SYSTEM (#4A4A4A, #CBCBCB, #FFFFE3, #6D8196)
+   ======================================================== */
+[data-theme="ink-wash"] {
+  --primary: #4A4A4A;
+  --primary-foreground: #FFFFE3;
+  --secondary: #F3F5F7;
+  --secondary-foreground: #24272A;
+  --accent: #6D8196;
+  --border: #CBCBCB;
+  --ring: #6D8196;
+}
+
+[data-theme="ink-wash"] .bg-\[\#1F3A2E\],
+[data-theme="ink-wash"] [class*="bg-[#1F3A2E]"],
+[data-theme="ink-wash"] .bg-\[\#1E6B3A\],
+[data-theme="ink-wash"] [class*="bg-[#1E6B3A]"] {
+  background-color: #4A4A4A !important;
+  color: #FFFFE3 !important;
+}
+
+[data-theme="ink-wash"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="ink-wash"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #383838 !important;
+}
+
+[data-theme="ink-wash"] .text-\[\#1F3A2E\],
+[data-theme="ink-wash"] [class*="text-[#1F3A2E]"],
+[data-theme="ink-wash"] .text-\[\#1E6B3A\],
+[data-theme="ink-wash"] [class*="text-[#1E6B3A]"] {
+  color: #4A4A4A !important;
+}
+
+[data-theme="ink-wash"] .border-\[\#1F3A2E\],
+[data-theme="ink-wash"] [class*="border-[#1F3A2E]"],
+[data-theme="ink-wash"] .border-\[\#BBE3C7\],
+[data-theme="ink-wash"] [class*="border-[#BBE3C7]"] {
+  border-color: #CBCBCB !important;
+}
+
+[data-theme="ink-wash"] .bg-\[\#E8F0EA\],
+[data-theme="ink-wash"] [class*="bg-[#E8F0EA]"],
+[data-theme="ink-wash"] .bg-\[\#E4F3E9\],
+[data-theme="ink-wash"] [class*="bg-[#E4F3E9]"],
+[data-theme="ink-wash"] .bg-\[\#F0F4F1\],
+[data-theme="ink-wash"] [class*="bg-[#F0F4F1]"],
+[data-theme="ink-wash"] .badge-good {
+  background-color: #F3F5F7 !important;
+  color: #353F4A !important;
+  border-color: #CBCBCB !important;
+}
+
+/* ========================================================
+   FRESH PEACH THEME SYSTEM (#FFD3AC, #FFB5AB, #E39A7B, #DBB06B)
+   ======================================================== */
+[data-theme="fresh-peach"] {
+  --primary: #C87552;
+  --primary-foreground: #FFFFFF;
+  --secondary: #FFF3EB;
+  --secondary-foreground: #2A1D1A;
+  --accent: #E39A7B;
+  --border: #F0CDBC;
+  --ring: #DBB06B;
+}
+
+[data-theme="fresh-peach"] .bg-\[\#1F3A2E\],
+[data-theme="fresh-peach"] [class*="bg-[#1F3A2E]"],
+[data-theme="fresh-peach"] .bg-\[\#1E6B3A\],
+[data-theme="fresh-peach"] [class*="bg-[#1E6B3A]"] {
+  background-color: #C87552 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="fresh-peach"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="fresh-peach"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #B56543 !important;
+}
+
+[data-theme="fresh-peach"] .text-\[\#1F3A2E\],
+[data-theme="fresh-peach"] [class*="text-[#1F3A2E]"],
+[data-theme="fresh-peach"] .text-\[\#1E6B3A\],
+[data-theme="fresh-peach"] [class*="text-[#1E6B3A]"] {
+  color: #B56543 !important;
+}
+
+[data-theme="fresh-peach"] .border-\[\#1F3A2E\],
+[data-theme="fresh-peach"] [class*="border-[#1F3A2E]"],
+[data-theme="fresh-peach"] .border-\[\#BBE3C7\],
+[data-theme="fresh-peach"] [class*="border-[#BBE3C7]"] {
+  border-color: #F0CDBC !important;
+}
+
+[data-theme="fresh-peach"] .bg-\[\#E8F0EA\],
+[data-theme="fresh-peach"] [class*="bg-[#E8F0EA]"],
+[data-theme="fresh-peach"] .bg-\[\#E4F3E9\],
+[data-theme="fresh-peach"] [class*="bg-[#E4F3E9]"],
+[data-theme="fresh-peach"] .bg-\[\#F0F4F1\],
+[data-theme="fresh-peach"] [class*="bg-[#F0F4F1]"],
+[data-theme="fresh-peach"] .badge-good {
+  background-color: #FFF3EB !important;
+  color: #9E4D2B !important;
+  border-color: #F0CDBC !important;
+}
+
+/* ========================================================
+   STORMY MORNING THEME SYSTEM (#6A89A7, #BDDDFC, #88BDF2, #384959)
+   ======================================================== */
+[data-theme="stormy-morning"] {
+  --primary: #384959;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EBF4FC;
+  --secondary-foreground: #1E2730;
+  --accent: #6A89A7;
+  --border: #BDDDFC;
+  --ring: #88BDF2;
+}
+
+[data-theme="stormy-morning"] .bg-\[\#1F3A2E\],
+[data-theme="stormy-morning"] [class*="bg-[#1F3A2E]"],
+[data-theme="stormy-morning"] .bg-\[\#1E6B3A\],
+[data-theme="stormy-morning"] [class*="bg-[#1E6B3A]"] {
+  background-color: #384959 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="stormy-morning"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="stormy-morning"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #2D3B48 !important;
+}
+
+[data-theme="stormy-morning"] .text-\[\#1F3A2E\],
+[data-theme="stormy-morning"] [class*="text-[#1F3A2E]"],
+[data-theme="stormy-morning"] .text-\[\#1E6B3A\],
+[data-theme="stormy-morning"] [class*="text-[#1E6B3A]"] {
+  color: #384959 !important;
+}
+
+[data-theme="stormy-morning"] .border-\[\#1F3A2E\],
+[data-theme="stormy-morning"] [class*="border-[#1F3A2E]"],
+[data-theme="stormy-morning"] .border-\[\#BBE3C7\],
+[data-theme="stormy-morning"] [class*="border-[#BBE3C7]"] {
+  border-color: #BDDDFC !important;
+}
+
+[data-theme="stormy-morning"] .bg-\[\#E8F0EA\],
+[data-theme="stormy-morning"] [class*="bg-[#E8F0EA]"],
+[data-theme="stormy-morning"] .bg-\[\#E4F3E9\],
+[data-theme="stormy-morning"] [class*="bg-[#E4F3E9]"],
+[data-theme="stormy-morning"] .bg-\[\#F0F4F1\],
+[data-theme="stormy-morning"] [class*="bg-[#F0F4F1]"],
+[data-theme="stormy-morning"] .badge-good {
+  background-color: #EBF4FC !important;
+  color: #233442 !important;
+  border-color: #BDDDFC !important;
+}

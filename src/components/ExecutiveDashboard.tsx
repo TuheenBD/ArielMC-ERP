@@ -54,21 +54,73 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
   // Theme color accents
   const isRoyalBlue = theme === 'royal-blue';
   const isHeritageTan = theme === 'heritage-tan';
+  const isCalifornia = theme === 'california-beaches';
+  const isMossy = theme === 'mossy-hollow';
+  const isInkWash = theme === 'ink-wash';
+  const isPeach = theme === 'fresh-peach';
+  const isStormy = theme === 'stormy-morning';
 
   const headerAccent = isRoyalBlue
     ? 'text-[#64B5F6]'
+    : isCalifornia
+    ? 'text-[#FFC067]'
+    : isMossy
+    ? 'text-[#D4DE95]'
+    : isInkWash
+    ? 'text-[#6D8196]'
+    : isPeach
+    ? 'text-[#E39A7B]'
+    : isStormy
+    ? 'text-[#88BDF2]'
     : isHeritageTan
     ? 'text-[#C8A96A]'
     : 'text-[#C8A96A]';
 
   const cardHoverBorder = isRoyalBlue
     ? 'hover:border-[#1E3A8A]'
+    : isCalifornia
+    ? 'hover:border-[#66C4FF]'
+    : isMossy
+    ? 'hover:border-[#636B2F]'
+    : isInkWash
+    ? 'hover:border-[#6D8196]'
+    : isPeach
+    ? 'hover:border-[#E39A7B]'
+    : isStormy
+    ? 'hover:border-[#6A89A7]'
     : isHeritageTan
     ? 'hover:border-[#A27B5C]'
     : 'hover:border-[#2C5240]';
 
+  const bannerBg = isRoyalBlue
+    ? 'bg-gradient-to-r from-[#0B132B] via-[#0F172A] to-[#0B132B] border-[#1E293B]'
+    : isCalifornia
+    ? 'bg-gradient-to-r from-[#101C24] via-[#14232C] to-[#101C24] border-[#203642]'
+    : isMossy
+    ? 'bg-gradient-to-r from-[#1B1D12] via-[#282B1B] to-[#1B1D12] border-[#3D4127]'
+    : isInkWash
+    ? 'bg-gradient-to-r from-[#17191B] via-[#24272A] to-[#17191B] border-[#363A3F]'
+    : isPeach
+    ? 'bg-gradient-to-r from-[#1D1412] via-[#2A1D1A] to-[#1D1412] border-[#422E29]'
+    : isStormy
+    ? 'bg-gradient-to-r from-[#141B21] via-[#1E2730] to-[#141B21] border-[#2E3C4A]'
+    : isHeritageTan
+    ? 'bg-gradient-to-r from-[#11231A] via-[#183124] to-[#11231A] border-[#2A4837]'
+    : 'bg-gradient-to-r from-[#12231B] via-[#1F3A2E] to-[#12231B] border-[#2C5240]';
+
   // Quick launch modules for ArielMC ERP
   const quickModules = [
+    {
+      tab: 'REPORTS' as ActiveTab,
+      title: 'Executive Reports Suite',
+      phase: 'Executive Suite (Live)',
+      description: 'Formal enterprise reporting engine: B2B P&L Statements, Daily Cashflow, Consignments, Audits & Print/CSV exports.',
+      icon: BarChart3,
+      badge: 'Executive',
+      color: 'text-amber-700',
+      bg: 'bg-amber-50/70',
+      border: 'border-amber-200',
+    },
     {
       tab: 'STATIONS' as ActiveTab,
       title: 'Multi-Entity Stations',
@@ -162,7 +214,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* 1. Executive Command Banner */}
-      <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-[#12231B] via-[#1F3A2E] to-[#12231B] text-white shadow-lg border border-[#2C5240] relative overflow-hidden">
+      <div className={`p-6 md:p-8 rounded-2xl ${bannerBg} text-white shadow-lg border relative overflow-hidden`}>
         {/* Subtle decorative background glow */}
         <div className="absolute -right-16 -top-16 w-64 h-64 bg-[#C8A96A]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute right-1/3 -bottom-16 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />

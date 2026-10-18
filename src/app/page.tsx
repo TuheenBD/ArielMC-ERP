@@ -142,7 +142,17 @@ export default function Home() {
   React.useEffect(() => {
     try {
       const savedTheme = localStorage.getItem('arielmc_erp_theme') as ThemeProfile;
-      if (savedTheme && (savedTheme === 'crm-green' || savedTheme === 'royal-blue' || savedTheme === 'heritage-tan')) {
+      const validThemes: ThemeProfile[] = [
+        'crm-green',
+        'royal-blue',
+        'heritage-tan',
+        'california-beaches',
+        'mossy-hollow',
+        'ink-wash',
+        'fresh-peach',
+        'stormy-morning'
+      ];
+      if (savedTheme && validThemes.includes(savedTheme)) {
         setTheme(savedTheme);
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.body.setAttribute('data-theme', savedTheme);

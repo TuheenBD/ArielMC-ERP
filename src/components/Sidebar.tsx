@@ -56,7 +56,15 @@ export type ActiveTab =
   | 'POS' 
   | 'COMMUNICATIONS';
 
-export type ThemeProfile = 'crm-green' | 'royal-blue' | 'heritage-tan';
+export type ThemeProfile = 
+  | 'crm-green' 
+  | 'royal-blue' 
+  | 'heritage-tan'
+  | 'california-beaches'
+  | 'mossy-hollow'
+  | 'ink-wash'
+  | 'fresh-peach'
+  | 'stormy-morning';
 
 interface SidebarProps {
   activeTab: ActiveTab;
@@ -83,6 +91,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: LayoutDashboard,
           badge: 'Overview',
           phase: 'Command Hub',
+        },
+        {
+          id: 'REPORTS' as ActiveTab,
+          label: 'Executive Reports Suite',
+          icon: BarChart3,
+          badge: 'Executive',
+          phase: 'Live Hub',
         },
       ],
     },
@@ -182,13 +197,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           phase: 'Phase 8',
         },
         {
-          id: 'REPORTS' as ActiveTab,
-          label: 'Executive Reports Suite',
-          icon: BarChart3,
-          badge: 'Executive',
-          phase: 'Live Hub',
-        },
-        {
           id: 'POS' as ActiveTab,
           label: 'Omnichannel Store POS',
           icon: Store,
@@ -202,42 +210,149 @@ export const Sidebar: React.FC<SidebarProps> = ({
   // Theme-specific styling variables
   const isRoyal = theme === 'royal-blue';
   const isHeritage = theme === 'heritage-tan';
+  const isCalifornia = theme === 'california-beaches';
+  const isMossy = theme === 'mossy-hollow';
+  const isInkWash = theme === 'ink-wash';
+  const isPeach = theme === 'fresh-peach';
+  const isStormy = theme === 'stormy-morning';
 
   const containerBg = isRoyal
     ? 'bg-[#0B132B] border-r border-[#1E293B]'
     : isHeritage
     ? 'bg-[#183124] border-r border-[#2A4837]'
+    : isCalifornia
+    ? 'bg-[#14232C] border-r border-[#203642]'
+    : isMossy
+    ? 'bg-[#282B1B] border-r border-[#3D4127]'
+    : isInkWash
+    ? 'bg-[#24272A] border-r border-[#363A3F]'
+    : isPeach
+    ? 'bg-[#2A1D1A] border-r border-[#422E29]'
+    : isStormy
+    ? 'bg-[#1E2730] border-r border-[#2E3C4A]'
     : 'bg-[#1F3A2E] border-r border-[#2C5240]'; // crm-green default
 
   const headerBg = isRoyal
     ? 'bg-[#0F172A] border-b border-[#1E293B]'
     : isHeritage
     ? 'bg-[#11231A] border-b border-[#2A4837]'
+    : isCalifornia
+    ? 'bg-[#0E1A21] border-b border-[#203642]'
+    : isMossy
+    ? 'bg-[#1D2013] border-b border-[#3D4127]'
+    : isInkWash
+    ? 'bg-[#1B1D1F] border-b border-[#363A3F]'
+    : isPeach
+    ? 'bg-[#1F1513] border-b border-[#422E29]'
+    : isStormy
+    ? 'bg-[#161D24] border-b border-[#2E3C4A]'
     : 'bg-[#172D24] border-b border-[#2C5240]';
 
   const brandText = 'text-white';
-  const brandSubtext = isRoyal ? 'text-[#93C5FD]' : 'text-[#C8A96A]';
+  const brandSubtext = isRoyal
+    ? 'text-[#93C5FD]'
+    : isCalifornia
+    ? 'text-[#66F4FF]'
+    : isMossy
+    ? 'text-[#D4DE95]'
+    : isInkWash
+    ? 'text-[#CBCBCB]'
+    : isPeach
+    ? 'text-[#DBB06B]'
+    : isStormy
+    ? 'text-[#88BDF2]'
+    : 'text-[#C8A96A]';
 
   const entityBoxBg = isRoyal
     ? 'bg-[#1E293B] border border-[#334155]'
     : isHeritage
     ? 'bg-[#244232] border border-[#345943]'
+    : isCalifornia
+    ? 'bg-[#1B2F3B] border border-[#2B4B5C]'
+    : isMossy
+    ? 'bg-[#343823] border border-[#4E5434]'
+    : isInkWash
+    ? 'bg-[#303438] border border-[#4A4F55]'
+    : isPeach
+    ? 'bg-[#382622] border border-[#543A34]'
+    : isStormy
+    ? 'bg-[#283542] border border-[#3E5164]'
     : 'bg-[#28493A] border border-[#3A6B54]';
 
   const entityTitle = 'text-white';
-  const entitySub = isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]';
+  const entitySub = isRoyal
+    ? 'text-[#94A3B8]'
+    : isCalifornia
+    ? 'text-[#BACDD6]'
+    : isMossy
+    ? 'text-[#BAC095]'
+    : isInkWash
+    ? 'text-[#CBCBCB]'
+    : isPeach
+    ? 'text-[#FFD3AC]'
+    : isStormy
+    ? 'text-[#BDDDFC]'
+    : 'text-[#CFE0D5]';
 
   const sectionGroupText = isRoyal
     ? 'text-[#60A5FA]'
+    : isCalifornia
+    ? 'text-[#FFC067]'
+    : isMossy
+    ? 'text-[#D4DE95]'
+    : isInkWash
+    ? 'text-[#FFFFE3]'
+    : isPeach
+    ? 'text-[#FFD3AC]'
+    : isStormy
+    ? 'text-[#BDDDFC]'
     : 'text-[#C8A96A]';
 
   const footerBg = isRoyal
     ? 'bg-[#0F172A] border-t border-[#1E293B]'
     : isHeritage
     ? 'bg-[#11231A] border-t border-[#2A4837]'
+    : isCalifornia
+    ? 'bg-[#0E1A21] border-t border-[#203642]'
+    : isMossy
+    ? 'bg-[#1D2013] border-t border-[#3D4127]'
+    : isInkWash
+    ? 'bg-[#1B1D1F] border-t border-[#363A3F]'
+    : isPeach
+    ? 'bg-[#1F1513] border-t border-[#422E29]'
+    : isStormy
+    ? 'bg-[#161D24] border-t border-[#2E3C4A]'
     : 'bg-[#172D24] border-t border-[#2C5240]';
 
-  const footerText = isRoyal ? 'text-[#94A3B8]' : 'text-[#CFE0D5]';
+  const footerText = isRoyal
+    ? 'text-[#94A3B8]'
+    : isCalifornia
+    ? 'text-[#BACDD6]'
+    : isMossy
+    ? 'text-[#BAC095]'
+    : isInkWash
+    ? 'text-[#CBCBCB]'
+    : isPeach
+    ? 'text-[#FFD3AC]'
+    : isStormy
+    ? 'text-[#BDDDFC]'
+    : 'text-[#CFE0D5]';
+
+  const dividerBorder = isRoyal
+    ? 'border-[#1E293B]'
+    : isHeritage
+    ? 'border-[#2A4837]'
+    : isCalifornia
+    ? 'border-[#203642]'
+    : isMossy
+    ? 'border-[#3D4127]'
+    : isInkWash
+    ? 'border-[#363A3F]'
+    : isPeach
+    ? 'border-[#422E29]'
+    : isStormy
+    ? 'border-[#2E3C4A]'
+    : 'border-[#2C5240]';
 
   return (
     <aside className={`w-72 ${containerBg} flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl transition-colors`}>
@@ -324,6 +439,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       iconClass = isLive ? 'text-[#60A5FA]' : 'text-slate-500';
                       badgeClass = 'bg-[#1E293B] text-[#94A3B8] border border-[#334155]';
                     }
+                  } else if (isCalifornia) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#66C4FF] text-[#0E1A21] font-bold shadow-lg shadow-[#66C4FF]/30';
+                      iconClass = 'text-[#0E1A21]';
+                      badgeClass = 'bg-[#0E1A21]/20 text-[#0E1A21] font-bold border border-[#0E1A21]/30';
+                    } else {
+                      buttonClass = 'text-[#BACDD6] hover:bg-[#1B2F3B] hover:text-white';
+                      iconClass = isLive ? 'text-[#FFC067]' : 'text-[#7D99AA]';
+                      badgeClass = 'bg-[#1B2F3B] text-[#BACDD6] border border-[#2B4B5C]';
+                    }
+                  } else if (isMossy) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#D4DE95] text-[#1D2013] font-bold shadow-md shadow-[#D4DE95]/25';
+                      iconClass = 'text-[#1D2013]';
+                      badgeClass = 'bg-[#1D2013]/20 text-[#1D2013] font-bold border border-[#1D2013]/30';
+                    } else {
+                      buttonClass = 'text-[#DCE0C5] hover:bg-[#343823] hover:text-white';
+                      iconClass = isLive ? 'text-[#D4DE95]' : 'text-[#BAC095]';
+                      badgeClass = 'bg-[#343823] text-[#DCE0C5] border border-[#4E5434]';
+                    }
+                  } else if (isInkWash) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#6D8196] text-[#FFFFE3] font-bold shadow-md shadow-[#6D8196]/25';
+                      iconClass = 'text-[#FFFFE3]';
+                      badgeClass = 'bg-[#FFFFE3]/20 text-[#FFFFE3] font-bold border border-[#FFFFE3]/30';
+                    } else {
+                      buttonClass = 'text-[#CBCBCB] hover:bg-[#303438] hover:text-white';
+                      iconClass = isLive ? 'text-[#6D8196]' : 'text-[#8E959E]';
+                      badgeClass = 'bg-[#303438] text-[#CBCBCB] border border-[#4A4F55]';
+                    }
+                  } else if (isPeach) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#E39A7B] text-[#1F1513] font-bold shadow-md shadow-[#E39A7B]/25';
+                      iconClass = 'text-[#1F1513]';
+                      badgeClass = 'bg-[#1F1513]/20 text-[#1F1513] font-bold border border-[#1F1513]/30';
+                    } else {
+                      buttonClass = 'text-[#FFD3AC] hover:bg-[#382622] hover:text-white';
+                      iconClass = isLive ? 'text-[#FFB5AB]' : 'text-[#DBB06B]';
+                      badgeClass = 'bg-[#382622] text-[#FFD3AC] border border-[#543A34]';
+                    }
+                  } else if (isStormy) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#6A89A7] text-white font-bold shadow-md shadow-[#6A89A7]/30';
+                      iconClass = 'text-white';
+                      badgeClass = 'bg-white/20 text-white font-bold border border-white/30';
+                    } else {
+                      buttonClass = 'text-[#BDDDFC] hover:bg-[#283542] hover:text-white';
+                      iconClass = isLive ? 'text-[#88BDF2]' : 'text-[#6A89A7]';
+                      badgeClass = 'bg-[#283542] text-[#BDDDFC] border border-[#3E5164]';
+                    }
                   } else {
                     // crm-green or heritage-tan
                     if (isActive) {
@@ -363,10 +528,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Supplier & Buyer Communications Card & Footer */}
       <div>
         {/* Quick Channels Card */}
-        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 ${isRoyal ? 'bg-[#1E293B] border-[#334155]' : isHeritage ? 'bg-[#183124] border-[#2A4837]' : 'bg-[#172D24] border-[#2C5240]'}`}>
+        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 ${entityBoxBg}`}>
           <div className="flex items-center justify-between">
-            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${isRoyal ? 'text-[#60A5FA]' : 'text-[#C8A96A]'}`}>
-              <Phone className="w-3 h-3 text-[#C8A96A]" />
+            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${sectionGroupText}`}>
+              <Phone className="w-3 h-3" />
               <span>Trade Channels</span>
             </span>
             <div className="flex items-center gap-1.5">
@@ -374,9 +539,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onSelectTab('COMMUNICATIONS')}
                 className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all font-mono ${
                   activeTab === 'COMMUNICATIONS'
-                    ? isRoyal ? 'bg-[#4169E1] text-white' : 'bg-[#C8A96A] text-[#1F3A2E]'
+                    ? isRoyal
+                      ? 'bg-[#4169E1] text-white'
+                      : isCalifornia
+                      ? 'bg-[#66C4FF] text-[#0E1A21]'
+                      : isMossy
+                      ? 'bg-[#D4DE95] text-[#1D2013]'
+                      : isInkWash
+                      ? 'bg-[#6D8196] text-[#FFFFE3]'
+                      : isPeach
+                      ? 'bg-[#E39A7B] text-[#1F1513]'
+                      : isStormy
+                      ? 'bg-[#6A89A7] text-white'
+                      : 'bg-[#C8A96A] text-[#1F3A2E]'
                     : isRoyal
                     ? 'bg-[#4169E1]/20 text-[#60A5FA] hover:bg-[#4169E1]/30 border border-[#4169E1]/40'
+                    : isCalifornia
+                    ? 'bg-[#66C4FF]/20 text-[#66C4FF] hover:bg-[#66C4FF]/30 border border-[#66C4FF]/40'
+                    : isMossy
+                    ? 'bg-[#D4DE95]/20 text-[#D4DE95] hover:bg-[#D4DE95]/30 border border-[#D4DE95]/40'
+                    : isInkWash
+                    ? 'bg-[#6D8196]/20 text-[#FFFFE3] hover:bg-[#6D8196]/30 border border-[#6D8196]/40'
+                    : isPeach
+                    ? 'bg-[#E39A7B]/20 text-[#FFD3AC] hover:bg-[#E39A7B]/30 border border-[#E39A7B]/40'
+                    : isStormy
+                    ? 'bg-[#6A89A7]/20 text-[#BDDDFC] hover:bg-[#6A89A7]/30 border border-[#6A89A7]/40'
                     : 'bg-[#C8A96A]/20 text-[#C8A96A] hover:bg-[#C8A96A]/30 border border-[#C8A96A]/40'
                 }`}
                 title="Open Live Communications Hub"
@@ -385,7 +572,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </button>
               <button
                 onClick={() => setIsChannelsModalOpen(true)}
-                className={`text-[10px] font-semibold underline hover:brightness-110 ${isRoyal ? 'text-[#60A5FA]' : 'text-[#C8A96A]'}`}
+                className={`text-[10px] font-semibold underline hover:brightness-110 ${sectionGroupText}`}
                 title="View Full Directory"
               >
                 Directory
@@ -410,7 +597,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Virtual Meetings Quick Launcher Bar (Zoom, Meet, Teams, Hostinger, Gmail) */}
-          <div className={`pt-1.5 border-t flex items-center justify-between ${isRoyal ? 'border-[#1E293B]' : 'border-[#2C5240]'}`}>
+          <div className={`pt-1.5 border-t flex items-center justify-between ${dividerBorder}`}>
             <a
               href="https://zoom.us/join"
               target="_blank"
@@ -459,7 +646,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Social icons row */}
-          <div className={`flex items-center justify-between pt-1.5 border-t ${isRoyal ? 'border-[#1E293B]' : 'border-[#2C5240]'}`}>
+          <div className={`flex items-center justify-between pt-1.5 border-t ${dividerBorder}`}>
             <a
               href="https://www.linkedin.com/company/arielmc/?viewAsMember=true"
               target="_blank"
@@ -515,7 +702,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
             <span className="text-[10px] font-mono text-[#C8A96A]">v1.0.0</span>
           </div>
-          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${isRoyal ? 'border-[#1E293B]' : 'border-[#2C5240]'}`}>
+          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${dividerBorder}`}>
             <span>PostgreSQL Active</span>
             <span>Next.js 16</span>
           </div>

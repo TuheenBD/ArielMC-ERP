@@ -106,30 +106,106 @@ export const Header: React.FC<HeaderProps> = ({
 
   const isRoyal = theme === 'royal-blue';
   const isHeritage = theme === 'heritage-tan';
+  const isCalifornia = theme === 'california-beaches';
+  const isMossy = theme === 'mossy-hollow';
+  const isInkWash = theme === 'ink-wash';
+  const isPeach = theme === 'fresh-peach';
+  const isStormy = theme === 'stormy-morning';
 
   const headerBg = isRoyal
     ? 'bg-[#0F172A] border-b-[3px] border-[#4169E1] text-white'
     : isHeritage
     ? 'bg-[#183124] border-b-[3px] border-[#C8A96A] text-white'
+    : isCalifornia
+    ? 'bg-[#14232C] border-b-[3px] border-[#FFC067] text-white'
+    : isMossy
+    ? 'bg-[#282B1B] border-b-[3px] border-[#D4DE95] text-white'
+    : isInkWash
+    ? 'bg-[#24272A] border-b-[3px] border-[#6D8196] text-white'
+    : isPeach
+    ? 'bg-[#2A1D1A] border-b-[3px] border-[#E39A7B] text-white'
+    : isStormy
+    ? 'bg-[#1E2730] border-b-[3px] border-[#88BDF2] text-white'
     : 'bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white';
 
   const searchBoxBg = isRoyal
     ? 'bg-[#1E293B] text-white placeholder-[#94A3B8] border-[#334155] focus:border-[#4169E1]'
+    : isHeritage
+    ? 'bg-[#244232] text-white placeholder-[#CFE0D5] border-[#345943] focus:border-[#C8A96A]'
+    : isCalifornia
+    ? 'bg-[#1B2F3B] text-white placeholder-[#BACDD6] border-[#2B4B5C] focus:border-[#66C4FF]'
+    : isMossy
+    ? 'bg-[#343823] text-white placeholder-[#BAC095] border-[#4E5434] focus:border-[#D4DE95]'
+    : isInkWash
+    ? 'bg-[#303438] text-white placeholder-[#CBCBCB] border-[#4A4F55] focus:border-[#6D8196]'
+    : isPeach
+    ? 'bg-[#382622] text-white placeholder-[#FFD3AC] border-[#543A34] focus:border-[#E39A7B]'
+    : isStormy
+    ? 'bg-[#283542] text-white placeholder-[#BDDDFC] border-[#3E5164] focus:border-[#88BDF2]'
     : 'bg-[#2C5240] text-white placeholder-[#A0B9A8] border-[#3A6B54] focus:border-[#C8A96A]';
 
   // Standard corporate toolbar button style - uniform 36px (h-9)
   const toolBtn = `h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer select-none ${
     isRoyal
       ? 'bg-[#1E293B] text-white border-[#334155] hover:border-[#4169E1] hover:bg-[#334155]'
+      : isHeritage
+      ? 'bg-[#244232] text-white border-[#345943] hover:border-[#C8A96A] hover:bg-[#2e543f]'
+      : isCalifornia
+      ? 'bg-[#1B2F3B] text-white border-[#2B4B5C] hover:border-[#66C4FF] hover:bg-[#243d4d]'
+      : isMossy
+      ? 'bg-[#343823] text-white border-[#4E5434] hover:border-[#D4DE95] hover:bg-[#43492e]'
+      : isInkWash
+      ? 'bg-[#303438] text-white border-[#4A4F55] hover:border-[#6D8196] hover:bg-[#3d4348]'
+      : isPeach
+      ? 'bg-[#382622] text-white border-[#543A34] hover:border-[#E39A7B] hover:bg-[#4a332d]'
+      : isStormy
+      ? 'bg-[#283542] text-white border-[#3E5164] hover:border-[#88BDF2] hover:bg-[#354657]'
       : 'bg-[#2C5240] text-white border-[#3A6B54] hover:border-[#C8A96A] hover:bg-[#35614c]'
   }`;
 
   const tickerBg = isRoyal
     ? 'bg-[#1E293B] text-white border-[#334155]'
+    : isHeritage
+    ? 'bg-[#244232] text-white border-[#345943]'
+    : isCalifornia
+    ? 'bg-[#1B2F3B] text-white border-[#2B4B5C]'
+    : isMossy
+    ? 'bg-[#343823] text-white border-[#4E5434]'
+    : isInkWash
+    ? 'bg-[#303438] text-white border-[#4A4F55]'
+    : isPeach
+    ? 'bg-[#382622] text-white border-[#543A34]'
+    : isStormy
+    ? 'bg-[#283542] text-white border-[#3E5164]'
     : 'bg-[#2C5240] text-white border-[#3A6B54]';
 
-  const tickerText = isRoyal ? 'text-[#93C5FD]' : 'text-[#CFE0D5]';
-  const tickerCurrency = isRoyal ? 'text-[#E2E8F0]' : 'text-[#E8F0EA]';
+  const tickerText = isRoyal
+    ? 'text-[#93C5FD]'
+    : isCalifornia
+    ? 'text-[#66F4FF]'
+    : isMossy
+    ? 'text-[#D4DE95]'
+    : isInkWash
+    ? 'text-[#CBCBCB]'
+    : isPeach
+    ? 'text-[#DBB06B]'
+    : isStormy
+    ? 'text-[#88BDF2]'
+    : 'text-[#CFE0D5]';
+
+  const tickerCurrency = isRoyal
+    ? 'text-[#E2E8F0]'
+    : isCalifornia
+    ? 'text-[#FFC067]'
+    : isMossy
+    ? 'text-[#D4DE95]'
+    : isInkWash
+    ? 'text-[#FFFFE3]'
+    : isPeach
+    ? 'text-[#FFD3AC]'
+    : isStormy
+    ? 'text-[#BDDDFC]'
+    : 'text-[#E8F0EA]';
 
   return (
     <header className={`sticky top-0 z-30 ${headerBg} px-6 py-2.5 transition-colors shadow-md`}>
@@ -234,7 +310,7 @@ export const Header: React.FC<HeaderProps> = ({
             </select>
           </div>
 
-          {/* Color Scheme Dropdown (Instant Click Selection with Zero Stuck Risk) */}
+          {/* Color Scheme Dropdown (Instant Click Selection with 8 Bespoke Palettes) */}
           <div className="relative" ref={themeMenuRef}>
             <button
               id="theme-profile-selector-btn"
@@ -252,7 +328,19 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'ArielMC Green'
                   : theme === 'royal-blue'
                   ? 'Royal Blue'
-                  : 'Heritage Tan'}
+                  : theme === 'heritage-tan'
+                  ? 'Heritage Tan'
+                  : theme === 'california-beaches'
+                  ? 'California Beaches'
+                  : theme === 'mossy-hollow'
+                  ? 'Mossy Hollow'
+                  : theme === 'ink-wash'
+                  ? 'Ink Wash'
+                  : theme === 'fresh-peach'
+                  ? 'Fresh Peach'
+                  : theme === 'stormy-morning'
+                  ? 'Stormy Morning'
+                  : 'ArielMC Green'}
               </span>
               <ChevronDown className={`w-3.5 h-3.5 text-[#C8A96A] transition-transform duration-200 ${isThemeMenuOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -260,10 +348,10 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Theme Dropdown Menu */}
             {isThemeMenuOpen && (
               <div 
-                className="absolute left-0 mt-2 w-64 bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150"
+                className="absolute left-0 mt-2 w-72 bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150 max-h-96 overflow-y-auto"
                 style={{ zIndex: 9999 }}
               >
-                <div className="px-3 py-2 border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269] uppercase tracking-wider flex items-center justify-between">
+                <div className="px-3 py-2 border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269] uppercase tracking-wider flex items-center justify-between sticky top-0 bg-white z-10">
                   <span>ERP Color Scheme</span>
                   <Palette className="w-3.5 h-3.5 text-[#1F3A2E]" />
                 </div>
@@ -282,18 +370,22 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
                       theme === 'crm-green'
-                        ? 'bg-[#E8F0EA] border border-[#C8A96A] text-[#1F3A2E] font-bold'
+                        ? 'bg-[#E8F0EA] border border-[#C8A96A] text-[#1F3A2E] font-bold shadow-xs'
                         : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-3.5 h-3.5 rounded-full bg-[#1F3A2E] border border-[#C8A96A] shrink-0" />
-                      <div>
-                        <div className="font-semibold text-[#1F3A2E]">ArielMC Green (CRM)</div>
-                        <div className="text-[10px] text-[#6B7269]">Deep Sourcing Forest &amp; Gold</div>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#1F3A2E', '#2C5240', '#C8A96A', '#FAF9F5'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#1F3A2E] truncate">ArielMC Green (CRM)</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Deep Sourcing Forest &amp; Gold</div>
                       </div>
                     </div>
-                    {theme === 'crm-green' && <Check className="w-3.5 h-3.5 text-[#1F3A2E]" />}
+                    {theme === 'crm-green' && <Check className="w-3.5 h-3.5 text-[#1F3A2E] shrink-0 ml-1.5" />}
                   </button>
 
                   {/* Option 2: Royal Blue (#4169E1) */}
@@ -310,18 +402,22 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
                       theme === 'royal-blue'
-                        ? 'bg-[#EFF6FF] border border-[#4169E1] text-[#1E3A8A] font-bold'
+                        ? 'bg-[#EFF6FF] border border-[#4169E1] text-[#1E3A8A] font-bold shadow-xs'
                         : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-3.5 h-3.5 rounded-full bg-[#4169E1] border border-[#2563EB] shadow-xs shrink-0" />
-                      <div>
-                        <div className="font-semibold text-[#1E3A8A]">Royal Blue (#4169E1)</div>
-                        <div className="text-[10px] text-[#64748B]">Royal Blue &amp; Ivory White</div>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#0F172A', '#4169E1', '#60A5FA', '#EFF6FF'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#1E3A8A] truncate">Royal Blue (#4169E1)</div>
+                        <div className="text-[10px] text-[#64748B] leading-tight truncate">Royal Blue &amp; Ivory White</div>
                       </div>
                     </div>
-                    {theme === 'royal-blue' && <Check className="w-3.5 h-3.5 text-[#4169E1]" />}
+                    {theme === 'royal-blue' && <Check className="w-3.5 h-3.5 text-[#4169E1] shrink-0 ml-1.5" />}
                   </button>
 
                   {/* Option 3: Heritage Tan */}
@@ -338,18 +434,182 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
                       theme === 'heritage-tan'
-                        ? 'bg-[#FAF6EE] border border-[#C8A96A] text-[#1F3A2E] font-bold'
+                        ? 'bg-[#FAF6EE] border border-[#C8A96A] text-[#1F3A2E] font-bold shadow-xs'
                         : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-3.5 h-3.5 rounded-full bg-[#C8A96A] border border-[#8A6D3B] shrink-0" />
-                      <div>
-                        <div className="font-semibold text-[#1A1A1A]">Heritage Leather &amp; Sand</div>
-                        <div className="text-[10px] text-[#6B7269]">Saddle Tan &amp; British Cypress</div>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#183124', '#8A6D3B', '#C8A96A', '#FAF6EE'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#1A1A1A] truncate">Heritage Leather &amp; Sand</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Saddle Tan &amp; British Cypress</div>
                       </div>
                     </div>
-                    {theme === 'heritage-tan' && <Check className="w-3.5 h-3.5 text-[#1F3A2E]" />}
+                    {theme === 'heritage-tan' && <Check className="w-3.5 h-3.5 text-[#1F3A2E] shrink-0 ml-1.5" />}
+                  </button>
+
+                  {/* Option 4: California beaches */}
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('california-beaches');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
+                      onSelectTheme?.('california-beaches');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                      theme === 'california-beaches'
+                        ? 'bg-[#EBF8FF] border border-[#66C4FF] text-[#14232C] font-bold shadow-xs'
+                        : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#FFC067', '#66F4FF', '#66C4FF', '#7D99AA'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#14232C] truncate">California Beaches</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Amber Sand, Cyan Foam &amp; Ocean Slate</div>
+                      </div>
+                    </div>
+                    {theme === 'california-beaches' && <Check className="w-3.5 h-3.5 text-[#2B6B88] shrink-0 ml-1.5" />}
+                  </button>
+
+                  {/* Option 5: Mossy hollow */}
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('mossy-hollow');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
+                      onSelectTheme?.('mossy-hollow');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                      theme === 'mossy-hollow'
+                        ? 'bg-[#F4F6EA] border border-[#636B2F] text-[#282B1B] font-bold shadow-xs'
+                        : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#636B2F', '#BAC095', '#D4DE95', '#3D4127'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#282B1B] truncate">Mossy Hollow</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Olive Moss, Pale Chartreuse &amp; Bark Lichen</div>
+                      </div>
+                    </div>
+                    {theme === 'mossy-hollow' && <Check className="w-3.5 h-3.5 text-[#636B2F] shrink-0 ml-1.5" />}
+                  </button>
+
+                  {/* Option 6: Ink wash */}
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('ink-wash');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
+                      onSelectTheme?.('ink-wash');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                      theme === 'ink-wash'
+                        ? 'bg-[#F3F5F7] border border-[#6D8196] text-[#24272A] font-bold shadow-xs'
+                        : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#4A4A4A', '#CBCBCB', '#FFFFE3', '#6D8196'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#24272A] truncate">Ink Wash</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Sumi Charcoal, Rice Paper &amp; Slate Wash</div>
+                      </div>
+                    </div>
+                    {theme === 'ink-wash' && <Check className="w-3.5 h-3.5 text-[#6D8196] shrink-0 ml-1.5" />}
+                  </button>
+
+                  {/* Option 7: Fresh peach */}
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('fresh-peach');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
+                      onSelectTheme?.('fresh-peach');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                      theme === 'fresh-peach'
+                        ? 'bg-[#FFF3EB] border border-[#E39A7B] text-[#2A1D1A] font-bold shadow-xs'
+                        : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#FFD3AC', '#FFB5AB', '#E39A7B', '#DBB06B'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#2A1D1A] truncate">Fresh Peach</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Soft Peach, Coral Blush &amp; Terracotta Clay</div>
+                      </div>
+                    </div>
+                    {theme === 'fresh-peach' && <Check className="w-3.5 h-3.5 text-[#E39A7B] shrink-0 ml-1.5" />}
+                  </button>
+
+                  {/* Option 8: Stormy morning */}
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onSelectTheme?.('stormy-morning');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    onClick={() => {
+                      onSelectTheme?.('stormy-morning');
+                      setIsThemeMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                      theme === 'stormy-morning'
+                        ? 'bg-[#EBF4FC] border border-[#88BDF2] text-[#1E2730] font-bold shadow-xs'
+                        : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center -space-x-1 shrink-0 p-0.5 rounded-full bg-slate-100 border border-slate-200">
+                        {['#6A89A7', '#BDDDFC', '#88BDF2', '#384959'].map((c, i) => (
+                          <span key={i} className="w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: c }} />
+                        ))}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs leading-snug text-[#1E2730] truncate">Stormy Morning</div>
+                        <div className="text-[10px] text-[#6B7269] leading-tight truncate">Storm Steel Blue, Ice Mist &amp; Deep Slate</div>
+                      </div>
+                    </div>
+                    {theme === 'stormy-morning' && <Check className="w-3.5 h-3.5 text-[#6A89A7] shrink-0 ml-1.5" />}
                   </button>
                 </div>
               </div>
