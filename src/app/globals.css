@@ -50,6 +50,240 @@ html, body {
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* ==========================================================================
+   ArielMC Sovereign ERP - Global Glassmorphism & Responsive Dashboard Engine
+   (Tailwind CSS + shadcn/ui Design System)
+   Universal onMouseOver (Glass Effect) for every button on the platform.
+   ========================================================================== */
+
+button,
+.btn,
+[role="button"] {
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow, background-color, border-color;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* onMouseOver Glass Lift & Specular Highlight for ALL Buttons */
+button:hover:not(:disabled),
+.btn:hover:not(:disabled),
+[role="button"]:hover:not([aria-disabled="true"]) {
+  backdrop-filter: blur(12px) saturate(135%);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  transform: translateY(-1.5px);
+}
+
+/* Tactile Active / Click Response */
+button:active:not(:disabled),
+.btn:active:not(:disabled),
+[role="button"]:active:not([aria-disabled="true"]) {
+  transform: translateY(0px) scale(0.985) !important;
+  transition-duration: 0.08s;
+}
+
+/* Accessible & Crisp Glass Focus Ring */
+button:focus-visible,
+.btn:focus-visible,
+[role="button"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #FAF9F5, 0 0 0 4px rgba(31, 58, 46, 0.35), 0 6px 18px -2px rgba(31, 58, 46, 0.2) !important;
+}
+
+/* Specular Light Reflection Sheen on Button Hover */
+button::after,
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+button:hover:not(:disabled)::after,
+.btn:hover:not(:disabled)::after {
+  opacity: 1;
+}
+
+/* -------------------------------------------------------------
+   Category 1: Primary Brand Forest & Dark Buttons
+   ------------------------------------------------------------- */
+button.bg-\[\#1F3A2E\]:hover:not(:disabled),
+button[class*="bg-[#1F3A2E]"]:hover:not(:disabled),
+button.bg-emerald-700:hover:not(:disabled),
+button.bg-emerald-800:hover:not(:disabled),
+button.bg-emerald-900:hover:not(:disabled),
+button.bg-teal-700:hover:not(:disabled),
+button.bg-teal-800:hover:not(:disabled),
+button.bg-slate-900:hover:not(:disabled),
+button.bg-slate-800:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(44, 82, 64, 0.95) 0%, rgba(31, 58, 46, 0.98) 100%) !important;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.25),
+    0 8px 24px -4px rgba(31, 58, 46, 0.42),
+    0 2px 6px 0 rgba(0, 0, 0, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* -------------------------------------------------------------
+   Category 2: Crisp Light / White / Outline Glass Buttons
+   ------------------------------------------------------------- */
+button.bg-white:hover:not(:disabled),
+button[class*="bg-white"]:hover:not(:disabled),
+button.bg-slate-50:hover:not(:disabled),
+button.bg-slate-100:hover:not(:disabled),
+button.bg-gray-50:hover:not(:disabled),
+button.bg-gray-100:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(14px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+  border-color: rgba(31, 58, 46, 0.28) !important;
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1),
+    0 8px 22px -3px rgba(31, 58, 46, 0.12),
+    0 2px 6px 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+/* -------------------------------------------------------------
+   Category 3: Gold / Champagne Accent Buttons
+   ------------------------------------------------------------- */
+button.bg-\[\#C9A86A\]:hover:not(:disabled),
+button[class*="bg-[#C9A86A]"]:hover:not(:disabled),
+button.bg-\[\#C8A96A\]:hover:not(:disabled),
+button[class*="bg-[#C8A96A]"]:hover:not(:disabled),
+button.bg-amber-500:hover:not(:disabled),
+button.bg-amber-600:hover:not(:disabled) {
+  background: linear-gradient(180deg, #DEBE80 0%, #C9A86A 100%) !important;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.60),
+    0 8px 24px -2px rgba(201, 168, 106, 0.45),
+    0 2px 8px 0 rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* -------------------------------------------------------------
+   Category 4: Destructive / Crimson Buttons
+   ------------------------------------------------------------- */
+button.bg-rose-600:hover:not(:disabled),
+button.bg-rose-700:hover:not(:disabled),
+button.bg-red-600:hover:not(:disabled),
+button.bg-red-700:hover:not(:disabled),
+button.hover\:bg-rose-50:hover:not(:disabled) {
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+    0 8px 22px -2px rgba(225, 29, 72, 0.35),
+    0 2px 6px 0 rgba(0, 0, 0, 0.08) !important;
+}
+
+/* -------------------------------------------------------------
+   Category 5: Soft Pastel Badges & Compact Action Pills (+SDO, +PO)
+   ------------------------------------------------------------- */
+button.bg-emerald-50:hover:not(:disabled),
+button.bg-teal-50:hover:not(:disabled),
+button.bg-blue-50:hover:not(:disabled),
+button.bg-amber-50:hover:not(:disabled),
+button.bg-purple-50:hover:not(:disabled) {
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.85),
+    0 6px 16px -2px rgba(31, 58, 46, 0.15) !important;
+}
+
+/* -------------------------------------------------------------
+   Category 6: Header Corporate Toolbar & Top Controls
+   ------------------------------------------------------------- */
+header button:hover:not(:disabled) {
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.30),
+    0 6px 16px -2px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* -------------------------------------------------------------
+   Category 7: Sidebar Navigation & Sub-Action Buttons
+   ------------------------------------------------------------- */
+aside button:hover:not(:disabled),
+nav button:hover:not(:disabled) {
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
+    0 4px 12px -2px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* -------------------------------------------------------------
+   shadcn/ui & Modern Dashboard Glass Utilities
+   ------------------------------------------------------------- */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.84) !important;
+  backdrop-filter: blur(16px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+  border: 1px solid rgba(221, 227, 221, 0.8) !important;
+  box-shadow: 0 10px 30px 0 rgba(31, 58, 46, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  border: 1px solid #DDE3DD !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), inset 0 1px 0 0 rgba(255, 255, 255, 0.85) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(31, 58, 46, 0.3) !important;
+  box-shadow: 0 12px 32px -4px rgba(31, 58, 46, 0.09), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  border: 1px solid rgba(221, 227, 221, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(31, 58, 46, 0.28);
+  box-shadow: 0 8px 22px -2px rgba(31, 58, 46, 0.12), inset 0 1px 1px rgba(255, 255, 255, 1);
+  transform: translateY(-1.5px);
+}
+
+/* Polished Sleek Dashboard Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(31, 58, 46, 0.20);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(31, 58, 46, 0.35);
+}
+
 /* Light Ivory White Canvas for All Themes (#FAF9F5) */
 body,
 #arielmc-erp-root,
