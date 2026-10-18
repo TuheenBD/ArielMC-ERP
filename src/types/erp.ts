@@ -741,6 +741,40 @@ export interface AqlInspectionReport {
   digitalSealUrl?: string;
 }
 
+export type ChemicalTestType =
+  | 'REACH_CHROMIUM_VI'
+  | 'REACH_AZO_DYES'
+  | 'REACH_HEAVY_METALS'
+  | 'DENIM_CROCKING_ISO105'
+  | 'JUTE_MOISTURE_CLEANLINESS'
+  | 'DMF_ANTI_MOULD'
+  | 'FORMALDEHYDE_SCREEN';
+
+export type LabTestVerdict = 'PASSED_CERTIFIED' | 'WARNING_BORDERLINE' | 'FAILED_REJECTED';
+
+export interface ChemicalComplianceTest {
+  id: string;
+  testReportNumber: string; // e.g. TUV-DHK-2026-CH-0982
+  batchLotNumber: string; // e.g. BATCH-SAV-LWG-092
+  sku: string;
+  productName: string;
+  sector: ProductSector;
+  testType: ChemicalTestType;
+  testStandard: string; // e.g. ISO 17075-1:2017, ISO 105-X12:2016, EN ISO 17234-1
+  accreditedLaboratory: 'TÜV SÜD Bangladesh' | 'SGS Bangladesh' | 'Intertek Bangladesh' | 'Bureau Veritas Dhaka';
+  sampleCollectionDate: string;
+  reportIssueDate: string;
+  validUntilDate: string;
+  measuredValue: string; // e.g. "< 0.5 mg/kg", "Dry 4.5 / Wet 3.8", "ND (< 5 mg/kg)"
+  regulatoryThreshold: string; // e.g. "< 3.0 mg/kg (REACH Annex XVII)", "Dry ≥ 4.0 / Wet ≥ 3.5"
+  verdict: LabTestVerdict;
+  tanneryOrMillName: string; // e.g. Savar Tannery Estate (CETP Unit 4) / Bengal Denim Mills Narayanganj
+  lwgRating?: 'LWG_GOLD' | 'LWG_SILVER' | 'LWG_BRONZE' | 'AUDITED';
+  leadChemist: string;
+  digitalCertificateHash: string;
+  notes: string;
+}
+
 export interface FactoryPurchaseOrder {
   id: string;
   poNumber: string; // PO-2026-FAC-001

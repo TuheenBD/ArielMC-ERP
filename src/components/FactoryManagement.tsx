@@ -30,12 +30,14 @@ import {
   Building2,
   Download,
   Globe,
-  Award
+  Award,
+  FlaskConical,
 } from 'lucide-react';
 import { ArielMC } from '@/lib/brand';
 import { VendorEnlistmentModal } from './VendorEnlistmentModal';
 import { OfficialVendorProfilePdfModal } from './OfficialVendorProfilePdfModal';
 import { FactoryRatingModelModal } from './FactoryRatingModelModal';
+import { QualityChemicalComplianceTracker } from './QualityChemicalComplianceTracker';
 
 interface FactoryManagementProps {
   factories: SupplierFactory[];
@@ -55,6 +57,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   const [viewingPdfFactory, setViewingPdfFactory] = useState<SupplierFactory | null>(null);
   const [isRatingModelOpen, setIsRatingModelOpen] = useState(false);
   const [ratingModelFactory, setRatingModelFactory] = useState<SupplierFactory | null>(null);
+  const [factoryViewMode, setFactoryViewMode] = useState<'FACILITIES' | 'CHEMICAL_COMPLIANCE'>('FACILITIES');
 
   // Filter factories
   const filteredFactories = useMemo(() => {
@@ -282,7 +285,44 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         </div>
       </div>
 
-      {/* Proactive Compliance Expiry Alert Banner */}
+      {/* View Switcher: Facilities vs Quality & Chemical Compliance */}
+      <div className="flex items-center gap-2 border-b border-[#DDE3DD] pb-2 text-xs font-['Montserrat'] overflow-x-auto">
+        <button
+          onClick={() => setFactoryViewMode('FACILITIES')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer shrink-0 ${
+            factoryViewMode === 'FACILITIES'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
+          }`}
+        >
+          <Building2 className={`w-4 h-4 ${factoryViewMode === 'FACILITIES' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+          <span>Partner Facilities &amp; Factory Directory</span>
+          <span className="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white font-mono text-[9px]">
+            {factories.length} Facilities
+          </span>
+        </button>
+
+        <button
+          onClick={() => setFactoryViewMode('CHEMICAL_COMPLIANCE')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer shrink-0 ${
+            factoryViewMode === 'CHEMICAL_COMPLIANCE'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
+          }`}
+        >
+          <FlaskConical className={`w-4 h-4 ${factoryViewMode === 'CHEMICAL_COMPLIANCE' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+          <span>Quality &amp; Tannery Chemical Compliance Tracker</span>
+          <span className="px-1.5 py-0.2 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-[9px] font-bold">
+            REACH / Crocking
+          </span>
+        </button>
+      </div>
+
+      {factoryViewMode === 'CHEMICAL_COMPLIANCE' ? (
+        <QualityChemicalComplianceTracker />
+      ) : (
+        <>
+          {/* Proactive Compliance Expiry Alert Banner */}
       {expiringAudits.length > 0 && (
         <div className="p-4 rounded-xl bg-[#FDF2F2] border border-[#F8B4B4] text-xs space-y-2">
           <div className="flex items-center gap-2 text-[#8A1515] font-semibold">
@@ -860,6 +900,8 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
 
       {/* Modal: Vendor Enlistment & Profile Form Wizard */}
