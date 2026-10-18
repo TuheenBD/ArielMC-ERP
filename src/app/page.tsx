@@ -567,6 +567,7 @@ export default function Home() {
               consignments={consignments}
               securityBudget={securityBudgetPlan}
               securityIncidents={recentSecurityAudits}
+              onAddConsignment={(newCng) => setConsignments((prev) => [newCng, ...prev])}
             />
           )}
 

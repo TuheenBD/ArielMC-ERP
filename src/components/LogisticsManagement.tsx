@@ -38,20 +38,23 @@ import {
 } from 'lucide-react';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
+import { ContainerLoadCbmPlanner } from '@/components/ContainerLoadCbmPlanner';
 
 interface LogisticsManagementProps {
   consignments: LogisticsConsignment[];
   securityBudget: SecurityBudgetLine[];
   securityIncidents: SecurityIncident[];
   onSelectConsignment?: (cng: LogisticsConsignment) => void;
+  onAddConsignment?: (newCng: LogisticsConsignment) => void;
 }
 
 export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
   consignments,
   securityBudget,
   securityIncidents,
+  onAddConsignment,
 }) => {
-  const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY'>('CONSIGNMENTS');
+  const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY' | 'CONTAINER_PLANNER'>('CONSIGNMENTS');
   const [selectedHub, setSelectedHub] = useState<HubLocation>('WH-UK');
   const [activeConsignment, setActiveConsignment] = useState<LogisticsConsignment>(consignments[0]);
   const [documentPreviewType, setDocumentPreviewType] = useState<'INVOICE' | 'PACKING_LIST' | 'FORM_EXP' | 'EDI_MANIFEST'>('INVOICE');
@@ -188,6 +191,21 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
         </button>
 
         <button
+          onClick={() => setActiveTab('CONTAINER_PLANNER')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
+            activeTab === 'CONTAINER_PLANNER'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
+          }`}
+        >
+          <Boxes className={`w-4 h-4 ${activeTab === 'CONTAINER_PLANNER' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+          <span>Container Load &amp; CBM Planner</span>
+          <span className="px-1.5 py-0.2 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-[9px] font-bold">
+            FCL / CBM
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('HUBS')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
             activeTab === 'HUBS'
@@ -235,6 +253,22 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
           <span>SOP-SEC-2026-V1 Cyber Security Governance</span>
         </button>
       </div>
+
+      {/* TAB 0: CONTAINER LOAD & CBM PLANNER */}
+      {activeTab === 'CONTAINER_PLANNER' && (
+        <ContainerLoadCbmPlanner
+          onAddConsignment={(newCng) => {
+            if (onAddConsignment) onAddConsignment(newCng);
+            setActiveConsignment(newCng);
+            setActiveTab('CONSIGNMENTS');
+          }}
+          onSelectConsignment={(cng) => {
+            setActiveConsignment(cng);
+            setActiveTab('CONSIGNMENTS');
+          }}
+          existingConsignmentsCount={consignments.length}
+        />
+      )}
 
       {/* TAB 1: ACTIVE OCEAN CONSIGNMENTS */}
       {activeTab === 'CONSIGNMENTS' && (
