@@ -96,23 +96,23 @@ export const TranslatorUtility: React.FC = () => {
     );
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-blue-950/80 border border-blue-500/40 text-blue-300 text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Languages className="w-3.5 h-3.5 text-blue-400" />
+            <span className="px-2.5 py-0.5 rounded bg-[#1F3A2E] border border-[#C8A96A]/50 text-[#C8A96A] text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs">
+              <Languages className="w-3.5 h-3.5 text-[#C8A96A]" />
               Cross-Border Trade &amp; Garments
             </span>
-            <span className="text-xs text-[#C8A96A] font-mono">
+            <span className="text-xs text-slate-700 font-mono font-medium">
               English • বাংলা • Français • Deutsch • 中文
             </span>
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mt-1">
+          <h3 className="text-xl md:text-2xl font-bold font-heading text-[#1F3A2E] mt-1.5">
             International Garment, Sourcing &amp; Export Translator
           </h3>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-slate-600 font-medium mt-0.5">
             Bilingual trade phrase translation and comprehensive technical glossary for leather, jute, quality audits, and banking instruments.
           </p>
         </div>

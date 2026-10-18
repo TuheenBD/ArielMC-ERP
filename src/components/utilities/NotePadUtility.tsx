@@ -114,22 +114,22 @@ export const NotePadUtility: React.FC = () => {
     .sort((a, b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Top Header & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
-          <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+          <h3 className="text-lg md:text-xl font-bold font-heading text-[#1F3A2E] flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#C8A96A]" />
             Enterprise Note Pad &amp; Scratchpad Studio
           </h3>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-slate-600 font-medium mt-0.5">
             Quick notes, meeting minutes, technical pattern specs, and corporate memos with local export.
           </p>
         </div>
 
         <button
           onClick={handleStartCreate}
-          className="px-4 py-2 rounded-xl bg-[#C8A96A] text-slate-950 font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md self-start sm:self-auto"
+          className="px-4 py-2 rounded-xl bg-[#C8A96A] text-[#1F3A2E] font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>New Note</span>

@@ -139,15 +139,15 @@ export const ContactsDirectoryUtility: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Header & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
-          <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+          <h3 className="text-lg md:text-xl font-bold font-heading text-[#1F3A2E] flex items-center gap-2">
             <Users2 className="w-5 h-5 text-[#C8A96A]" />
             Enterprise Master Contacts Directory
           </h3>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-slate-600 font-medium mt-0.5">
             Single repository for all corporate stakeholders: International Buyers, Sourcing Suppliers, Partner Factories, and Internal Staff.
           </p>
         </div>
@@ -155,21 +155,21 @@ export const ContactsDirectoryUtility: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="px-4 py-2 rounded-xl bg-[#C8A96A] text-slate-950 font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md"
+            className="px-4 py-2 rounded-xl bg-[#C8A96A] text-[#1F3A2E] font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Contact</span>
           </button>
           <button
             onClick={handleExportCsv}
-            className="p-2 rounded-xl bg-[#14281f] border border-[#2b5540] text-slate-300 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-white border border-[#DDE3DD] text-[#1F3A2E] hover:bg-[#F4F6F4] shadow-xs cursor-pointer transition-colors"
             title="Export CSV"
           >
             <Download className="w-4 h-4" />
           </button>
           <button
             onClick={() => window.print()}
-            className="p-2 rounded-xl bg-[#14281f] border border-[#2b5540] text-slate-300 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-white border border-[#DDE3DD] text-[#1F3A2E] hover:bg-[#F4F6F4] shadow-xs cursor-pointer transition-colors"
             title="Print Directory"
           >
             <Printer className="w-4 h-4" />

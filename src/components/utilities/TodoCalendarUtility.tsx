@@ -276,19 +276,19 @@ export const TodoCalendarUtility: React.FC<TodoCalendarUtilityProps> = ({
   ];
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Top Header & View Controls Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-[#C8A96A]/20 border border-[#C8A96A]/40 text-[#C8A96A] text-xs font-mono font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded bg-[#1F3A2E] border border-[#C8A96A]/40 text-[#C8A96A] text-xs font-mono font-bold uppercase tracking-wider shadow-xs">
               Flowlu Productivity Engine
             </span>
-            <span className="text-xs text-slate-400 font-mono">
+            <span className="text-xs text-slate-700 font-mono font-medium">
               Tasks • Calendar • Time Tracking
             </span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold text-white mt-1">
+          <h2 className="text-xl md:text-2xl font-bold font-heading text-[#1F3A2E] mt-1">
             To-Do, Workload Calendar &amp; Billable Time Tracker
           </h2>
         </div>
@@ -298,7 +298,7 @@ export const TodoCalendarUtility: React.FC<TodoCalendarUtilityProps> = ({
           <div className="flex items-center gap-1 p-1 rounded-xl bg-[#12241b] border border-[#2b5540] text-xs">
             <button
               onClick={() => setViewMode('LIST')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 viewMode === 'LIST'
                   ? 'bg-[#C8A96A] text-slate-950 font-bold shadow'
                   : 'text-slate-300 hover:text-white'
@@ -309,7 +309,7 @@ export const TodoCalendarUtility: React.FC<TodoCalendarUtilityProps> = ({
             </button>
             <button
               onClick={() => setViewMode('CALENDAR')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 viewMode === 'CALENDAR'
                   ? 'bg-[#C8A96A] text-slate-950 font-bold shadow'
                   : 'text-slate-300 hover:text-white'
@@ -320,7 +320,7 @@ export const TodoCalendarUtility: React.FC<TodoCalendarUtilityProps> = ({
             </button>
             <button
               onClick={() => setViewMode('TIME_TRACKING')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 viewMode === 'TIME_TRACKING'
                   ? 'bg-[#C8A96A] text-slate-950 font-bold shadow'
                   : 'text-slate-300 hover:text-white'
@@ -334,7 +334,7 @@ export const TodoCalendarUtility: React.FC<TodoCalendarUtilityProps> = ({
           {/* Quick Task Creation Trigger */}
           <button
             onClick={() => setIsQuickTaskOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-[#193d2b] hover:bg-[#22523b] text-white border border-[#347855] text-xs font-bold flex items-center gap-1.5 transition-colors shadow-md"
+            className="px-3.5 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#284c3c] text-white border border-[#C8A96A]/50 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-md cursor-pointer"
           >
             <Plus className="w-4 h-4 text-[#C8A96A]" />
             <span>Create Task</span>
@@ -342,7 +342,7 @@ export const TodoCalendarUtility: React.FC<TodoCalendarUtilityProps> = ({
 
           <button
             onClick={handleExportCsv}
-            className="p-2 rounded-xl bg-[#14281f] border border-[#2b5540] text-slate-300 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-white border border-[#DDE3DD] text-[#1F3A2E] hover:bg-[#F4F6F4] shadow-xs cursor-pointer transition-colors"
             title="Export CSV"
           >
             <Download className="w-4 h-4" />

@@ -85,38 +85,38 @@ export const MessageCenterUtility: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-blue-950/80 border border-blue-500/40 text-blue-300 text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Bell className="w-3.5 h-3.5 text-blue-400" />
+            <span className="px-2.5 py-0.5 rounded bg-[#1F3A2E] border border-[#C8A96A]/50 text-[#C8A96A] text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs">
+              <Bell className="w-3.5 h-3.5 text-[#C8A96A]" />
               Station Broadcast &amp; Alerts
             </span>
-            <span className="text-xs text-slate-400 font-mono">
+            <span className="text-xs text-slate-700 font-mono font-medium">
               Dhaka HQ ⇄ London ⇄ Global Desks
             </span>
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mt-1 flex items-center gap-2">
+          <h3 className="text-xl md:text-2xl font-bold font-heading text-[#1F3A2E] mt-1.5 flex items-center gap-2.5">
             <MessageSquare className="w-6 h-6 text-[#C8A96A]" />
-            ArielMC Message Center &amp; Internal Bulletin Board
+            <span>ArielMC Message Center &amp; Internal Bulletin Board</span>
           </h3>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsComposeOpen(true)}
-            className="px-4 py-2 rounded-xl bg-[#C8A96A] text-slate-950 font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md"
+            className="px-4 py-2 rounded-xl bg-[#C8A96A] text-[#1F3A2E] font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md cursor-pointer"
           >
             <Send className="w-4 h-4" />
             <span>Broadcast Memo</span>
           </button>
           <button
             onClick={handleMarkAllRead}
-            className="px-3 py-2 rounded-xl bg-[#14281f] border border-[#2b5540] text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 rounded-xl bg-white border border-[#DDE3DD] text-[#1F3A2E] hover:bg-[#F4F6F4] text-xs font-mono font-semibold flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
           >
-            <CheckCheck className="w-4 h-4 text-emerald-400" />
+            <CheckCheck className="w-4 h-4 text-emerald-600" />
             <span>Mark All Read</span>
           </button>
         </div>

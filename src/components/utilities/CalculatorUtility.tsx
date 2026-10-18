@@ -125,15 +125,15 @@ export const CalculatorUtility: React.FC<CalculatorUtilityProps> = ({
   };
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Sub-Tabs Selector */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#234534] pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#C8A96A]/30 pb-4">
         <div>
-          <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+          <h3 className="text-lg md:text-xl font-bold font-heading text-[#1F3A2E] flex items-center gap-2">
             <CalcIcon className="w-5 h-5 text-[#C8A96A]" />
             Enterprise Financial, Margin &amp; Freight Calculator Suite
           </h3>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-slate-600 font-medium mt-0.5">
             Four specialized calculators: B2B Unit Costing &amp; Margin, Real-Time Forex, Freight CBM &amp; Container Estimator, and Standard Keypad.
           </p>
         </div>

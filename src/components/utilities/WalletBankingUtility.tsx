@@ -89,24 +89,24 @@ SECURITY NOTICE: ArielMC never alters bank settlement details via email alone. A
   );
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Header & Badges */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="px-2.5 py-0.5 rounded bg-[#1F3A2E] border border-[#C8A96A]/50 text-[#C8A96A] text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C8A96A]" />
               Sovereign Banking Vault
             </span>
-            <span className="text-xs text-[#C8A96A] font-mono font-semibold">
+            <span className="text-xs text-slate-700 font-mono font-medium">
               Zero Local Card Storage (PCI-DSS)
             </span>
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mt-1 flex items-center gap-2">
+          <h3 className="text-xl md:text-2xl font-bold font-heading text-[#1F3A2E] mt-1.5 flex items-center gap-2.5">
             <Wallet className="w-6 h-6 text-[#C8A96A]" />
             Enterprise Banking Wallet &amp; Settlement Vault
           </h3>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-slate-600 font-medium mt-0.5">
             Store and generate verified wire instructions for Wise UK, Dhaka AD Bank (Bangladesh Bank ERQ), US Chase, and EU SEPA rails.
           </p>
         </div>
@@ -114,14 +114,14 @@ SECURITY NOTICE: ArielMC never alters bank settlement details via email alone. A
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="px-4 py-2 rounded-xl bg-[#C8A96A] text-slate-950 font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md"
+            className="px-4 py-2 rounded-xl bg-[#C8A96A] text-[#1F3A2E] font-bold text-xs flex items-center gap-2 hover:bg-[#d4b97d] transition-all shadow-md cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Account</span>
           </button>
           <button
             onClick={() => window.print()}
-            className="p-2 rounded-xl bg-[#14281f] border border-[#2b5540] text-slate-300 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-white border border-[#DDE3DD] text-[#1F3A2E] hover:bg-[#F4F6F4] shadow-xs cursor-pointer transition-colors"
             title="Print Bank Schedule"
           >
             <Printer className="w-4 h-4" />

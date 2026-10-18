@@ -44,23 +44,23 @@ export const MapsUtility: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 text-slate-100 animate-in fade-in duration-200">
+    <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#234534] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#C8A96A]/30 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded bg-[#1F3A2E] border border-[#C8A96A]/50 text-[#C8A96A] text-xs font-mono font-bold uppercase tracking-wider shadow-xs">
               Global Supply Chain Geography
             </span>
-            <span className="text-xs text-[#C8A96A] font-mono">
+            <span className="text-xs text-slate-700 font-mono font-medium">
               Chittagong Port ⇄ Suez Canal ⇄ UK Felixstowe
             </span>
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mt-1 flex items-center gap-2">
+          <h3 className="text-xl md:text-2xl font-bold font-heading text-[#1F3A2E] mt-1.5 flex items-center gap-2.5">
             <Globe2 className="w-6 h-6 text-[#C8A96A]" />
             ArielMC Global Station, Factory &amp; Maritime Port Maps
           </h3>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-slate-600 font-medium mt-0.5">
             Geographic directory mapping Dhaka HQ, London Subsidiary, Savar/Narayanganj manufacturing clusters, and international cargo gateways.
           </p>
         </div>
