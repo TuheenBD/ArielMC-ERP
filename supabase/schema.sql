@@ -330,6 +330,221 @@ CREATE POLICY "Public Read Access PnL" ON pnl_records FOR SELECT USING (true);
 CREATE POLICY "Public Write Access PnL" ON pnl_records FOR ALL USING (true);
 
 -- ==============================================================================
+-- TABLE 10: VOUCHERS (Standard Cash Purchase, Money Receive & Multi-Currency Ledger)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS vouchers (
+    id TEXT PRIMARY KEY,
+    voucher_number TEXT UNIQUE NOT NULL,
+    type TEXT NOT NULL CHECK (type IN ('CASH_PURCHASE', 'CASH_RECEIVE')),
+    date DATE NOT NULL,
+    main_account_head TEXT NOT NULL,
+    sub_category_head TEXT NOT NULL,
+    currency TEXT NOT NULL DEFAULT 'BDT',
+    exchange_rate_to_bdt NUMERIC(10,4) NOT NULL DEFAULT 1.0000,
+    party_name TEXT NOT NULL,
+    party_details TEXT,
+    linked_order_number TEXT,
+    buyer_country TEXT,
+    payment_mode TEXT NOT NULL,
+    bank_reference TEXT,
+    tax_chalan_ref TEXT,
+    station_code TEXT DEFAULT 'ARIEL_BD',
+    station_bank_name TEXT,
+    station_account_number TEXT,
+    channel TEXT,
+    channel_transaction_ref TEXT,
+    is_station_b2c_inflow BOOLEAN DEFAULT false,
+    items JSONB NOT NULL DEFAULT '[]'::jsonb,
+    total_amount NUMERIC(14,2) NOT NULL DEFAULT 0.00,
+    total_amount_bdt NUMERIC(14,2) NOT NULL DEFAULT 0.00,
+    amount_in_words TEXT NOT NULL,
+    prepared_by TEXT NOT NULL,
+    verified_by TEXT NOT NULL,
+    approved_by TEXT NOT NULL,
+    claimant_or_depositor TEXT NOT NULL,
+    physical_attachment JSONB,
+    audit_status TEXT DEFAULT 'VERIFIED',
+    is_local_value_addition BOOLEAN DEFAULT true,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_vouchers_date ON vouchers(date);
+CREATE INDEX IF NOT EXISTS idx_vouchers_type ON vouchers(type);
+CREATE INDEX IF NOT EXISTS idx_vouchers_station ON vouchers(station_code);
+CREATE INDEX IF NOT EXISTS idx_vouchers_account_head ON vouchers(main_account_head);
+
+-- ==============================================================================
+-- TABLE 11: ACCOUNT HEADS (Master Chart of Accounts & Subcategories)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS account_heads (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    code TEXT UNIQUE NOT NULL,
+    type TEXT NOT NULL,
+    description TEXT,
+    sub_categories JSONB DEFAULT '[]'::jsonb,
+    is_default BOOLEAN DEFAULT false,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_account_heads_type ON account_heads(type);
+
+-- ==============================================================================
+-- TABLE 12: COMPLIANCE RECORDS (Bangladesh 34-Step Statutory Legal Matrix)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS compliance_records (
+    id TEXT PRIMARY KEY,
+    checklist_id INT NOT NULL,
+    title TEXT NOT NULL,
+    category TEXT NOT NULL,
+    category_label TEXT NOT NULL,
+    issuing_authority TEXT NOT NULL,
+    description TEXT,
+    step_sequence INT NOT NULL,
+    step_title TEXT,
+    govt_fee_estimate TEXT,
+    agency_fee_estimate TEXT,
+    total_budget_estimate TEXT,
+    destination_market_audit TEXT,
+    document_id TEXT,
+    is_mandatory BOOLEAN DEFAULT true,
+    status TEXT NOT NULL DEFAULT 'PENDING_UPLOAD',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_compliance_status ON compliance_records(status);
+CREATE INDEX IF NOT EXISTS idx_compliance_step ON compliance_records(step_sequence);
+
+-- ==============================================================================
+-- TABLE 13: POS REGISTER SHIFTS (Showroom Cash Register Sessions)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS pos_register_shifts (
+    id TEXT PRIMARY KEY,
+    store_id TEXT NOT NULL,
+    cashier TEXT NOT NULL,
+    opened_at TIMESTAMPTZ NOT NULL,
+    closed_at TIMESTAMPTZ,
+    opening_float NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+    cash_sales NUMERIC(12,2) DEFAULT 0.00,
+    card_sales NUMERIC(12,2) DEFAULT 0.00,
+    wire_sales NUMERIC(12,2) DEFAULT 0.00,
+    mobile_sales NUMERIC(12,2) DEFAULT 0.00,
+    total_sales NUMERIC(12,2) DEFAULT 0.00,
+    total_orders INT DEFAULT 0,
+    b2b_orders_count INT DEFAULT 0,
+    d2c_orders_count INT DEFAULT 0,
+    cash_expected NUMERIC(12,2) DEFAULT 0.00,
+    cash_actual NUMERIC(12,2),
+    notes TEXT,
+    status TEXT DEFAULT 'OPEN',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pos_shifts_store ON pos_register_shifts(store_id);
+CREATE INDEX IF NOT EXISTS idx_pos_shifts_status ON pos_register_shifts(status);
+
+-- ==============================================================================
+-- TABLE 14: POS TRANSACTIONS (Omnichannel Retail & Wholesale Receipts)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS pos_transactions (
+    id TEXT PRIMARY KEY,
+    receipt_number TEXT UNIQUE NOT NULL,
+    date DATE NOT NULL,
+    time TEXT NOT NULL,
+    store_id TEXT NOT NULL,
+    mode TEXT NOT NULL CHECK (mode IN ('B2B_WHOLESALE', 'D2C_RETAIL')),
+    customer JSONB NOT NULL DEFAULT '{}'::jsonb,
+    items JSONB NOT NULL DEFAULT '[]'::jsonb,
+    subtotal NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+    discount_amount NUMERIC(12,2) DEFAULT 0.00,
+    discount_code TEXT,
+    tax_amount NUMERIC(12,2) DEFAULT 0.00,
+    total_amount NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+    currency TEXT NOT NULL DEFAULT 'GBP',
+    currency_symbol TEXT DEFAULT '£',
+    payment_method TEXT NOT NULL,
+    payment_ref TEXT,
+    amount_tendered NUMERIC(12,2) NOT NULL DEFAULT 0.00,
+    change_due NUMERIC(12,2) DEFAULT 0.00,
+    cashier_name TEXT NOT NULL,
+    linked_sales_order_id TEXT,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pos_txns_date ON pos_transactions(date);
+CREATE INDEX IF NOT EXISTS idx_pos_txns_store ON pos_transactions(store_id);
+CREATE INDEX IF NOT EXISTS idx_pos_txns_receipt ON pos_transactions(receipt_number);
+
+-- ==============================================================================
+-- TABLE 15: OFFICIAL DOCUMENTS (Legal, Commercial, Statutory & Export Archive)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS official_documents (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    doc_code TEXT NOT NULL,
+    section TEXT NOT NULL,
+    station TEXT NOT NULL,
+    issuing_authority TEXT NOT NULL,
+    document_number TEXT NOT NULL,
+    category TEXT NOT NULL,
+    issue_date DATE NOT NULL,
+    expiry_date DATE NOT NULL,
+    renewal_lead_days INT DEFAULT 30,
+    status TEXT NOT NULL DEFAULT 'ACTIVE',
+    file_format TEXT DEFAULT 'PDF',
+    file_size TEXT,
+    file_url TEXT,
+    verified BOOLEAN DEFAULT true,
+    uploaded_by TEXT,
+    uploaded_at TIMESTAMPTZ DEFAULT NOW(),
+    notes TEXT,
+    renewal_task JSONB,
+    checklist_item_id INT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_documents_station ON official_documents(station);
+CREATE INDEX IF NOT EXISTS idx_documents_section ON official_documents(section);
+CREATE INDEX IF NOT EXISTS idx_documents_status ON official_documents(status);
+CREATE INDEX IF NOT EXISTS idx_documents_checklist ON official_documents(checklist_item_id);
+
+-- ==============================================================================
+-- ROW LEVEL SECURITY (RLS) POLICIES FOR NEW TABLES
+-- ==============================================================================
+ALTER TABLE vouchers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE account_heads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE compliance_records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pos_register_shifts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pos_transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE official_documents ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public Read Access Vouchers" ON vouchers FOR SELECT USING (true);
+CREATE POLICY "Public Write Access Vouchers" ON vouchers FOR ALL USING (true);
+
+CREATE POLICY "Public Read Access AccountHeads" ON account_heads FOR SELECT USING (true);
+CREATE POLICY "Public Write Access AccountHeads" ON account_heads FOR ALL USING (true);
+
+CREATE POLICY "Public Read Access Compliance" ON compliance_records FOR SELECT USING (true);
+CREATE POLICY "Public Write Access Compliance" ON compliance_records FOR ALL USING (true);
+
+CREATE POLICY "Public Read Access PosShifts" ON pos_register_shifts FOR SELECT USING (true);
+CREATE POLICY "Public Write Access PosShifts" ON pos_register_shifts FOR ALL USING (true);
+
+CREATE POLICY "Public Read Access PosTxns" ON pos_transactions FOR SELECT USING (true);
+CREATE POLICY "Public Write Access PosTxns" ON pos_transactions FOR ALL USING (true);
+
+CREATE POLICY "Public Read Access Documents" ON official_documents FOR SELECT USING (true);
+CREATE POLICY "Public Write Access Documents" ON official_documents FOR ALL USING (true);
+
+-- ==============================================================================
 -- AUTOMATIC updated_at TIMESTAMP TRIGGER
 -- ==============================================================================
 CREATE OR REPLACE FUNCTION set_updated_at_timestamp()
@@ -357,3 +572,21 @@ CREATE TRIGGER trg_crm_leads_updated_at BEFORE UPDATE ON crm_leads FOR EACH ROW 
 
 DROP TRIGGER IF EXISTS trg_inventory_updated_at ON inventory_items;
 CREATE TRIGGER trg_inventory_updated_at BEFORE UPDATE ON inventory_items FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+DROP TRIGGER IF EXISTS trg_vouchers_updated_at ON vouchers;
+CREATE TRIGGER trg_vouchers_updated_at BEFORE UPDATE ON vouchers FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+DROP TRIGGER IF EXISTS trg_account_heads_updated_at ON account_heads;
+CREATE TRIGGER trg_account_heads_updated_at BEFORE UPDATE ON account_heads FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+DROP TRIGGER IF EXISTS trg_compliance_updated_at ON compliance_records;
+CREATE TRIGGER trg_compliance_updated_at BEFORE UPDATE ON compliance_records FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+DROP TRIGGER IF EXISTS trg_pos_shifts_updated_at ON pos_register_shifts;
+CREATE TRIGGER trg_pos_shifts_updated_at BEFORE UPDATE ON pos_register_shifts FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+DROP TRIGGER IF EXISTS trg_pos_txns_updated_at ON pos_transactions;
+CREATE TRIGGER trg_pos_txns_updated_at BEFORE UPDATE ON pos_transactions FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+DROP TRIGGER IF EXISTS trg_documents_updated_at ON official_documents;
+CREATE TRIGGER trg_documents_updated_at BEFORE UPDATE ON official_documents FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();

@@ -637,12 +637,17 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                   {[
                     { label: 'Products Master', table: 'products', count: tableCounts.products ?? 12, desc: 'Leather, Jute, Textiles, Ceramics' },
                     { label: 'Factories Network', table: 'factories', count: tableCounts.factories ?? 8, desc: 'Savar, Gazipur, Narsingdi' },
-                    { label: 'Sample Dev Orders (SDO)', table: 'sample_development_orders', count: tableCounts.sample_development_orders ?? 8, desc: 'Tech Packs, QA, Prototypes' },
-                    { label: 'Sales Orders (OMS)', table: 'sales_orders', count: tableCounts.sales_orders ?? 5, desc: 'Buyer SOs & Factory POs' },
+                    { label: 'Sample Dev Orders (SDO)', table: 'sample_development_orders', count: tableCounts.samples ?? 8, desc: 'Tech Packs, QA, Prototypes' },
+                    { label: 'Sales Orders (OMS)', table: 'sales_orders', count: tableCounts.orders ?? 5, desc: 'Buyer SOs & Factory POs' },
                     { label: 'CRM Wholesale Leads', table: 'crm_leads', count: tableCounts.crm_leads ?? 35, desc: 'UK, US, EU, AU Pipeline' },
                     { label: 'Warehouses & Hubs', table: 'warehouses', count: tableCounts.warehouses ?? 4, desc: 'Savar, Tilbury, Rotterdam, NY' },
                     { label: 'Inventory Items', table: 'inventory_items', count: tableCounts.inventory_items ?? 12, desc: 'Batch, BoE, Physical Stock' },
                     { label: 'Stock Transfers', table: 'stock_transfers', count: tableCounts.stock_transfers ?? 3, desc: 'Ocean FCL, Air Freight' },
+                    { label: 'Standard Vouchers', table: 'vouchers', count: tableCounts.vouchers ?? 14, desc: 'Debit, Credit, Journal, Contra' },
+                    { label: 'Account Heads', table: 'account_heads', count: tableCounts.account_heads ?? 12, desc: 'Statutory Chart of Accounts' },
+                    { label: 'Official Documents', table: 'official_documents', count: tableCounts.official_documents ?? 14, desc: 'Export Docs, Licenses, Tax Chalan' },
+                    { label: 'Bangladesh Compliance', table: 'compliance_records', count: tableCounts.compliance_records ?? 34, desc: '34-Step Statutory Legal Checklist' },
+                    { label: 'POS Transactions', table: 'pos_transactions', count: tableCounts.pos_transactions ?? 8, desc: 'Retail & Wholesale Store Receipts' },
                     { label: 'Finance PnL Records', table: 'pnl_records', count: tableCounts.pnl_records ?? 6, desc: 'Multi-Currency Revenue & EBITDA' },
                   ].map((item, idx) => (
                     <div 

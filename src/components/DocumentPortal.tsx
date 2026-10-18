@@ -40,6 +40,11 @@ import { OfficialDocumentViewerModal } from '@/components/OfficialDocumentViewer
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { ArielMC, renderBrandText } from '@/lib/brand';
 import { DeleteDocumentConfirmModal } from '@/components/DeleteDocumentConfirmModal';
+import {
+  fetchOfficialDocuments,
+  persistOfficialDocument,
+  deleteOfficialDocument,
+} from '@/lib/erpPersistence';
 
 interface DocumentPortalProps {
   companies: CompanyEntity[];
@@ -121,25 +126,28 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  // Load from localStorage on mount & listen to changes across stations
+  // Load from Supabase PostgreSQL & LocalStorage on mount & listen to changes across stations
   useEffect(() => {
-    const reloadDocs = () => {
+    let isMounted = true;
+    const reloadDocs = async () => {
       try {
-        const savedDocs = localStorage.getItem('arielmc_erp_official_documents_v1');
-        if (savedDocs) {
-          const parsed = JSON.parse(savedDocs);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setDocuments(parsed);
-          }
+        const persistedDocs = await fetchOfficialDocuments();
+        if (isMounted && persistedDocs && persistedDocs.length > 0) {
+          setDocuments(persistedDocs);
         }
-      } catch {}
+      } catch (e) {
+        console.warn('Error reloading official documents:', e);
+      }
     };
     reloadDocs();
     window.addEventListener('arielmc_documents_changed', reloadDocs);
-    return () => window.removeEventListener('arielmc_documents_changed', reloadDocs);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('arielmc_documents_changed', reloadDocs);
+    };
   }, []);
 
-  // Save to localStorage helper & dispatch sync event
+  // Save to persistence helper (LocalStorage + Supabase) & dispatch sync event
   const saveDocuments = (updated: OfficialDocument[]) => {
     setDocuments(updated);
     try {
@@ -152,6 +160,7 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
   const handleUploadSuccess = (newDoc: OfficialDocument) => {
     const updated = [newDoc, ...documents];
     saveDocuments(updated);
+    persistOfficialDocument(newDoc).catch(console.error);
     showToast(`Document "${newDoc.title}" successfully archived.`);
   };
 
@@ -160,6 +169,7 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
     const targetDoc = documents.find((d) => d.id === id);
     const updated = documents.filter((d) => d.id !== id);
     saveDocuments(updated);
+    deleteOfficialDocument(id).catch(console.error);
     if (previewDoc?.id === id) setPreviewDoc(null);
     if (viewingDoc?.id === id) setViewingDoc(null);
     if (sharingDoc?.id === id) setSharingDoc(null);
@@ -171,13 +181,15 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
   const handleToggleTask = (docId: string) => {
     const updated = documents.map((doc) => {
       if (doc.id === docId && doc.renewalTask) {
-        return {
+        const updatedDoc = {
           ...doc,
           renewalTask: {
             ...doc.renewalTask,
             isCompleted: !doc.renewalTask.isCompleted,
           },
         };
+        persistOfficialDocument(updatedDoc).catch(console.error);
+        return updatedDoc;
       }
       return doc;
     });
@@ -186,12 +198,13 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
 
   // Handle Quick Renewal (+ 1 Year)
   const handleRenewOneYear = (docId: string) => {
+    let renewedDoc: OfficialDocument | null = null;
     const updated = documents.map((doc) => {
       if (doc.id === docId) {
         const currentExp = new Date(doc.expiryDate);
         currentExp.setFullYear(currentExp.getFullYear() + 1);
         const newExpiryDate = currentExp.toISOString().split('T')[0];
-        return {
+        renewedDoc = {
           ...doc,
           expiryDate: newExpiryDate,
           status: 'ACTIVE' as DocumentStatus,
@@ -203,12 +216,16 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
               }
             : undefined,
         };
+        return renewedDoc;
       }
       return doc;
     });
     saveDocuments(updated);
+    if (renewedDoc) {
+      persistOfficialDocument(renewedDoc).catch(console.error);
+    }
     if (previewDoc?.id === docId) {
-      setPreviewDoc(updated.find((d) => d.id === docId) || null);
+      setPreviewDoc(renewedDoc);
     }
   };
 

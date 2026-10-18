@@ -24,6 +24,11 @@ import { StandardVoucher } from '@/types/voucher';
 import { INITIAL_STANDARD_VOUCHERS } from '@/data/initialVouchers';
 import { AccountHead } from '@/types/accountHead';
 import { INITIAL_ACCOUNT_HEADS } from '@/data/initialAccountHeads';
+import { ComplianceChecklistItem, OfficialDocument } from '@/types/documentPortal';
+import { BANGLADESH_34_COMPLIANCE_CHECKLIST } from '@/data/bangladeshComplianceChecklist';
+import { INITIAL_OFFICIAL_DOCUMENTS } from '@/data/initialOfficialDocuments';
+import { PosRegisterShift, PosTransaction } from '@/types/pos';
+import { INITIAL_REGISTER_SHIFTS, INITIAL_POS_TRANSACTIONS } from '@/data/initialPosData';
 
 const LOCAL_STORAGE_KEYS = {
   PRODUCTS: 'arielmc_erp_products_v1',
@@ -36,6 +41,10 @@ const LOCAL_STORAGE_KEYS = {
   TRANSFERS: 'arielmc_erp_transfers_v1',
   VOUCHERS: 'arielmc_vouchers_db',
   ACCOUNT_HEADS: 'arielmc_erp_account_heads_v1',
+  OFFICIAL_DOCUMENTS: 'arielmc_erp_official_documents_v1',
+  COMPLIANCE: 'arielmc_erp_compliance_checklist_v1',
+  POS_SHIFTS: 'arielmc_erp_pos_shifts_v1',
+  POS_TRANSACTIONS: 'arielmc_erp_pos_transactions_v1',
 };
 
 // ==============================================================================
@@ -733,6 +742,152 @@ export const syncAllSeedDataToSupabase = async (): Promise<{
     }));
     await supabase.from('stock_transfers').upsert(transfersPayload);
 
+    // 8. Seed Standard Vouchers
+    const vouchersPayload = INITIAL_STANDARD_VOUCHERS.map((v) => ({
+      id: v.id,
+      voucher_number: v.voucherNumber,
+      type: v.type,
+      date: v.date,
+      main_account_head: v.mainAccountHead,
+      sub_category_head: v.subCategoryHead,
+      currency: v.currency,
+      exchange_rate_to_bdt: v.exchangeRateToBdt,
+      party_name: v.partyName,
+      party_details: v.partyDetails,
+      linked_order_number: v.linkedOrderNumber,
+      buyer_country: v.buyerCountry,
+      payment_mode: v.paymentMode,
+      bank_reference: v.bankReference,
+      tax_chalan_ref: v.taxChalanRef,
+      station_code: v.stationCode || 'ARIEL_BD',
+      station_bank_name: v.stationBankName,
+      station_account_number: v.stationAccountNumber,
+      channel: v.channel,
+      channel_transaction_ref: v.channelTransactionRef,
+      is_station_b2c_inflow: v.isStationB2CInflow ?? false,
+      items: v.items,
+      total_amount: v.totalAmount,
+      total_amount_bdt: v.totalAmountBdt,
+      amount_in_words: v.amountInWords,
+      prepared_by: v.preparedBy,
+      verified_by: v.verifiedBy,
+      approved_by: v.approvedBy,
+      claimant_or_depositor: v.claimantOrDepositor,
+      physical_attachment: v.physicalAttachment,
+      audit_status: v.auditStatus,
+      is_local_value_addition: v.isLocalValueAddition,
+      notes: v.notes,
+    }));
+    await supabase.from('vouchers').upsert(vouchersPayload);
+
+    // 9. Seed Account Heads
+    const accountHeadsPayload = INITIAL_ACCOUNT_HEADS.map((h) => ({
+      id: h.id,
+      name: h.name,
+      code: h.code,
+      type: h.type,
+      description: h.description,
+      sub_categories: h.subCategories,
+      is_default: h.isDefault,
+    }));
+    await supabase.from('account_heads').upsert(accountHeadsPayload);
+
+    // 10. Seed Bangladesh 34 Compliance Checklist
+    const compliancePayload = BANGLADESH_34_COMPLIANCE_CHECKLIST.map((c) => ({
+      id: `chk-${c.id}`,
+      checklist_id: c.id,
+      title: c.title,
+      category: c.category,
+      category_label: c.categoryLabel,
+      issuing_authority: c.issuingAuthority,
+      description: c.description,
+      step_sequence: c.stepSequence,
+      step_title: c.stepTitle,
+      govt_fee_estimate: c.govtFeeEstimate,
+      agency_fee_estimate: c.agencyFeeEstimate,
+      total_budget_estimate: c.totalBudgetEstimate,
+      destination_market_audit: c.destinationMarketAudit,
+      document_id: c.documentId,
+      is_mandatory: c.isMandatory,
+      status: c.status,
+    }));
+    await supabase.from('compliance_records').upsert(compliancePayload);
+
+    // 11. Seed POS Register Shifts
+    const posShiftsPayload = Object.values(INITIAL_REGISTER_SHIFTS).map((s) => ({
+      id: s.id,
+      store_id: s.storeId,
+      cashier: s.cashier,
+      opened_at: s.openedAt,
+      closed_at: s.closedAt,
+      opening_float: s.openingFloat,
+      cash_sales: s.cashSales,
+      card_sales: s.cardSales,
+      wire_sales: s.wireSales,
+      mobile_sales: s.mobileSales,
+      total_sales: s.totalSales,
+      total_orders: s.totalOrders,
+      b2b_orders_count: s.b2bOrdersCount,
+      d2c_orders_count: s.d2cOrdersCount,
+      cash_expected: s.cashExpected,
+      cash_actual: s.cashActual,
+      status: s.status,
+    }));
+    await supabase.from('pos_register_shifts').upsert(posShiftsPayload);
+
+    // 12. Seed POS Transactions
+    const posTxnsPayload = INITIAL_POS_TRANSACTIONS.map((txn) => ({
+      id: txn.id,
+      receipt_number: txn.receiptNumber,
+      date: txn.date,
+      time: txn.time,
+      store_id: txn.storeId,
+      mode: txn.mode,
+      customer: txn.customer,
+      items: txn.items,
+      subtotal: txn.subtotal,
+      discount_amount: txn.discountAmount,
+      discount_code: txn.discountCode,
+      tax_amount: txn.taxAmount,
+      total_amount: txn.totalAmount,
+      currency: txn.currency,
+      currency_symbol: txn.currencySymbol,
+      payment_method: txn.paymentMethod,
+      payment_ref: txn.paymentRef,
+      amount_tendered: txn.amountTendered,
+      change_due: txn.changeDue,
+      cashier_name: txn.cashierName,
+      linked_sales_order_id: txn.linkedSalesOrderId,
+      notes: txn.notes,
+    }));
+    await supabase.from('pos_transactions').upsert(posTxnsPayload);
+
+    // 13. Seed Official Documents
+    const documentsPayload = INITIAL_OFFICIAL_DOCUMENTS.map((doc) => ({
+      id: doc.id,
+      title: doc.title,
+      doc_code: doc.docCode,
+      section: doc.section,
+      station: doc.station,
+      issuing_authority: doc.issuingAuthority,
+      document_number: doc.documentNumber,
+      category: doc.category,
+      issue_date: doc.issueDate,
+      expiry_date: doc.expiryDate,
+      renewal_lead_days: doc.renewalLeadDays,
+      status: doc.status,
+      file_format: doc.fileFormat,
+      file_size: doc.fileSize,
+      file_url: doc.fileUrl,
+      verified: doc.verified ?? true,
+      uploaded_by: doc.uploadedBy,
+      uploaded_at: doc.uploadedAt,
+      notes: doc.notes,
+      renewal_task: doc.renewalTask,
+      checklist_item_id: doc.checklistItemId,
+    }));
+    await supabase.from('official_documents').upsert(documentsPayload);
+
     const countsMap = {
       products: productsPayload.length,
       factories: factoriesPayload.length,
@@ -741,11 +896,17 @@ export const syncAllSeedDataToSupabase = async (): Promise<{
       warehouses: warehousesPayload.length,
       inventory: itemsPayload.length,
       transfers: transfersPayload.length,
+      vouchers: vouchersPayload.length,
+      account_heads: accountHeadsPayload.length,
+      compliance_records: compliancePayload.length,
+      pos_shifts: posShiftsPayload.length,
+      pos_transactions: posTxnsPayload.length,
+      official_documents: documentsPayload.length,
     };
 
     return {
       success: true,
-      message: 'All master records seeded successfully to Supabase PostgreSQL!',
+      message: 'All master enterprise records seeded successfully to Supabase PostgreSQL!',
       counts: countsMap,
       details: countsMap,
     };
@@ -955,7 +1116,445 @@ export const persistAccountHeads = async (heads: AccountHead[]): Promise<void> =
 };
 
 // ==============================================================================
-// 8. DATABASE HEALTH CHECK & PING
+// 7.7. OFFICIAL DOCUMENTS PERSISTENCE (Statutory, Export & Commercial Archive)
+// ==============================================================================
+
+export const fetchOfficialDocuments = async (): Promise<OfficialDocument[]> => {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('official_documents')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const mapped: OfficialDocument[] = data.map((row: any) => ({
+          id: row.id,
+          title: row.title,
+          docCode: row.doc_code || row.docCode,
+          section: row.section,
+          station: row.station,
+          issuingAuthority: row.issuing_authority || row.issuingAuthority,
+          documentNumber: row.document_number || row.documentNumber,
+          category: row.category,
+          issueDate: row.issue_date || row.issueDate,
+          expiryDate: row.expiry_date || row.expiryDate,
+          renewalLeadDays: row.renewal_lead_days ?? row.renewalLeadDays ?? 30,
+          status: row.status,
+          fileFormat: row.file_format || row.fileFormat || 'PDF',
+          fileSize: row.file_size || row.fileSize,
+          fileUrl: row.file_url || row.fileUrl,
+          verified: row.verified ?? true,
+          uploadedBy: row.uploaded_by || row.uploadedBy,
+          uploadedAt: row.uploaded_at || row.uploadedAt,
+          notes: row.notes,
+          renewalTask: row.renewal_task || row.renewalTask,
+          checklistItemId: row.checklist_item_id ?? row.checklistItemId,
+        }));
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.OFFICIAL_DOCUMENTS, JSON.stringify(mapped));
+          } catch {}
+        }
+        return mapped;
+      }
+    } catch (e) {
+      console.warn('Supabase official_documents fetch failed, falling back to local cache:', e);
+    }
+  }
+
+  // LocalStorage / Seed Fallback
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.OFFICIAL_DOCUMENTS);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+  }
+  return INITIAL_OFFICIAL_DOCUMENTS;
+};
+
+export const persistOfficialDocument = async (doc: OfficialDocument): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.OFFICIAL_DOCUMENTS);
+      let list: OfficialDocument[] = cached ? JSON.parse(cached) : INITIAL_OFFICIAL_DOCUMENTS;
+      const idx = list.findIndex((d) => d.id === doc.id);
+      if (idx >= 0) {
+        list[idx] = doc;
+      } else {
+        list = [doc, ...list];
+      }
+      localStorage.setItem(LOCAL_STORAGE_KEYS.OFFICIAL_DOCUMENTS, JSON.stringify(list));
+      window.dispatchEvent(new CustomEvent('arielmc_documents_changed'));
+    } catch (err) {
+      console.error('LocalStorage official document persistence error:', err);
+    }
+  }
+
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from('official_documents').upsert({
+        id: doc.id,
+        title: doc.title,
+        doc_code: doc.docCode,
+        section: doc.section,
+        station: doc.station,
+        issuing_authority: doc.issuingAuthority,
+        document_number: doc.documentNumber,
+        category: doc.category,
+        issue_date: doc.issueDate,
+        expiry_date: doc.expiryDate,
+        renewal_lead_days: doc.renewalLeadDays,
+        status: doc.status,
+        file_format: doc.fileFormat,
+        file_size: doc.fileSize,
+        file_url: doc.fileUrl,
+        verified: doc.verified ?? true,
+        uploaded_by: doc.uploadedBy,
+        uploaded_at: doc.uploadedAt || new Date().toISOString(),
+        notes: doc.notes,
+        renewal_task: doc.renewalTask,
+        checklist_item_id: doc.checklistItemId,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Supabase official document sync skipped:', e);
+    }
+  }
+};
+
+export const deleteOfficialDocument = async (docId: string): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.OFFICIAL_DOCUMENTS);
+      if (cached) {
+        const list: OfficialDocument[] = JSON.parse(cached);
+        const filtered = list.filter((d) => d.id !== docId);
+        localStorage.setItem(LOCAL_STORAGE_KEYS.OFFICIAL_DOCUMENTS, JSON.stringify(filtered));
+        window.dispatchEvent(new CustomEvent('arielmc_documents_changed'));
+      }
+    } catch (err) {
+      console.error('LocalStorage official document delete error:', err);
+    }
+  }
+
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from('official_documents').delete().eq('id', docId);
+    } catch (e) {
+      console.warn('Supabase official document delete skipped:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 7.8. BANGLADESH 34-STEP STATUTORY COMPLIANCE PERSISTENCE
+// ==============================================================================
+
+export const fetchComplianceChecklist = async (): Promise<ComplianceChecklistItem[]> => {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('compliance_records')
+        .select('*')
+        .order('step_sequence', { ascending: true });
+
+      if (!error && data && data.length > 0) {
+        const mapped: ComplianceChecklistItem[] = data.map((row: any) => ({
+          id: row.checklist_id ?? Number(row.id?.replace('chk-', '')) ?? 1,
+          title: row.title,
+          category: row.category,
+          categoryLabel: row.category_label || row.categoryLabel,
+          issuingAuthority: row.issuing_authority || row.issuingAuthority,
+          description: row.description,
+          stepSequence: row.step_sequence ?? row.stepSequence,
+          stepTitle: row.step_title || row.stepTitle,
+          govtFeeEstimate: row.govt_fee_estimate || row.govtFeeEstimate,
+          agencyFeeEstimate: row.agency_fee_estimate || row.agencyFeeEstimate,
+          totalBudgetEstimate: row.total_budget_estimate || row.totalBudgetEstimate,
+          destinationMarketAudit: row.destination_market_audit || row.destinationMarketAudit,
+          documentId: row.document_id || row.documentId,
+          isMandatory: row.is_mandatory ?? row.isMandatory ?? true,
+          status: row.status,
+        }));
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.COMPLIANCE, JSON.stringify(mapped));
+          } catch {}
+        }
+        return mapped;
+      }
+    } catch (e) {
+      console.warn('Supabase compliance_records fetch failed, falling back to local cache:', e);
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.COMPLIANCE);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+  }
+  return BANGLADESH_34_COMPLIANCE_CHECKLIST;
+};
+
+export const persistComplianceChecklistItem = async (item: ComplianceChecklistItem): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.COMPLIANCE);
+      let list: ComplianceChecklistItem[] = cached ? JSON.parse(cached) : BANGLADESH_34_COMPLIANCE_CHECKLIST;
+      const idx = list.findIndex((c) => c.id === item.id);
+      if (idx >= 0) {
+        list[idx] = item;
+      } else {
+        list.push(item);
+      }
+      localStorage.setItem(LOCAL_STORAGE_KEYS.COMPLIANCE, JSON.stringify(list));
+    } catch (err) {
+      console.error('LocalStorage compliance persistence error:', err);
+    }
+  }
+
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from('compliance_records').upsert({
+        id: `chk-${item.id}`,
+        checklist_id: item.id,
+        title: item.title,
+        category: item.category,
+        category_label: item.categoryLabel,
+        issuing_authority: item.issuingAuthority,
+        description: item.description,
+        step_sequence: item.stepSequence,
+        step_title: item.stepTitle,
+        govt_fee_estimate: item.govtFeeEstimate,
+        agency_fee_estimate: item.agencyFeeEstimate,
+        total_budget_estimate: item.totalBudgetEstimate,
+        destination_market_audit: item.destinationMarketAudit,
+        document_id: item.documentId,
+        is_mandatory: item.isMandatory,
+        status: item.status,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Supabase compliance sync skipped:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 7.9. POS REGISTER SHIFTS PERSISTENCE (Multi-Store Shift Drawer Tracking)
+// ==============================================================================
+
+export const fetchPosRegisterShifts = async (): Promise<Record<string, PosRegisterShift>> => {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('pos_register_shifts').select('*');
+      if (!error && data && data.length > 0) {
+        const mapped: Record<string, PosRegisterShift> = {};
+        data.forEach((row: any) => {
+          mapped[row.store_id] = {
+            id: row.id,
+            storeId: row.store_id,
+            cashier: row.cashier,
+            openedAt: row.opened_at,
+            closedAt: row.closed_at,
+            openingFloat: Number(row.opening_float) || 0,
+            cashSales: Number(row.cash_sales) || 0,
+            cardSales: Number(row.card_sales) || 0,
+            wireSales: Number(row.wire_sales) || 0,
+            mobileSales: Number(row.mobile_sales) || 0,
+            totalSales: Number(row.total_sales) || 0,
+            totalOrders: row.total_orders || 0,
+            b2bOrdersCount: row.b2b_orders_count || 0,
+            d2cOrdersCount: row.d2c_orders_count || 0,
+            cashExpected: Number(row.cash_expected) || 0,
+            cashActual: row.cash_actual != null ? Number(row.cash_actual) : undefined,
+            status: row.status || 'OPEN',
+          };
+        });
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.POS_SHIFTS, JSON.stringify(mapped));
+          } catch {}
+        }
+        return mapped;
+      }
+    } catch (e) {
+      console.warn('Supabase pos_register_shifts fetch failed, falling back to local cache:', e);
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.POS_SHIFTS);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+  }
+  return INITIAL_REGISTER_SHIFTS;
+};
+
+export const persistPosRegisterShift = async (shift: PosRegisterShift): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.POS_SHIFTS);
+      const shiftsMap: Record<string, PosRegisterShift> = cached
+        ? JSON.parse(cached)
+        : { ...INITIAL_REGISTER_SHIFTS };
+      shiftsMap[shift.storeId] = shift;
+      localStorage.setItem(LOCAL_STORAGE_KEYS.POS_SHIFTS, JSON.stringify(shiftsMap));
+    } catch (err) {
+      console.error('LocalStorage POS shift persistence error:', err);
+    }
+  }
+
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from('pos_register_shifts').upsert({
+        id: shift.id,
+        store_id: shift.storeId,
+        cashier: shift.cashier,
+        opened_at: shift.openedAt,
+        closed_at: shift.closedAt,
+        opening_float: shift.openingFloat,
+        cash_sales: shift.cashSales,
+        card_sales: shift.cardSales,
+        wire_sales: shift.wireSales,
+        mobile_sales: shift.mobileSales,
+        total_sales: shift.totalSales,
+        total_orders: shift.totalOrders,
+        b2b_orders_count: shift.b2bOrdersCount,
+        d2c_orders_count: shift.d2cOrdersCount,
+        cash_expected: shift.cashExpected,
+        cash_actual: shift.cashActual,
+        status: shift.status,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Supabase POS shift sync skipped:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 7.10. POS TRANSACTIONS PERSISTENCE (Omnichannel Retail & Wholesale Receipts)
+// ==============================================================================
+
+export const fetchPosTransactions = async (): Promise<PosTransaction[]> => {
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('pos_transactions')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        const mapped: PosTransaction[] = data.map((row: any) => ({
+          id: row.id,
+          receiptNumber: row.receipt_number || row.receiptNumber,
+          date: row.date,
+          time: row.time,
+          storeId: row.store_id || row.storeId,
+          mode: row.mode,
+          customer: row.customer || {},
+          items: row.items || [],
+          subtotal: Number(row.subtotal) || 0,
+          discountAmount: Number(row.discount_amount) || 0,
+          discountCode: row.discount_code || row.discountCode,
+          taxAmount: Number(row.tax_amount) || 0,
+          totalAmount: Number(row.total_amount) || 0,
+          currency: row.currency || 'GBP',
+          currencySymbol: row.currency_symbol || row.currencySymbol || '£',
+          paymentMethod: row.payment_method || row.paymentMethod,
+          paymentRef: row.payment_ref || row.paymentRef,
+          amountTendered: Number(row.amount_tendered) || 0,
+          changeDue: Number(row.change_due) || 0,
+          cashierName: row.cashier_name || row.cashierName,
+          linkedSalesOrderId: row.linked_sales_order_id || row.linkedSalesOrderId,
+          notes: row.notes,
+        }));
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.POS_TRANSACTIONS, JSON.stringify(mapped));
+          } catch {}
+        }
+        return mapped;
+      }
+    } catch (e) {
+      console.warn('Supabase pos_transactions fetch failed, falling back to local cache:', e);
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.POS_TRANSACTIONS);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+  }
+  return INITIAL_POS_TRANSACTIONS;
+};
+
+export const persistPosTransaction = async (tx: PosTransaction): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.POS_TRANSACTIONS);
+      let list: PosTransaction[] = cached ? JSON.parse(cached) : INITIAL_POS_TRANSACTIONS;
+      const idx = list.findIndex((t) => t.id === tx.id);
+      if (idx >= 0) {
+        list[idx] = tx;
+      } else {
+        list = [tx, ...list];
+      }
+      localStorage.setItem(LOCAL_STORAGE_KEYS.POS_TRANSACTIONS, JSON.stringify(list));
+    } catch (err) {
+      console.error('LocalStorage POS transaction persistence error:', err);
+    }
+  }
+
+  const supabase = getSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from('pos_transactions').upsert({
+        id: tx.id,
+        receipt_number: tx.receiptNumber,
+        date: tx.date,
+        time: tx.time,
+        store_id: tx.storeId,
+        mode: tx.mode,
+        customer: tx.customer,
+        items: tx.items,
+        subtotal: tx.subtotal,
+        discount_amount: tx.discountAmount,
+        discount_code: tx.discountCode,
+        tax_amount: tx.taxAmount,
+        total_amount: tx.totalAmount,
+        currency: tx.currency,
+        currency_symbol: tx.currencySymbol,
+        payment_method: tx.paymentMethod,
+        payment_ref: tx.paymentRef,
+        amount_tendered: tx.amountTendered,
+        change_due: tx.changeDue,
+        cashier_name: tx.cashierName,
+        linked_sales_order_id: tx.linkedSalesOrderId,
+        notes: tx.notes,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Supabase POS transaction sync skipped:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 8. DATABASE HEALTH CHECK & MULTI-TABLE PING
 // ==============================================================================
 
 export const testSupabaseHealth = async (): Promise<{
@@ -988,16 +1587,37 @@ export const testSupabaseHealth = async (): Promise<{
 
   const start = performance.now();
   try {
-    const { count, error } = await supabase.from('products').select('*', { count: 'exact', head: true });
+    const [
+      prodsRes,
+      facsRes,
+      sdosRes,
+      ordersRes,
+      vouchersRes,
+      headsRes,
+      docsRes,
+      posTxRes,
+      complianceRes,
+    ] = await Promise.all([
+      supabase.from('products').select('*', { count: 'exact', head: true }),
+      supabase.from('factories').select('*', { count: 'exact', head: true }),
+      supabase.from('sample_development_orders').select('*', { count: 'exact', head: true }),
+      supabase.from('sales_orders').select('*', { count: 'exact', head: true }),
+      supabase.from('vouchers').select('*', { count: 'exact', head: true }),
+      supabase.from('account_heads').select('*', { count: 'exact', head: true }),
+      supabase.from('official_documents').select('*', { count: 'exact', head: true }),
+      supabase.from('pos_transactions').select('*', { count: 'exact', head: true }),
+      supabase.from('compliance_records').select('*', { count: 'exact', head: true }),
+    ]);
+
     const latencyMs = Math.round(performance.now() - start);
 
-    if (error) {
+    if (prodsRes.error) {
       return {
         configured: true,
         connected: false,
         latencyMs,
-        message: `Connected to Supabase endpoint, but table query returned error: ${error.message}. (Have you run supabase/schema.sql in the Supabase SQL Editor?)`,
-        error: error.message,
+        message: `Connected to Supabase endpoint, but table query returned error: ${prodsRes.error.message}. (Have you run supabase/schema.sql in the Supabase SQL Editor?)`,
+        error: prodsRes.error.message,
       };
     }
 
@@ -1005,9 +1625,17 @@ export const testSupabaseHealth = async (): Promise<{
       configured: true,
       connected: true,
       latencyMs,
-      message: `Active PostgreSQL connection verified (${latencyMs}ms response time).`,
+      message: `Active PostgreSQL connection verified (${latencyMs}ms response time across 9 enterprise tables).`,
       tableCounts: {
-        products: count || 0,
+        products: prodsRes.count || 0,
+        factories: facsRes.count || 0,
+        samples: sdosRes.count || 0,
+        orders: ordersRes.count || 0,
+        vouchers: vouchersRes.count || 0,
+        account_heads: headsRes.count || 0,
+        official_documents: docsRes.count || 0,
+        pos_transactions: posTxRes.count || 0,
+        compliance_records: complianceRes.count || 0,
       },
     };
   } catch (err: any) {

@@ -57,6 +57,12 @@ import {
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
 import { ArielMC, renderBrandText } from '@/lib/brand';
+import {
+  fetchPosTransactions,
+  persistPosTransaction,
+  fetchPosRegisterShifts,
+  persistPosRegisterShift,
+} from '@/lib/erpPersistence';
 
 interface OmnichannelPosSuiteProps {
   products?: ProductItem[];
@@ -85,6 +91,26 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
 
   // Transactions State
   const [transactions, setTransactions] = useState<PosTransaction[]>(INITIAL_POS_TRANSACTIONS);
+
+  // Hydrate persisted shifts and transactions from Supabase/LocalStorage
+  React.useEffect(() => {
+    let isMounted = true;
+    Promise.all([fetchPosRegisterShifts(), fetchPosTransactions()])
+      .then(([persistedShifts, persistedTxns]) => {
+        if (isMounted) {
+          if (persistedShifts && Object.keys(persistedShifts).length > 0) {
+            setShifts(persistedShifts);
+          }
+          if (persistedTxns && persistedTxns.length > 0) {
+            setTransactions(persistedTxns);
+          }
+        }
+      })
+      .catch((e) => console.warn('POS persistence hydration error:', e));
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Customer selection
   const [selectedCustomer, setSelectedCustomer] = useState<PosCustomer>(INITIAL_POS_CUSTOMERS[0]);
@@ -349,25 +375,30 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
 
     // Update transactions log
     setTransactions((prev) => [newTxn, ...prev]);
+    persistPosTransaction(newTxn).catch(console.error);
 
     // Update Shift Totals
-    setShifts((prev) => {
-      const old = prev[activeStoreId] || currentShift;
-      return {
-        ...prev,
-        [activeStoreId]: {
-          ...old,
-          totalSales: old.totalSales + cartTotal,
-          totalOrders: old.totalOrders + 1,
-          b2bOrdersCount: old.b2bOrdersCount + (terminalMode === 'B2B_WHOLESALE' ? 1 : 0),
-          d2cOrdersCount: old.d2cOrdersCount + (terminalMode === 'D2C_RETAIL' ? 1 : 0),
-          cashSales: selectedPaymentMethod === 'CASH' ? old.cashSales + cartTotal : old.cashSales,
-          cardSales: selectedPaymentMethod === 'CARD_TERMINAL' || selectedPaymentMethod === 'APPLE_PAY' ? old.cardSales + cartTotal : old.cardSales,
-          wireSales: selectedPaymentMethod === 'BANK_WIRE' ? old.wireSales + cartTotal : old.wireSales,
-          cashExpected: selectedPaymentMethod === 'CASH' ? old.cashExpected + cartTotal : old.cashExpected,
-        },
-      };
-    });
+    const oldShift = shifts[activeStoreId] || currentShift;
+    const updatedShift: PosRegisterShift = {
+      ...oldShift,
+      totalSales: oldShift.totalSales + cartTotal,
+      totalOrders: oldShift.totalOrders + 1,
+      b2bOrdersCount: oldShift.b2bOrdersCount + (terminalMode === 'B2B_WHOLESALE' ? 1 : 0),
+      d2cOrdersCount: oldShift.d2cOrdersCount + (terminalMode === 'D2C_RETAIL' ? 1 : 0),
+      cashSales: selectedPaymentMethod === 'CASH' ? oldShift.cashSales + cartTotal : oldShift.cashSales,
+      cardSales:
+        selectedPaymentMethod === 'CARD_TERMINAL' || selectedPaymentMethod === 'APPLE_PAY'
+          ? oldShift.cardSales + cartTotal
+          : oldShift.cardSales,
+      wireSales: selectedPaymentMethod === 'BANK_WIRE' ? oldShift.wireSales + cartTotal : oldShift.wireSales,
+      cashExpected: selectedPaymentMethod === 'CASH' ? oldShift.cashExpected + cartTotal : oldShift.cashExpected,
+    };
+
+    setShifts((prev) => ({
+      ...prev,
+      [activeStoreId]: updatedShift,
+    }));
+    persistPosRegisterShift(updatedShift).catch(console.error);
 
     // Clear cart and show receipt
     setCart([]);
@@ -381,31 +412,35 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
   const handleCloseShift = () => {
     const actual = Number(actualCashCount) || currentShift.cashExpected;
     const variance = actual - currentShift.cashExpected;
+    const closedShift: PosRegisterShift = {
+      ...currentShift,
+      closedAt: new Date().toISOString(),
+      cashActual: actual,
+      variance,
+      status: 'CLOSED',
+    };
 
     setShifts((prev) => ({
       ...prev,
-      [activeStoreId]: {
-        ...prev[activeStoreId],
-        closedAt: new Date().toISOString(),
-        cashActual: actual,
-        variance,
-        status: 'CLOSED',
-      },
+      [activeStoreId]: closedShift,
     }));
+    persistPosRegisterShift(closedShift).catch(console.error);
 
     setIsCloseDrawerModalOpen(false);
   };
 
   // Reopen shift
   const handleReopenShift = () => {
+    const reopenedShift: PosRegisterShift = {
+      ...currentShift,
+      openedAt: new Date().toISOString(),
+      status: 'OPEN',
+    };
     setShifts((prev) => ({
       ...prev,
-      [activeStoreId]: {
-        ...prev[activeStoreId],
-        openedAt: new Date().toISOString(),
-        status: 'OPEN',
-      },
+      [activeStoreId]: reopenedShift,
     }));
+    persistPosRegisterShift(reopenedShift).catch(console.error);
   };
 
   // Themes
