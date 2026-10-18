@@ -1136,3 +1136,126 @@ export interface StockTransferOrder {
   status: 'PENDING' | 'IN_TRANSIT' | 'ARRIVED_3PL' | 'FULFILLED';
   notes: string;
 }
+
+// -------------------------------------------------------------
+// Milestone 6: Two-Tier B2B Sample Dispatch Protocol (Handbook Part 7)
+// -------------------------------------------------------------
+
+export type SampleDispatchTierType = 'TIER_1_3PL_BUFFER' | 'TIER_2_DHAKA_OEM';
+
+export interface SampleStockBufferItem {
+  id: string;
+  sku: string;
+  name: string;
+  sector: ProductSector;
+  warehouseHub: 'WH-UK' | 'WH-DE';
+  hubLocation: string; // e.g. 'Davies Turner, Dartford DA2' or 'Dachser SE, Hamburg DE-21107'
+  availableUnits: number;
+  reservedUnits: number;
+  allocatedUnits: number;
+  reorderThreshold: number;
+  domesticCarrier: 'Royal Mail Tracked 24' | 'Royal Mail Tracked 48' | 'DHL Paket National';
+  typicalLeadTimeHours: number; // 24 or 48
+}
+
+export interface SampleDispatchOrder {
+  id: string;
+  dispatchNumber: string; // e.g. SMP-DSP-2026-001
+  dispatchTier: SampleDispatchTierType;
+  sdoId?: string;
+  buyerCompany: string;
+  buyerContact: string;
+  buyerEmail?: string;
+  buyerAddress: string;
+  buyerCountry: 'UK' | 'Germany' | 'France' | 'Netherlands' | 'USA' | 'Australia' | 'Other';
+  hubOrOrigin: 'WH-UK' | 'WH-DE' | 'DHAKA_RND_LAB';
+  courier: 'Royal Mail Tracked 24' | 'Royal Mail Tracked 48' | 'DHL Paket National' | 'DHL Express Worldwide' | 'FedEx International Priority';
+  awbTrackingNumber: string;
+  trackingUrl: string;
+  dispatchDate: string;
+  estimatedDeliveryDate: string;
+  transitStatus: 'QUEUED' | 'LABEL_GENERATED' | 'DISPATCHED' | 'OUT_FOR_DELIVERY' | 'DELIVERED';
+  sampleItems: {
+    sku: string;
+    styleName: string;
+    sector: ProductSector;
+    quantity: number;
+    declaredValueUsd: number;
+    notes?: string;
+  }[];
+  customsDeclaration?: {
+    statement: string; // "Mutilated Samples — Not for Resale"
+    incoterm: 'DDP' | 'DAP';
+    eoriNumber: string; // 'GB382910482000' or 'DE847291038472'
+    hsCode: string; // '4202.21.00' or '6305.10.10'
+    customsValueUsd: number; // Nominal (< $20 to avoid duty hold)
+    invoiceNumber: string;
+  };
+  totalCostUsd: number;
+  costBearer: 'ARIEL_MARKETING_BUFFER' | 'BUYER_PAID' | 'REIMBURSABLE_ON_BULK_PO';
+  notes?: string;
+}
+
+// -------------------------------------------------------------
+// Milestone 7: Channel Contribution & Per-Unit Profitability Simulator (Handbook Part 5)
+// -------------------------------------------------------------
+
+export interface ChannelContributionSimulation {
+  channelName: 'AMAZON_FBM' | 'ETSY' | 'SHOPIFY_DTC' | 'B2B_WHOLESALE';
+  label: string;
+  grossSellingPrice: number;
+  vatRatePercent: number; // e.g. 19% or 20%
+  vatDeduction: number;
+  netRevenue: number;
+  landedFobCost: number; // FOB Dhaka + Ocean freight share
+  fulfillment3PlCost: number; // Pick & pack + packing materials + domestic courier
+  platformFeePercent: number;
+  platformFeeAmount: number;
+  paymentGatewayFeePercent: number;
+  paymentGatewayFixedFee: number;
+  paymentGatewayFeeAmount: number;
+  listingFeeAmount: number;
+  marketingCacPerUnit: number;
+  totalChannelCosts: number;
+  netContributionMargin: number;
+  contributionMarginPercent: number;
+}
+
+// -------------------------------------------------------------
+// Milestone 8: 3PL Daily Dispatch Manifest & Tracking Feedback Loop (Handbook Part 8)
+// -------------------------------------------------------------
+
+export interface DispatchManifestItem {
+  orderId: string;
+  orderNumber: string;
+  channel: 'SHOPIFY' | 'AMAZON_FBM' | 'ETSY' | 'B2B_WHOLESALE' | 'SAMPLE_DISPATCH';
+  recipientName: string;
+  recipientAddress: string;
+  countryCode: string;
+  sku: string;
+  productName: string;
+  quantity: number;
+  carrier: 'Royal Mail Tracked 48' | 'Royal Mail Tracked 24' | 'DHL Paket National' | 'Palletways' | 'Dachser Logistics';
+  serviceCode: string;
+  declaredWeightKg: number;
+  packagingType: 'POLY_MAILER' | 'CUSTOM_TOTE_BOX' | 'DOUBLE_WALL_CARTON' | 'WOODEN_PALLET';
+  status: 'PENDING_PICK' | 'PICKED' | 'PACKED' | 'DISPATCHED' | 'DELIVERED';
+  trackingNumber?: string;
+}
+
+export interface Daily3PlDispatchManifest {
+  id: string;
+  manifestReference: string; // e.g. 'MNF-DT-UK-20261018-01'
+  hubCode: 'WH-UK' | 'WH-DE';
+  hubName: string; // e.g. 'Davies Turner - Dartford, UK'
+  carrierPartner: 'Davies Turner Logistics Ltd' | 'Dachser European Logistics SE';
+  manifestDate: string;
+  cutoffTime: string; // '16:00 BST' or '17:00 CEST'
+  totalOrders: number;
+  totalParcels: number;
+  totalWeightKg: number;
+  exportStatus: 'DRAFT' | 'TRANSMITTED_EDI' | 'DOWNLOADED_CSV' | 'CONFIRMED_BY_HUB';
+  ediTransmissionId?: string;
+  items: DispatchManifestItem[];
+}
+

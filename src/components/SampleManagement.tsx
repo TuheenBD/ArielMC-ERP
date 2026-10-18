@@ -56,6 +56,7 @@ import { StandardFactoryTechPackModal } from './StandardFactoryTechPackModal';
 import { buildStandardFactoryTechPack } from '@/data/standardTechPacks';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
+import { SampleDispatchProtocolSection } from './SampleDispatchProtocolSection';
 
 interface SampleManagementProps {
   samples: SampleDevelopmentOrder[];
@@ -201,7 +202,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'TECHPACK' | 'COURIER' | 'COSTING' | 'FEEDBACK'>('TECHPACK');
   const [viewingTechPack, setViewingTechPack] = useState<StandardFactoryTechPack | null>(null);
-  const [activeModuleTab, setActiveSampleModuleTab] = useState<'TRACKER' | 'SOP_POLICY' | 'PRICING_MATRIX' | 'REIMBURSEMENT_CALC'>('TRACKER');
+  const [activeModuleTab, setActiveSampleModuleTab] = useState<'TRACKER' | 'SOP_POLICY' | 'PRICING_MATRIX' | 'REIMBURSEMENT_CALC' | 'DISPATCH_PROTOCOL'>('TRACKER');
   const [showSopModal, setShowSopModal] = useState(false);
   const [calcPoQty, setCalcPoQty] = useState(1200);
   const [calcPoValue, setCalcPoValue] = useState(8400);
@@ -365,6 +366,21 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         >
           <Calculator className="w-4 h-4 text-[#C8A96A]" />
           <span>100% Sample Fee Refund Calculator</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSampleModuleTab('DISPATCH_PROTOCOL')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
+            activeModuleTab === 'DISPATCH_PROTOCOL'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-white'
+          }`}
+        >
+          <Truck className="w-4 h-4 text-[#C8A96A]" />
+          <span>Two-Tier Sample Dispatch Protocol</span>
+          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-700 font-bold">
+            Part 7
+          </span>
         </button>
       </div>
 
@@ -1314,6 +1330,17 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
             })()}
           </div>
         </div>
+      )}
+
+      {/* TAB 5: TWO-TIER B2B SAMPLE DISPATCH PROTOCOL (OPERATIONAL HANDBOOK PART 7) */}
+      {activeModuleTab === 'DISPATCH_PROTOCOL' && (
+        <SampleDispatchProtocolSection
+          crmLeads={crmLeads}
+          onOpenSampleOrder={(sdoId) => {
+            const s = samples.find((item) => item.id === sdoId || item.sdoNumber === sdoId);
+            if (s) setSelectedSample(s);
+          }}
+        />
       )}
 
       {/* SDO Detail Drawer */}
