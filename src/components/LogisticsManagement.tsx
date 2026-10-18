@@ -39,6 +39,7 @@ import {
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
 import { ContainerLoadCbmPlanner } from '@/components/ContainerLoadCbmPlanner';
+import { DailyDispatchManifestSection } from '@/components/DailyDispatchManifestSection';
 
 interface LogisticsManagementProps {
   consignments: LogisticsConsignment[];
@@ -54,7 +55,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
   securityIncidents,
   onAddConsignment,
 }) => {
-  const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY' | 'CONTAINER_PLANNER'>('CONSIGNMENTS');
+  const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY' | 'CONTAINER_PLANNER' | 'DISPATCH_MANIFEST'>('CONSIGNMENTS');
   const [selectedHub, setSelectedHub] = useState<HubLocation>('WH-UK');
   const [activeConsignment, setActiveConsignment] = useState<LogisticsConsignment>(consignments[0]);
   const [documentPreviewType, setDocumentPreviewType] = useState<'INVOICE' | 'PACKING_LIST' | 'FORM_EXP' | 'EDI_MANIFEST'>('INVOICE');
@@ -206,6 +207,21 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
         </button>
 
         <button
+          onClick={() => setActiveTab('DISPATCH_MANIFEST')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
+            activeTab === 'DISPATCH_MANIFEST'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
+          }`}
+        >
+          <Truck className={`w-4 h-4 ${activeTab === 'DISPATCH_MANIFEST' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+          <span>3PL Daily Dispatch Manifest &amp; Tracking Loop</span>
+          <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 font-mono text-[9px] font-bold">
+            Part 8
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('HUBS')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
             activeTab === 'HUBS'
@@ -268,6 +284,11 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
           }}
           existingConsignmentsCount={consignments.length}
         />
+      )}
+
+      {/* TAB: 3PL DAILY DISPATCH MANIFEST & COURIER TRACKING LOOP (OPERATIONAL HANDBOOK PART 8) */}
+      {activeTab === 'DISPATCH_MANIFEST' && (
+        <DailyDispatchManifestSection />
       )}
 
       {/* TAB 1: ACTIVE OCEAN CONSIGNMENTS */}
