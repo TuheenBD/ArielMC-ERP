@@ -324,7 +324,7 @@ export const Header: React.FC<HeaderProps> = ({
           LINE 1: Corporate Context Controls & Quick Action Tools
           All uniform h-9 buttons with ample breathing room
           ======================================================== */}
-      <div className="flex items-center justify-between gap-4 pb-2.5 border-b border-white/10">
+      <div className="w-full flex items-center justify-between gap-2.5 sm:gap-4 pb-2.5 border-b border-white/10">
         
         {/* Left Side: Station, Currency, and Color Scheme Selectors */}
         <div className="flex items-center gap-2">
@@ -788,8 +788,8 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div className="flex items-center gap-1.5 leading-none">
                 <span className="font-heading font-bold text-xs tracking-tight">ArielMC AI</span>
-                <span className="text-white/40 text-[10px]">/</span>
-                <span className={`text-[10px] font-medium ${isArielAiOpen ? 'text-[#1F3A2E]' : 'text-emerald-400'}`}>Online Assistant</span>
+                <span className="hidden xl:inline text-white/40 text-[10px]">/</span>
+                <span className={`text-[10px] font-medium hidden xl:inline ${isArielAiOpen ? 'text-[#1F3A2E]' : 'text-emerald-400'}`}>Online Assistant</span>
               </div>
             </button>
           )}
@@ -851,11 +851,11 @@ export const Header: React.FC<HeaderProps> = ({
           LINE 2: Search Bar & Executive User Profile (Per Instruction)
           Search gets prominent width, Profile is placed on the 2nd line
           ======================================================== */}
-      <div className="flex items-center justify-between gap-4 pt-2.5">
+      <div className="w-full flex items-center justify-between gap-2.5 sm:gap-4 pt-2.5">
         
         {/* Left: Prominent Search Input + Live FX Ticker */}
-        <div className="flex items-center gap-3 flex-1 max-w-3xl">
-          <div className="relative flex-1">
+        <div className="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
+          <div className="relative flex-1 min-w-0">
             <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${searchIconColor}`} />
             <input
               id="global-erp-search"
@@ -863,7 +863,7 @@ export const Header: React.FC<HeaderProps> = ({
               placeholder="Search SKUs, HS codes, leather types, factories, buyers, purchase orders..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className={`w-full h-10 pl-10 pr-4 text-xs rounded-lg border transition-all shadow-inner focus:outline-none focus:ring-1 focus:ring-[#C8A96A] ${searchBoxBg}`}
+              className={`w-full min-w-0 h-10 pl-10 pr-4 text-xs rounded-lg border transition-all shadow-inner focus:outline-none focus:ring-1 focus:ring-[#C8A96A] ${searchBoxBg}`}
             />
           </div>
 
@@ -879,7 +879,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onOpenForexSync?.();
               }
             }}
-            className={`hidden lg:flex items-center gap-2.5 h-10 px-3.5 rounded-lg border text-xs shrink-0 cursor-pointer transition-all hover:border-[#C8A96A]/60 select-none ${tickerBg}`}
+            className={`hidden lg:flex items-center gap-2.5 h-10 px-3 rounded-lg border text-xs shrink-0 cursor-pointer transition-all hover:border-[#C8A96A]/60 select-none ${tickerBg}`}
             title="Live Interbank & Bangladesh Bank FX Feed (USD, BDT, GBP, EUR, AUD). Click to view full statutory rate matrix."
           >
             <div className={`flex items-center gap-1.5 font-medium ${tickerText}`}>
@@ -889,9 +889,9 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <span className="text-[11px] font-bold tracking-wider">FX:</span>
             </div>
-            <div className="flex items-center gap-3 text-[11px]">
-              {currencies.filter(c => c.code !== 'USD').map(curr => (
-                <span key={curr.code} className={`font-mono ${tickerCurrency}`}>
+            <div className="flex items-center gap-2.5 text-[11px]">
+              {currencies.filter(c => c.code !== 'USD').map((curr, idx) => (
+                <span key={curr.code} className={`font-mono ${tickerCurrency} ${idx > 1 ? 'hidden xl:inline' : ''}`}>
                   {curr.code}: <span className="text-[#C8A96A] font-semibold">{curr.rateToUsd}</span>
                 </span>
               ))}
@@ -904,7 +904,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onRefreshForex();
                 }}
                 disabled={isForexSyncing}
-                className="ml-1 p-1 rounded-md text-white/50 hover:text-[#C8A96A] hover:bg-white/10 transition-colors disabled:opacity-50"
+                className="ml-0.5 p-1 rounded-md text-white/50 hover:text-[#C8A96A] hover:bg-white/10 transition-colors disabled:opacity-50"
                 title="Sync live rates now from Bangladesh Bank & Interbank feed"
               >
                 <RefreshCw className={`w-3 h-3 ${isForexSyncing ? 'animate-spin text-[#C8A96A]' : ''}`} />
@@ -914,7 +914,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right: Quick Tools (User Guide, Notifications) & Executive Profile (Line 2) */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 ml-auto">
           {/* ArielMC ERP User Guide (PDF) - Line 2 */}
           {onOpenUserGuide && (
             <button
