@@ -276,6 +276,51 @@ export interface CrmLead {
   source: string;
   createdAt: string;
   cur?: string;
+  city?: string;
+  contactability?: 'email' | 'phone' | 'both' | 'none';
+  price?: number | null;
+  priceNote?: string;
+}
+
+export interface CrmActivity {
+  id: string;
+  date: string;
+  leadId: string;
+  company?: string;
+  type: string;
+  outcome?: string;
+  note: string;
+  stage?: string;
+  ts: string;
+  user: string;
+}
+
+export interface CrmTask {
+  id: string;
+  leadId: string;
+  leadCompany: string;
+  market: string;
+  action: string;
+  dueDate: string;
+  priority: string;
+  completed: boolean;
+  assignedTo: string;
+  createdAt: string;
+}
+
+export interface CrmSettings {
+  title: string;
+  owner: string;
+  markets: string[];
+  tiers: string[];
+  channels: string[];
+  priorities: string[];
+  interests: string[];
+  owners: string[];
+  actTypes: string[];
+  outcomes: string[];
+  stages: { name: string; prob: number }[];
+  users: any[];
 }
 
 export interface ComplianceAudit {

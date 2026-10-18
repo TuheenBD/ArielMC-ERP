@@ -1,0 +1,203 @@
+{
+  "title": "ArielMC CRM",
+  "owner": "Tuheen",
+  "markets": [
+    "UK",
+    "EU",
+    "USA",
+    "AU",
+    "Global"
+  ],
+  "tiers": [
+    "Retailer",
+    "Wholesaler",
+    "Sales agent"
+  ],
+  "channels": [
+    "Outbound email",
+    "LinkedIn",
+    "Trade show",
+    "Marketplace",
+    "Customs data",
+    "Agent",
+    "Association",
+    "Referral",
+    "Inbound web",
+    "Institutional (EPB/embassy)",
+    "Monitor (watchlist)"
+  ],
+  "priorities": [
+    "A",
+    "B",
+    "C"
+  ],
+  "interests": [
+    "Jute & natural fibre",
+    "Leather goods",
+    "Both (jute + leather)"
+  ],
+  "owners": [
+    "Syed"
+  ],
+  "actTypes": [
+    "Email sent",
+    "LinkedIn message",
+    "Call",
+    "Meeting",
+    "Sample shipped",
+    "Quote issued",
+    "Show / event",
+    "Note"
+  ],
+  "outcomes": [
+    "Sent - awaiting reply",
+    "Replied - positive",
+    "Replied - needs info",
+    "Replied - not now",
+    "No reply",
+    "Sample requested",
+    "Quote requested",
+    "Order placed"
+  ],
+  "stages": [
+    {
+      "name": "0 Watchlist",
+      "prob": 0
+    },
+    {
+      "name": "1 Prospect",
+      "prob": 0.05
+    },
+    {
+      "name": "2 Contacted",
+      "prob": 0.1
+    },
+    {
+      "name": "3 Replied",
+      "prob": 0.2
+    },
+    {
+      "name": "4 Qualified",
+      "prob": 0.35
+    },
+    {
+      "name": "5 Sample sent",
+      "prob": 0.5
+    },
+    {
+      "name": "6 Quote issued",
+      "prob": 0.65
+    },
+    {
+      "name": "7 Negotiation",
+      "prob": 0.8
+    },
+    {
+      "name": "8 Won",
+      "prob": 1
+    },
+    {
+      "name": "9 Lost or Nurture",
+      "prob": 0
+    }
+  ],
+  "users": [
+    {
+      "markets": [
+        "All"
+      ],
+      "role": "admin",
+      "salt": "ce22fd98f801a9ce3ac67e803b885104",
+      "created": "2026-10-11T16:21:58.099Z",
+      "mobile": "+8801819273458",
+      "name": "Syed Akramul Hassan",
+      "photo": "https://drive.google.com/thumbnail?id=1EFBc1snw1MGvnuTLtJzvJUA6zNHj2ApD&sz=w400",
+      "id": "tuheen",
+      "hash": "0ba0ec31054d6b4800c84b8fb402e2bd184bc99690679c245ca5b545d04468f6",
+      "email": "tuheen@arielmc.com"
+    }
+  ],
+  "requests": "",
+  "products": [
+    {
+      "name": "Laminated jute market tote",
+      "cur": "GBP",
+      "active": true,
+      "sku": "JD-16",
+      "price": 2.83,
+      "cat": "Jute & natural fibre"
+    },
+    {
+      "name": "Jute & cotton canvas commuter tote",
+      "cur": "GBP",
+      "active": true,
+      "sku": "JD-17",
+      "price": 4.33,
+      "cat": "Jute & natural fibre"
+    },
+    {
+      "name": "Hand-coiled jute storage basket (set of 3)",
+      "cur": "GBP",
+      "active": true,
+      "sku": "JD-20",
+      "price": 10.26,
+      "cat": "Jute & natural fibre"
+    },
+    {
+      "name": "Jute double wine carrier",
+      "cur": "GBP",
+      "active": true,
+      "sku": "JD-29",
+      "price": 3.35,
+      "cat": "Jute & natural fibre"
+    },
+    {
+      "name": "Jute drawstring gift pouch",
+      "cur": "GBP",
+      "active": true,
+      "sku": "JD-30",
+      "price": 1.44,
+      "cat": "Jute & natural fibre"
+    },
+    {
+      "name": "Printed conference / exhibition swag bag",
+      "cur": "GBP",
+      "active": true,
+      "sku": "JD-31",
+      "price": 3,
+      "cat": "Jute & natural fibre"
+    },
+    {
+      "name": "Full-grain RFID bifold wallet",
+      "cur": "GBP",
+      "active": true,
+      "sku": "LD-1",
+      "price": 15.24,
+      "cat": "Leather goods"
+    },
+    {
+      "name": "Front-pocket leather cardholder",
+      "cur": "GBP",
+      "active": true,
+      "sku": "LD-2",
+      "price": 9.47,
+      "cat": "Leather goods"
+    },
+    {
+      "name": "Leather passport cover",
+      "cur": "GBP",
+      "active": true,
+      "sku": "LD-10",
+      "price": 11.44,
+      "cat": "Leather goods"
+    },
+    {
+      "name": "Full-grain formal belt 32mm",
+      "cur": "GBP",
+      "active": true,
+      "sku": "LD-13",
+      "price": 17.45,
+      "cat": "Leather goods"
+    }
+  ]
+}

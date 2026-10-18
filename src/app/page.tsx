@@ -525,7 +525,13 @@ export default function Home() {
           )}
 
           {activeTab === 'CRM' && (
-            <CrmPipeline initialLeads={crmLeads} />
+            <CrmPipeline
+              initialLeads={crmLeads}
+              theme={theme}
+              activeEntity={activeEntity}
+              activeCurrency={activeCurrency}
+              onNavigateTab={setActiveTab}
+            />
           )}
 
           {activeTab === 'RND' && (
