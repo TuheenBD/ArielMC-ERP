@@ -44,6 +44,7 @@ import { ReportGenerationModal } from '@/components/ReportGenerationModal';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
 import { ThemeProfile } from '@/components/Sidebar';
+import { ChannelProfitabilitySimulator } from '@/components/ChannelProfitabilitySimulator';
 import {
   INITIAL_DUAL_TRACK_PNL,
   B2C_UNIT_ECONOMICS,
@@ -56,6 +57,7 @@ type FinanceTab =
   | 'OVERVIEW'
   | 'DAILY_EXPENSES_AUDIT'
   | 'REPORTS_SUITE'
+  | 'CHANNEL_SIMULATOR'
   | 'LONDON_HYBRID_LAUNCH'
   | 'B2B_EXPANSION_PLAN'
   | 'RAW_MATERIALS_STRATEGY'
@@ -398,6 +400,21 @@ arielmc.com | arielmc.co.uk`;
         >
           <Percent className="w-3.5 h-3.5" />
           <span>Per-Bag Unit Economics</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('CHANNEL_SIMULATOR')}
+          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
+            activeTab === 'CHANNEL_SIMULATOR'
+              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
+          }`}
+        >
+          <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
+          <span>Channel Profitability Simulator</span>
+          <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 font-mono text-[9px] font-bold">
+            Part 5
+          </span>
         </button>
 
         <button
@@ -2433,6 +2450,11 @@ arielmc.com | arielmc.co.uk`;
             </div>
           </div>
         </div>
+      )}
+
+      {/* OPERATIONAL HANDBOOK PART 5: CHANNEL CONTRIBUTION & PER-UNIT PROFITABILITY SIMULATOR */}
+      {activeTab === 'CHANNEL_SIMULATOR' && (
+        <ChannelProfitabilitySimulator />
       )}
 
       {/* TAB 5: WORKING CAPITAL & PVA TAX SHIELD */}
