@@ -42,10 +42,12 @@ import {
   FileText,
   Printer,
   Package,
-  Award
+  Award,
+  Globe2,
 } from 'lucide-react';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import { TimeAndActionGanttCalendar } from '@/components/TimeAndActionGanttCalendar';
+import { DualHubGeoRoutingSection } from '@/components/DualHubGeoRoutingSection';
 import { ArielMC } from '@/lib/brand';
 import { DocumentType } from '@/components/OfficialDocumentCenter';
 
@@ -147,7 +149,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'OVERVIEW' | 'MARGIN' | 'TNA' | 'AQL'>('OVERVIEW');
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
-  const [mainView, setMainView] = useState<'ORDERS' | 'TNA_GANTT'>('ORDERS');
+  const [mainView, setMainView] = useState<'ORDERS' | 'TNA_GANTT' | 'GEO_ROUTING'>('ORDERS');
   const [selectedGanttOrderId, setSelectedGanttOrderId] = useState<string | null>(null);
 
   // Filter calculations
@@ -233,6 +235,23 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                 Live
               </span>
             </button>
+            <button
+              onClick={() => {
+                setSelectedGanttOrderId(null);
+                setMainView('GEO_ROUTING');
+              }}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                mainView === 'GEO_ROUTING'
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] shadow-sm'
+                  : 'text-white/80 hover:text-white'
+              }`}
+            >
+              <Globe2 className="w-3.5 h-3.5" />
+              <span>Dual-Hub 3PL Routing</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-blue-500 text-white font-mono text-[9px]">
+                UK / DE
+              </span>
+            </button>
           </div>
 
           {onOpenDocumentCenter && (
@@ -270,6 +289,11 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
           selectedOrderId={selectedGanttOrderId}
           onSelectOrder={setSelectedGanttOrderId}
           onBackToOrders={() => setMainView('ORDERS')}
+        />
+      ) : mainView === 'GEO_ROUTING' ? (
+        <DualHubGeoRoutingSection
+          orders={orders}
+          onSelectOrder={setSelectedOrder}
         />
       ) : (
         <>

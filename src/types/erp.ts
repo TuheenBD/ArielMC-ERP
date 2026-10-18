@@ -758,6 +758,17 @@ export interface FactoryPurchaseOrder {
   items: OrderLineItem[];
 }
 
+export interface OrderFulfillmentRouting {
+  assignedHub: HubLocation | 'WH-US' | 'WH-BD';
+  hubName: string;
+  shippingCountry: string;
+  deliveryCarrier: string;
+  dispatchStatus: 'PENDING_ROUTING' | 'PICK_SLIP_READY' | 'DISPATCHED_TO_3PL' | 'DELIVERED';
+  trackingNumber?: string;
+  taxRegime: 'UK_VAT_20' | 'EU_OSS_19' | 'US_NEXUS' | 'EXPORT_EXEMPT';
+  preferentialTariffRatePct: number;
+}
+
 export interface BuyerSalesOrder {
   id: string;
   soNumber: string; // SO-2026-UK-001
@@ -790,6 +801,7 @@ export interface BuyerSalesOrder {
   };
   timeAndAction: TimeAndActionMilestone[];
   inspections: AqlInspectionReport[];
+  fulfillmentRouting?: OrderFulfillmentRouting;
 }
 
 // -------------------------------------------------------------

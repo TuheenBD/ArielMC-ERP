@@ -112,3 +112,17 @@ graph LR
 - **ORM**: Prisma ORM
 - **Queue & Async**: Redis + BullMQ (for automated invoice PDF generation, marketplace sync)
 - **Storage**: Cloudflare R2 / AWS S3 (for CAD tech packs, inspection images, compliance certificates)
+
+---
+
+## 5. Dual 3PL Hub Operations & Odoo Replacement Mandate
+
+For full operational procedures, maritime risk controls, customs classifications, and channel fee structures, consult the master handbook:
+👉 **[ArielMC Master Operational Handbook](file:///Users/syedakramulhassan/Library/CloudStorage/GoogleDrive-arielmc.bd@gmail.com/My%20Drive/ArielMC%20-%20ERP/docs/ARIELMC_OPERATIONAL_HANDBOOK.md)**
+
+### Strategic Odoo Replacement Architecture:
+1. **Automated Geographic Routing**: Seamlessly directs UK destination orders to `WH-UK` (Felixstowe/Northampton) and Pan-EU orders to `WH-DE` (Hamburg/Rotterdam) without third-party Python server actions.
+2. **Hybrid Amazon Replenishment**: Native allocation split between 30–45 day Amazon FBA drip-feed (Jute Shopper & Bloom Laptop Tote) and Seller-Fulfilled FBM for delicate full-grain leather totes (Styles 2 & 3).
+3. **Sovereign Bangladesh Export Compliance**: Integrates Bangladesh Bank Form EXP, FE Circular 48/31, Chittagong DAE Phytosanitary Certification, Absortech desiccant tracking, and Savar LWG REACH test certificates directly into the export workflow.
+4. **Zero SaaS Middleware Overhead**: Replaces $4,500–$6,200/year Odoo license, hosting, and fragile connector fees with native Next.js API routes and sovereign PostgreSQL/Supabase persistence.
+
