@@ -26,10 +26,7 @@ import {
   Video,
   BarChart3,
   FolderLock,
-  LayoutDashboard,
-  FileSpreadsheet,
-  Zap,
-  Globe
+  LayoutDashboard
 } from 'lucide-react';
 import {
   LinkedinIcon as Linkedin,
@@ -139,29 +136,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Users2,
           badge: '254 Leads',
           phase: 'Live Suite',
-        },
-      ],
-      links: [
-        {
-          label: 'Master CRM Google Sheet',
-          subtext: '254-Lead Relational Database',
-          href: 'https://docs.google.com/spreadsheets/d/1BpXNvribNccFzBIKY7FlV1mVaT3c8t3Hr6xCUWVxy30/edit?gid=625671773#gid=625671773',
-          icon: FileSpreadsheet,
-          badge: 'Sheets DB',
-        },
-        {
-          label: 'Live CRM Cloud WebApp',
-          subtext: 'Google Apps Script Live Deployment',
-          href: 'https://script.google.com/macros/s/AKfycbwB14a61CTXDxtH5m-yzgqPDtSLrmtLor_z43P_SzfXLAVCeGaNWlb2PRO-E8FgTC1r/exec',
-          icon: Zap,
-          badge: 'Apps Script',
-        },
-        {
-          label: 'ArielMC Enterprise Portal',
-          subtext: 'Staff & Buyer Sourcing Gateway',
-          href: 'https://www.arielmc.com/portal.html',
-          icon: Globe,
-          badge: 'Portal & Web',
         },
       ],
     },
@@ -550,53 +524,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </button>
                   );
                 })}
-
-                {section.links && (
-                  <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
-                    <div className="flex items-center justify-between px-1 text-[9px] font-mono font-bold uppercase tracking-wider text-[#C8A96A]">
-                      <span>Important Links (3)</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    </div>
-                    {section.links.map((link, lIdx) => {
-                      const LinkIcon = link.icon;
-                      return (
-                        <a
-                          key={lIdx}
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all group ${
-                            isRoyal
-                              ? 'text-[#94A3B8] hover:bg-[#1E293B] hover:text-white'
-                              : isCalifornia
-                              ? 'text-[#BACDD6] hover:bg-[#1B2F3B] hover:text-white'
-                              : isMossy
-                              ? 'text-[#BAC095] hover:bg-[#343823] hover:text-white'
-                              : isInkWash
-                              ? 'text-[#CBCBCB] hover:bg-[#303438] hover:text-white'
-                              : isPeach
-                              ? 'text-[#FFD3AC] hover:bg-[#382622] hover:text-white'
-                              : isStormy
-                              ? 'text-[#BDDDFC] hover:bg-[#283542] hover:text-white'
-                              : 'text-[#CFE0D5] hover:bg-[#28493A] hover:text-white'
-                          }`}
-                          title={`${link.label} — ${link.subtext}`}
-                        >
-                          <div className="flex items-center gap-2 min-w-0">
-                            <LinkIcon className="w-3.5 h-3.5 text-[#C8A96A] shrink-0 group-hover:scale-110 transition-transform" />
-                            <span className="truncate">{link.label}</span>
-                          </div>
-                          <div className="flex items-center gap-1 shrink-0">
-                            <span className="text-[8.5px] font-mono px-1 py-0.2 rounded bg-black/20 text-[#C8A96A] border border-[#C8A96A]/30">
-                              {link.badge}
-                            </span>
-                            <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100 text-gray-300" />
-                          </div>
-                        </a>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
             </div>
           ))}
