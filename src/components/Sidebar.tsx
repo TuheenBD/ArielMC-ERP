@@ -437,78 +437,63 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   // Active / Inactive Button Styling
                   let buttonClass = '';
                   let iconClass = '';
-                  let badgeClass = '';
 
                   if (isRoyal) {
                     if (isActive) {
                       buttonClass = 'bg-[#4169E1] text-white font-bold shadow-lg shadow-[#4169E1]/30';
                       iconClass = 'text-white';
-                      badgeClass = 'bg-white/20 text-white font-bold border border-white/30';
                     } else {
                       buttonClass = 'text-[#94A3B8] hover:bg-[#1E293B] hover:text-white';
                       iconClass = isLive ? 'text-[#60A5FA]' : 'text-slate-500';
-                      badgeClass = 'bg-[#1E293B] text-[#94A3B8] border border-[#334155]';
                     }
                   } else if (isCalifornia) {
                     if (isActive) {
                       buttonClass = 'bg-[#66C4FF] text-[#0E1A21] font-bold shadow-lg shadow-[#66C4FF]/30';
                       iconClass = 'text-[#0E1A21]';
-                      badgeClass = 'bg-[#0E1A21]/20 text-[#0E1A21] font-bold border border-[#0E1A21]/30';
                     } else {
                       buttonClass = 'text-[#BACDD6] hover:bg-[#1B2F3B] hover:text-white';
                       iconClass = isLive ? 'text-[#FFC067]' : 'text-[#7D99AA]';
-                      badgeClass = 'bg-[#1B2F3B] text-[#BACDD6] border border-[#2B4B5C]';
                     }
                   } else if (isMossy) {
                     if (isActive) {
                       buttonClass = 'bg-[#D4DE95] text-[#1D2013] font-bold shadow-md shadow-[#D4DE95]/25';
                       iconClass = 'text-[#1D2013]';
-                      badgeClass = 'bg-[#1D2013]/20 text-[#1D2013] font-bold border border-[#1D2013]/30';
                     } else {
                       buttonClass = 'text-[#DCE0C5] hover:bg-[#343823] hover:text-white';
                       iconClass = isLive ? 'text-[#D4DE95]' : 'text-[#BAC095]';
-                      badgeClass = 'bg-[#343823] text-[#DCE0C5] border border-[#4E5434]';
                     }
                   } else if (isInkWash) {
                     if (isActive) {
                       buttonClass = 'bg-[#6D8196] text-[#FFFFE3] font-bold shadow-md shadow-[#6D8196]/25';
                       iconClass = 'text-[#FFFFE3]';
-                      badgeClass = 'bg-[#FFFFE3]/20 text-[#FFFFE3] font-bold border border-[#FFFFE3]/30';
                     } else {
                       buttonClass = 'text-[#CBCBCB] hover:bg-[#303438] hover:text-white';
                       iconClass = isLive ? 'text-[#6D8196]' : 'text-[#8E959E]';
-                      badgeClass = 'bg-[#303438] text-[#CBCBCB] border border-[#4A4F55]';
                     }
                   } else if (isPeach) {
                     if (isActive) {
                       buttonClass = 'bg-[#E39A7B] text-[#1F1513] font-bold shadow-md shadow-[#E39A7B]/25';
                       iconClass = 'text-[#1F1513]';
-                      badgeClass = 'bg-[#1F1513]/20 text-[#1F1513] font-bold border border-[#1F1513]/30';
                     } else {
                       buttonClass = 'text-[#FFD3AC] hover:bg-[#382622] hover:text-white';
                       iconClass = isLive ? 'text-[#FFB5AB]' : 'text-[#DBB06B]';
-                      badgeClass = 'bg-[#382622] text-[#FFD3AC] border border-[#543A34]';
                     }
                   } else if (isStormy) {
                     if (isActive) {
                       buttonClass = 'bg-[#6A89A7] text-white font-bold shadow-md shadow-[#6A89A7]/30';
                       iconClass = 'text-white';
-                      badgeClass = 'bg-white/20 text-white font-bold border border-white/30';
                     } else {
                       buttonClass = 'text-[#BDDDFC] hover:bg-[#283542] hover:text-white';
                       iconClass = isLive ? 'text-[#88BDF2]' : 'text-[#6A89A7]';
-                      badgeClass = 'bg-[#283542] text-[#BDDDFC] border border-[#3E5164]';
                     }
                   } else {
                     // crm-green or heritage-tan
                     if (isActive) {
                       buttonClass = 'bg-[#C8A96A] text-[#1F3A2E] font-bold shadow-md shadow-[#C8A96A]/20';
                       iconClass = 'text-[#1F3A2E]';
-                      badgeClass = 'bg-[#1F3A2E]/20 text-[#1F3A2E] font-bold border border-[#1F3A2E]/30';
                     } else {
                       buttonClass = 'text-[#CFE0D5] hover:bg-[#28493A] hover:text-white';
                       iconClass = isLive ? 'text-[#C8A96A]' : 'text-[#8EA896]';
-                      badgeClass = 'bg-[#28493A] text-[#CFE0D5] border border-[#3A6B54]';
                     }
                   }
 
@@ -517,15 +502,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       key={item.id}
                       id={`nav-${item.id.toLowerCase()}`}
                       onClick={() => onSelectTab(item.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all text-left ${buttonClass}`}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all text-left ${buttonClass}`}
                     >
-                      <div className="flex items-center gap-2.5 text-left min-w-0">
-                        <Icon className={`w-4 h-4 ${iconClass} shrink-0`} />
-                        <span className="text-left truncate">{item.label}</span>
-                      </div>
-                      <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${badgeClass} shrink-0 ml-1 text-left`}>
-                        {item.badge}
-                      </span>
+                      <Icon className={`w-4 h-4 ${iconClass} shrink-0`} />
+                      <span className="text-left truncate">{item.label}</span>
                     </button>
                   );
                 })}
