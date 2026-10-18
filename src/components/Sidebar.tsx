@@ -119,6 +119,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           phase: 'Statutory Hub',
         },
         {
+          id: 'COMMUNICATIONS' as ActiveTab,
+          label: 'Communications & Meetings',
+          icon: Video,
+          badge: 'Live Desks',
+          phase: 'Direct Hub',
+        },
+        {
           id: 'PRODUCTS' as ActiveTab,
           label: 'Sector Product Master',
           icon: Package,
@@ -180,13 +187,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       group: 'Commercial & Global Trade',
       items: [
-        {
-          id: 'COMMUNICATIONS' as ActiveTab,
-          label: 'Communications & Meetings',
-          icon: Video,
-          badge: 'Live Desks',
-          phase: 'Direct Hub',
-        },
         {
           id: 'LOGISTICS' as ActiveTab,
           label: 'Logistics & Export Docs',
