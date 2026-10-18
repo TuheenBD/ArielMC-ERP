@@ -140,6 +140,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
+      group: 'Accounting / Finance',
+      items: [
+        {
+          id: 'FINANCE' as ActiveTab,
+          label: 'Global Multi-Station Finance',
+          icon: Landmark,
+          badge: '10k P&L Live',
+          phase: 'Phase 8',
+        },
+      ],
+    },
+    {
       group: 'Supply Chain & Manufacturing',
       items: [
         {
@@ -192,15 +204,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      group: 'Accounting & Expansion',
+      group: 'Omnichannel Expansion',
       items: [
-        {
-          id: 'FINANCE' as ActiveTab,
-          label: 'Global Multi-Station Finance',
-          icon: Landmark,
-          badge: '10k P&L Live',
-          phase: 'Phase 8',
-        },
         {
           id: 'POS' as ActiveTab,
           label: 'Omnichannel Store POS',

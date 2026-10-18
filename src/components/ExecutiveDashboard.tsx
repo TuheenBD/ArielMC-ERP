@@ -166,6 +166,17 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       border: 'border-purple-200',
     },
     {
+      tab: 'FINANCE' as ActiveTab,
+      title: 'Global Multi-Station Finance',
+      phase: 'Phase 8 (Live)',
+      description: 'Multi-currency ledger, Bangladesh Bank FE Circular 48/31 ERQ desk, FX forward hedging, and consolidated 10k P&L.',
+      icon: Landmark,
+      badge: '10k P&L Live',
+      color: 'text-emerald-800',
+      bg: 'bg-emerald-50/70',
+      border: 'border-emerald-200',
+    },
+    {
       tab: 'FACTORIES' as ActiveTab,
       title: 'BD Factory & Compliance',
       phase: 'Phase 2 (Live)',
@@ -197,17 +208,6 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       color: 'text-indigo-700',
       bg: 'bg-indigo-50/70',
       border: 'border-indigo-200',
-    },
-    {
-      tab: 'FINANCE' as ActiveTab,
-      title: 'Global Multi-Station Finance',
-      phase: 'Phase 8 (Live)',
-      description: 'Multi-currency ledger, Bangladesh Bank FE Circular 48/31 ERQ desk, FX forward hedging, and consolidated 10k P&L.',
-      icon: Landmark,
-      badge: '10k P&L Live',
-      color: 'text-emerald-800',
-      bg: 'bg-emerald-50/70',
-      border: 'border-emerald-200',
     },
   ];
 
