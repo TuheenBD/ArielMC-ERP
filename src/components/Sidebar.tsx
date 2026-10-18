@@ -365,17 +365,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
     : 'border-[#2C5240]';
 
   return (
-    <aside className={`w-72 ${containerBg} flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl transition-colors`}>
+    <aside className={`w-72 ${containerBg} flex flex-col justify-between h-screen sticky top-0 select-none shadow-xl transition-colors text-left`}>
       {/* Top Branding */}
-      <div>
-        <div className={`p-3.5 ${headerBg}`}>
+      <div className="text-left">
+        <div className={`p-3.5 ${headerBg} text-left`}>
           {/* Executive Official ArielMC Logo Card */}
           <div
             onClick={() => onSelectTab('DASHBOARD')}
-            className="group cursor-pointer bg-white/95 hover:bg-white rounded-xl p-2.5 shadow-md border border-[#C8A96A]/60 flex items-center justify-between gap-2.5 transition-all hover:shadow-lg hover:border-[#C8A96A]"
+            className="group cursor-pointer bg-white/95 hover:bg-white rounded-xl p-2.5 shadow-md border border-[#C8A96A]/60 flex items-center justify-between gap-2.5 transition-all hover:shadow-lg hover:border-[#C8A96A] text-left"
             title="ArielMC Global Sourcing & Supply Chain ERP — Go to Executive Dashboard"
           >
-            <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex items-center gap-2.5 min-w-0 text-left">
               <div className="relative w-11 h-11 rounded-2xl overflow-hidden shrink-0 flex items-center justify-center p-0.5 bg-white shadow-md border border-[#C8A96A]/60">
                 <Image
                   src="/images/ArielMC_ERP_Icon.png"
@@ -386,16 +386,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   priority
                 />
               </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-heading font-black text-[#003177] text-base tracking-tight leading-none group-hover:text-[#0A2540] transition-colors">
+              <div className="min-w-0 text-left">
+                <div className="flex items-center gap-1.5 text-left">
+                  <span className="font-heading font-black text-[#003177] text-base tracking-tight leading-none group-hover:text-[#0A2540] transition-colors text-left">
                     ArielMC
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#1F3A2E] text-[#C8A96A] font-mono font-bold tracking-wider shrink-0">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#1F3A2E] text-[#C8A96A] font-mono font-bold tracking-wider shrink-0 text-left">
                     ERP
                   </span>
                 </div>
-                <p className="text-[8.5px] font-bold text-[#E89A1B] uppercase tracking-tighter truncate mt-1 leading-tight">
+                <p className="text-[8.5px] font-bold text-[#E89A1B] uppercase tracking-tighter truncate mt-1 leading-tight text-left">
                   Global Trade &amp; Sourcing ERP
                 </p>
               </div>
@@ -403,29 +403,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Active Operating Entity Bar */}
-          <div className={`mt-3.5 p-2 rounded-lg ${entityBoxBg} flex items-center justify-between text-xs`}>
-            <div className="flex items-center gap-2">
-              <span className="text-base">{activeEntity.flag}</span>
-              <div>
-                <span className={`font-bold ${entityTitle} block text-[11px] leading-tight font-heading`}>
+          <div className={`mt-3.5 p-2 rounded-lg ${entityBoxBg} flex items-center justify-between text-xs text-left`}>
+            <div className="flex items-center gap-2 text-left">
+              <span className="text-base shrink-0">{activeEntity.flag}</span>
+              <div className="text-left min-w-0">
+                <span className={`font-bold ${entityTitle} block text-[11px] leading-tight font-heading text-left truncate`}>
                   {activeEntity.code.replace('ARIEL_', 'ArielMC ')}
                 </span>
-                <span className={`text-[9px] ${entitySub}`}>
+                <span className={`text-[9px] ${entitySub} text-left block truncate`}>
                   {activeEntity.city} Station
                 </span>
               </div>
             </div>
-            <span className="px-1.5 py-0.5 rounded bg-[#C8A96A]/20 text-[#C8A96A] font-mono text-[10px] font-bold border border-[#C8A96A]/40">
+            <span className="px-1.5 py-0.5 rounded bg-[#C8A96A]/20 text-[#C8A96A] font-mono text-[10px] font-bold border border-[#C8A96A]/40 text-left shrink-0">
               {activeEntity.baseCurrency}
             </span>
           </div>
         </div>
 
         {/* Navigation List */}
-        <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-270px)]">
+        <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-270px)] text-left">
           {navSections.map((section, idx) => (
-            <div key={idx} className="space-y-1">
-              <div className={`px-2.5 py-1 text-[10px] font-bold tracking-wider ${sectionGroupText} uppercase font-heading`}>
+            <div key={idx} className="space-y-1 text-left">
+              <div className={`px-2.5 py-1 text-[10px] font-bold tracking-wider ${sectionGroupText} uppercase font-heading text-left`}>
                 {section.group}
               </div>
               <div className="space-y-0.5">
@@ -517,13 +517,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       key={item.id}
                       id={`nav-${item.id.toLowerCase()}`}
                       onClick={() => onSelectTab(item.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${buttonClass}`}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all text-left ${buttonClass}`}
                     >
-                      <div className="flex items-center gap-2.5">
-                        <Icon className={`w-4 h-4 ${iconClass}`} />
-                        <span>{item.label}</span>
+                      <div className="flex items-center gap-2.5 text-left min-w-0">
+                        <Icon className={`w-4 h-4 ${iconClass} shrink-0`} />
+                        <span className="text-left truncate">{item.label}</span>
                       </div>
-                      <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${badgeClass}`}>
+                      <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${badgeClass} shrink-0 ml-1 text-left`}>
                         {item.badge}
                       </span>
                     </button>
@@ -536,18 +536,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Supplier & Buyer Communications Card & Footer */}
-      <div>
+      <div className="text-left">
         {/* Quick Channels Card */}
-        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 ${entityBoxBg}`}>
-          <div className="flex items-center justify-between">
-            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 ${sectionGroupText}`}>
-              <Phone className="w-3 h-3" />
-              <span>Trade Channels</span>
+        <div className={`p-2.5 mx-3 mb-2 rounded-xl border text-xs space-y-2.5 text-left ${entityBoxBg}`}>
+          <div className="flex items-center justify-between text-left">
+            <span className={`text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 text-left ${sectionGroupText}`}>
+              <Phone className="w-3 h-3 shrink-0" />
+              <span className="text-left">Trade Channels</span>
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 text-left">
               <button
                 onClick={() => onSelectTab('COMMUNICATIONS')}
-                className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all font-mono ${
+                className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all font-mono text-left ${
                   activeTab === 'COMMUNICATIONS'
                     ? isRoyal
                       ? 'bg-[#4169E1] text-white'
@@ -582,7 +582,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </button>
               <button
                 onClick={() => setIsChannelsModalOpen(true)}
-                className={`text-[10px] font-semibold underline hover:brightness-110 ${sectionGroupText}`}
+                className={`text-[10px] font-semibold underline hover:brightness-110 text-left ${sectionGroupText}`}
                 title="View Full Directory"
               >
                 Directory
@@ -590,15 +590,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-[11px] font-mono">
-            <a href="tel:+8801819273458" className="font-bold hover:underline text-white">
+          <div className="flex items-center justify-between text-[11px] font-mono text-left">
+            <a href="tel:+8801819273458" className="font-bold hover:underline text-white text-left">
               +8801819273458
             </a>
             <a
               href="https://wa.me/8801819273458?text=Hello%20ArielMC%20Team%2C%20inquiry%20via%20ArielMC%20ERP"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-1.5 py-0.5 rounded bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white transition-colors flex items-center gap-1 text-[10px] font-mono font-bold"
+              className="px-1.5 py-0.5 rounded bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white transition-colors flex items-center gap-1 text-[10px] font-mono font-bold text-left"
               title="Chat on WhatsApp"
             >
               <WhatsappIcon className="w-3 h-3" />
@@ -607,7 +607,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Virtual Meetings Quick Launcher Bar (Zoom, Meet, Teams, Hostinger, Gmail) */}
-          <div className={`pt-1.5 border-t flex items-center justify-between ${dividerBorder}`}>
+          <div className={`pt-1.5 border-t flex items-center justify-between text-left ${dividerBorder}`}>
             <a
               href="https://zoom.us/join"
               target="_blank"
@@ -656,7 +656,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Social icons row */}
-          <div className={`flex items-center justify-between pt-1.5 border-t ${dividerBorder}`}>
+          <div className={`flex items-center justify-between pt-1.5 border-t text-left ${dividerBorder}`}>
             <a
               href="https://www.linkedin.com/company/arielmc/?viewAsMember=true"
               target="_blank"
@@ -704,17 +704,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Footer / System Health */}
-        <div className={`p-3.5 ${footerBg} text-[11px] space-y-2`}>
-          <div className={`flex items-center justify-between ${footerText}`}>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-              <span className="text-[10px] font-mono font-medium">ERP Engine Live</span>
+        <div className={`p-3.5 ${footerBg} text-[11px] space-y-2 text-left`}>
+          <div className={`flex items-center justify-between ${footerText} text-left`}>
+            <span className="flex items-center gap-1.5 text-left">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shrink-0" />
+              <span className="text-[10px] font-mono font-medium text-left">ERP Engine Live</span>
             </span>
-            <span className="text-[10px] font-mono text-[#C8A96A]">v1.0.0</span>
+            <span className="text-[10px] font-mono text-[#C8A96A] text-left">v1.0.0</span>
           </div>
-          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${dividerBorder}`}>
-            <span>PostgreSQL Active</span>
-            <span>Next.js 16</span>
+          <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${dividerBorder} text-left`}>
+            <span className="text-left">PostgreSQL Active</span>
+            <span className="text-left">Next.js 16</span>
           </div>
         </div>
       </div>
