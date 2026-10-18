@@ -27,7 +27,8 @@ import {
   BarChart3,
   FolderLock,
   LayoutDashboard,
-  Megaphone
+  Megaphone,
+  Wrench
 } from 'lucide-react';
 import {
   LinkedinIcon as Linkedin,
@@ -43,6 +44,7 @@ import {
 
 export type ActiveTab = 
   | 'DASHBOARD'
+  | 'UTILITIES'
   | 'STATIONS' 
   | 'DOCUMENTS'
   | 'PRODUCTS' 
@@ -100,6 +102,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: BarChart3,
           badge: 'Executive',
           phase: 'Live Hub',
+        },
+      ],
+    },
+    {
+      group: 'Enterprise Utilities',
+      items: [
+        {
+          id: 'UTILITIES' as ActiveTab,
+          label: 'Office & Enterprise Utilities',
+          icon: Wrench,
+          badge: '8 Tools',
+          phase: 'Head Section',
         },
       ],
     },

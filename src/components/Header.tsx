@@ -19,7 +19,8 @@ import {
   BookOpen,
   ShieldCheck,
   Bot,
-  RefreshCw
+  RefreshCw,
+  Wrench
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 
@@ -766,6 +767,29 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-white/40 text-[10px]">/</span>
                 <span className={`text-[10px] font-medium ${isArielAiOpen ? 'text-[#1F3A2E]' : 'text-emerald-400'}`}>Online Assistant</span>
               </div>
+            </button>
+          )}
+
+          {/* Quick Office Utilities Launcher (Head Section) */}
+          {onSelectTab && (
+            <button
+              id="header-utilities-btn"
+              type="button"
+              onClick={() => onSelectTab('UTILITIES')}
+              className={`h-9 flex items-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 select-none ${
+                activeTab === 'UTILITIES'
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] border-[#C8A96A] font-bold shadow-md'
+                  : toolBtn
+              }`}
+              title="Office & Enterprise Utilities (Calculator, Note Pad, To Do / Calendar, Messages, Contacts, Wallet, Maps, Translator)"
+            >
+              <Wrench className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span>Utilities</span>
+              <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold ${
+                activeTab === 'UTILITIES' ? 'bg-[#1F3A2E] text-[#C8A96A]' : 'bg-slate-800 text-slate-300'
+              }`}>
+                8
+              </span>
             </button>
           )}
 
