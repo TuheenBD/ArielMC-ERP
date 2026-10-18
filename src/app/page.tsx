@@ -46,6 +46,13 @@ import { AuthWelcomeModal } from '@/components/auth/AuthWelcomeModal';
 import { ProfileControlModal } from '@/components/profile/ProfileControlModal';
 import { ArielMCAICopilot } from '@/components/ai/ArielMCAICopilot';
 import { UserGuideModal } from '@/components/UserGuideModal';
+import { LiveExchangeRateModal } from '@/components/LiveExchangeRateModal';
+import {
+  syncLiveExchangeRates,
+  getCachedCurrencies,
+  getCachedForexMeta,
+  ForexSyncPayload,
+} from '@/lib/forexSync';
 import { PhaseRoadmapPreview } from '@/components/PhaseRoadmapPreview';
 import { initialConsignments, securityBudgetPlan, recentSecurityAudits } from '@/data/initialLogistics';
 import { UserProfile } from '@/types/auth';
@@ -127,7 +134,9 @@ export default function Home() {
   };
 
   const [activeEntityCode, setActiveEntityCode] = useState<EntityCode>('ARIEL_BD');
-  const [currencies] = useState<CurrencyRate[]>(INITIAL_CURRENCIES);
+  const [currencies, setCurrencies] = useState<CurrencyRate[]>(INITIAL_CURRENCIES);
+  const [forexMeta, setForexMeta] = useState<ForexSyncPayload | null>(null);
+  const [isForexSyncing, setIsForexSyncing] = useState(false);
   const [activeCurrencyCode, setActiveCurrencyCode] = useState<string>('USD');
   const [products, setProducts] = useState<ProductItem[]>(INITIAL_PRODUCTS);
   const [factories, setFactories] = useState<SupplierFactory[]>(INITIAL_FACTORIES);
@@ -240,6 +249,34 @@ export default function Home() {
   const [isDbModalOpen, setIsDbModalOpen] = useState(false);
   const [isDbConnected, setIsDbConnected] = useState(false);
   const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
+  const [isForexModalOpen, setIsForexModalOpen] = useState(false);
+  const [isArielAiOpen, setIsArielAiOpen] = useState(false);
+
+  // Live Exchange Rate Sync Handler (Bangladesh Bank statutory rates & Interbank feeds)
+  const handleRefreshForex = React.useCallback(async () => {
+    setIsForexSyncing(true);
+    try {
+      const result = await syncLiveExchangeRates();
+      if (result && result.currencies) {
+        setCurrencies(result.currencies);
+        setForexMeta(result.meta);
+      }
+    } catch (err) {
+      console.error('Forex sync error:', err);
+    } finally {
+      setIsForexSyncing(false);
+    }
+  }, []);
+
+  // Hydrate cached forex rates and trigger fresh live sync
+  React.useEffect(() => {
+    const cachedCurrs = getCachedCurrencies();
+    const cachedMeta = getCachedForexMeta();
+    if (cachedCurrs) setCurrencies(cachedCurrs);
+    if (cachedMeta) setForexMeta(cachedMeta);
+
+    handleRefreshForex();
+  }, [handleRefreshForex]);
 
   // Persistent Storage Initial Hydration & Connection Ping
   const loadPersistentData = React.useCallback(async () => {
@@ -432,6 +469,11 @@ export default function Home() {
           onOpenProfileControl={() => setIsProfileModalOpen(true)}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onOpenUserGuide={() => setIsUserGuideModalOpen(true)}
+          onOpenArielAi={() => setIsArielAiOpen((prev) => !prev)}
+          isArielAiOpen={isArielAiOpen}
+          onOpenForexSync={() => setIsForexModalOpen(true)}
+          isForexSyncing={isForexSyncing}
+          onRefreshForex={handleRefreshForex}
         />
 
         {/* Dashboard Workspace (Independent Smooth Scroll) */}
@@ -648,11 +690,24 @@ export default function Home() {
         consignments={consignments}
         crmLeads={crmLeads}
         theme={theme}
+        isOpen={isArielAiOpen}
+        onToggleOpen={setIsArielAiOpen}
         onNavigateTab={setActiveTab}
         onOpenDocumentCenter={() => handleOpenDocCenter('COMMERCIAL_INVOICE')}
         onOpenDatabaseSettings={() => setIsDbModalOpen(true)}
         onOpenUserGuide={() => setIsUserGuideModalOpen(true)}
         onOpenProfileControl={() => setIsProfileModalOpen(true)}
+      />
+
+      {/* Live Exchange Rate Sync & Bangladesh Bank Statutory Matrix Modal */}
+      <LiveExchangeRateModal
+        isOpen={isForexModalOpen}
+        onClose={() => setIsForexModalOpen(false)}
+        currencies={currencies}
+        onCurrenciesUpdated={setCurrencies}
+        forexMeta={forexMeta}
+        onMetaUpdated={setForexMeta}
+        theme={theme}
       />
 
       {/* ArielMC ERP Official User Guide Modal */}

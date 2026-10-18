@@ -17,7 +17,9 @@ import {
   FileText,
   Database,
   BookOpen,
-  ShieldCheck
+  ShieldCheck,
+  Bot,
+  RefreshCw
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 
@@ -41,6 +43,11 @@ interface HeaderProps {
   onOpenProfileControl?: () => void;
   onOpenAuthModal?: () => void;
   onOpenUserGuide?: () => void;
+  onOpenArielAi?: () => void;
+  isArielAiOpen?: boolean;
+  onOpenForexSync?: () => void;
+  isForexSyncing?: boolean;
+  onRefreshForex?: () => void;
 }
 
 const getStationBrandName = (code: EntityCode) => {
@@ -82,6 +89,11 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfileControl,
   onOpenAuthModal,
   onOpenUserGuide,
+  onOpenArielAi,
+  isArielAiOpen = false,
+  onOpenForexSync,
+  isForexSyncing = false,
+  onRefreshForex,
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
@@ -676,6 +688,31 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* ArielMC AI Copilot Button (No Logo -- Just "ArielMC AI / Online Assistant") */}
+          {onOpenArielAi && (
+            <button
+              id="header-arielmc-ai-btn"
+              type="button"
+              onClick={onOpenArielAi}
+              className={`h-9 flex items-center gap-2 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 select-none ${
+                isArielAiOpen
+                  ? 'bg-gradient-to-r from-[#C8A96A] to-[#E5C992] text-[#1F3A2E] border-[#C8A96A] shadow-md ring-2 ring-[#C8A96A]/40 font-bold'
+                  : toolBtn
+              }`}
+              title="ArielMC AI / Online Assistant - Autonomous Operations Copilot"
+            >
+              <div className="relative flex items-center">
+                <Bot className={`w-4 h-4 ${isArielAiOpen ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`} />
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 border border-black/30 animate-pulse" />
+              </div>
+              <div className="flex items-center gap-1.5 leading-none">
+                <span className="font-heading font-bold text-xs tracking-tight">ArielMC AI</span>
+                <span className="text-white/40 text-[10px]">/</span>
+                <span className={`text-[10px] font-medium ${isArielAiOpen ? 'text-[#1F3A2E]' : 'text-emerald-400'}`}>Online Assistant</span>
+              </div>
+            </button>
+          )}
+
           {/* Notifications */}
           <button 
             id="header-notifications-btn"
@@ -737,11 +774,27 @@ export const Header: React.FC<HeaderProps> = ({
             />
           </div>
 
-          {/* Live FX Ticker (Clean h-10 pill) */}
-          <div className={`hidden lg:flex items-center gap-2 h-10 px-3.5 rounded-lg border text-xs shrink-0 ${tickerBg}`}>
+          {/* Live FX Ticker (Interactive h-10 pill with Bangladesh Bank live feed trigger) */}
+          <div 
+            id="header-live-fx-ticker"
+            role="button"
+            tabIndex={0}
+            onClick={onOpenForexSync}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onOpenForexSync?.();
+              }
+            }}
+            className={`hidden lg:flex items-center gap-2.5 h-10 px-3.5 rounded-lg border text-xs shrink-0 cursor-pointer transition-all hover:border-[#C8A96A]/60 select-none ${tickerBg}`}
+            title="Live Interbank & Bangladesh Bank FX Feed (USD, BDT, GBP, EUR, AUD). Click to view full statutory rate matrix."
+          >
             <div className={`flex items-center gap-1.5 font-medium ${tickerText}`}>
-              <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span className="text-[11px] font-semibold">FX:</span>
+              <div className="relative flex items-center">
+                <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
+                <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+              <span className="text-[11px] font-bold tracking-wider">FX:</span>
             </div>
             <div className="flex items-center gap-3 text-[11px]">
               {currencies.filter(c => c.code !== 'USD').map(curr => (
@@ -750,6 +803,20 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               ))}
             </div>
+            {onRefreshForex && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRefreshForex();
+                }}
+                disabled={isForexSyncing}
+                className="ml-1 p-1 rounded-md text-white/50 hover:text-[#C8A96A] hover:bg-white/10 transition-colors disabled:opacity-50"
+                title="Sync live rates now from Bangladesh Bank & Interbank feed"
+              >
+                <RefreshCw className={`w-3 h-3 ${isForexSyncing ? 'animate-spin text-[#C8A96A]' : ''}`} />
+              </button>
+            )}
           </div>
         </div>
 

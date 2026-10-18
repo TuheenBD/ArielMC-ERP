@@ -58,6 +58,8 @@ export interface ArielMCAICopilotProps {
   onOpenDatabaseSettings?: () => void;
   onOpenUserGuide?: () => void;
   onOpenProfileControl?: () => void;
+  isOpen?: boolean;
+  onToggleOpen?: (open: boolean) => void;
 }
 
 interface ChatMessage {
@@ -86,9 +88,19 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   onOpenDocumentCenter,
   onOpenDatabaseSettings,
   onOpenUserGuide,
-  onOpenProfileControl
+  onOpenProfileControl,
+  isOpen: externalIsOpen,
+  onToggleOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+
+  const setIsOpen = (val: boolean | ((prev: boolean) => boolean)) => {
+    const nextVal = typeof val === 'function' ? val(isOpen) : val;
+    setInternalIsOpen(nextVal);
+    onToggleOpen?.(nextVal);
+  };
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
