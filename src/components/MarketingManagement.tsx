@@ -26,6 +26,7 @@ import { CreateCampaignModal } from '@/components/CreateCampaignModal';
 import { LetterheadStudioModal } from '@/components/LetterheadStudioModal';
 import { B2bRoiCalculatorSection } from '@/components/B2bRoiCalculatorSection';
 import { MarketingStrategyPlaybookSection } from '@/components/MarketingStrategyPlaybookSection';
+import { CyberSecuritySopSection } from '@/components/CyberSecuritySopSection';
 import {
   Megaphone,
   BookOpen,
@@ -69,6 +70,7 @@ interface MarketingManagementProps {
 type MarketingSubTab = 
   | 'ROI_CALCULATOR'
   | 'STRATEGY_PLAYBOOK'
+  | 'CYBER_SECURITY'
   | 'CAMPAIGNS' 
   | 'COLLATERALS' 
   | 'SECTORS' 
@@ -307,6 +309,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
         {[
           { id: 'ROI_CALCULATOR' as MarketingSubTab, label: 'B2B ROI & TCO Engine', icon: Calculator, badge: 'CFO Model' },
           { id: 'STRATEGY_PLAYBOOK' as MarketingSubTab, label: '12-Mo Strategy & Playbooks', icon: Target, badge: 'Deliverable 2' },
+          { id: 'CYBER_SECURITY' as MarketingSubTab, label: 'Cyber Security & Platform SOP', icon: ShieldCheck, badge: 'SOP-SEC-2026' },
           { id: 'CAMPAIGNS' as MarketingSubTab, label: 'B2B Campaigns & Outreach', icon: Megaphone, count: campaigns.length },
           { id: 'COLLATERALS' as MarketingSubTab, label: 'Digital Collaterals & Lookbooks', icon: BookOpen, count: collaterals.length },
           { id: 'SECTORS' as MarketingSubTab, label: '5 Pride Sectors Showcase', icon: Layers },
@@ -359,6 +362,17 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
           ========================================================================= */}
       {activeSubTab === 'STRATEGY_PLAYBOOK' && (
         <MarketingStrategyPlaybookSection theme={theme} />
+      )}
+
+      {/* =========================================================================
+          SUB-TAB: CYBER SECURITY & CROSS-BORDER PLATFORM GOVERNANCE (SOP-SEC-2026-V1)
+          ========================================================================= */}
+      {activeSubTab === 'CYBER_SECURITY' && (
+        <CyberSecuritySopSection
+          activeEntity={activeEntity}
+          activeCurrency={activeCurrency}
+          theme={theme}
+        />
       )}
 
       {/* =========================================================================
