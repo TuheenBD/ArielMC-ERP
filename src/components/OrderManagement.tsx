@@ -44,10 +44,12 @@ import {
   Package,
   Award,
   Globe2,
+  Webhook,
 } from 'lucide-react';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import { TimeAndActionGanttCalendar } from '@/components/TimeAndActionGanttCalendar';
 import { DualHubGeoRoutingSection } from '@/components/DualHubGeoRoutingSection';
+import { StorefrontWebhookIngestionSection } from '@/components/StorefrontWebhookIngestionSection';
 import { ArielMC } from '@/lib/brand';
 import { DocumentType } from '@/components/OfficialDocumentCenter';
 
@@ -149,7 +151,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'OVERVIEW' | 'MARGIN' | 'TNA' | 'AQL'>('OVERVIEW');
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
-  const [mainView, setMainView] = useState<'ORDERS' | 'TNA_GANTT' | 'GEO_ROUTING'>('ORDERS');
+  const [mainView, setMainView] = useState<'ORDERS' | 'TNA_GANTT' | 'GEO_ROUTING' | 'WEBHOOK_INGESTION'>('ORDERS');
   const [selectedGanttOrderId, setSelectedGanttOrderId] = useState<string | null>(null);
 
   // Filter calculations
@@ -252,6 +254,23 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                 UK / DE
               </span>
             </button>
+            <button
+              onClick={() => {
+                setSelectedGanttOrderId(null);
+                setMainView('WEBHOOK_INGESTION');
+              }}
+              className={`px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                mainView === 'WEBHOOK_INGESTION'
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] shadow-sm'
+                  : 'text-white/80 hover:text-white'
+              }`}
+            >
+              <Webhook className="w-3.5 h-3.5" />
+              <span>Storefront &amp; 3PL Ingestion</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-emerald-500 text-white font-mono text-[9px]">
+                API
+              </span>
+            </button>
           </div>
 
           {onOpenDocumentCenter && (
@@ -293,6 +312,12 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
       ) : mainView === 'GEO_ROUTING' ? (
         <DualHubGeoRoutingSection
           orders={orders}
+          onSelectOrder={setSelectedOrder}
+        />
+      ) : mainView === 'WEBHOOK_INGESTION' ? (
+        <StorefrontWebhookIngestionSection
+          orders={orders}
+          onOrderIngested={onAddOrder}
           onSelectOrder={setSelectedOrder}
         />
       ) : (
