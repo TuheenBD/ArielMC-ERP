@@ -176,6 +176,44 @@ export const Header: React.FC<HeaderProps> = ({
       : 'bg-[#2C5240] text-white border-[#3A6B54] hover:border-[#C8A96A] hover:bg-[#35614c]'
   }`;
 
+  // Line 2 corporate toolbar button style - uniform 40px (h-10) matching search & profile
+  const toolBtnH10 = `h-10 flex items-center justify-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer select-none ${
+    isRoyal
+      ? 'bg-[#1E293B] text-white border-[#334155] hover:border-[#4169E1] hover:bg-[#334155]'
+      : isHeritage
+      ? 'bg-[#244232] text-white border-[#345943] hover:border-[#C8A96A] hover:bg-[#2e543f]'
+      : isCalifornia
+      ? 'bg-[#1B2F3B] text-white border-[#2B4B5C] hover:border-[#66C4FF] hover:bg-[#243d4d]'
+      : isMossy
+      ? 'bg-[#343823] text-white border-[#4E5434] hover:border-[#D4DE95] hover:bg-[#43492e]'
+      : isInkWash
+      ? 'bg-[#303438] text-white border-[#4A4F55] hover:border-[#6D8196] hover:bg-[#3d4348]'
+      : isPeach
+      ? 'bg-[#382622] text-white border-[#543A34] hover:border-[#E39A7B] hover:bg-[#4a332d]'
+      : isStormy
+      ? 'bg-[#283542] text-white border-[#3E5164] hover:border-[#88BDF2] hover:bg-[#354657]'
+      : 'bg-[#2C5240] text-white border-[#3A6B54] hover:border-[#C8A96A] hover:bg-[#35614c]'
+  }`;
+
+  // Line 2 Notification Icon button style - uniform 40px x 40px (h-10 w-10)
+  const notifBtnH10 = `h-10 w-10 flex items-center justify-center relative rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 ${
+    isRoyal
+      ? 'bg-[#1E293B] text-white border-[#334155] hover:border-[#4169E1] hover:bg-[#334155]'
+      : isHeritage
+      ? 'bg-[#244232] text-white border-[#345943] hover:border-[#C8A96A] hover:bg-[#2e543f]'
+      : isCalifornia
+      ? 'bg-[#1B2F3B] text-white border-[#2B4B5C] hover:border-[#66C4FF] hover:bg-[#243d4d]'
+      : isMossy
+      ? 'bg-[#343823] text-white border-[#4E5434] hover:border-[#D4DE95] hover:bg-[#43492e]'
+      : isInkWash
+      ? 'bg-[#303438] text-white border-[#4A4F55] hover:border-[#6D8196] hover:bg-[#3d4348]'
+      : isPeach
+      ? 'bg-[#382622] text-white border-[#543A34] hover:border-[#E39A7B] hover:bg-[#4a332d]'
+      : isStormy
+      ? 'bg-[#283542] text-white border-[#3E5164] hover:border-[#88BDF2] hover:bg-[#354657]'
+      : 'bg-[#2C5240] text-white border-[#3A6B54] hover:border-[#C8A96A] hover:bg-[#35614c]'
+  }`;
+
   const tickerBg = isRoyal
     ? 'bg-[#1E293B] text-white border-[#334155]'
     : isHeritage
@@ -731,20 +769,6 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* ArielMC ERP User Guide (PDF) */}
-          {onOpenUserGuide && (
-            <button
-              id="header-user-guide-btn"
-              type="button"
-              onClick={onOpenUserGuide}
-              className={toolBtn}
-              title="ArielMC ERP User Guide & Operational Manual (Official PDF & Interactive Reader)"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-[#C8A96A]" />
-              <span>User Guide</span>
-            </button>
-          )}
-
           {/* ArielMC AI Copilot Button (No Logo -- Just "ArielMC AI / Online Assistant") */}
           {onOpenArielAi && (
             <button
@@ -792,17 +816,6 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
           )}
-
-          {/* Notifications */}
-          <button 
-            id="header-notifications-btn"
-            type="button"
-            className="h-9 w-9 flex items-center justify-center relative rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 bg-transparent hover:bg-white/10"
-            title="Station Notifications"
-          >
-            <Bell className="w-4 h-4 text-white" />
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#C8A96A] ring-2 ring-[#1F3A2E]" />
-          </button>
 
           {/* Communication Hub LIVE Tab */}
           <button
@@ -900,45 +913,73 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right: Executive User Profile & Account Control (Prominent on Line 2) */}
-        <button
-          id="header-user-profile-btn"
-          type="button"
-          onClick={onOpenProfileControl || onOpenAuthModal}
-          className={`h-10 flex items-center gap-3 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 ${profileBtnBg}`}
-          title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
-        >
-          <div 
-            className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shadow-xs shrink-0 overflow-hidden"
-            style={{
-              backgroundColor: currentUser?.avatarColor || '#C8A96A',
-              color: '#1F3A2E'
-            }}
+        {/* Right: Quick Tools (User Guide, Notifications) & Executive Profile (Line 2) */}
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* ArielMC ERP User Guide (PDF) - Line 2 */}
+          {onOpenUserGuide && (
+            <button
+              id="header-user-guide-btn"
+              type="button"
+              onClick={onOpenUserGuide}
+              className={toolBtnH10}
+              title="ArielMC ERP User Guide & Operational Manual (Official PDF & Interactive Reader)"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="hidden md:inline">User Guide</span>
+            </button>
+          )}
+
+          {/* Station Notifications Bell - Line 2 Just before Profile */}
+          <button 
+            id="header-notifications-btn"
+            type="button"
+            className={notifBtnH10}
+            title="Station Notifications"
           >
-            {currentUser?.avatarUrl ? (
-              <img 
-                src={currentUser.avatarUrl} 
-                alt={currentUser.name} 
-                className="w-full h-full object-cover" 
-              />
-            ) : (
-              currentUser?.avatarInitials || 'AMC'
-            )}
-          </div>
-          <div className="text-left leading-tight hidden sm:block">
-            <div className="font-bold text-white text-xs flex items-center gap-1.5">
-              <span>{currentUser?.name || 'Syed Akramul Hassan'}</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#1F3A2E] font-bold">
-                SUPER ADMIN
-              </span>
+            <Bell className="w-4 h-4 text-white" />
+            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#C8A96A] ring-2 ring-[#1F3A2E]" />
+          </button>
+
+          {/* Executive User Profile & Account Control (Prominent on Line 2) */}
+          <button
+            id="header-user-profile-btn"
+            type="button"
+            onClick={onOpenProfileControl || onOpenAuthModal}
+            className={`h-10 flex items-center gap-3 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 ${profileBtnBg}`}
+            title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
+          >
+            <div 
+              className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shadow-xs shrink-0 overflow-hidden"
+              style={{
+                backgroundColor: currentUser?.avatarColor || '#C8A96A',
+                color: '#1F3A2E'
+              }}
+            >
+              {currentUser?.avatarUrl ? (
+                <img 
+                  src={currentUser.avatarUrl} 
+                  alt={currentUser.name} 
+                  className="w-full h-full object-cover" 
+                />
+              ) : (
+                currentUser?.avatarInitials || 'AMC'
+              )}
             </div>
-            <div className={`text-[10px] flex items-center gap-1 ${profileSubText}`}>
-              <ShieldCheck className="w-3 h-3 text-[#C8A96A]" />
-              <span>{currentUser?.designation || 'Managing Director & Founder'}</span>
+            <div className="text-left leading-tight hidden sm:block">
+              <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                <span>{currentUser?.name || 'Syed Akramul Hassan'}</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#1F3A2E] font-bold">
+                  SUPER ADMIN
+                </span>
+              </div>
+              <div className={`text-[10px] flex items-center gap-1 ${profileSubText}`}>
+                <ShieldCheck className="w-3 h-3 text-[#C8A96A]" />
+                <span>{currentUser?.designation || 'Managing Director & Founder'}</span>
+              </div>
             </div>
-          </div>
-          <ChevronDown className="w-3.5 h-3.5 text-[#C8A96A] ml-0.5" />
-        </button>
+            <ChevronDown className="w-3.5 h-3.5 text-[#C8A96A] ml-0.5" />
+          </button>
+        </div>
       </div>
 
       {/* Official Communication Channels & Social Hub Modal */}
