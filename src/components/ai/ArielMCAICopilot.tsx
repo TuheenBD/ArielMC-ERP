@@ -29,7 +29,8 @@ import {
   Search,
   MessageSquare,
   Boxes,
-  LayoutDashboard
+  LayoutDashboard,
+  Megaphone
 } from 'lucide-react';
 import {
   CompanyEntity,
@@ -271,6 +272,20 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             label: 'Open Executive Dashboard',
             action: () => { if (onNavigateTab) onNavigateTab('DASHBOARD'); },
             icon: LayoutDashboard
+          }
+        ]
+      };
+    }
+
+    // 1c. Marketing & Collateral Hub
+    if (q.includes('marketing') || q.includes('campaign') || q.includes('lookbook') || q.includes('collateral') || q.includes('trade show') || q.includes('letterhead') || q.includes('stationery') || q.includes('expo')) {
+      return {
+        text: `### **ArielMC** Marketing & Digital Collateral Hub\n\nOur **Marketing Section** powers strategic B2B buyer outreach across all 5 operating sovereign stations:\n- **B2B Campaigns**: 5 Multi-market initiatives across UK, EU, US, AU & BD ($2.85M pipeline attributed)\n- **Sector Lookbooks**: 6 Master digital lookbooks & line-sheets across Fine Ceramics, Leather Goods, Golden Jute, Home Textiles & Terracotta\n- **Stationery Studio**: A4 calibrated letterhead generator with standard 38mm logo & official 4-pillar corporate footer\n- **Global Expos**: Ambiente Frankfurt, Spring Fair Birmingham, NY NOW & Reed Gift Fairs Melbourne\n\nClick the button below to open the Marketing Hub.`,
+        actions: [
+          {
+            label: 'Open Marketing & Collateral Hub',
+            action: () => { if (onNavigateTab) onNavigateTab('MARKETING'); },
+            icon: Megaphone
           }
         ]
       };

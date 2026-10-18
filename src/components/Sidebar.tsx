@@ -26,7 +26,8 @@ import {
   Video,
   BarChart3,
   FolderLock,
-  LayoutDashboard
+  LayoutDashboard,
+  Megaphone
 } from 'lucide-react';
 import {
   LinkedinIcon as Linkedin,
@@ -54,7 +55,8 @@ export type ActiveTab =
   | 'FINANCE' 
   | 'REPORTS'
   | 'POS' 
-  | 'COMMUNICATIONS';
+  | 'COMMUNICATIONS'
+  | 'MARKETING';
 
 export type ThemeProfile = 
   | 'crm-green' 
@@ -131,6 +133,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Package,
           badge: '4 Sectors',
           phase: 'Foundation',
+        },
+      ],
+    },
+    {
+      group: 'Marketing',
+      items: [
+        {
+          id: 'MARKETING' as ActiveTab,
+          label: 'Marketing & Collaterals',
+          icon: Megaphone,
+          badge: 'Campaigns Live',
+          phase: 'Live Hub',
         },
       ],
     },
@@ -432,7 +446,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
-                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS' || item.id === 'LOGISTICS' || item.id === 'FINANCE' || item.id === 'COMMUNICATIONS';
+                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS' || item.id === 'LOGISTICS' || item.id === 'FINANCE' || item.id === 'COMMUNICATIONS' || item.id === 'MARKETING';
                   
                   // Active / Inactive Button Styling
                   let buttonClass = '';

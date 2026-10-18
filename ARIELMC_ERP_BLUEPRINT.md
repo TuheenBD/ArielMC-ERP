@@ -101,6 +101,14 @@ graph LR
 - Offline-first web POS for corporate showrooms / flagship retail in key fashion capitals.
 - Real-time barcode scan and inventory deduction.
 
+### Module 10: Marketing, Brand Strategy & Digital Collateral Hub [LIVE]
+- Multi-market B2B Campaign Management across UK, USA, EU, AU, and Bangladesh sovereign stations.
+- Interactive Digital Lookbook & Technical Spec Dossier Engine with high-res photography and AQL inspection metrics.
+- The 5 National Pride Sectors media showcase (Fine Ceramics, Artisan Leather, Golden Jute, Home Textiles, Terracotta).
+- A4 Calibrated Stationery & Letterhead Studio (38mm golden ratio logo, 4-pillar institutional corporate footer, direct PDF/print export).
+- Global Trade Show & Exhibition Planner (Ambiente Frankfurt, Spring Fair Birmingham, NY NOW, Reed Gift Fairs Melbourne).
+- Inbound Growth Analytics, buyer downloads attribution & campaign ROI tracking.
+
 ---
 
 ## 4. Recommended Tech Stack

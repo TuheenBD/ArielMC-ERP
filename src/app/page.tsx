@@ -40,6 +40,7 @@ import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
 import { DocumentPortal } from '@/components/DocumentPortal';
 import { OmnichannelPosSuite } from '@/components/OmnichannelPosSuite';
+import { MarketingManagement } from '@/components/MarketingManagement';
 import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocumentCenter';
 import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
 import { AuthWelcomeModal } from '@/components/auth/AuthWelcomeModal';
@@ -607,6 +608,16 @@ export default function Home() {
             />
           )}
 
+          {activeTab === 'MARKETING' && (
+            <MarketingManagement
+              activeEntity={activeEntity}
+              activeCurrency={activeCurrency}
+              theme={theme}
+              products={products}
+              onNavigateTab={setActiveTab}
+            />
+          )}
+
           {activeTab !== 'STATIONS' &&
             activeTab !== 'DOCUMENTS' &&
             activeTab !== 'POS' &&
@@ -619,7 +630,8 @@ export default function Home() {
             activeTab !== 'FINANCE' &&
             activeTab !== 'REPORTS' &&
             activeTab !== 'INVENTORY' &&
-            activeTab !== 'COMMUNICATIONS' && (
+            activeTab !== 'COMMUNICATIONS' &&
+            activeTab !== 'MARKETING' && (
               <PhaseRoadmapPreview
                 activeTab={activeTab}
                 onNavigateToProducts={() => setActiveTab('PRODUCTS')}
