@@ -172,7 +172,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2 font-heading">
-                  <ArielMC /> <span>Marketing &amp; Digital Collateral Hub</span>
+                  <ArielMC /> <span>Brand &amp; Marketing Hub</span>
                 </h1>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase">
                   Global Hub

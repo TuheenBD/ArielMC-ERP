@@ -277,13 +277,13 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       };
     }
 
-    // 1c. Marketing & Collateral Hub
-    if (q.includes('marketing') || q.includes('campaign') || q.includes('lookbook') || q.includes('collateral') || q.includes('trade show') || q.includes('letterhead') || q.includes('stationery') || q.includes('expo')) {
+    // 1c. Brand & Marketing Hub
+    if (q.includes('brand') || q.includes('marketing') || q.includes('campaign') || q.includes('lookbook') || q.includes('collateral') || q.includes('trade show') || q.includes('letterhead') || q.includes('stationery') || q.includes('expo') || q.includes('roi')) {
       return {
-        text: `### **ArielMC** Marketing & Digital Collateral Hub\n\nOur **Marketing Section** powers strategic B2B buyer outreach across all 5 operating sovereign stations:\n- **B2B Campaigns**: 5 Multi-market initiatives across UK, EU, US, AU & BD ($2.85M pipeline attributed)\n- **Sector Lookbooks**: 6 Master digital lookbooks & line-sheets across Fine Ceramics, Leather Goods, Golden Jute, Home Textiles & Terracotta\n- **Stationery Studio**: A4 calibrated letterhead generator with standard 38mm logo & official 4-pillar corporate footer\n- **Global Expos**: Ambiente Frankfurt, Spring Fair Birmingham, NY NOW & Reed Gift Fairs Melbourne\n\nClick the button below to open the Marketing Hub.`,
+        text: `### **ArielMC** Brand & Marketing Hub\n\nOur **Brand & Marketing Section** powers strategic B2B buyer outreach across all 5 operating sovereign stations:\n- **B2B ROI & TCO Engine**: Dynamic 60/40 deal desk model ($255k net savings, 700% ROI, 25% CFO haircut)\n- **12-Mo Strategy & Playbooks**: Appendix A (90-day sprints), Appendix B (21-day ABM), Appendix C (7 Klaviyo flows)\n- **B2B Campaigns**: 5 Multi-market initiatives across UK, EU, US, AU & BD ($2.85M pipeline attributed)\n- **Sector Lookbooks**: 6 Master digital lookbooks & line-sheets across Fine Ceramics, Leather Goods, Golden Jute, Home Textiles & Terracotta\n- **Stationery Studio**: A4 calibrated letterhead generator with standard 38mm logo & official 4-pillar corporate footer\n- **Global Expos**: Ambiente Frankfurt, Spring Fair Birmingham, NY NOW & Reed Gift Fairs Melbourne\n\nClick the button below to open the Brand & Marketing Hub.`,
         actions: [
           {
-            label: 'Open Marketing & Collateral Hub',
+            label: 'Open Brand & Marketing Hub',
             action: () => { if (onNavigateTab) onNavigateTab('MARKETING'); },
             icon: Megaphone
           }

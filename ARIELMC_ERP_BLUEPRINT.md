@@ -101,7 +101,9 @@ graph LR
 - Offline-first web POS for corporate showrooms / flagship retail in key fashion capitals.
 - Real-time barcode scan and inventory deduction.
 
-### Module 10: Marketing, Brand Strategy & Digital Collateral Hub [LIVE]
+### Module 10: Brand & Marketing Hub [LIVE]
+- Enterprise B2B ROI & TCO Consolidation Engine (60/40 deal desk model with 25% CFO haircut).
+- Hybrid Marketing Policy & 12-Month Strategic Playbook (90-day sprints, 21-day ABM sequence, 7 Klaviyo flows, scalable budget matrix).
 - Multi-market B2B Campaign Management across UK, USA, EU, AU, and Bangladesh sovereign stations.
 - Interactive Digital Lookbook & Technical Spec Dossier Engine with high-res photography and AQL inspection metrics.
 - The 5 National Pride Sectors media showcase (Fine Ceramics, Artisan Leather, Golden Jute, Home Textiles, Terracotta).
