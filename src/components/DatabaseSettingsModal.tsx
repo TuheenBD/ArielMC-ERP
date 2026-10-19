@@ -635,7 +635,7 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {[
-                    { label: 'Products Master', table: 'products', count: tableCounts.products ?? 12, desc: 'Leather, Jute, Textiles, Ceramics' },
+                    { label: 'Products Master', table: 'products', count: tableCounts.products ?? 12, desc: 'Leather, Jute, Textiles, Ceramics, Pottery' },
                     { label: 'Factories Network', table: 'factories', count: tableCounts.factories ?? 8, desc: 'Savar, Gazipur, Narsingdi' },
                     { label: 'Sample Dev Orders (SDO)', table: 'sample_development_orders', count: tableCounts.samples ?? 8, desc: 'Tech Packs, QA, Prototypes' },
                     { label: 'Sales Orders (OMS)', table: 'sales_orders', count: tableCounts.orders ?? 5, desc: 'Buyer SOs & Factory POs' },

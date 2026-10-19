@@ -147,7 +147,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       tab: 'PRODUCTS' as ActiveTab,
       title: 'Sector Product Master',
       phase: 'Foundation (Live)',
-      description: 'Centralized product catalogue covering Leather, Jute, Textiles, and Ceramics with multi-tier BOM costing.',
+      description: 'Centralized product catalogue covering Leather, Jute, Textiles, Ceramics, and Pottery with multi-tier BOM costing.',
       icon: Package,
       badge: `${totalProducts} SKUs`,
       color: 'text-[#1E6B3A]',
@@ -313,7 +313,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
             <span className="text-xs text-[#6B7269] font-sans font-normal">Registered</span>
           </div>
           <div className="text-[11px] text-[#1E6B3A] mt-1.5 flex items-center gap-1 font-medium">
-            <span>Leather, Jute, Textiles, Ceramics</span>
+            <span>Leather, Jute, Textiles, Ceramics, Pottery</span>
           </div>
           <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between text-[10px] text-[#1E6B3A] font-bold group-hover:translate-x-0.5 transition-transform">
             <span>View Product Catalog &amp; BOM</span>

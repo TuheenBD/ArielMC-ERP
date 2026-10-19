@@ -311,7 +311,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
         rows = [
           ['Opening Cash Balance', Math.round(59000 * orgMultiplier), Math.round(72500 * orgMultiplier), Math.round(94000 * orgMultiplier), Math.round(118000 * orgMultiplier), Math.round(59000 * orgMultiplier)],
           ['Revenue - Services (Bespoke & Sourcing)', Math.round(32000 * orgMultiplier), Math.round(48000 * orgMultiplier), Math.round(62000 * orgMultiplier), Math.round(78000 * orgMultiplier), Math.round(220000 * orgMultiplier)],
-          ['Revenue - Products (Leather, Jute, Ceramics)', Math.round(85000 * orgMultiplier), Math.round(142000 * orgMultiplier), Math.round(188000 * orgMultiplier), Math.round(235000 * orgMultiplier), Math.round(650000 * orgMultiplier)],
+          ['Revenue - Products (Leather, Jute, Textiles, Ceramics, Pottery)', Math.round(85000 * orgMultiplier), Math.round(142000 * orgMultiplier), Math.round(188000 * orgMultiplier), Math.round(235000 * orgMultiplier), Math.round(650000 * orgMultiplier)],
           ['COGS - Materials & Raw Supplies', Math.round(-42000 * orgMultiplier), Math.round(-68000 * orgMultiplier), Math.round(-88000 * orgMultiplier), Math.round(-112000 * orgMultiplier), Math.round(-310000 * orgMultiplier)],
           ['COGS - Delivery & Freight (Sea & Air)', Math.round(-14000 * orgMultiplier), Math.round(-22000 * orgMultiplier), Math.round(-29000 * orgMultiplier), Math.round(-36000 * orgMultiplier), Math.round(-101000 * orgMultiplier)],
           ['COGS - Subcontractors & Factory QA', Math.round(-18000 * orgMultiplier), Math.round(-26000 * orgMultiplier), Math.round(-34000 * orgMultiplier), Math.round(-42000 * orgMultiplier), Math.round(-120000 * orgMultiplier)],
@@ -1473,7 +1473,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                         <td className="py-2 px-4 text-right font-bold text-[#1E6B3A]">${Math.round(220000 * orgMultiplier).toLocaleString()}</td>
                       </tr>
                       <tr>
-                        <td className="py-2 px-6 font-medium text-slate-700 font-sans">+ Products (Leather, Jute, Ceramics)</td>
+                        <td className="py-2 px-6 font-medium text-slate-700 font-sans">+ Products (Leather, Jute, Textiles, Ceramics, Pottery)</td>
                         <td className="py-2 px-3 text-right text-slate-600">${Math.round(85000 * orgMultiplier).toLocaleString()}</td>
                         <td className="py-2 px-3 text-right text-slate-600">${Math.round(142000 * orgMultiplier).toLocaleString()}</td>
                         <td className="py-2 px-3 text-right text-slate-600">${Math.round(188000 * orgMultiplier).toLocaleString()}</td>

@@ -145,7 +145,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
           </div>
 
           <p className="text-xs text-gray-700 leading-relaxed">
-            The Product Master manages 12 registered export SKUs spanning Leather Goods, Jute Crafts, Apparel Textiles, and Artisan Ceramics.
+            The Product Master manages registered export SKUs spanning Leather Goods, Jute Crafts, Apparel Textiles, Artisan Ceramics, and Terracotta Pottery.
           </p>
 
           <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">

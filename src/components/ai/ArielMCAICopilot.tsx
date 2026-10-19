@@ -107,7 +107,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const initialWelcomeText = `Welcome to **ArielMC** ERP. I am your autonomous AI operations assistant, named **ArielMC**.\n\nI have complete real-time visibility across our **5 Operating Stations** (**ArielMC BD**, **ArielMC UK**, **ArielMC US**, **ArielMC EU**, and **ArielMC AU**).\n\nHow may I assist you today? You can ask me about:\n- **Master Product SKUs & Costing Margins** (Leather, Jute, Textiles, Ceramics)\n- **Bangladesh Factory Audits & Compliance** (LWG Gold, BSCI, SEDEX, OEKO-TEX)\n- **R&D & SDO Sample Tracking** (Lab Dips, Protos, Golden Seal Approval)\n- **Order Management & Back-to-Back POs** (M&S, Harrods, Ralph Lauren)\n- **Bonded Warehousing, Mushak 6.3 & Bangladesh Customs**\n- **Multi-Station Finance & FX Hedging**\n- **Profile Control, 2SA & User Security**\n- **ArielMC ERP User Guide (PDF)**`;
+  const initialWelcomeText = `Welcome to **ArielMC** ERP. I am your autonomous AI operations assistant, named **ArielMC**.\n\nI have complete real-time visibility across our **5 Operating Stations** (**ArielMC BD**, **ArielMC UK**, **ArielMC US**, **ArielMC EU**, and **ArielMC AU**).\n\nHow may I assist you today? You can ask me about:\n- **Master Product SKUs & Costing Margins** (Leather, Jute, Textiles, Ceramics, Pottery)\n- **Bangladesh Factory Audits & Compliance** (LWG Gold, BSCI, SEDEX, OEKO-TEX)\n- **R&D & SDO Sample Tracking** (Lab Dips, Protos, Golden Seal Approval)\n- **Order Management & Back-to-Back POs** (M&S, Harrods, Ralph Lauren)\n- **Bonded Warehousing, Mushak 6.3 & Bangladesh Customs**\n- **Multi-Station Finance & FX Hedging**\n- **Profile Control, 2SA & User Security**\n- **ArielMC ERP User Guide (PDF)**`;
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     if (typeof window !== 'undefined') {
@@ -266,7 +266,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
     // 1b. Executive Dashboard
     if (q.includes('dashboard') || q.includes('overview') || q.includes('home') || q.includes('kpi')) {
       return {
-        text: `### **ArielMC** Executive Command Center & Dashboard\n\nThe **Executive Dashboard** aggregates real-time metrics across all 5 operating sovereign stations:\n- **Operating Stations**: 5 Entities (BD, UK, US, EU, AU)\n- **Master Product SKUs**: Leather, Jute, Textiles, Ceramics\n- **Partner Factories**: 8 Audited Facilities (Savar, Gazipur, Narsingdi, Dhamrai)\n- **Global B2B Leads**: 254 Buyer Accounts (UK, EU, USA, AU)\n\nClick the button below to launch the Executive Dashboard.`,
+        text: `### **ArielMC** Executive Command Center & Dashboard\n\nThe **Executive Dashboard** aggregates real-time metrics across all 5 operating sovereign stations:\n- **Operating Stations**: 5 Entities (BD, UK, US, EU, AU)\n- **Master Product SKUs**: Leather, Jute, Textiles, Ceramics, Pottery\n- **Partner Factories**: 8 Audited Facilities (Savar, Gazipur, Narsingdi, Dhamrai)\n- **Global B2B Leads**: 254 Buyer Accounts (UK, EU, USA, AU)\n\nClick the button below to launch the Executive Dashboard.`,
         actions: [
           {
             label: 'Open Executive Dashboard',
