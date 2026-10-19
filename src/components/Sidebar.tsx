@@ -417,7 +417,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="min-w-0 text-left">
                 <div className="flex items-center gap-1.5 text-left">
                   <span className="font-heading font-black text-[#003177] text-base tracking-tight leading-none group-hover:text-[#0A2540] transition-colors text-left flex items-baseline">
-                    ArielMC<sup className="text-[0.6em] font-bold text-[#003177] ml-0.5">™</sup>
+                    ArielMC<sup className="text-[0.6em] font-bold text-[#003177] ml-[1px]">™</sup>
                   </span>
                   <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#1F3A2E] text-[#C8A96A] font-mono font-bold tracking-wider shrink-0 text-left">
                     ERP
@@ -727,8 +727,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Institutional System Brand & Copyright Lockup */}
           <div className={`pt-2 border-t ${dividerBorder} text-left select-none leading-tight`}>
-            <div className="text-[10px] font-bold text-white tracking-tight flex items-baseline gap-0.5">
-              <span className="text-[#93C5FD] font-black">ArielMC</span><sup className="text-[0.6em] font-bold text-[#93C5FD]">™</sup>
+            <div className="text-[10px] font-bold text-white tracking-tight flex items-baseline gap-1.5">
+              <span className="text-[#93C5FD] font-black inline-flex items-baseline">
+                ArielMC<sup className="text-[0.6em] font-bold text-[#93C5FD] ml-[1px]">™</sup>
+              </span>
               <span className="text-gray-200">Enterprise Resource Planning System</span>
             </div>
             <div className="text-[8.5px] text-gray-400 mt-1 leading-snug">

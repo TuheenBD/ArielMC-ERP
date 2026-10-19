@@ -859,8 +859,10 @@ CREATE TABLE IF NOT EXISTS pnl_records (
         {/* Modal Footer */}
         <div className={`px-6 py-3.5 ${modalFooterBg} flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs`}>
           <div className="flex flex-col text-left">
-            <div className="flex items-baseline gap-1 font-bold text-xs text-white">
-              <span className="font-bold text-[#93C5FD]">ArielMC</span><sup className="text-[0.65em] font-bold text-[#93C5FD]">™</sup>
+            <div className="flex items-baseline gap-1.5 font-bold text-xs text-white">
+              <span className="font-bold text-[#93C5FD] inline-flex items-baseline">
+                ArielMC<sup className="text-[0.65em] font-bold text-[#93C5FD] ml-[1px]">™</sup>
+              </span>
               <span className="font-bold">Enterprise Resource Planning System</span>
             </div>
             <div className={`text-[10px] ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} mt-0.5`}>

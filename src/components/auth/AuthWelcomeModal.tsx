@@ -270,8 +270,10 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
             />
           </div>
 
-          <h2 className="text-xl font-bold text-white font-heading tracking-wide flex items-baseline justify-center gap-1">
-            <span className="font-bold text-[#93C5FD]">ArielMC</span><sup className="text-[0.65em] font-bold text-[#93C5FD] -top-0.5">™</sup>
+          <h2 className="text-xl font-bold text-white font-heading tracking-wide flex items-baseline justify-center gap-2">
+            <span className="font-bold text-[#93C5FD] inline-flex items-baseline">
+              ArielMC<sup className="text-[0.65em] font-bold text-[#93C5FD] -top-0.5 ml-[1px]">™</sup>
+            </span>
             <span>Enterprise Resource Planning System</span>
           </h2>
           <p className="text-xs text-[#CFE0D5] mt-1 font-medium">

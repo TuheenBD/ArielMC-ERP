@@ -438,8 +438,10 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-heading font-bold text-base sm:text-lg text-white flex items-baseline gap-1">
-                  <span className="text-[#93C5FD] font-black">ArielMC</span><sup className="text-[0.6em] font-bold text-[#93C5FD] -top-1">™</sup>
+                <span className="font-heading font-bold text-base sm:text-lg text-white flex items-baseline gap-1.5">
+                  <span className="text-[#93C5FD] font-black inline-flex items-baseline">
+                    ArielMC<sup className="text-[0.6em] font-bold text-[#93C5FD] -top-1 ml-[1px]">™</sup>
+                  </span>
                   <span className="text-white">Enterprise Resource Planning System</span>
                 </span>
                 <span className="px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono text-[10px] font-bold shrink-0">
@@ -570,8 +572,10 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
 
               {/* Institutional System Footer */}
               <div className="pt-4 border-t border-gray-100 text-center select-none">
-                <div className="font-heading font-bold text-xs text-slate-800 tracking-tight flex items-baseline justify-center gap-1">
-                  <span className="text-[#003177] font-black">ArielMC</span><sup className="text-[0.65em] font-bold text-[#003177] -top-0.5">™</sup>
+                <div className="font-heading font-bold text-xs text-slate-800 tracking-tight flex items-baseline justify-center gap-1.5">
+                  <span className="text-[#003177] font-black inline-flex items-baseline">
+                    ArielMC<sup className="text-[0.65em] font-bold text-[#003177] -top-0.5 ml-[1px]">™</sup>
+                  </span>
                   <span className="font-bold text-slate-900">Enterprise Resource Planning System</span>
                 </div>
                 <p className="text-[10px] text-slate-500 mt-0.5 font-medium">

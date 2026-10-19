@@ -123,13 +123,10 @@ export const ArielMcErpSystemBrand: React.FC<ArielMcErpSystemBrandProps> = ({
 
   return (
     <div className={`flex flex-col ${alignClass} ${className} select-none leading-normal`}>
-      <div className={`font-heading font-bold ${titleSizeClass} tracking-tight flex items-baseline gap-1`}>
-        <span className={isDark ? 'text-[#93C5FD] font-black' : 'text-[#003177] font-black'}>
-          ArielMC
+      <div className={`font-heading font-bold ${titleSizeClass} tracking-tight flex items-baseline gap-1.5`}>
+        <span className={`${isDark ? 'text-[#93C5FD]' : 'text-[#003177]'} font-black inline-flex items-baseline`}>
+          ArielMC<sup className="text-[0.65em] font-bold -top-0.5 ml-[1px]">™</sup>
         </span>
-        <sup className={`text-[0.65em] font-bold ${isDark ? 'text-[#93C5FD]' : 'text-[#003177]'} -top-0.5`}>
-          ™
-        </sup>
         <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
           Enterprise Resource Planning System
         </span>
