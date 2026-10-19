@@ -221,12 +221,13 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full bg-[#C8A96A] text-[#12231B] text-[10px] font-bold font-mono tracking-wider uppercase">
                 Executive Command Center
               </span>
-              <span className="text-xs text-gray-300 font-mono">
-                ArielMC Global ERP v1.0
+              <span className="text-xs text-gray-300 font-mono flex items-baseline gap-0.5">
+                <span className="text-white font-bold">ArielMC</span><sup className="text-[0.65em] font-bold text-[#C8A96A]">™</sup>
+                <span className="text-gray-300 ml-0.5">Enterprise Resource Planning System</span>
               </span>
             </div>
 
@@ -495,11 +496,12 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         <div className="flex items-center gap-3">
           <Sparkles className="w-5 h-5 text-[#C8A96A] shrink-0" />
           <div>
-            <span className="font-bold text-[#1F3A2E] block">
-              Executive Dashboard Workspace Initialized
-            </span>
-            <p className="text-[11px] text-[#6B7269]">
-              The 4 top KPI metrics (Operating Stations, Master Product SKUs, Partner Factories, and Global Leads) are now centrally anchored on this Dashboard, providing a clean workspace on all other tabs. Dashboard widgets, live BI analytics, and reporting cards will be finalized in the final phase.
+            <div className="font-heading font-bold text-[#1F3A2E] text-xs flex items-baseline gap-1">
+              <span className="text-[#003177] font-black">ArielMC</span><sup className="text-[0.65em] font-bold text-[#003177] -top-0.5">™</sup>
+              <span className="font-bold text-slate-900">Enterprise Resource Planning System</span>
+            </div>
+            <p className="text-[11px] text-[#6B7269] mt-0.5">
+              © Ariel Marketing &amp; Communications Limited | All Right Reserve &bull; 4 Core Pillars Anchored
             </p>
           </div>
         </div>

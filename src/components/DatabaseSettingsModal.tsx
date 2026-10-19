@@ -857,9 +857,15 @@ CREATE TABLE IF NOT EXISTS pnl_records (
         </div>
 
         {/* Modal Footer */}
-        <div className={`px-6 py-3.5 ${modalFooterBg} flex items-center justify-between text-xs`}>
-          <div className={`${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} flex items-center gap-2`}>
-            <span className="font-bold text-white">ArielMC</span> Enterprise Resource Planning System
+        <div className={`px-6 py-3.5 ${modalFooterBg} flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs`}>
+          <div className="flex flex-col text-left">
+            <div className="flex items-baseline gap-1 font-bold text-xs text-white">
+              <span className="font-bold text-[#93C5FD]">ArielMC</span><sup className="text-[0.65em] font-bold text-[#93C5FD]">™</sup>
+              <span className="font-bold">Enterprise Resource Planning System</span>
+            </div>
+            <div className={`text-[10px] ${isRoyal ? 'text-slate-400' : isHeritage ? 'text-[#D4C3A3]' : 'text-[#A0B8AB]'} mt-0.5`}>
+              © Ariel Marketing &amp; Communications Limited | All Right Reserve
+            </div>
           </div>
 
           <button

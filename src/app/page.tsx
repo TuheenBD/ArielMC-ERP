@@ -49,6 +49,7 @@ import { ProfileControlModal } from '@/components/profile/ProfileControlModal';
 import { ArielMCAICopilot } from '@/components/ai/ArielMCAICopilot';
 import { UserGuideModal } from '@/components/UserGuideModal';
 import { LiveExchangeRateModal } from '@/components/LiveExchangeRateModal';
+import { ArielMcErpSystemBrand } from '@/lib/brand';
 import {
   syncLiveExchangeRates,
   getCachedCurrencies,
@@ -647,6 +648,11 @@ export default function Home() {
                 onNavigateToProducts={() => setActiveTab('PRODUCTS')}
               />
             )}
+
+          {/* Institutional Master System Footer */}
+          <footer className="pt-8 pb-4 text-center border-t border-[#DDE3DD] mt-12 select-none">
+            <ArielMcErpSystemBrand size="sm" align="center" showCopyright={true} />
+          </footer>
         </main>
       </div>
 

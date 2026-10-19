@@ -71,4 +71,85 @@ export const sanitizeBrandString = (str: string): string => {
   return str.replace(/ariel\s*mc|arielmc/gi, 'ArielMC');
 };
 
+/**
+ * ============================================================================
+ * OFFICIAL SYSTEM BRAND & COPYRIGHT MARK
+ * ============================================================================
+ * Canonical institutional brand lockup:
+ * Line 1: ArielMC™ Enterprise Resource Planning System
+ * Line 2: © Ariel Marketing & Communications Limited | All Right Reserve
+ */
+export interface ArielMcErpSystemBrandProps {
+  className?: string;
+  theme?: 'light' | 'dark' | 'auto';
+  showCopyright?: boolean;
+  align?: 'left' | 'center' | 'right';
+  size?: 'xs' | 'sm' | 'base' | 'lg';
+}
+
+export const ArielMcErpSystemBrand: React.FC<ArielMcErpSystemBrandProps> = ({
+  className = '',
+  theme = 'light',
+  showCopyright = true,
+  align = 'center',
+  size = 'sm',
+}) => {
+  const isDark = theme === 'dark';
+
+  const alignClass =
+    align === 'left'
+      ? 'text-left items-start'
+      : align === 'right'
+      ? 'text-right items-end'
+      : 'text-center items-center';
+
+  const titleSizeClass =
+    size === 'xs'
+      ? 'text-[11px]'
+      : size === 'sm'
+      ? 'text-xs sm:text-sm'
+      : size === 'base'
+      ? 'text-sm sm:text-base'
+      : 'text-base sm:text-lg';
+
+  const subSizeClass =
+    size === 'xs'
+      ? 'text-[9px]'
+      : size === 'sm'
+      ? 'text-[10px] sm:text-[11px]'
+      : size === 'base'
+      ? 'text-[11px] sm:text-xs'
+      : 'text-xs sm:text-sm';
+
+  return (
+    <div className={`flex flex-col ${alignClass} ${className} select-none leading-normal`}>
+      <div className={`font-heading font-bold ${titleSizeClass} tracking-tight flex items-baseline gap-1`}>
+        <span className={isDark ? 'text-[#93C5FD] font-black' : 'text-[#003177] font-black'}>
+          ArielMC
+        </span>
+        <sup className={`text-[0.65em] font-bold ${isDark ? 'text-[#93C5FD]' : 'text-[#003177]'} -top-0.5`}>
+          ™
+        </sup>
+        <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          Enterprise Resource Planning System
+        </span>
+      </div>
+      {showCopyright && (
+        <div
+          className={`font-medium ${subSizeClass} ${
+            isDark ? 'text-slate-400' : 'text-slate-600'
+          } mt-0.5 flex flex-wrap items-center gap-1`}
+        >
+          <span>©</span>
+          <span className={isDark ? 'text-slate-300 font-semibold' : 'text-[#003177] font-semibold'}>
+            Ariel Marketing & Communications Limited
+          </span>
+          <span className="opacity-60">|</span>
+          <span>All Right Reserve</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default ArielMC;

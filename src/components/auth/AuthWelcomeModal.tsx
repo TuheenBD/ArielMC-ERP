@@ -270,11 +270,12 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
             />
           </div>
 
-          <h2 className="text-xl font-bold text-white font-heading tracking-wide">
-            <span className="font-bold">ArielMC</span> Enterprise Gateway
+          <h2 className="text-xl font-bold text-white font-heading tracking-wide flex items-baseline justify-center gap-1">
+            <span className="font-bold text-[#93C5FD]">ArielMC</span><sup className="text-[0.65em] font-bold text-[#93C5FD] -top-0.5">™</sup>
+            <span>Enterprise Resource Planning System</span>
           </h2>
-          <p className="text-xs text-[#CFE0D5] mt-1">
-            Global Trade & Sourcing ERP Platform &bull; Multi-Station Secure Access
+          <p className="text-xs text-[#CFE0D5] mt-1 font-medium">
+            © Ariel Marketing &amp; Communications Limited | All Right Reserve
           </p>
 
           {/* Mode Tabs */}
@@ -742,13 +743,13 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-3 bg-[#0D1913] border-t border-[#2C5240] flex items-center justify-between text-[11px] text-[#CFE0D5]/70">
+        <div className="px-6 py-3 bg-[#0D1913] border-t border-[#2C5240] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-[#CFE0D5]/70">
           <div>
-            Official Access for <span className="text-white font-bold">ArielMC</span> Sourcing & Merchandising
+            <span className="text-white font-bold">ArielMC™</span> Enterprise Resource Planning System &bull; © Ariel Marketing &amp; Communications Limited | All Right Reserve
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-mono">Security Node Active</span>
+            <span className="font-mono text-emerald-400">Security Node Active</span>
           </div>
         </div>
       </div>

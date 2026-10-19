@@ -1380,8 +1380,14 @@ export const ProfileControlModal: React.FC<ProfileControlModalProps> = ({
           </button>
 
           <div className="flex items-center gap-3">
-            <span className="text-[#CFE0D5]/70 hidden sm:inline">
-              <span className="font-bold text-white">ArielMC</span> Profile & Security Controller
+            <span className="text-[#CFE0D5]/70 hidden sm:inline text-right leading-tight">
+              <span className="font-bold text-white flex items-baseline gap-0.5 justify-end">
+                <span className="text-[#93C5FD] font-bold">ArielMC</span><sup className="text-[0.6em] font-bold text-[#93C5FD]">™</sup>
+                <span className="font-medium text-[#CFE0D5] text-[11px]">Enterprise Resource Planning System</span>
+              </span>
+              <span className="text-[9.5px] text-gray-400 block mt-0.5">
+                © Ariel Marketing &amp; Communications Limited | All Right Reserve
+              </span>
             </span>
             <button
               onClick={onClose}

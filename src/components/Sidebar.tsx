@@ -416,15 +416,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="min-w-0 text-left">
                 <div className="flex items-center gap-1.5 text-left">
-                  <span className="font-heading font-black text-[#003177] text-base tracking-tight leading-none group-hover:text-[#0A2540] transition-colors text-left">
-                    ArielMC
+                  <span className="font-heading font-black text-[#003177] text-base tracking-tight leading-none group-hover:text-[#0A2540] transition-colors text-left flex items-baseline">
+                    ArielMC<sup className="text-[0.6em] font-bold text-[#003177] ml-0.5">™</sup>
                   </span>
                   <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#1F3A2E] text-[#C8A96A] font-mono font-bold tracking-wider shrink-0 text-left">
                     ERP
                   </span>
                 </div>
-                <p className="text-[8.5px] font-bold text-[#E89A1B] uppercase tracking-tighter truncate mt-1 leading-tight text-left">
-                  Global Trade &amp; Sourcing ERP
+                <p className="text-[8.5px] font-bold text-slate-800 truncate mt-1 leading-tight text-left">
+                  Enterprise Resource Planning System
                 </p>
               </div>
             </div>
@@ -723,6 +723,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className={`text-[10px] ${footerText} flex items-center justify-between pt-1 border-t ${dividerBorder} text-left`}>
             <span className="text-left">PostgreSQL Active</span>
             <span className="text-left">Next.js 16</span>
+          </div>
+
+          {/* Institutional System Brand & Copyright Lockup */}
+          <div className={`pt-2 border-t ${dividerBorder} text-left select-none leading-tight`}>
+            <div className="text-[10px] font-bold text-white tracking-tight flex items-baseline gap-0.5">
+              <span className="text-[#93C5FD] font-black">ArielMC</span><sup className="text-[0.6em] font-bold text-[#93C5FD]">™</sup>
+              <span className="text-gray-200">Enterprise Resource Planning System</span>
+            </div>
+            <div className="text-[8.5px] text-gray-400 mt-1 leading-snug">
+              © <span className="text-gray-300 font-medium">Ariel Marketing &amp; Communications Limited</span>
+            </div>
+            <div className="text-[8px] text-gray-400 font-mono tracking-tight">
+              All Right Reserve
+            </div>
           </div>
         </div>
       </div>

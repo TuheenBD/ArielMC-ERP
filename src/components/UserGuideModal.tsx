@@ -438,15 +438,16 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-heading font-bold text-lg text-white">
-                  ArielMC <span className="text-[#C8A96A]">ERP User Guide</span>
+                <span className="font-heading font-bold text-base sm:text-lg text-white flex items-baseline gap-1">
+                  <span className="text-[#93C5FD] font-black">ArielMC</span><sup className="text-[0.6em] font-bold text-[#93C5FD] -top-1">™</sup>
+                  <span className="text-white">Enterprise Resource Planning System</span>
                 </span>
-                <span className="px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono text-[10px] font-bold">
-                  OFFICIAL PDF READY
+                <span className="px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E] font-mono text-[10px] font-bold shrink-0">
+                  USER GUIDE
                 </span>
               </div>
               <p className="text-[11px] text-[#C8A96A]">
-                Comprehensive Operational Handbook &bull; Publication Ref: ArielMC-ERP-UG-2026-V1
+                © Ariel Marketing &amp; Communications Limited | All Right Reserve &bull; Ref: ArielMC-ERP-UG-2026-V1
               </p>
             </div>
           </div>
@@ -565,6 +566,17 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
                   <span>Download Full PDF</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
+              </div>
+
+              {/* Institutional System Footer */}
+              <div className="pt-4 border-t border-gray-100 text-center select-none">
+                <div className="font-heading font-bold text-xs text-slate-800 tracking-tight flex items-baseline justify-center gap-1">
+                  <span className="text-[#003177] font-black">ArielMC</span><sup className="text-[0.65em] font-bold text-[#003177] -top-0.5">™</sup>
+                  <span className="font-bold text-slate-900">Enterprise Resource Planning System</span>
+                </div>
+                <p className="text-[10px] text-slate-500 mt-0.5 font-medium">
+                  © Ariel Marketing &amp; Communications Limited | All Right Reserve
+                </p>
               </div>
             </div>
           </div>

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ArielMC Enterprise ERP | Global Sourcing & Supply Chain",
-  description: "Enterprise ERP for Ariel Marketing & Communications Limited (ArielMC) - B2B Export & D2C Brand Management",
+  title: "ArielMC™ Enterprise Resource Planning System | Global Sourcing & Supply Chain",
+  description: "ArielMC™ Enterprise Resource Planning System — © Ariel Marketing & Communications Limited | All Right Reserve",
   icons: {
     icon: "/images/ArielMC_ERP_Icon.png",
     apple: "/images/ArielMC_ERP_Icon.png",
