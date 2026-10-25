@@ -155,28 +155,27 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
     }
   };
 
-  const isRoyal = theme === 'royal-blue';
-  const cardBg = isRoyal ? 'bg-[#1E293B] border-slate-700' : 'bg-slate-900 border-slate-800';
+  const cardBg = 'bg-white border-[#DDE3DD] shadow-sm text-[#1A1A1A]';
 
   return (
-    <div className="space-y-6 text-white animate-in fade-in duration-300">
+    <div className="space-y-6 text-[#1A1A1A] animate-in fade-in duration-300">
       
       {/* Title & Framing Header */}
-      <div className={`p-6 rounded-2xl ${cardBg} border shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4`}>
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30">
+      <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-[#1F3A2E] via-[#162B22] to-[#0F1E18] border border-[#2E5A47] text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="p-2 rounded-xl bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30">
               <Calculator className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-black tracking-tight font-heading flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight font-heading flex items-center gap-2">
               <ArielMC /> <span>Enterprise B2B ROI &amp; TCO Consolidation Engine</span>
             </h2>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#C8A96A] text-[#12231B]">
               Deliverable 1 &amp; Appendix D
             </span>
           </div>
-          <p className="text-xs text-slate-300 max-w-3xl leading-relaxed">
-            Mission-critical commercial bridge for top-of-funnel web conversion (<code className="text-amber-300">arielmc.com/roi</code>) and deal-desk discovery debriefs. Incorporates non-negotiable <strong>25% conservative CFO haircut</strong> (75% realized productivity factor) to insulate business cases against finance vetos.
+          <p className="text-xs text-gray-300 max-w-3xl leading-relaxed">
+            Mission-critical commercial bridge for top-of-funnel web conversion (<code className="text-[#C8A96A] bg-black/30 px-1.5 py-0.5 rounded font-mono">arielmc.com/roi</code>) and deal-desk discovery debriefs. Incorporates non-negotiable <strong>25% conservative CFO haircut</strong> (75% realized productivity factor) to insulate business cases against finance vetos.
           </p>
         </div>
 
@@ -190,7 +189,7 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
               setErrorCost(30000);
               setD2cUsers(12);
             }}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition cursor-pointer"
           >
             Reset Defaults
           </button>
@@ -203,17 +202,17 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
         {/* =====================================================================
             LEFT PANE (60% Width / 7 Cols): Dynamic Input Sliders & Controls
             ===================================================================== */}
-        <div className={`lg:col-span-7 p-6 rounded-2xl ${cardBg} border shadow-xl space-y-6`}>
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className={`lg:col-span-7 p-6 rounded-2xl ${cardBg} border shadow-sm space-y-6`}>
+          <div className="flex items-center justify-between border-b border-[#DDE3DD] pb-3">
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#1F3A2E] font-heading flex items-center gap-2">
                 <span>1. Prospect Operational Input Variables</span>
               </h3>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-[#6B7269]">
                 Adjust observable operating parameters to model prospective account savings
               </p>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
               Live Interactive Math
             </span>
           </div>
@@ -222,10 +221,10 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             {/* 1. Target Department Headcount (N_emp) */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <label className="font-bold text-slate-200 flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-blue-400" />
+                <label className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-blue-600" />
                   <span>Target Department Headcount (Seats)</span>
-                  <span className="text-[10px] text-slate-400 font-mono">(N_emp)</span>
+                  <span className="text-[10px] text-[#6B7269] font-mono">(N_emp)</span>
                 </label>
                 <div className="flex items-center gap-1.5">
                   <input
@@ -234,9 +233,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                     max={5000}
                     value={numEmployees}
                     onChange={(e) => setNumEmployees(Math.max(10, Math.min(5000, Number(e.target.value) || 10)))}
-                    className="w-20 px-2 py-1 rounded bg-slate-950 border border-slate-700 text-right font-mono text-xs font-bold text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="w-20 px-2 py-1 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-right font-mono text-xs font-bold text-[#1F3A2E] focus:outline-none focus:border-[#1F3A2E] focus:bg-white shadow-2xs"
                   />
-                  <span className="text-xs text-slate-400 font-semibold">Seats</span>
+                  <span className="text-xs text-[#6B7269] font-semibold">Seats</span>
                 </div>
               </div>
               <input
@@ -246,9 +245,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                 step={5}
                 value={numEmployees}
                 onChange={(e) => setNumEmployees(Number(e.target.value))}
-                className="w-full accent-[#C8A96A] cursor-pointer"
+                className="w-full accent-[#1F3A2E] cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="flex justify-between text-[10px] text-[#6B7269] font-mono">
                 <span>10 Seats</span>
                 <span>Default: 100</span>
                 <span>1,000+ Seats</span>
@@ -258,10 +257,10 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             {/* 2. Average Fully Burdened Hourly Wage (W_hr) */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <label className="font-bold text-slate-200 flex items-center gap-1.5">
-                  <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+                <label className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
+                  <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Fully Burdened Hourly Wage (Salary + Benefits)</span>
-                  <span className="text-[10px] text-slate-400 font-mono">(W_hr)</span>
+                  <span className="text-[10px] text-[#6B7269] font-mono">(W_hr)</span>
                 </label>
                 <div className="flex items-center gap-1.5">
                   <input
@@ -271,9 +270,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                     step={1}
                     value={hourlyWage}
                     onChange={(e) => setHourlyWage(Math.max(20, Math.min(250, Number(e.target.value) || 20)))}
-                    className="w-20 px-2 py-1 rounded bg-slate-950 border border-slate-700 text-right font-mono text-xs font-bold text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="w-20 px-2 py-1 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-right font-mono text-xs font-bold text-[#1F3A2E] focus:outline-none focus:border-[#1F3A2E] focus:bg-white shadow-2xs"
                   />
-                  <span className="text-xs text-slate-400 font-semibold">$/hr</span>
+                  <span className="text-xs text-[#6B7269] font-semibold">$/hr</span>
                 </div>
               </div>
               <input
@@ -283,9 +282,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                 step={1}
                 value={hourlyWage}
                 onChange={(e) => setHourlyWage(Number(e.target.value))}
-                className="w-full accent-[#C8A96A] cursor-pointer"
+                className="w-full accent-[#1F3A2E] cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="flex justify-between text-[10px] text-[#6B7269] font-mono">
                 <span>$20.00 / hr</span>
                 <span>Default: $48.00 / hr</span>
                 <span>$150.00+ / hr</span>
@@ -295,10 +294,10 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             {/* 3. Weekly Hours Spent on Legacy Manual Workflow (H_wk) */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <label className="font-bold text-slate-200 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-amber-400" />
+                <label className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-amber-600" />
                   <span>Weekly Manual Legacy Workflow Hours per User</span>
-                  <span className="text-[10px] text-slate-400 font-mono">(H_wk)</span>
+                  <span className="text-[10px] text-[#6B7269] font-mono">(H_wk)</span>
                 </label>
                 <div className="flex items-center gap-1.5">
                   <input
@@ -308,9 +307,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                     step={0.5}
                     value={weeklyHours}
                     onChange={(e) => setWeeklyHours(Math.max(1.0, Math.min(25.0, Number(e.target.value) || 1.0)))}
-                    className="w-20 px-2 py-1 rounded bg-slate-950 border border-slate-700 text-right font-mono text-xs font-bold text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="w-20 px-2 py-1 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-right font-mono text-xs font-bold text-[#1F3A2E] focus:outline-none focus:border-[#1F3A2E] focus:bg-white shadow-2xs"
                   />
-                  <span className="text-xs text-slate-400 font-semibold">hrs/wk</span>
+                  <span className="text-xs text-[#6B7269] font-semibold">hrs/wk</span>
                 </div>
               </div>
               <input
@@ -320,9 +319,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                 step={0.5}
                 value={weeklyHours}
                 onChange={(e) => setWeeklyHours(Number(e.target.value))}
-                className="w-full accent-[#C8A96A] cursor-pointer"
+                className="w-full accent-[#1F3A2E] cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="flex justify-between text-[10px] text-[#6B7269] font-mono">
                 <span>1.0 hr / wk</span>
                 <span>Default: 4.5 hrs / wk</span>
                 <span>15.0+ hrs / wk</span>
@@ -332,10 +331,10 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             {/* 4. Current Annual Legacy Software & Vendor Spend (C_leg) */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <label className="font-bold text-slate-200 flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-purple-400" />
+                <label className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-purple-600" />
                   <span>Annual Legacy Software &amp; Vendor Spend</span>
-                  <span className="text-[10px] text-slate-400 font-mono">(C_leg)</span>
+                  <span className="text-[10px] text-[#6B7269] font-mono">(C_leg)</span>
                 </label>
                 <div className="flex items-center gap-1.5">
                   <input
@@ -345,9 +344,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                     step={1000}
                     value={legacySpend}
                     onChange={(e) => setLegacySpend(Math.max(0, Number(e.target.value) || 0))}
-                    className="w-24 px-2 py-1 rounded bg-slate-950 border border-slate-700 text-right font-mono text-xs font-bold text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="w-24 px-2 py-1 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-right font-mono text-xs font-bold text-[#1F3A2E] focus:outline-none focus:border-[#1F3A2E] focus:bg-white shadow-2xs"
                   />
-                  <span className="text-xs text-slate-400 font-semibold">$/yr</span>
+                  <span className="text-xs text-[#6B7269] font-semibold">$/yr</span>
                 </div>
               </div>
               <input
@@ -357,9 +356,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                 step={2500}
                 value={legacySpend}
                 onChange={(e) => setLegacySpend(Number(e.target.value))}
-                className="w-full accent-[#C8A96A] cursor-pointer"
+                className="w-full accent-[#1F3A2E] cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="flex justify-between text-[10px] text-[#6B7269] font-mono">
                 <span>$0</span>
                 <span>Default: $42,000 / yr</span>
                 <span>$200,000+ / yr</span>
@@ -369,10 +368,10 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             {/* 5. Annual Operational Error, Rework or Attrition Costs (E_err) */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <label className="font-bold text-slate-200 flex items-center gap-1.5">
-                  <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Annual Operational Error, Rework &amp; Rework Costs</span>
-                  <span className="text-[10px] text-slate-400 font-mono">(E_err)</span>
+                <label className="font-bold text-[#1A1A1A] flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+                  <span>Annual Operational Error, Rework &amp; Attrition Costs</span>
+                  <span className="text-[10px] text-[#6B7269] font-mono">(E_err)</span>
                 </label>
                 <div className="flex items-center gap-1.5">
                   <input
@@ -382,9 +381,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                     step={1000}
                     value={errorCost}
                     onChange={(e) => setErrorCost(Math.max(0, Number(e.target.value) || 0))}
-                    className="w-24 px-2 py-1 rounded bg-slate-950 border border-slate-700 text-right font-mono text-xs font-bold text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="w-24 px-2 py-1 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-right font-mono text-xs font-bold text-[#1F3A2E] focus:outline-none focus:border-[#1F3A2E] focus:bg-white shadow-2xs"
                   />
-                  <span className="text-xs text-slate-400 font-semibold">$/yr</span>
+                  <span className="text-xs text-[#6B7269] font-semibold">$/yr</span>
                 </div>
               </div>
               <input
@@ -394,9 +393,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                 step={2500}
                 value={errorCost}
                 onChange={(e) => setErrorCost(Number(e.target.value))}
-                className="w-full accent-[#C8A96A] cursor-pointer"
+                className="w-full accent-[#1F3A2E] cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="flex justify-between text-[10px] text-[#6B7269] font-mono">
                 <span>$0</span>
                 <span>Default: $30,000 / yr</span>
                 <span>$150,000+ / yr</span>
@@ -404,15 +403,15 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             </div>
 
             {/* 6. Employees Expensing ArielMC D2C (N_d2c) - Trojan Horse Indicator */}
-            <div className="space-y-2 p-3.5 rounded-xl bg-slate-950/70 border border-amber-500/30">
+            <div className="space-y-2 p-3.5 rounded-xl bg-amber-50/70 border border-amber-200">
               <div className="flex justify-between items-center text-xs">
                 <div>
-                  <label className="font-bold text-amber-300 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <label className="font-bold text-amber-900 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#C8A96A]" />
                     <span>Employees Already Expensing ArielMC Individually</span>
-                    <span className="text-[10px] text-amber-400/80 font-mono">(N_d2c)</span>
+                    <span className="text-[10px] text-[#8A6D3B] font-mono">(N_d2c)</span>
                   </label>
-                  <p className="text-[10px] text-slate-400">
+                  <p className="text-[10px] text-[#6B7269]">
                     Bottom-Up Trojan Horse Signal (Organic end-user adoption expensed on corporate cards)
                   </p>
                 </div>
@@ -423,9 +422,9 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                     max={500}
                     value={d2cUsers}
                     onChange={(e) => setD2cUsers(Math.max(0, Math.min(500, Number(e.target.value) || 0)))}
-                    className="w-16 px-2 py-1 rounded bg-slate-900 border border-amber-500/40 text-right font-mono text-xs font-bold text-amber-300 focus:outline-none"
+                    className="w-16 px-2 py-1 rounded bg-white border border-amber-300 text-right font-mono text-xs font-bold text-[#8A6D3B] focus:outline-none shadow-2xs"
                   />
-                  <span className="text-xs text-slate-400 font-semibold">Users</span>
+                  <span className="text-xs text-[#6B7269] font-semibold">Users</span>
                 </div>
               </div>
               <input
@@ -435,7 +434,7 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
                 step={1}
                 value={d2cUsers}
                 onChange={(e) => setD2cUsers(Number(e.target.value))}
-                className="w-full accent-amber-400 cursor-pointer"
+                className="w-full accent-[#C8A96A] cursor-pointer"
               />
             </div>
           </div>
@@ -443,45 +442,45 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
           {/* ===================================================================
               ADVANCED AUDIT ASSUMPTIONS (COLLAPSIBLE / CFO HAIRCUT ACCORDION)
               =================================================================== */}
-          <div className="border-t border-slate-800 pt-3">
+          <div className="border-t border-[#DDE3DD] pt-3">
             <button
               type="button"
               onClick={() => setShowAdvanced(!showAdvanced)}
-              className="flex items-center justify-between w-full text-xs font-bold text-slate-300 hover:text-white py-1.5 transition"
+              className="flex items-center justify-between w-full text-xs font-bold text-[#1F3A2E] hover:text-[#12231B] py-1.5 transition cursor-pointer"
             >
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <ShieldCheck className="w-4 h-4 text-emerald-700" />
                 <span>[+] View Advanced Audit Assumptions (25% Conservative CFO Haircut)</span>
               </div>
               {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
 
             {showAdvanced && (
-              <div className="mt-3 p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-xs space-y-3 animate-in fade-in duration-200">
+              <div className="mt-3 p-4 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] text-xs space-y-3 animate-in fade-in duration-200">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
                   <div>
-                    <span className="text-slate-400 block">Workflow Time Reduction Factor:</span>
-                    <span className="font-mono font-bold text-white">E_time = 0.31 (31% documented in Industry Report #1)</span>
+                    <span className="text-[#6B7269] block">Workflow Time Reduction Factor:</span>
+                    <span className="font-mono font-bold text-[#1A1A1A]">E_time = 0.31 (31% documented in Industry Report #1)</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block">Realized Productivity Capture:</span>
-                    <span className="font-mono font-bold text-emerald-400">R_adopt = 0.75 (Non-negotiable 25% CFO Haircut)</span>
+                    <span className="text-[#6B7269] block">Realized Productivity Capture:</span>
+                    <span className="font-mono font-bold text-emerald-700">R_adopt = 0.75 (Non-negotiable 25% CFO Haircut)</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block">Operational Error Mitigation:</span>
-                    <span className="font-mono font-bold text-white">E_qual = 0.40 (40% error reduction)</span>
+                    <span className="text-[#6B7269] block">Operational Error Mitigation:</span>
+                    <span className="font-mono font-bold text-[#1A1A1A]">E_qual = 0.40 (40% error reduction)</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block">D2C Retail Price per Seat:</span>
-                    <span className="font-mono font-bold text-white">P_d2c = $450 / user / year</span>
+                    <span className="text-[#6B7269] block">D2C Retail Price per Seat:</span>
+                    <span className="font-mono font-bold text-[#1A1A1A]">P_d2c = $450 / user / year</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block">Enterprise Volume Discount:</span>
-                    <span className="font-mono font-bold text-amber-300">D_ent = 30% ($315/seat/year contract price)</span>
+                    <span className="text-[#6B7269] block">Enterprise Volume Discount:</span>
+                    <span className="font-mono font-bold text-[#8A6D3B]">D_ent = 30% ($315/seat/year contract price)</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block">Implementation &amp; Onboarding:</span>
-                    <span className="font-mono font-bold text-white">C_imp = $5,000 (11-day rapid rollout)</span>
+                    <span className="text-[#6B7269] block">Implementation &amp; Onboarding:</span>
+                    <span className="font-mono font-bold text-[#1A1A1A]">C_imp = $5,000 (11-day rapid rollout)</span>
                   </div>
                 </div>
               </div>
@@ -492,25 +491,25 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
         {/* =====================================================================
             RIGHT PANE (40% Width / 5 Cols): Sticky Executive Scorecard & Lead Capture
             ===================================================================== */}
-        <div className={`lg:col-span-5 p-6 rounded-2xl ${cardBg} border shadow-2xl space-y-6 lg:sticky lg:top-24`}>
+        <div className={`lg:col-span-5 p-6 rounded-2xl ${cardBg} border shadow-sm space-y-6 lg:sticky lg:top-24`}>
           
           {/* Top Scorecard Header */}
-          <div className="border-b border-slate-800 pb-3">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+          <div className="border-b border-[#DDE3DD] pb-3">
+            <span className="text-[10px] font-bold text-[#6B7269] uppercase tracking-wider block font-heading">
               ArielMC Executive Scorecard
             </span>
             <div className="flex items-baseline justify-between mt-1">
               <div>
-                <span className="text-3xl font-black text-white font-mono tracking-tight">
+                <span className="text-3xl font-black text-[#1F3A2E] font-mono tracking-tight">
                   ${Math.round(calculations.year1NetBenefit).toLocaleString()}
                 </span>
-                <span className="text-xs text-slate-400 block">/ Year 1 Net Benefit</span>
+                <span className="text-xs text-[#6B7269] block">/ Year 1 Net Benefit</span>
               </div>
               <div className="text-right">
-                <span className="text-xl font-black text-emerald-400 font-mono">
+                <span className="text-xl font-black text-emerald-700 font-mono">
                   {calculations.netRoiPct.toFixed(1)}%
                 </span>
-                <span className="text-[10px] text-emerald-300/80 block uppercase font-bold">
+                <span className="text-[10px] text-emerald-800 block uppercase font-bold">
                   Net Year 1 ROI
                 </span>
               </div>
@@ -519,46 +518,46 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
 
           {/* 3 Live Metric Badges */}
           <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-[9.5px] text-slate-400 uppercase font-bold block">Payback Horizon</span>
-              <span className="text-xs font-black text-amber-400 font-mono mt-0.5 block">
+            <div className="p-2.5 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD]">
+              <span className="text-[9.5px] text-[#6B7269] uppercase font-bold block">Payback Horizon</span>
+              <span className="text-xs font-black text-amber-700 font-mono mt-0.5 block">
                 {calculations.paybackMonths.toFixed(2)} Mo
               </span>
-              <span className="text-[9px] text-slate-500 font-semibold block">({calculations.paybackDays} Days)</span>
+              <span className="text-[9px] text-[#6B7269] font-semibold block">({calculations.paybackDays} Days)</span>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-[9.5px] text-slate-400 uppercase font-bold block">Reclaimed Hours</span>
-              <span className="text-xs font-black text-blue-400 font-mono mt-0.5 block">
+            <div className="p-2.5 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD]">
+              <span className="text-[9.5px] text-[#6B7269] uppercase font-bold block">Reclaimed Hours</span>
+              <span className="text-xs font-black text-blue-700 font-mono mt-0.5 block">
                 {Math.round(calculations.hoursSaved).toLocaleString()}
               </span>
-              <span className="text-[9px] text-slate-500 font-semibold block">Hours / Year</span>
+              <span className="text-[9px] text-[#6B7269] font-semibold block">Hours / Year</span>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-[9.5px] text-slate-400 uppercase font-bold block">3-Year NPV</span>
-              <span className="text-xs font-black text-emerald-400 font-mono mt-0.5 block">
+            <div className="p-2.5 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD]">
+              <span className="text-[9.5px] text-[#6B7269] uppercase font-bold block">3-Year NPV</span>
+              <span className="text-xs font-black text-emerald-700 font-mono mt-0.5 block">
                 ${Math.round(calculations.npv3Year).toLocaleString()}
               </span>
-              <span className="text-[9px] text-slate-500 font-semibold block">@ 10% Disc</span>
+              <span className="text-[9px] text-[#6B7269] font-semibold block">@ 10% Disc</span>
             </div>
           </div>
 
           {/* Annual Savings Distribution (Segmented Bar) */}
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs">
-              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-[#6B7269] uppercase tracking-wider font-heading">
                 Annual Savings Distribution
               </span>
-              <span className="text-xs font-mono font-bold text-white">
+              <span className="text-xs font-mono font-bold text-[#1F3A2E]">
                 ${Math.round(calculations.totalBenefit).toLocaleString()} Total
               </span>
             </div>
 
             {/* Segmented Visual Bar */}
-            <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden flex border border-slate-800">
+            <div className="w-full bg-[#E5EAE5] h-3 rounded-full overflow-hidden flex border border-[#DDE3DD]">
               <div
-                className="bg-blue-500 h-full transition-all duration-300"
+                className="bg-blue-600 h-full transition-all duration-300"
                 style={{ width: `${calculations.pctLabor}%` }}
                 title={`Reclaimed Labor: ${calculations.pctLabor.toFixed(1)}%`}
               />
@@ -576,32 +575,32 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
 
             {/* Distribution Legend */}
             <div className="space-y-1 text-[11px] pt-1">
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-[#4A5568]">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
+                  <span className="w-2 h-2 rounded-full bg-blue-600" />
                   <span>Labor Productivity ({calculations.pctLabor.toFixed(1)}%)</span>
                 </span>
-                <span className="font-mono font-semibold text-white">
+                <span className="font-mono font-semibold text-[#1F3A2E]">
                   ${Math.round(calculations.laborSavings).toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-[#4A5568]">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-amber-500" />
                   <span>Legacy &amp; Shadow D2C ({calculations.pctConsolidation.toFixed(1)}%)</span>
                 </span>
-                <span className="font-mono font-semibold text-white">
+                <span className="font-mono font-semibold text-[#1F3A2E]">
                   ${Math.round(calculations.consolidationSavings).toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-[#4A5568]">
                 <span className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-rose-500" />
                   <span>Error &amp; Attrition Mitigation ({calculations.pctError.toFixed(1)}%)</span>
                 </span>
-                <span className="font-mono font-semibold text-white">
+                <span className="font-mono font-semibold text-[#1F3A2E]">
                   ${Math.round(calculations.errorSavings).toLocaleString()}
                 </span>
               </div>
@@ -609,34 +608,34 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
           </div>
 
           {/* Enterprise Investment Breakdown */}
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+          <div className="p-3.5 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] text-xs space-y-1.5">
+            <span className="text-[10px] font-bold text-[#6B7269] uppercase tracking-wider block font-heading">
               Enterprise Subscription Investment
             </span>
-            <div className="flex justify-between text-slate-300 text-[11px]">
+            <div className="flex justify-between text-[#6B7269] text-[11px]">
               <span>Annual Contract (ARR @ $315/seat):</span>
-              <span className="font-mono font-bold text-white">${calculations.annualArr.toLocaleString()}</span>
+              <span className="font-mono font-bold text-[#1A1A1A]">${calculations.annualArr.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-slate-300 text-[11px]">
+            <div className="flex justify-between text-[#6B7269] text-[11px]">
               <span>One-Time Rapid Implementation:</span>
-              <span className="font-mono font-bold text-white">${implementationFee.toLocaleString()}</span>
+              <span className="font-mono font-bold text-[#1A1A1A]">${implementationFee.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-slate-200 text-xs font-bold pt-1 border-t border-slate-800">
+            <div className="flex justify-between text-[#1A1A1A] text-xs font-bold pt-1 border-t border-[#DDE3DD]">
               <span>Year 1 Total Investment:</span>
-              <span className="font-mono text-amber-400">${calculations.year1Investment.toLocaleString()}</span>
+              <span className="font-mono text-amber-800">${calculations.year1Investment.toLocaleString()}</span>
             </div>
           </div>
 
           {/* ===================================================================
               LEAD CAPTURE: GATED FORMAL AUDIT (HubSpot & SDR SLA)
               =================================================================== */}
-          <div className="p-4 rounded-xl bg-gradient-to-br from-slate-950 to-blue-950/40 border border-blue-500/30 space-y-3">
+          <div className="p-4 rounded-xl bg-gradient-to-br from-[#1F3A2E] to-[#12231B] border border-[#C8A96A]/30 text-white space-y-3 shadow-md">
             <div className="space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#C8A96A] flex items-center gap-1.5">
                 <FileSpreadsheet className="w-3.5 h-3.5" />
                 <span>Email Me the CFO-Ready PDF &amp; Excel Audit</span>
               </span>
-              <p className="text-[11px] text-slate-300">
+              <p className="text-[11px] text-gray-300">
                 Receive the unredacted mathematical model formatted for CFO deal-desk debriefs.
               </p>
             </div>
@@ -644,39 +643,39 @@ export const B2bRoiCalculatorSection: React.FC<B2bRoiCalculatorSectionProps> = (
             {!leadSubmitted ? (
               <form onSubmit={handleLeadSubmit} className="space-y-2">
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="email"
                     required
                     value={leadEmail}
                     onChange={(e) => setLeadEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-[#C8A96A]"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C8A96A] focus:bg-white/20"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] text-xs font-bold shadow-lg transition flex items-center justify-center gap-2 transform active:scale-95"
+                  className="w-full py-2.5 rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#12231B] text-xs font-bold shadow-md transition flex items-center justify-center gap-2 transform active:scale-95 cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>Send My Bespoke Business Case</span>
                 </button>
-                <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 pt-0.5">
+                <div className="flex items-center justify-center gap-2 text-[10px] text-gray-300 pt-0.5">
                   <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                   <span>Instant delivery • Zero spam guarantee</span>
                 </div>
               </form>
             ) : (
-              <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs space-y-2">
-                <div className="flex items-center gap-2 text-emerald-400 font-bold">
-                  <CheckCircle2 className="w-4 h-4" />
+              <div className="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-xs space-y-2 text-white">
+                <div className="flex items-center gap-2 text-emerald-300 font-bold">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>Business Case Dispatched to {leadEmail}</span>
                 </div>
-                <p className="text-[11px] text-slate-300">
+                <p className="text-[11px] text-gray-200">
                   Custom financial model with {numEmployees} seats (${Math.round(calculations.year1NetBenefit).toLocaleString()} net savings) has been generated.
                 </p>
                 {slaTriggered && (
-                  <div className="p-2 rounded bg-slate-900 border border-amber-500/30 text-[10.5px] text-amber-300 flex items-center gap-1.5">
+                  <div className="p-2 rounded bg-black/40 border border-amber-500/40 text-[10.5px] text-amber-300 flex items-center gap-1.5">
                     <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                     <span><strong>Enterprise Account Triggered (&ge;100 seats):</strong> Slack alert fired to assigned Enterprise AE (15-min SLA response).</span>
                   </div>

@@ -22,6 +22,9 @@ import {
   Layers,
   Globe2
 } from 'lucide-react';
+import { EmailProviderType } from '@/types/erp';
+import { dispatchErpEmail } from '@/lib/emailService';
+
 
 // Custom WhatsApp SVG Icon
 const WhatsappIcon = ({ className = 'w-4 h-4' }: { className?: string }) => (
@@ -100,7 +103,7 @@ export const ShareDocumentModal: React.FC<ShareDocumentModalProps> = ({
   const [ackTime, setAckTime] = useState<string | null>(null);
 
   // Email form state
-  const [emailProvider, setEmailProvider] = useState<'HOSTINGER' | 'GMAIL'>('HOSTINGER');
+  const [emailProvider, setEmailProvider] = useState<EmailProviderType>('RESEND');
   const [recipientEmail, setRecipientEmail] = useState('trade.fx@easternbank.com.bd');
   const [emailSubject, setEmailSubject] = useState(
     isBatch
@@ -235,7 +238,7 @@ ${emailNotes ? `💬 *Remarks:* ${emailNotes}\n---------------------------------
     setTimeout(() => setIsCopied(null), 2000);
   };
 
-  // Direct Send Email via /api/send-email
+  // Direct Send Email via Asynchronous Pipeline
   const handleSendDirectEmail = async () => {
     if (!recipientEmail || !recipientEmail.includes('@')) {
       setSendStatus({
@@ -248,50 +251,23 @@ ${emailNotes ? `💬 *Remarks:* ${emailNotes}\n---------------------------------
     setIsSending(true);
     setSendStatus(null);
 
-    const fromAccount = emailProvider === 'HOSTINGER' ? 'info@arielmc.com' : 'TuheenBD@gmail.com';
-
     try {
-      const res = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider: emailProvider,
-          fromAccount,
-          to: recipientEmail,
+      const result = await dispatchErpEmail({
+        to: recipientEmail,
+        recipientName: isBatch ? 'Official Regulatory Authority' : primaryDoc.issuingAuthority,
+        subject: emailSubject,
+        templateId: 'CUSTOM',
+        variables: {
           subject: emailSubject,
           body: generatedEmailBody,
-        }),
+        },
+        provider: emailProvider,
       });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to dispatch email.');
-      }
 
       setSendStatus({
         type: 'success',
-        message: `Official document dispatched successfully via ${
-          emailProvider === 'HOSTINGER' ? 'Hostinger Mail' : 'Google Workspace'
-        }! Message ID: ${data.messageId || 'SENT'}`,
+        message: `Official document dispatched to queue successfully via ${emailProvider}! Ticket ID: ${result.messageId || 'SENT'}`,
       });
-
-      // Save to communication dispatch history in localStorage
-      try {
-        const savedHistory = localStorage.getItem('arielmc_email_history');
-        const historyList = savedHistory ? JSON.parse(savedHistory) : [];
-        const newEntry = {
-          id: `dsp-doc-${Date.now()}`,
-          timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
-          provider: emailProvider,
-          from: fromAccount,
-          to: recipientEmail,
-          subject: emailSubject,
-          mode: data.mode || 'LIVE_SMTP',
-          messageId: data.messageId || `doc-share-${Date.now()}`,
-        };
-        localStorage.setItem('arielmc_email_history', JSON.stringify([newEntry, ...historyList]));
-      } catch {}
     } catch (err: any) {
       setSendStatus({
         type: 'error',
@@ -496,31 +472,57 @@ ${emailNotes ? `💬 *Remarks:* ${emailNotes}\n---------------------------------
           {activeTab === 'EMAIL' && (
             <div className="space-y-4">
               {/* Provider Selector */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <button
                   type="button"
-                  onClick={() => setEmailProvider('HOSTINGER')}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    emailProvider === 'HOSTINGER'
-                      ? 'bg-[#1F3A2E] border-[#C8A96A] shadow-md'
+                  onClick={() => setEmailProvider('RESEND')}
+                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                    emailProvider === 'RESEND'
+                      ? 'bg-[#1F3A2E] border-[#C8A96A] shadow-md ring-1 ring-[#C8A96A]'
                       : 'bg-black/20 border-white/10 hover:border-white/20'
                   }`}
                 >
-                  <div className="font-bold text-white text-xs">Hostinger Business Mail</div>
-                  <div className="text-[10px] text-gray-400 font-mono">info@arielmc.com / tuheen@arielmc.com</div>
+                  <div className="font-bold text-white text-xs">Resend API</div>
+                  <div className="text-[9.5px] text-[#C8A96A] font-mono">Recommended (Fast)</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setEmailProvider('POSTMARK')}
+                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                    emailProvider === 'POSTMARK'
+                      ? 'bg-[#1F3A2E] border-[#FFDC00] shadow-md ring-1 ring-[#FFDC00]'
+                      : 'bg-black/20 border-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <div className="font-bold text-white text-xs">Postmark API</div>
+                  <div className="text-[9.5px] text-amber-300 font-mono">High Deliverability</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setEmailProvider('HOSTINGER')}
+                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                    emailProvider === 'HOSTINGER'
+                      ? 'bg-[#1F3A2E] border-[#673AB7] shadow-md ring-1 ring-[#673AB7]'
+                      : 'bg-black/20 border-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <div className="font-bold text-white text-xs">Hostinger Mail</div>
+                  <div className="text-[9.5px] text-purple-300 font-mono">@arielmc.com</div>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setEmailProvider('GMAIL')}
-                  className={`p-3 rounded-xl border text-left transition-all ${
+                  className={`p-2.5 rounded-xl border text-left transition-all ${
                     emailProvider === 'GMAIL'
-                      ? 'bg-[#1F3A2E] border-[#C8A96A] shadow-md'
+                      ? 'bg-[#1F3A2E] border-[#EA4335] shadow-md ring-1 ring-[#EA4335]'
                       : 'bg-black/20 border-white/10 hover:border-white/20'
                   }`}
                 >
-                  <div className="font-bold text-white text-xs">Google Workspace / Gmail</div>
-                  <div className="text-[10px] text-gray-400 font-mono">TuheenBD@gmail.com</div>
+                  <div className="font-bold text-white text-xs">Workspace Mail</div>
+                  <div className="text-[9.5px] text-red-300 font-mono">TuheenBD@gmail</div>
                 </button>
               </div>
 

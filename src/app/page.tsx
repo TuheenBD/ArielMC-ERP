@@ -40,7 +40,9 @@ import { InventoryManagement } from '@/components/InventoryManagement';
 import { CommunicationsHub } from '@/components/CommunicationsHub';
 import { DocumentPortal } from '@/components/DocumentPortal';
 import { OmnichannelPosSuite } from '@/components/OmnichannelPosSuite';
+import { D2cMultichannelSalesSuite } from '@/components/D2cMultichannelSalesSuite';
 import { MarketingManagement } from '@/components/MarketingManagement';
+import { SalesManagement, SalesSubTab } from '@/components/SalesManagement';
 import { UtilitiesManagement } from '@/components/utilities/UtilitiesManagement';
 import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocumentCenter';
 import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
@@ -49,6 +51,7 @@ import { ProfileControlModal } from '@/components/profile/ProfileControlModal';
 import { ArielMCAICopilot } from '@/components/ai/ArielMCAICopilot';
 import { UserGuideModal } from '@/components/UserGuideModal';
 import { LiveExchangeRateModal } from '@/components/LiveExchangeRateModal';
+import { GlobalSearchResultsWindow, GlobalSearchResultItem } from '@/components/GlobalSearchResultsWindow';
 import { ArielMcErpSystemBrand } from '@/lib/brand';
 import {
   syncLiveExchangeRates,
@@ -72,6 +75,14 @@ import {
   testSupabaseHealth,
 } from '@/lib/erpPersistence';
 import {
+  ALL_PAGE_DEFINITIONS,
+  loadFavoritePages,
+  togglePageFavorite,
+  getPageMeta,
+  DEFAULT_FAVORITE_PAGES,
+} from '@/lib/favoritesManager';
+import { FavoriteKey } from '@/types/favorites';
+import {
   Building2,
   Package,
   Factory,
@@ -84,10 +95,51 @@ import {
   Users2,
   FlaskConical,
   Repeat,
+  Star,
+  X,
 } from 'lucide-react';
 
 export default function Home() {
   const [companies, setCompanies] = useState<CompanyEntity[]>(INITIAL_COMPANIES);
+
+  // Favorite Pages State & Persistence
+  const [favoritePages, setFavoritePages] = useState<FavoriteKey[]>(DEFAULT_FAVORITE_PAGES);
+  const [favoriteToast, setFavoriteToast] = useState<{ message: string; isAdded: boolean } | null>(null);
+
+  React.useEffect(() => {
+    setFavoritePages(loadFavoritePages());
+  }, []);
+
+  const handleToggleFavorite = (id: FavoriteKey) => {
+    const { updatedFavorites, isAdded } = togglePageFavorite(favoritePages, id);
+    setFavoritePages(updatedFavorites);
+    const meta = getPageMeta(id);
+    setFavoriteToast({
+      message: isAdded
+        ? `Added "${meta.shortLabel}" to Favorite Pages`
+        : `Removed "${meta.shortLabel}" from Favorite Pages`,
+      isAdded,
+    });
+  };
+
+  const handleSelectFavorite = (favId: FavoriteKey) => {
+    const meta = ALL_PAGE_DEFINITIONS[favId];
+    if (meta?.targetTab) {
+      setActiveTab(meta.targetTab);
+      if (meta.targetTab === 'SALES' && meta.subTab) {
+        setSalesInitialSubTab(meta.subTab as SalesSubTab);
+        setSalesActiveSubTab(meta.subTab as SalesSubTab);
+      }
+    } else if (favId in ALL_PAGE_DEFINITIONS) {
+      setActiveTab(favId as ActiveTab);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!favoriteToast) return;
+    const timer = setTimeout(() => setFavoriteToast(null), 3000);
+    return () => clearTimeout(timer);
+  }, [favoriteToast]);
 
   // Load and hydrate operating stations from localStorage
   React.useEffect(() => {
@@ -157,14 +209,19 @@ export default function Home() {
       const validThemes: ThemeProfile[] = [
         'crm-green',
         'royal-blue',
-        'heritage-tan',
+        'hydrangea',
         'california-beaches',
         'mossy-hollow',
         'ink-wash',
         'fresh-peach',
         'stormy-morning'
       ];
-      if (savedTheme && validThemes.includes(savedTheme)) {
+      if (savedTheme === ('heritage-tan' as any)) {
+        setTheme('crm-green');
+        localStorage.setItem('arielmc_erp_theme', 'crm-green');
+        document.documentElement.setAttribute('data-theme', 'crm-green');
+        document.body.setAttribute('data-theme', 'crm-green');
+      } else if (savedTheme && validThemes.includes(savedTheme)) {
         setTheme(savedTheme);
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.body.setAttribute('data-theme', savedTheme);
@@ -254,6 +311,37 @@ export default function Home() {
   const [isUserGuideModalOpen, setIsUserGuideModalOpen] = useState(false);
   const [isForexModalOpen, setIsForexModalOpen] = useState(false);
   const [isArielAiOpen, setIsArielAiOpen] = useState(false);
+  const [isSearchWindowOpen, setIsSearchWindowOpen] = useState(false);
+  const [isSearchWindowMinimized, setIsSearchWindowMinimized] = useState(false);
+  const [salesInitialSubTab, setSalesInitialSubTab] = useState<SalesSubTab | undefined>(undefined);
+  const [salesActiveSubTab, setSalesActiveSubTab] = useState<SalesSubTab>('OVERVIEW');
+  const [salesInitialBuyerCompany, setSalesInitialBuyerCompany] = useState<string | undefined>(undefined);
+
+  const handleSelectSearchResult = (result: GlobalSearchResultItem) => {
+    setActiveTab(result.tab);
+    if (result.category === 'PRODUCTS' && result.dataItem) {
+      setSelectedProduct(result.dataItem);
+    } else if (result.category === 'DOCUMENTS') {
+      handleOpenDocCenter('COMMERCIAL_INVOICE');
+    } else if (result.category === 'STATIONS' && result.dataItem) {
+      setActiveEntityCode(result.dataItem.code);
+    } else if (result.category === 'BUYERS') {
+      setSalesInitialSubTab('BUYERS');
+      setSalesActiveSubTab('BUYERS');
+      if (result.dataItem?.buyerCompany) {
+        setSalesInitialBuyerCompany(result.dataItem.buyerCompany);
+      }
+    } else if (result.category === 'NAVIGATION') {
+      if (result.tab === 'DOCUMENTS') {
+        handleOpenDocCenter('COMMERCIAL_INVOICE');
+      } else if (result.id === 'nav_forex') {
+        setIsForexModalOpen(true);
+      } else if (result.id === 'nav_buyers') {
+        setSalesInitialSubTab('BUYERS');
+        setSalesActiveSubTab('BUYERS');
+      }
+    }
+  };
 
   // Live Exchange Rate Sync Handler (Bangladesh Bank statutory rates & Interbank feeds)
   const handleRefreshForex = React.useCallback(async () => {
@@ -446,6 +534,8 @@ export default function Home() {
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         activeEntity={activeEntity}
+        companies={companies}
+        onSelectEntity={setActiveEntityCode}
         theme={theme}
       />
 
@@ -460,7 +550,21 @@ export default function Home() {
           activeCurrency={activeCurrency}
           onSelectCurrency={setActiveCurrencyCode}
           searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          onSearchChange={(q) => {
+            setSearchQuery(q);
+            if (q.trim()) {
+              setIsSearchWindowOpen(true);
+            }
+          }}
+          onOpenSearchWindow={() => {
+            setIsSearchWindowOpen(true);
+            setIsSearchWindowMinimized(false);
+          }}
+          onCloseSearchWindow={() => {
+            setIsSearchWindowOpen(false);
+          }}
+          isSearchWindowOpen={isSearchWindowOpen}
+          isSearchWindowMinimized={isSearchWindowMinimized}
           theme={theme}
           onSelectTheme={handleSelectTheme}
           activeTab={activeTab}
@@ -477,10 +581,134 @@ export default function Home() {
           onOpenForexSync={() => setIsForexModalOpen(true)}
           isForexSyncing={isForexSyncing}
           onRefreshForex={handleRefreshForex}
+          favoritePages={favoritePages}
+          onToggleFavorite={handleToggleFavorite}
+          onSelectFavorite={handleSelectFavorite}
         />
 
         {/* Dashboard Workspace (Independent Smooth Scroll) */}
         <main className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
+          {/* Universal Page Header Context Bar with 1-Click "Add to Fav" / "Favorited" Action */}
+          <div className="flex items-center justify-between p-3 sm:px-4 sm:py-2.5 rounded-xl bg-white border border-[#DDE3DD] shadow-xs select-none">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 hidden sm:inline">
+                  {activeTab === 'SALES' && salesActiveSubTab === 'BUYERS'
+                    ? 'Sales & Commercial'
+                    : ALL_PAGE_DEFINITIONS[activeTab]?.category || 'Module'}
+                </span>
+
+                {activeTab === 'SALES' && salesActiveSubTab === 'BUYERS' ? (
+                  <div className="flex items-center gap-1.5 min-w-0 text-xs">
+                    <span className="text-slate-500 font-medium truncate">Sales Hub</span>
+                    <span className="text-slate-400">/</span>
+                    <span className="font-bold text-[#1F3A2E] font-heading truncate bg-[#1F3A2E]/10 px-2 py-0.5 rounded border border-[#1F3A2E]/20">
+                      Strategic Accounts (Living Portfolio)
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-xs font-bold text-[#1F3A2E] font-heading truncate">
+                    {ALL_PAGE_DEFINITIONS[activeTab]?.label || activeTab}
+                  </span>
+                )}
+
+                {ALL_PAGE_DEFINITIONS[activeTab]?.badge && !(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') && (
+                  <span className="text-[10px] px-2 py-0.2 rounded-full bg-[#C8A96A]/20 text-[#8B6B2E] font-bold border border-[#C8A96A]/40 font-mono hidden md:inline">
+                    {ALL_PAGE_DEFINITIONS[activeTab]?.badge}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* "Add to Fav" / "Favorited" Action Buttons */}
+            <div className="flex items-center gap-2 shrink-0">
+              {activeTab === 'SALES' && salesActiveSubTab === 'BUYERS' ? (
+                <>
+                  {/* Primary Favorite: Strategic Accounts */}
+                  <button
+                    id="page-add-to-fav-strategic-accounts"
+                    type="button"
+                    onClick={() => handleToggleFavorite('STRATEGIC_ACCOUNTS')}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer select-none shrink-0 ${
+                      favoritePages.includes('STRATEGIC_ACCOUNTS')
+                        ? 'bg-amber-50 text-amber-900 border-2 border-amber-400 ring-2 ring-amber-400/20 shadow-amber-100/50 hover:bg-amber-100'
+                        : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 hover:border-amber-400 hover:text-amber-800'
+                    }`}
+                    title={
+                      favoritePages.includes('STRATEGIC_ACCOUNTS')
+                        ? 'Remove "Strategic Accounts" from Favorite Pages'
+                        : 'Add "Strategic Accounts" to Favorite Pages'
+                    }
+                  >
+                    <Star
+                      className={`w-4 h-4 transition-transform ${
+                        favoritePages.includes('STRATEGIC_ACCOUNTS')
+                          ? 'fill-amber-400 text-amber-500 scale-110'
+                          : 'text-slate-400 hover:text-amber-500'
+                      }`}
+                    />
+                    <span>
+                      {favoritePages.includes('STRATEGIC_ACCOUNTS')
+                        ? 'Strategic Accounts Favorited'
+                        : 'Fav Strategic Accounts'}
+                    </span>
+                  </button>
+
+                  {/* Secondary Favorite: Entire Sales Hub Page */}
+                  <button
+                    id="page-add-to-fav-sales-hub"
+                    type="button"
+                    onClick={() => handleToggleFavorite('SALES')}
+                    className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                      favoritePages.includes('SALES')
+                        ? 'bg-amber-50 text-amber-800 border border-amber-300'
+                        : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50 border border-slate-200'
+                    }`}
+                    title={
+                      favoritePages.includes('SALES')
+                        ? 'Remove "Sales Hub" from Favorite Pages'
+                        : 'Add whole "Sales Hub" to Favorite Pages'
+                    }
+                  >
+                    <Star
+                      className={`w-3.5 h-3.5 ${
+                        favoritePages.includes('SALES')
+                          ? 'fill-amber-400 text-amber-500'
+                          : 'text-slate-400'
+                      }`}
+                    />
+                    <span>{favoritePages.includes('SALES') ? 'Sales Hub Fav' : 'Fav Whole Page'}</span>
+                  </button>
+                </>
+              ) : (
+                <button
+                  id={`page-add-to-fav-${activeTab.toLowerCase()}`}
+                  type="button"
+                  onClick={() => handleToggleFavorite(activeTab)}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer select-none shrink-0 ${
+                    favoritePages.includes(activeTab)
+                      ? 'bg-amber-50 text-amber-900 border-2 border-amber-400 ring-2 ring-amber-400/20 shadow-amber-100/50 hover:bg-amber-100'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 hover:border-amber-400 hover:text-amber-800'
+                  }`}
+                  title={
+                    favoritePages.includes(activeTab)
+                      ? `Remove "${ALL_PAGE_DEFINITIONS[activeTab]?.label || activeTab}" from Favorite Pages`
+                      : `Add "${ALL_PAGE_DEFINITIONS[activeTab]?.label || activeTab}" to Favorite Pages`
+                  }
+                >
+                  <Star
+                    className={`w-4 h-4 transition-transform ${
+                      favoritePages.includes(activeTab)
+                        ? 'fill-amber-400 text-amber-500 scale-110'
+                        : 'text-slate-400 hover:text-amber-500'
+                    }`}
+                  />
+                  <span>{favoritePages.includes(activeTab) ? 'Favorited' : 'Add to Fav'}</span>
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Active View Content */}
           {activeTab === 'DASHBOARD' && (
             <ExecutiveDashboard
@@ -527,6 +755,27 @@ export default function Home() {
             />
           )}
 
+          {activeTab === 'SALES' && (
+            <SalesManagement
+              orders={orders}
+              crmLeads={crmLeads}
+              factories={factories}
+              products={products}
+              activeEntity={activeEntity}
+              activeCurrency={activeCurrency}
+              currencies={currencies}
+              onNavigateTab={setActiveTab}
+              onAddOrder={handleAddOrder}
+              onOpenDocumentCenter={handleOpenDocCenter}
+              theme={theme}
+              initialSubTab={salesInitialSubTab}
+              initialBuyerCompany={salesInitialBuyerCompany}
+              onSubTabChange={(subTab) => setSalesActiveSubTab(subTab)}
+              favoritePages={favoritePages}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          )}
+
           {activeTab === 'CRM' && (
             <CrmPipeline
               initialLeads={crmLeads}
@@ -558,6 +807,8 @@ export default function Home() {
               factories={factories}
               products={products}
               crmLeads={crmLeads}
+              activeEntity={activeEntity}
+              currencies={currencies}
               onAddOrder={handleAddOrder}
               onUpdateOrderStatus={handleUpdateOrderStatus}
               onUpdateMilestoneStatus={handleUpdateMilestoneStatus}
@@ -602,6 +853,14 @@ export default function Home() {
             />
           )}
 
+          {activeTab === 'ECOM' && (
+            <D2cMultichannelSalesSuite
+              isBdStation={activeEntity.code === 'ARIEL_BD'}
+              bdtRate={121.5}
+              onNavigateToInventory={() => setActiveTab('INVENTORY')}
+            />
+          )}
+
           {activeTab === 'POS' && (
             <OmnichannelPosSuite
               products={products}
@@ -630,9 +889,11 @@ export default function Home() {
 
           {activeTab !== 'STATIONS' &&
             activeTab !== 'DOCUMENTS' &&
+            activeTab !== 'ECOM' &&
             activeTab !== 'POS' &&
             activeTab !== 'PRODUCTS' &&
             activeTab !== 'FACTORIES' &&
+            activeTab !== 'SALES' &&
             activeTab !== 'CRM' &&
             activeTab !== 'RND' &&
             activeTab !== 'ORDERS' &&
@@ -753,6 +1014,40 @@ export default function Home() {
         onClose={() => setIsUserGuideModalOpen(false)}
         theme={theme}
       />
+
+      {/* Global ERP Search Results Window (Floating Window with Minimize & Close - Requirements 2.a, 2.b, 2.c, 2.d) */}
+      <GlobalSearchResultsWindow
+        isOpen={isSearchWindowOpen}
+        isMinimized={isSearchWindowMinimized}
+        onMinimize={() => setIsSearchWindowMinimized(true)}
+        onRestore={() => setIsSearchWindowMinimized(false)}
+        onClose={() => setIsSearchWindowOpen(false)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        theme={theme}
+        products={products}
+        orders={orders}
+        factories={factories}
+        samples={samples}
+        companies={companies}
+        onSelectResult={handleSelectSearchResult}
+      />
+
+      {/* Favorite Pages Toast Notification */}
+      {favoriteToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-[#12231B] text-white border-2 border-[#C8A96A] shadow-2xl animate-in slide-in-from-bottom-4 duration-200 select-none">
+          <Star className={`w-4 h-4 ${favoriteToast.isAdded ? 'fill-amber-400 text-amber-400' : 'text-slate-400'}`} />
+          <span className="text-xs font-bold font-heading">{favoriteToast.message}</span>
+          <button
+            type="button"
+            onClick={() => setFavoriteToast(null)}
+            className="ml-2 text-white/50 hover:text-white cursor-pointer"
+            title="Dismiss"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

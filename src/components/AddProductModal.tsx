@@ -396,9 +396,19 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#12231B]/70 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl max-h-[92vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        {/* Top-Right Absolute Close Button (Standard Window Position) */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/30 hover:bg-black/60 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
+          title="Close Window (X)"
+          aria-label="Close Window"
+        >
+          <X className="w-5 h-5" />
+        </button>
         
         {/* Header */}
-        <div className="p-5 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white flex items-center justify-between">
+        <div className="p-5 pr-16 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-white/15 text-[#C8A96A] border border-white/20 flex items-center justify-center font-bold">
               <FileText className="w-5 h-5" />
@@ -415,12 +425,6 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               </h2>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Form Intake Navigation Tabs */}

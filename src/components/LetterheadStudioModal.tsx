@@ -121,40 +121,50 @@ Ariel Marketing & Communications Limited`);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-6xl max-h-[94vh] flex flex-col bg-[#0F172A] border border-slate-700 rounded-2xl shadow-2xl overflow-hidden text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-6xl max-h-[94vh] flex flex-col bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden text-[#1A1A1A]">
+        {/* Top-Right Absolute Close Button (Standard Window Position) */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-3.5 right-4 z-20 p-2 rounded-xl bg-black/30 hover:bg-black/60 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
+          title="Close Window (X)"
+          aria-label="Close Window"
+        >
+          <X className="w-5 h-5" />
+        </button>
         
         {/* Top Control Bar */}
-        <div className="flex flex-wrap items-center justify-between px-5 py-3.5 bg-[#1E293B] border-b border-slate-700 shrink-0 gap-3">
+        <div className="flex flex-wrap items-center justify-between px-5 pr-16 py-3.5 bg-gradient-to-r from-[#1F3A2E] to-[#12231B] border-b border-[#C8A96A]/30 shrink-0 gap-3 text-white">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            <div className="p-2 rounded-xl bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2 font-heading">
                 <span>ArielMC Stationery &amp; Letterhead Studio</span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-semibold">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-[#C8A96A] text-[#12231B] font-bold">
                   A4 Calibrated
                 </span>
               </h3>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-gray-300">
                 Draft official correspondence with 38mm Golden Ratio logo &amp; 4-pillar institutional footer
               </p>
             </div>
           </div>
 
           {/* Logo Size Calibration Pills */}
-          <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-700 text-xs">
-            <span className="text-slate-400 px-2 font-medium">Logo:</span>
+          <div className="flex items-center gap-1.5 bg-white/10 p-1 rounded-xl border border-white/20 text-xs">
+            <span className="text-gray-300 px-2 font-medium">Logo:</span>
             {(['32mm', '38mm', '44mm'] as const).map((size) => (
               <button
                 key={size}
                 type="button"
                 onClick={() => setLogoSize(size)}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition ${
+                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer ${
                   logoSize === size
-                    ? 'bg-[#C8A96A] text-[#0A1A2F] shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    ? 'bg-[#C8A96A] text-[#12231B] shadow-xs font-bold'
+                    : 'text-gray-200 hover:text-white hover:bg-white/10'
                 }`}
               >
                 {size === '38mm' ? 'Standard (38mm) ✓' : size === '32mm' ? 'Compact (32mm)' : 'Executive (44mm)'}
@@ -166,37 +176,30 @@ Ariel Marketing & Communications Limited`);
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyText}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 transition cursor-pointer"
               title="Copy letter text to clipboard"
             >
-              {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#C8A96A]" />}
               <span>{isCopied ? 'Copied!' : 'Copy Text'}</span>
             </button>
 
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] shadow-lg transition"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#12231B] shadow-md transition cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / Save PDF</span>
-            </button>
-
-            <button
-              onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors ml-1"
-            >
-              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Workspace Body: Left controls + Right A4 Paper Stage */}
-        <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-800">
+        <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#DDE3DD]">
           
           {/* Left Configuration Sidebar (4 cols) */}
-          <div className="lg:col-span-4 p-5 overflow-y-auto space-y-4 bg-[#0B132B]">
+          <div className="lg:col-span-4 p-5 overflow-y-auto space-y-4 bg-[#F8FAF8]">
             <div>
-              <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">
+              <span className="text-xs font-bold text-[#1F3A2E] uppercase tracking-wider block mb-2 font-heading">
                 Pre-Loaded Letter Templates
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -210,10 +213,10 @@ Ariel Marketing & Communications Limited`);
                     key={tpl.id}
                     type="button"
                     onClick={() => handleSelectTemplate(tpl.id)}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold text-left border transition ${
+                    className={`px-3 py-2 rounded-xl text-xs font-semibold text-left border transition cursor-pointer ${
                       templateType === tpl.id
-                        ? 'bg-[#003B73] border-blue-400 text-white shadow'
-                        : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'
+                        ? 'bg-[#1F3A2E] border-[#1F3A2E] text-white shadow-xs'
+                        : 'bg-white border-[#DDE3DD] text-[#1A1A1A] hover:bg-slate-50'
                     }`}
                   >
                     {tpl.label}
@@ -222,9 +225,9 @@ Ariel Marketing & Communications Limited`);
               </div>
             </div>
 
-            <div className="space-y-3 pt-2 border-t border-slate-800">
+            <div className="space-y-3 pt-2 border-t border-[#DDE3DD]">
               <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-[#6B7269] uppercase tracking-wider mb-1 font-heading">
                   Reference Code &amp; Date
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -232,61 +235,61 @@ Ariel Marketing & Communications Limited`);
                     type="text"
                     value={refCode}
                     onChange={(e) => setRefCode(e.target.value)}
-                    className="px-2.5 py-1.5 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="px-2.5 py-1.5 text-xs rounded-lg bg-white border border-[#DDE3DD] text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-2xs font-mono"
                   />
                   <input
                     type="text"
                     value={letterDate}
                     onChange={(e) => setLetterDate(e.target.value)}
-                    className="px-2.5 py-1.5 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#C8A96A]"
+                    className="px-2.5 py-1.5 text-xs rounded-lg bg-white border border-[#DDE3DD] text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-2xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-[#6B7269] uppercase tracking-wider mb-1 font-heading">
                   Recipient Address Block
                 </label>
                 <textarea
                   rows={2}
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#C8A96A] font-sans"
+                  className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white border border-[#DDE3DD] text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] font-sans shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-[#6B7269] uppercase tracking-wider mb-1 font-heading">
                   Subject Heading
                 </label>
                 <input
                   type="text"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-xs font-bold rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#C8A96A]"
+                  className="w-full px-2.5 py-1.5 text-xs font-bold rounded-lg bg-white border border-[#DDE3DD] text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-[#6B7269] uppercase tracking-wider mb-1 font-heading">
                   Letter Body (Markdown / Plain Text)
                 </label>
                 <textarea
                   rows={8}
                   value={letterBody}
                   onChange={(e) => setLetterBody(e.target.value)}
-                  className="w-full px-2.5 py-2 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-[#C8A96A] font-sans leading-relaxed"
+                  className="w-full px-2.5 py-2 text-xs rounded-lg bg-white border border-[#DDE3DD] text-[#1A1A1A] focus:outline-none focus:border-[#1F3A2E] font-sans leading-relaxed shadow-2xs"
                 />
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400">
+            <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-[11px] text-[#8A6D3B]">
               💡 <strong>Pro-Tip:</strong> The paper preview on the right renders in genuine <strong>A4 dimensions (210mm x 297mm)</strong>. Clicking Print will trigger high-definition borderless vector PDF generation.
             </div>
           </div>
 
           {/* Right A4 Paper Stage (8 cols) */}
-          <div className="lg:col-span-8 p-4 sm:p-6 overflow-y-auto flex justify-center bg-slate-950/70">
+          <div className="lg:col-span-8 p-4 sm:p-6 overflow-y-auto flex justify-center bg-[#F1F3EE]">
             {/* Real Simulated A4 Sheet */}
             <div 
               id="printable-a4-letterhead"

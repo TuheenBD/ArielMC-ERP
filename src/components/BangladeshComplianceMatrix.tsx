@@ -73,7 +73,7 @@ export const BangladeshComplianceMatrix: React.FC<BangladeshComplianceMatrixProp
   theme = 'crm-green',
 }) => {
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
 
   // Navigation sub-tabs
   const [activeSubTab, setActiveSubTab] = useState<ComplianceSubTab>('CHECKLIST');

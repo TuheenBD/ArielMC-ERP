@@ -373,19 +373,20 @@ CREATE TABLE IF NOT EXISTS pnl_records (
   if (!isOpen) return null;
 
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
+  const isHeritage = isHydrangea;
 
   // Theme-aware styles
   const modalShell = isRoyal
     ? 'bg-[#0B132B] border border-slate-700/80 text-slate-100'
-    : isHeritage
-    ? 'bg-[#1C160C] border border-[#8A6D3B]/60 text-[#F5EEDC]'
+    : isHydrangea
+    ? 'bg-[#1C0624] border border-[#AD56C4]/40 text-[#FCE7F3]'
     : 'bg-[#12231B] border border-[#2C5240] text-white';
 
   const modalHeaderBg = isRoyal
     ? 'bg-[#0F172A] border-b border-slate-800'
-    : isHeritage
-    ? 'bg-[#261E10] border-b-2 border-[#C8A96A]'
+    : isHydrangea
+    ? 'bg-[#2B0C38] border-b-2 border-[#AD56C4]'
     : 'bg-[#162B22] border-b-2 border-[#C8A96A]';
 
   const iconBox = isRoyal
@@ -649,6 +650,8 @@ CREATE TABLE IF NOT EXISTS pnl_records (
                     { label: 'Bangladesh Compliance', table: 'compliance_records', count: tableCounts.compliance_records ?? 34, desc: '34-Step Statutory Legal Checklist' },
                     { label: 'POS Transactions', table: 'pos_transactions', count: tableCounts.pos_transactions ?? 8, desc: 'Retail & Wholesale Store Receipts' },
                     { label: 'Finance PnL Records', table: 'pnl_records', count: tableCounts.pnl_records ?? 6, desc: 'Multi-Currency Revenue & EBITDA' },
+                    { label: 'Email Outbox Queue', table: 'email_queue', count: tableCounts.email_queue ?? 3, desc: 'Asynchronous Ingestion Outbox' },
+                    { label: 'Email Audit Ledger', table: 'email_audit_ledger', count: tableCounts.email_audit_ledger ?? 3, desc: 'Real-Time Webhook Telemetry' },
                   ].map((item, idx) => (
                     <div 
                       key={idx}

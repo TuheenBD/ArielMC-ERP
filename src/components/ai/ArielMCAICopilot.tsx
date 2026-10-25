@@ -528,11 +528,11 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   };
 
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
 
-  const themeAccentBg = isRoyal ? 'bg-[#4169E1]' : 'bg-[#1F3A2E]';
-  const themeAccentBorder = isRoyal ? 'border-[#4169E1]' : 'border-[#C8A96A]';
-  const themeAccentRing = isRoyal ? 'ring-[#4169E1]' : 'ring-[#C8A96A]';
+  const themeAccentBg = isRoyal ? 'bg-[#4169E1]' : isHydrangea ? 'bg-[#AD56C4]' : 'bg-[#1F3A2E]';
+  const themeAccentBorder = isRoyal ? 'border-[#4169E1]' : isHydrangea ? 'border-[#AD56C4]' : 'border-[#C8A96A]';
+  const themeAccentRing = isRoyal ? 'ring-[#4169E1]' : isHydrangea ? 'ring-[#AD56C4]' : 'ring-[#C8A96A]';
 
   return (
     <>
@@ -544,7 +544,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
               ? 'w-[calc(100vw-3rem)] max-w-4xl h-[calc(100vh-5rem)]'
               : 'w-[92vw] sm:w-[460px] h-[640px] max-h-[85vh]'
           } ${
-            isRoyal ? 'border-[#4169E1]' : 'border-[#C8A96A]'
+            isRoyal ? 'border-[#4169E1]' : isHydrangea ? 'border-[#AD56C4]' : 'border-[#C8A96A]'
           }`}
         >
           {/* Header Bar */}
@@ -552,8 +552,8 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             className={`px-4 py-3.5 flex items-center justify-between text-white border-b ${
               isRoyal
                 ? 'bg-[#0F172A] border-[#1E293B]'
-                : isHeritage
-                ? 'bg-[#183124] border-[#2A4837]'
+                : isHydrangea
+                ? 'bg-[#230C2E] border-[#3D1A4D]'
                 : 'bg-[#1F3A2E] border-[#2C5240]'
             }`}
           >

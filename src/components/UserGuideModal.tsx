@@ -51,12 +51,12 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
   if (!isOpen) return null;
 
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
 
   const modalHeaderBg = isRoyal
     ? 'bg-[#0F172A] border-b border-[#1E293B] text-white'
-    : isHeritage
-    ? 'bg-[#183124] border-b border-[#2A4837] text-white'
+    : isHydrangea
+    ? 'bg-[#230C2E] border-b border-[#3D1A4D] text-white'
     : 'bg-[#1F3A2E] border-b border-[#2C5240] text-white';
 
   const chapters: Chapter[] = [

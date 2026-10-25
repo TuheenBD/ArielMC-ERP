@@ -31,8 +31,11 @@ import {
   MapPin,
   Send,
   Zap,
+  Mail,
 } from 'lucide-react';
 import { INITIAL_SAMPLE_BUFFER_ITEMS, INITIAL_SAMPLE_DISPATCHES } from '@/data/initialSampleDispatches';
+import { dispatchErpEmail } from '@/lib/emailService';
+
 
 interface SampleDispatchProtocolSectionProps {
   crmLeads?: CrmLead[];
@@ -181,6 +184,30 @@ export function SampleDispatchProtocolSection({
 
       setDispatches([newDispatch, ...dispatches]);
       setIsSubmitting(false);
+
+      // Automated Asynchronous Email Pipeline Ingestion
+      if (buyerEmail && buyerEmail.includes('@')) {
+        dispatchErpEmail({
+          to: buyerEmail,
+          recipientName: buyerContact || buyerCompany,
+          subject: `[Sample Dispatch #${newDispatch.dispatchNumber}] ${items[0]?.styleName || 'Export Prototype'} — Dispatched via ${newDispatch.courier}`,
+          templateId: 'SAMPLE_DISPATCH',
+          variables: {
+            sampleCode: newDispatch.dispatchNumber,
+            buyerName: buyerCompany,
+            sku: items[0]?.sku || 'SKU-001',
+            productName: items[0]?.styleName || 'Export Prototype',
+            tier: dispatchTier,
+            carrier: newDispatch.courier,
+            trackingNumber: newDispatch.awbTrackingNumber,
+            originHub: isTier1 ? (hubCode === 'WH-UK' ? 'Davies Turner UK Hub (Dartford DA2)' : 'Dachser European Logistics Hub (Hamburg DE)') : 'Dhaka OEM Artisan R&D Facility',
+            destinationAddress: newDispatch.buyerAddress,
+            estimatedDeliveryDate: newDispatch.estimatedDeliveryDate,
+          },
+          provider: 'RESEND',
+        }).catch((err) => console.warn('Sample email dispatch notice:', err));
+      }
+
       setSuccessMessage(`Sample Dispatch ${newDispatch.dispatchNumber} prepared! Tracking AWB: ${newDispatch.awbTrackingNumber}`);
       setActiveTab('DISPATCH_LOG');
 
@@ -862,8 +889,43 @@ export function SampleDispatchProtocolSection({
 
                         <td className="py-3.5 px-4 text-right space-x-2">
                           <button
+                            onClick={async () => {
+                              try {
+                                const targetEmail = dsp.buyerEmail || `procurement@${dsp.buyerCompany.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+                                await dispatchErpEmail({
+                                  to: targetEmail,
+                                  recipientName: dsp.buyerContact || dsp.buyerCompany,
+                                  subject: `[Sample Dispatch #${dsp.dispatchNumber}] ${dsp.sampleItems[0]?.styleName || 'Export Sample'} — Courier Tracking`,
+                                  templateId: 'SAMPLE_DISPATCH',
+                                  variables: {
+                                    sampleCode: dsp.dispatchNumber,
+                                    buyerName: dsp.buyerCompany,
+                                    sku: dsp.sampleItems[0]?.sku || 'SKU-001',
+                                    productName: dsp.sampleItems[0]?.styleName || 'Export Prototype',
+                                    tier: dsp.dispatchTier,
+                                    carrier: dsp.courier,
+                                    trackingNumber: dsp.awbTrackingNumber,
+                                    originHub: dsp.hubOrOrigin,
+                                    destinationAddress: dsp.buyerAddress || `${dsp.buyerCountry} Receiving Depot`,
+                                    estimatedDeliveryDate: dsp.estimatedDeliveryDate,
+                                  },
+                                  provider: 'RESEND',
+                                });
+                                alert(`Dispatched tracking protocol for ${dsp.dispatchNumber} to ${dsp.buyerCompany} (${targetEmail})!`);
+                              } catch (e: any) {
+                                alert(`Error: ${e.message}`);
+                              }
+                            }}
+                            className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 transition-all inline-flex items-center gap-1 border border-emerald-300 dark:border-emerald-800 cursor-pointer"
+                            title="Dispatch branded sample tracking email to buyer"
+                          >
+                            <Mail className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                            Email Tracking
+                          </button>
+
+                          <button
                             onClick={() => setSelectedInvoice(dsp)}
-                            className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all inline-flex items-center gap-1"
+                            className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all inline-flex items-center gap-1 cursor-pointer"
                           >
                             <FileText className="w-3 h-3" />
                             Invoice / Docket

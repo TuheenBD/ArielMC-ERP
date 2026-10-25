@@ -192,7 +192,8 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   theme = 'crm-green',
 }) => {
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
+  const isHeritage = isHydrangea;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedStage, setSelectedStage] = useState<SampleStage | 'ALL'>('ALL');
@@ -319,7 +320,7 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
       </div>
 
       {/* Sub-Tab Navigation Bar */}
-      <div className="flex items-center gap-2 border-b border-[#DDE3DD] pb-2 overflow-x-auto text-xs font-montserrat">
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#DDE3DD] pb-2.5 text-xs font-montserrat">
         <button
           onClick={() => setActiveSampleModuleTab('TRACKER')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
@@ -2518,7 +2519,8 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
   theme = 'crm-green',
 }) => {
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
+  const isHeritage = isHydrangea;
 
   const [sector, setSector] = useState<ProductSector>('LEATHER');
   const [styleName, setStyleName] = useState('');

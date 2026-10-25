@@ -1259,3 +1259,47 @@ export interface Daily3PlDispatchManifest {
   items: DispatchManifestItem[];
 }
 
+// -------------------------------------------------------------
+// Milestone 7: High-Performance Asynchronous Email Pipeline Types
+// -------------------------------------------------------------
+
+export type EmailQueueStatus = 'queued' | 'processing' | 'sent' | 'delivered' | 'bounced' | 'failed';
+
+export type EmailTemplateType = 
+  | 'INVOICE' 
+  | 'SAMPLE_DISPATCH' 
+  | 'ORDER_CONFIRMATION' 
+  | 'FACTORY_PO' 
+  | 'SYSTEM_ALERT' 
+  | 'B2B_PITCH'
+  | 'CUSTOM';
+
+export type EmailProviderType = 'RESEND' | 'POSTMARK' | 'HOSTINGER' | 'GMAIL' | 'SIMULATED';
+
+export interface EmailQueueItem {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  recipient: string;
+  recipientName?: string;
+  templateId: EmailTemplateType;
+  subject: string;
+  payload: Record<string, any>;
+  status: EmailQueueStatus;
+  externalMessageId?: string;
+  deliveryErrorDetails?: string;
+  attempts: number;
+  provider?: EmailProviderType;
+}
+
+export interface EmailAuditLedgerItem {
+  id: string;
+  queueId?: string;
+  externalMessageId?: string;
+  eventType: 'queued' | 'sent' | 'delivery' | 'bounce' | 'open' | 'click' | 'spam';
+  recipient: string;
+  rawPayload?: Record<string, any>;
+  createdAt: string;
+}
+
+

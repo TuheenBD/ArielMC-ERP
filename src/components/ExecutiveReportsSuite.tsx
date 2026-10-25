@@ -160,7 +160,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
   initialView = 'DIRECTORY',
 }) => {
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
   const isCalifornia = theme === 'california-beaches';
   const isMossy = theme === 'mossy-hollow';
   const isInkWash = theme === 'ink-wash';
@@ -169,8 +169,8 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
   const activeTabClass = isRoyal
     ? 'bg-[#1E293B] text-white shadow-2xs'
-    : isHeritage
-    ? 'bg-[#244232] text-white shadow-2xs'
+    : isHydrangea
+    ? 'bg-[#341344] text-white shadow-2xs'
     : isCalifornia
     ? 'bg-[#1B2F3B] text-white shadow-2xs'
     : isMossy
@@ -185,8 +185,8 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
   const generateReportBtnBg = isRoyal
     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500'
-    : isHeritage
-    ? 'bg-gradient-to-r from-[#8A6D3B] to-[#735626] hover:from-[#9C7B43] hover:to-[#85652D]'
+    : isHydrangea
+    ? 'bg-gradient-to-r from-[#AD56C4] to-[#7E22CE] hover:from-[#C084FC] hover:to-[#9333EA]'
     : isCalifornia
     ? 'bg-gradient-to-r from-[#2B6B88] to-[#1E526B] hover:from-[#357F9F] hover:to-[#2B6B88]'
     : isMossy
@@ -201,8 +201,8 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
   const generateStatementBtnBg = isRoyal
     ? 'bg-blue-600 hover:bg-blue-700'
-    : isHeritage
-    ? 'bg-[#8A6D3B] hover:bg-[#735626]'
+    : isHydrangea
+    ? 'bg-[#AD56C4] hover:bg-[#86198F]'
     : isCalifornia
     ? 'bg-[#2B6B88] hover:bg-[#20526B]'
     : isMossy
@@ -548,19 +548,31 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
               {/* Category Filter Pills (All, Tasks, CRM, Projects, Finance) */}
               <div className="flex items-center gap-1.5 p-1 bg-[#F4F6F4] border border-[#DDE3DD] rounded-xl text-xs font-semibold overflow-x-auto">
-                {(['ALL', 'TASKS', 'CRM', 'PROJECTS', 'FINANCE'] as ReportCategory[]).map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-3 py-1.5 rounded-lg transition-all capitalize cursor-pointer ${
-                      activeCategory === cat
-                        ? 'bg-white text-[#1F3A2E] shadow-xs font-bold border border-[#DDE3DD]'
-                        : 'text-[#6B7269] hover:text-[#1F3A2E]'
-                    }`}
-                  >
-                    {cat.toLowerCase()}
-                  </button>
-                ))}
+                {(['ALL', 'TASKS', 'CRM', 'PROJECTS', 'FINANCE'] as ReportCategory[]).map((cat) => {
+                  const label =
+                    cat === 'ALL'
+                      ? 'All'
+                      : cat === 'TASKS'
+                      ? 'Tasks'
+                      : cat === 'CRM'
+                      ? 'CRM'
+                      : cat === 'PROJECTS'
+                      ? 'Projects'
+                      : 'Finance';
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat)}
+                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        activeCategory === cat
+                          ? 'bg-white text-[#1F3A2E] shadow-xs font-bold border border-[#DDE3DD]'
+                          : 'text-[#6B7269] hover:text-[#1F3A2E]'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -575,7 +587,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('TASK_SUMMARY')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Task Summary Report"
                 >
@@ -591,7 +603,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('TASKS_IN_PROGRESS')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Tasks In Progress Report"
                 >
@@ -607,7 +619,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('TASKS_BY_ASSIGNEE')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Tasks By Assignee Report"
                 >
@@ -623,7 +635,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('ALL_TASKS')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate All Tasks Master Report"
                 >
@@ -639,7 +651,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('SPENT_TIME_WEEKLY')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Spent Time Weekly Report"
                 >
@@ -655,7 +667,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('ESTIMATED_SPENT_ALL')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Estimated vs Spent Time Report"
                 >
@@ -671,7 +683,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('SDO_SAMPLING_VARIANCE')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate SDO Sampling Variance Report"
                 >
@@ -699,7 +711,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div
-                  onClick={() => { setSelectedGenReportType('CRM_PIPELINE'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('CRM_ACCOUNTS_REPORT')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate CRM Lead Report"
                 >
@@ -715,7 +727,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('CRM_PIPELINE'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('CRM_OPPORTUNITIES_FUNNEL')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate All Opportunities Pipeline Report"
                 >
@@ -743,7 +755,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
 
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div
-                  onClick={() => { setSelectedGenReportType('ANNUAL_FINANCIAL_MATRIX'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('PAYMENTS_DISBURSEMENTS')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Payments Disbursement Ledger"
                 >
@@ -759,7 +771,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('ACCOUNTS_PAYABLE'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('UPCOMING_EXPENSES_COMMITMENTS')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Upcoming Expenses Report"
                 >
@@ -775,7 +787,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('COMMERCIAL_INVOICES'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('UPCOMING_INCOME_MILESTONES')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Upcoming Income & Receivables Report"
                 >
@@ -791,7 +803,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('ANNUAL_FINANCIAL_MATRIX'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('PROJECT_CASH_FLOW_ALLOCATION')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Project Cash Flow Report"
                 >
@@ -807,7 +819,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </div>
 
                 <div
-                  onClick={() => { setSelectedGenReportType('TASKS_OPERATIONS'); setIsReportGenModalOpen(true); }}
+                  onClick={() => handleOpenReportModal('PAID_TASKS_CERTIFICATES')}
                   className="p-4 rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
                   title="Generate Paid Tasks & QC Certificates Report"
                 >

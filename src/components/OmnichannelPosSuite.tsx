@@ -445,14 +445,14 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
 
   // Themes
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
 
-  const containerBg = isRoyal ? 'bg-[#0B132B] text-slate-100' : isHeritage ? 'bg-[#181208] text-[#F5EEDC]' : 'bg-[#0D1913] text-white';
-  const headerBg = isRoyal ? 'bg-[#0F172A] border-slate-800' : isHeritage ? 'bg-[#261E10] border-[#8A6D3B]/40' : 'bg-[#162B22] border-[#2C5240]';
-  const cardBg = isRoyal ? 'bg-slate-900/80 border-slate-800' : isHeritage ? 'bg-[#22180C] border-[#8A6D3B]/30' : 'bg-[#12231B] border-[#2C5240]';
-  const terminalCartBg = isRoyal ? 'bg-slate-950/90 border-slate-800' : isHeritage ? 'bg-[#1C140A] border-[#8A6D3B]/40' : 'bg-[#0D1913] border-[#2C5240]';
-  const accentGold = isRoyal ? 'text-blue-400' : 'text-[#C8A96A]';
-  const accentBadge = isRoyal ? 'bg-blue-500/20 text-blue-300 border-blue-500/30' : 'bg-[#C8A96A]/20 text-[#C8A96A] border-[#C8A96A]/30';
+  const containerBg = isRoyal ? 'bg-[#0B132B] text-slate-100' : isHydrangea ? 'bg-[#15031D] text-[#FCE7F3]' : 'bg-[#0D1913] text-white';
+  const headerBg = isRoyal ? 'bg-[#0F172A] border-slate-800' : isHydrangea ? 'bg-[#2B0C38] border-[#AD56C4]/40' : 'bg-[#162B22] border-[#2C5240]';
+  const cardBg = isRoyal ? 'bg-slate-900/80 border-slate-800' : isHydrangea ? 'bg-[#23082C] border-[#AD56C4]/30' : 'bg-[#12231B] border-[#2C5240]';
+  const terminalCartBg = isRoyal ? 'bg-slate-950/90 border-slate-800' : isHydrangea ? 'bg-[#1C0624] border-[#AD56C4]/40' : 'bg-[#0D1913] border-[#2C5240]';
+  const accentGold = isRoyal ? 'text-blue-400' : isHydrangea ? 'text-[#FF9CE9]' : 'text-[#C8A96A]';
+  const accentBadge = isRoyal ? 'bg-blue-500/20 text-blue-300 border-blue-500/30' : isHydrangea ? 'bg-[#AD56C4]/20 text-[#FF9CE9] border-[#AD56C4]/30' : 'bg-[#C8A96A]/20 text-[#C8A96A] border-[#C8A96A]/30';
 
   return (
     <div className={`flex flex-col h-full min-h-screen ${containerBg} font-sans`}>
@@ -510,7 +510,7 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
             }`}
           >
             <ShoppingBag className="w-4 h-4 text-[#C8A96A]" />
-            <span>D2C Luxury Retail POS</span>
+            <span>Store Retail POS</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">
               Full MSRP
             </span>
@@ -549,24 +549,31 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
           </button>
 
           {/* Tab Navigation: Register vs Transactions */}
-          <div className="flex items-center rounded-xl bg-black/40 border border-white/10 p-0.5">
+          <div className="flex items-center rounded-xl bg-black/40 border border-white/10 p-1 gap-1">
             <button
               onClick={() => setActiveTab('REGISTER')}
-              className={`p-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'REGISTER' ? 'bg-[#1F3A2E] text-white shadow-xs' : 'text-gray-400 hover:text-white'
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === 'REGISTER'
+                  ? 'bg-[#1F3A2E] text-white shadow-xs border border-[#C8A96A]/40'
+                  : 'text-gray-400 hover:text-white'
               }`}
-              title="POS Register & Terminal"
+              title="Showroom POS Register & Checkout Terminal"
             >
-              <Store className="w-4 h-4" />
+              <Store className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="hidden sm:inline">Showroom POS</span>
             </button>
+
             <button
               onClick={() => setActiveTab('TRANSACTIONS')}
-              className={`p-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'TRANSACTIONS' ? 'bg-[#1F3A2E] text-white shadow-xs' : 'text-gray-400 hover:text-white'
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === 'TRANSACTIONS'
+                  ? 'bg-[#1F3A2E] text-white shadow-xs border border-[#C8A96A]/40'
+                  : 'text-gray-400 hover:text-white'
               }`}
-              title="Sales History & Receipts"
+              title="Showroom Sales History & Receipts"
             >
-              <Receipt className="w-4 h-4" />
+              <Receipt className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span className="hidden sm:inline">Receipts</span>
             </button>
           </div>
         </div>
@@ -1078,13 +1085,23 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
       )}
 
       {/* ========================================================
-          4. PAYMENT & CHECKOUT TENDER MODAL
+          3. PAYMENT & CHECKOUT TENDER MODAL
           ======================================================== */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="w-full max-w-lg rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-6 shadow-2xl space-y-4">
+          <div className="relative w-full max-w-lg rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-6 shadow-2xl space-y-4">
+            {/* Top-Right Absolute Close Button (Standard Window Position) */}
+            <button
+              type="button"
+              onClick={() => setIsCheckoutOpen(false)}
+              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
+              title="Close Window (X)"
+              aria-label="Close Window"
+            >
+              <X className="w-5 h-5" />
+            </button>
             
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+            <div className="flex items-center justify-between pb-3 pr-14 border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-[#C8A96A]/20 text-[#C8A96A]">
                   <CreditCard className="w-5 h-5" />
@@ -1098,12 +1115,6 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
                   </div>
                 </div>
               </div>
-              <button
-                onClick={() => setIsCheckoutOpen(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
 
             {/* Total Balance Due Card */}
@@ -1250,9 +1261,19 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
           ======================================================== */}
       {viewingReceipt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="w-full max-w-md rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-5 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
-            
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 shrink-0 no-print">
+          <div className="relative w-full max-w-md rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-5 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+            {/* Top-Right Absolute Close Button (Standard Window Position) */}
+            <button
+              type="button"
+              onClick={() => setViewingReceipt(null)}
+              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
+              title="Close Window (X)"
+              aria-label="Close Window"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center justify-between pb-3 pr-14 border-b border-white/10 shrink-0 no-print">
               <div className="flex items-center gap-2">
                 <Receipt className="w-5 h-5 text-[#C8A96A]" />
                 <h3 className="font-heading font-bold text-sm text-white">
@@ -1275,12 +1296,6 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
                 >
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Share (Verify / Ack)</span>
-                </button>
-                <button
-                  onClick={() => setViewingReceipt(null)}
-                  className="p-1 rounded-lg text-gray-400 hover:text-white"
-                >
-                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -1424,21 +1439,25 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
           ======================================================== */}
       {isCloseDrawerModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="w-full max-w-lg rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-6 shadow-2xl space-y-4">
+          <div className="relative w-full max-w-lg rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-6 shadow-2xl space-y-4">
+            {/* Top-Right Absolute Close Button (Standard Window Position) */}
+            <button
+              type="button"
+              onClick={() => setIsCloseDrawerModalOpen(false)}
+              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
+              title="Close Window (X)"
+              aria-label="Close Window"
+            >
+              <X className="w-5 h-5" />
+            </button>
             
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+            <div className="flex items-center justify-between pb-3 pr-14 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <Banknote className="w-5 h-5 text-[#C8A96A]" />
                 <h3 className="font-heading font-bold text-base text-white">
                   Cash Drawer &amp; Shift Reconciliation
                 </h3>
               </div>
-              <button
-                onClick={() => setIsCloseDrawerModalOpen(false)}
-                className="p-1 rounded-lg text-gray-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
 
             {/* Shift Metrics Grid */}

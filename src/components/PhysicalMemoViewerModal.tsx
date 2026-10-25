@@ -47,10 +47,20 @@ export const PhysicalMemoViewerModal: React.FC<PhysicalMemoViewerModalProps> = (
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="bg-[#12231B] border-2 border-[#2C5240] rounded-2xl w-full max-w-4xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden text-white">
-        
+      <div className="relative bg-[#12231B] border-2 border-[#2C5240] rounded-2xl w-full max-w-4xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden text-white">
+        {/* Top-Right Absolute Close Button (Standard Window Position) */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
+          title="Close Window (X)"
+          aria-label="Close Window"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {/* Header Bar */}
-        <div className="px-5 py-4 bg-[#0A140F] border-b border-[#2C5240] flex items-center justify-between shrink-0 no-print">
+        <div className="px-5 pr-16 py-4 bg-[#0A140F] border-b border-[#2C5240] flex items-center justify-between shrink-0 no-print">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 text-[#C8A96A] shadow-inner">
               <Paperclip className="w-5 h-5" />
@@ -113,14 +123,6 @@ export const PhysicalMemoViewerModal: React.FC<PhysicalMemoViewerModalProps> = (
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Download</span>
             </a>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
 

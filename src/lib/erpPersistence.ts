@@ -29,6 +29,12 @@ import { BANGLADESH_34_COMPLIANCE_CHECKLIST } from '@/data/bangladeshComplianceC
 import { INITIAL_OFFICIAL_DOCUMENTS } from '@/data/initialOfficialDocuments';
 import { PosRegisterShift, PosTransaction } from '@/types/pos';
 import { INITIAL_REGISTER_SHIFTS, INITIAL_POS_TRANSACTIONS } from '@/data/initialPosData';
+import { BuyerPortfolio } from '@/types/buyerPortfolio';
+import { INITIAL_BUYER_PORTFOLIOS } from '@/data/initialBuyerPortfolios';
+import { FactorySupplierPortfolio } from '@/types/factoryPortfolio';
+import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
+import { D2cSalesPoint, D2cSaleOrder } from '@/types/d2cSales';
+import { INITIAL_D2C_SALES_POINTS, INITIAL_D2C_SALE_ORDERS } from '@/data/initialD2cSalesData';
 
 const LOCAL_STORAGE_KEYS = {
   PRODUCTS: 'arielmc_erp_products_v1',
@@ -45,6 +51,10 @@ const LOCAL_STORAGE_KEYS = {
   COMPLIANCE: 'arielmc_erp_compliance_checklist_v1',
   POS_SHIFTS: 'arielmc_erp_pos_shifts_v1',
   POS_TRANSACTIONS: 'arielmc_erp_pos_transactions_v1',
+  BUYER_PORTFOLIOS: 'arielmc_erp_buyer_portfolios_v1',
+  FACTORY_PORTFOLIOS: 'arielmc_erp_factory_portfolios_v1',
+  D2C_SALES_POINTS: 'arielmc_erp_d2c_sales_points_v1',
+  D2C_SALE_ORDERS: 'arielmc_erp_d2c_sale_orders_v1',
 };
 
 // ==============================================================================
@@ -1648,3 +1658,105 @@ export const testSupabaseHealth = async (): Promise<{
     };
   }
 };
+
+// ==============================================================================
+// 15. BUYER PORTFOLIOS PERSISTENCE
+// ==============================================================================
+
+export const fetchBuyerPortfolios = async (): Promise<BuyerPortfolio[]> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.BUYER_PORTFOLIOS);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Failed to parse cached buyer portfolios:', e);
+    }
+  }
+  return INITIAL_BUYER_PORTFOLIOS;
+};
+
+export const persistBuyerPortfolios = async (portfolios: BuyerPortfolio[]): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.BUYER_PORTFOLIOS, JSON.stringify(portfolios));
+    } catch (e) {
+      console.warn('Failed to cache buyer portfolios:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 16. FACTORY & SUPPLIER PORTFOLIOS PERSISTENCE
+// ==============================================================================
+
+export const fetchFactoryPortfolios = async (): Promise<FactorySupplierPortfolio[]> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.FACTORY_PORTFOLIOS);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Failed to parse cached factory portfolios:', e);
+    }
+  }
+  return INITIAL_FACTORY_PORTFOLIOS;
+};
+
+export const persistFactoryPortfolios = async (portfolios: FactorySupplierPortfolio[]): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.FACTORY_PORTFOLIOS, JSON.stringify(portfolios));
+    } catch (e) {
+      console.warn('Failed to cache factory portfolios:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 17. B2C / D2C MULTICHANNEL SALES POINTS & ORDERS PERSISTENCE
+// ==============================================================================
+
+export const fetchD2cSalesPoints = async (): Promise<D2cSalesPoint[]> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.D2C_SALES_POINTS);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Failed to parse cached D2C sales points:', e);
+    }
+  }
+  return INITIAL_D2C_SALES_POINTS;
+};
+
+export const persistD2cSalesPoints = async (points: D2cSalesPoint[]): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.D2C_SALES_POINTS, JSON.stringify(points));
+    } catch (e) {
+      console.warn('Failed to cache D2C sales points:', e);
+    }
+  }
+};
+
+export const fetchD2cSaleOrders = async (): Promise<D2cSaleOrder[]> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.D2C_SALE_ORDERS);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Failed to parse cached D2C sale orders:', e);
+    }
+  }
+  return INITIAL_D2C_SALE_ORDERS;
+};
+
+export const persistD2cSaleOrders = async (orders: D2cSaleOrder[]): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.D2C_SALE_ORDERS, JSON.stringify(orders));
+    } catch (e) {
+      console.warn('Failed to cache D2C sale orders:', e);
+    }
+  }
+};
+
+

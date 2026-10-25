@@ -71,7 +71,7 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
   theme = 'crm-green',
 }) => {
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
   const isCalifornia = theme === 'california-beaches';
   const isMossy = theme === 'mossy-hollow';
   const isInkWash = theme === 'ink-wash';
@@ -80,8 +80,8 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
 
   const addBtnGradient = isRoyal
     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-blue-950/20'
-    : isHeritage
-    ? 'bg-gradient-to-r from-[#8A6D3B] to-[#735626] hover:from-[#9C7B43] hover:to-[#85652D] shadow-[#735626]/20'
+    : isHydrangea
+    ? 'bg-gradient-to-r from-[#AD56C4] to-[#7E22CE] hover:from-[#C084FC] hover:to-[#9333EA] shadow-purple-950/20'
     : isCalifornia
     ? 'bg-gradient-to-r from-[#2B6B88] to-[#1E526B] hover:from-[#357F9F] hover:to-[#2B6B88] shadow-[#1E526B]/20'
     : isMossy
@@ -96,8 +96,8 @@ export const EntityStationOverview: React.FC<EntityStationOverviewProps> = ({
 
   const dossierBtnBg = isRoyal
     ? 'bg-[#1E293B] hover:bg-[#0F172A] text-blue-300 border-blue-400/60'
-    : isHeritage
-    ? 'bg-[#244232] hover:bg-[#1A3326] text-[#D4AF37] border-[#D4AF37]/60'
+    : isHydrangea
+    ? 'bg-[#341344] hover:bg-[#230C2E] text-pink-200 border-pink-300/60'
     : isCalifornia
     ? 'bg-[#1B2F3B] hover:bg-[#13232C] text-amber-200 border-amber-300/60'
     : isMossy

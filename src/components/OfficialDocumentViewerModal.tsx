@@ -83,26 +83,56 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
       margin: 0;
       padding: 0;
     }
+    :root {
+      --bg-stage: #06130D;
+      --bg-toolbar: #0A140F;
+      --border-toolbar: #2C5240;
+      --text-toolbar: #ffffff;
+      --accent-gold: #C8A96A;
+      --accent-emerald: #10B981;
+    }
+    body.theme-emerald {
+      --bg-stage: #06130D;
+      --bg-toolbar: #0A140F;
+      --border-toolbar: #2C5240;
+    }
+    body.theme-light {
+      --bg-stage: #E6ECE8;
+      --bg-toolbar: #12231B;
+      --border-toolbar: #2C5240;
+    }
+    body.theme-dark {
+      --bg-stage: #040906;
+      --bg-toolbar: #0A140F;
+      --border-toolbar: #2C5240;
+    }
+    body.theme-parchment {
+      --bg-stage: #14211A;
+      --bg-toolbar: #0A140F;
+      --border-toolbar: #2C5240;
+    }
     body {
-      background-color: #0f172a;
+      background-color: var(--bg-stage);
       color: #0f172a;
       font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease;
     }
     .print-toolbar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: #111827;
-      color: #f9fafb;
-      border-bottom: 1px solid #374151;
-      padding: 12px 24px;
+      background: var(--bg-toolbar);
+      color: var(--text-toolbar);
+      border-bottom: 1px solid var(--border-toolbar);
+      padding: 10px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      transition: all 0.25s ease;
     }
     .print-toolbar .toolbar-left {
       display: flex;
@@ -112,7 +142,7 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
     .print-toolbar .toolbar-title {
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #ffffff;
     }
     .print-toolbar .toolbar-ref {
@@ -125,6 +155,64 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
       border-radius: 4px;
       font-weight: 700;
     }
+    .screen-color-picker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-toolbar);
+      padding: 4px 8px;
+      border-radius: 10px;
+    }
+    .picker-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #C8A96A;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .picker-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #94A3B8;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .theme-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+    }
+    .theme-btn.active {
+      background: rgba(44, 82, 64, 0.7);
+      border-color: #C8A96A;
+      color: #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    .color-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .swatch-emerald { background: #06130D; border-color: #2C5240; }
+    .swatch-light { background: #E6ECE8; border-color: #94A3B8; }
+    .swatch-dark { background: #0C1A14; border-color: #C8A96A; }
+    .swatch-parchment { background: #FFFDF9; border-color: #C8A96A; }
     .print-toolbar .toolbar-actions {
       display: flex;
       align-items: center;
@@ -134,7 +222,7 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 16px;
+      padding: 7px 15px;
       border-radius: 8px;
       font-family: 'Montserrat', sans-serif;
       font-size: 12px;
@@ -147,26 +235,31 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
     .btn-primary {
       background: linear-gradient(135deg, #059669, #0d9488);
       color: #ffffff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      border: 1px solid #34D399;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.45);
     }
     .btn-primary:hover {
       background: linear-gradient(135deg, #10b981, #14b8a6);
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.6);
     }
     .btn-secondary {
-      background: #1f2937;
-      color: #e5e7eb;
-      border: 1px solid #4b5563;
+      background: #162B22;
+      color: #E2E8F0;
+      border: 1px solid #2C5240;
     }
     .btn-secondary:hover {
-      background: #374151;
-      color: #ffffff;
+      background: #1F3A2E;
+      color: #FFFFFF;
+      border-color: #C8A96A;
     }
     .paper-stage {
       padding: 30px 16px 60px;
       display: flex;
       justify-content: center;
-      background: #0f172a;
+      background: var(--bg-stage);
+      min-height: calc(100vh - 65px);
+      transition: background-color 0.25s ease;
     }
     .a4-sheet {
       width: 210mm;
@@ -211,7 +304,7 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
     }
   </style>
 </head>
-<body>
+<body class="theme-emerald">
   <div class="print-toolbar no-print">
     <div class="toolbar-left">
       <div style="font-size: 20px;">📜</div>
@@ -221,6 +314,27 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
           <span class="toolbar-ref">${document.docCode}</span>
           <span style="font-size: 11px; color: #9ca3af; font-family: monospace;">Station: ${document.station} • Authority: ${document.issuingAuthority}</span>
         </div>
+      </div>
+    </div>
+    <div class="screen-color-picker no-print">
+      <span class="picker-label">🎨 Screen Color:</span>
+      <div class="picker-group">
+        <button type="button" class="theme-btn active" id="btn-theme-emerald" onclick="setScreenColor('theme-emerald')" title="ArielMC Signature Deep Emerald Canvas">
+          <span class="color-swatch swatch-emerald"></span>
+          <span>Emerald Dark</span>
+        </button>
+        <button type="button" class="theme-btn" id="btn-theme-light" onclick="setScreenColor('theme-light')" title="Soft Light Studio Drafting Canvas">
+          <span class="color-swatch swatch-light"></span>
+          <span>Soft Light</span>
+        </button>
+        <button type="button" class="theme-btn" id="btn-theme-dark" onclick="setScreenColor('theme-dark')" title="Executive Dark Mode Dossier">
+          <span class="color-swatch swatch-dark"></span>
+          <span>Dark Mode</span>
+        </button>
+        <button type="button" class="theme-btn" id="btn-theme-parchment" onclick="setScreenColor('theme-parchment')" title="Ivory Parchment & Gold Borders">
+          <span class="color-swatch swatch-parchment"></span>
+          <span>Ivory / Gold</span>
+        </button>
       </div>
     </div>
     <div class="toolbar-actions">
@@ -237,6 +351,26 @@ export const OfficialDocumentViewerModal: React.FC<OfficialDocumentViewerModalPr
       ${printEl.innerHTML}
     </div>
   </div>
+  <script>
+    function setScreenColor(theme) {
+      document.body.className = theme;
+      var buttons = document.querySelectorAll('.theme-btn');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('active');
+      }
+      var activeBtn = document.getElementById('btn-' + theme);
+      if (activeBtn) activeBtn.classList.add('active');
+      try {
+        localStorage.setItem('arielmc_print_screen_theme', theme);
+      } catch (e) {}
+    }
+    try {
+      var savedTheme = localStorage.getItem('arielmc_print_screen_theme');
+      if (savedTheme) {
+        setScreenColor(savedTheme);
+      }
+    } catch (e) {}
+  </script>
 </body>
 </html>`;
 

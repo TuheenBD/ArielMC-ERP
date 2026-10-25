@@ -31,7 +31,8 @@
       "price": null,
       "cur": "GBP",
       "priceNote": "",
-      "photos": []
+      "photos": [],
+      "updatedAt": "2026-10-19T20:13:04.695Z"
     },
     {
       "id": "P-0002",
@@ -11803,22 +11804,12 @@
       }
     ]
   },
-  "inboundInquiries": [
-    {
-      "id": "INB-1792332111119",
-      "name": "Enterprise Client",
-      "company": "Ariel Global Trade",
-      "email": "client@arielglobal.com",
-      "message": "Requesting 2x 40ft HQ container of Jute Geo-textiles",
-      "receivedAt": "2026-10-18T14:01:51.119Z",
-      "leadId": "LEAD-1792332111119"
-    }
-  ],
+  "inboundInquiries": [],
   "metadata": {
     "version": "2.0.0",
     "dbEngine": "ArielMC Native Relational Storage Engine",
-    "createdAt": "2026-10-18T13:55:17.087Z",
-    "lastSaved": "2026-10-18T14:02:01.464Z",
+    "createdAt": "2026-10-19T18:11:44.309Z",
+    "lastSaved": "2026-10-19T20:13:04.695Z",
     "totalLeads": 254,
     "totalActivities": 11,
     "totalTasks": 252

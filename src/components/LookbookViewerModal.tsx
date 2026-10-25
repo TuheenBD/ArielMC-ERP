@@ -69,20 +69,20 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-[#0F172A] border border-slate-700 rounded-2xl shadow-2xl overflow-hidden text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden text-[#1A1A1A]">
         
         {/* Top Header Bar */}
-        <div className="flex items-center justify-between px-5 py-3.5 bg-[#1E293B] border-b border-slate-700 shrink-0">
+        <div className="flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-[#1F3A2E] via-[#162B22] to-[#0F1E18] text-white border-b border-[#C8A96A]/30 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <span className="px-2.5 py-1 text-[10px] font-mono font-bold uppercase rounded bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30 shrink-0">
+            <span className="px-2.5 py-1 text-[10px] font-mono font-bold uppercase rounded bg-[#C8A96A] text-[#1F3A2E] shadow-xs shrink-0">
               {collateral.code}
             </span>
             <div className="min-w-0">
-              <h3 className="text-base font-bold text-white truncate flex items-center gap-2">
+              <h3 className="text-base font-bold text-white truncate flex items-center gap-2 font-serif">
                 {collateral.title}
               </h3>
-              <p className="text-xs text-slate-400 truncate">
+              <p className="text-xs text-slate-300 truncate">
                 {collateral.sector} Sector • {collateral.season} • {collateral.pages} Pages • {collateral.fileSize}
               </p>
             </div>
@@ -91,17 +91,17 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleCopyShareLink}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors"
               title="Copy buyer shareable link"
             >
-              {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-slate-300" />}
+              {isCopied ? <Check className="w-3.5 h-3.5 text-[#C8A96A]" /> : <Share2 className="w-3.5 h-3.5 text-slate-200" />}
               <span>{isCopied ? 'Link Copied!' : 'Share Link'}</span>
             </button>
 
             <a
               href={collateral.downloadUrl}
               download
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] shadow transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#1F3A2E] shadow transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Download PDF</span>
@@ -109,7 +109,7 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors ml-1"
+              className="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors ml-1"
             >
               <X className="w-5 h-5" />
             </button>
@@ -117,12 +117,12 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
         </div>
 
         {/* Main Content Area (Preview + Side Spec Drawer) */}
-        <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-800">
+        <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-[#DDE3DD]">
           
           {/* Main Visual Carousel (Left 2 Columns) */}
-          <div className="lg:col-span-2 relative flex flex-col justify-between bg-black/50 p-4 sm:p-6 overflow-hidden">
+          <div className="lg:col-span-2 relative flex flex-col justify-between bg-[#F4F6F2] p-4 sm:p-6 overflow-hidden">
             {/* Image Stage */}
-            <div className="relative flex-1 flex items-center justify-center min-h-[380px] max-h-[58vh] overflow-hidden rounded-xl bg-slate-950/60 border border-slate-800/80">
+            <div className="relative flex-1 flex items-center justify-center min-h-[380px] max-h-[58vh] overflow-hidden rounded-xl bg-white border border-[#DDE3DD] shadow-sm">
               <div 
                 className={`relative w-full h-full transition-transform duration-300 cursor-zoom-in flex items-center justify-center ${isZoomed ? 'scale-125' : 'scale-100'}`}
                 onClick={() => setIsZoomed(!isZoomed)}
@@ -144,7 +144,7 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
                   <button
                     onClick={handlePrevPage}
                     disabled={currentPageIndex === 0}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-black/90 text-white disabled:opacity-30 disabled:pointer-events-none transition-all border border-white/10 shadow-lg"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/90 hover:bg-white text-[#1F3A2E] disabled:opacity-30 disabled:pointer-events-none transition-all border border-[#DDE3DD] shadow-md"
                     title="Previous page"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -153,7 +153,7 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
                   <button
                     onClick={handleNextPage}
                     disabled={currentPageIndex === pages.length - 1}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-black/90 text-white disabled:opacity-30 disabled:pointer-events-none transition-all border border-white/10 shadow-lg"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/90 hover:bg-white text-[#1F3A2E] disabled:opacity-30 disabled:pointer-events-none transition-all border border-[#DDE3DD] shadow-md"
                     title="Next page"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -162,8 +162,8 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
               )}
 
               {/* Zoom hint badge */}
-              <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-black/60 backdrop-blur text-[10px] text-slate-300 flex items-center gap-1 border border-white/10">
-                <ZoomIn className="w-3 h-3" />
+              <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-[#1F3A2E]/80 backdrop-blur text-[10px] text-white flex items-center gap-1 border border-white/20">
+                <ZoomIn className="w-3 h-3 text-[#C8A96A]" />
                 <span>{isZoomed ? 'Click to Fit' : 'Click to Zoom'}</span>
               </div>
             </div>
@@ -171,11 +171,11 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
             {/* Bottom Carousel Controls & Captions */}
             <div className="mt-4 flex items-center justify-between gap-4 shrink-0">
               <div className="min-w-0">
-                <span className="text-[11px] font-bold text-[#C8A96A] uppercase tracking-wider block">
+                <span className="text-[11px] font-bold text-[#1F3A2E] uppercase tracking-wider block">
                   Page {currentPageIndex + 1} of {pages.length}: {activePage.title}
                 </span>
                 {activePage.caption && (
-                  <p className="text-xs text-slate-300 truncate mt-0.5">
+                  <p className="text-xs text-slate-600 truncate mt-0.5">
                     {activePage.caption}
                   </p>
                 )}
@@ -191,7 +191,7 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
                       setIsZoomed(false);
                     }}
                     className={`h-2 rounded-full transition-all ${
-                      idx === currentPageIndex ? 'w-6 bg-[#C8A96A]' : 'w-2 bg-slate-700 hover:bg-slate-500'
+                      idx === currentPageIndex ? 'w-6 bg-[#1F3A2E]' : 'w-2 bg-[#DDE3DD] hover:bg-[#C8A96A]'
                     }`}
                     title={`Go to page ${idx + 1}`}
                   />
@@ -201,36 +201,36 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
           </div>
 
           {/* Right Info & Technical Spec Drawer (1 Column) */}
-          <div className="p-5 flex flex-col justify-between overflow-y-auto space-y-5 bg-[#0F172A]">
+          <div className="p-5 flex flex-col justify-between overflow-y-auto space-y-5 bg-[#FCFDFB]">
             <div className="space-y-4">
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-[#1F3A2E]/70 uppercase tracking-wider">
                   Target Procurement Audience
                 </span>
-                <p className="text-sm font-semibold text-slate-200 mt-0.5">
+                <p className="text-sm font-semibold text-[#1A1A1A] mt-0.5">
                   {collateral.targetAudience}
                 </p>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-[#1F3A2E]/70 uppercase tracking-wider">
                   Executive Overview
                 </span>
-                <p className="text-xs text-slate-300 leading-relaxed mt-1">
+                <p className="text-xs text-slate-600 leading-relaxed mt-1">
                   {collateral.description}
                 </p>
               </div>
 
               {/* Tags */}
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                <span className="text-[10px] font-bold text-[#1F3A2E]/70 uppercase tracking-wider block mb-1.5">
                   Key Attributes & Compliance
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {collateral.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-700"
+                      className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#F1F3EE] text-[#1F3A2E] border border-[#DDE3DD]"
                     >
                       {tag}
                     </span>
@@ -239,27 +239,27 @@ export const LookbookViewerModal: React.FC<LookbookViewerModalProps> = ({
               </div>
 
               {/* Institutional Assurance */}
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
-                  <ShieldCheck className="w-4 h-4" />
+              <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-900">
+                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
                   <span>ArielMC Sovereign Safeguards</span>
                 </div>
-                <p className="text-[11px] text-slate-400 leading-normal">
+                <p className="text-[11px] text-emerald-800 leading-normal">
                   All designs and technical parameters featured in this dossier are audited against BSCI, Sedex, and LWG/FDA standards with verified AQL 2.5 pass guarantee.
                 </p>
               </div>
             </div>
 
             {/* Bottom Actions inside drawer */}
-            <div className="pt-4 border-t border-slate-800 space-y-2.5">
+            <div className="pt-4 border-t border-[#DDE3DD] space-y-2.5">
               <button
                 onClick={() => {
                   onClose();
                   onNavigateToSamples?.();
                 }}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#003B73] hover:bg-[#002D59] text-white text-xs font-bold shadow-md transition-colors border border-blue-400/20"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold shadow-sm transition-colors border border-[#1F3A2E]"
               >
-                <Send className="w-3.5 h-3.5" />
+                <Send className="w-3.5 h-3.5 text-[#C8A96A]" />
                 <span>Request Sample Development (SDO)</span>
               </button>
 

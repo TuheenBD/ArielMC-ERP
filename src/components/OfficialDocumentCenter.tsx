@@ -158,7 +158,8 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
   };
 
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
+  const isHeritage = isHydrangea;
 
   // Shell
   const docShell = isRoyal

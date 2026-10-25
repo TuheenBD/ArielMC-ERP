@@ -48,7 +48,7 @@ export const MarketingStrategyPlaybookSection: React.FC<MarketingStrategyPlayboo
   const [activeFlowIndex, setActiveFlowIndex] = useState<number>(0);
 
   const isRoyal = theme === 'royal-blue';
-  const cardBg = isRoyal ? 'bg-[#1E293B] border-slate-700' : 'bg-slate-900 border-slate-800';
+  const cardBg = 'bg-white border-[#DDE3DD] shadow-sm text-[#1A1A1A]';
 
   // ABM Touches Data
   const abmTouches = [
@@ -247,36 +247,36 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
   };
 
   return (
-    <div className="space-y-6 text-white animate-in fade-in duration-300">
+    <div className="space-y-6 text-[#1A1A1A] animate-in fade-in duration-300">
       
       {/* Header Banner */}
-      <div className={`p-6 rounded-2xl ${cardBg} border shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4`}>
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-[#1F3A2E] via-[#162B22] to-[#0F1E18] border border-[#2E5A47] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 text-white">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
+            <span className="p-2 rounded-xl bg-white/10 text-[#C8A96A] border border-[#C8A96A]/30">
               <BookOpen className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-black tracking-tight font-heading flex items-center gap-2">
+            <h2 className="text-xl font-black tracking-tight font-heading flex items-center gap-2 text-white">
               <ArielMC /> <span>Hybrid Marketing Policy &amp; 12-Month Strategic Playbook</span>
             </h2>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/40 uppercase">
               Boardroom Master Dossier
             </span>
           </div>
-          <p className="text-xs text-slate-300 max-w-3xl leading-relaxed">
+          <p className="text-xs text-white/80 max-w-3xl leading-relaxed font-['Open_Sans']">
             Dual-Engine Commercial Architecture bridging Enterprise/Mid-Market B2B and Direct-to-Consumer (B2C/D2C). Incorporates the 21-Day ABM outreach sequence, 7 Klaviyo lifecycle flows, 90-day Q1 sprint tracker, and scalable budget matrix.
           </p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          <span className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
             CMO Authorized • Appendices A–D
           </span>
         </div>
       </div>
 
       {/* Playbook Navigation Sub-Tabs */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+      <div className="bg-white border border-[#DDE3DD] rounded-xl p-1.5 shadow-xs flex flex-wrap items-center gap-1.5 text-xs font-semibold">
         {[
           { id: 'ABM_SEQUENCE' as PlaybookTab, label: 'Appendix B: 21-Day ABM Outreach', icon: Target },
           { id: 'KLAVIYO_FLOWS' as PlaybookTab, label: 'Appendix C: 7 Klaviyo B2C Flows', icon: Mail },
@@ -291,13 +291,13 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#C8A96A] text-[#0A1A2F] font-bold shadow'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                  ? 'bg-[#1F3A2E] text-white font-bold shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50 border border-slate-200/60 bg-slate-50/50'
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#C8A96A]' : 'text-slate-500'}`} />
               <span>{tab.label}</span>
             </button>
           );
@@ -309,14 +309,14 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
           ========================================================================= */}
       {activeTab === 'ABM_SEQUENCE' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-slate-50 border border-[#DDE3DD] text-xs text-[#4A5568] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
             <div>
-              <span className="font-bold text-white text-sm block">
+              <span className="font-bold text-[#1F3A2E] text-sm block font-heading">
                 21-Day Multi-Channel Account Penetration Sequence (Top 50 Accounts)
               </span>
-              Pre-Sequence (Days -14 to 0): Target account buying committee receives 14 days of LinkedIn Thought Leader Ads. SDR prepares 3-bullet hypothesis and dispatches dimensional "Trojan Box".
+              Pre-Sequence (Days -14 to 0): Target account buying committee receives 14 days of LinkedIn Thought Leader Ads. SDR prepares 3-bullet hypothesis and dispatches dimensional &quot;Trojan Box&quot;.
             </div>
-            <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+            <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300 whitespace-nowrap">
               8 Multi-Touch Plays
             </span>
           </div>
@@ -333,23 +333,23 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                     onClick={() => setActiveTouchIndex(idx)}
                     className={`p-3 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-[#003B73] border-blue-400 text-white shadow-lg'
-                        : 'bg-slate-900/90 border-slate-800 text-slate-300 hover:bg-slate-850 hover:text-white'
+                        ? 'bg-[#1F3A2E] border-[#1F3A2E] text-white shadow-md'
+                        : 'bg-white border-[#DDE3DD] text-[#4A5568] hover:bg-slate-50 hover:text-[#1F3A2E]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 font-mono">
+                      <span className={`text-[10px] font-bold uppercase tracking-wider font-mono ${isSelected ? 'text-[#C8A96A]' : 'text-[#8A6D3B]'}`}>
                         {touch.step}
                       </span>
-                      <span className="text-[9.5px] text-slate-300 font-medium">
+                      <span className={`text-[9.5px] font-medium ${isSelected ? 'text-white/80' : 'text-slate-500'}`}>
                         {touch.timing}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <Icon className="w-3.5 h-3.5 text-blue-300 shrink-0" />
-                      <span className="font-bold text-xs truncate">{touch.channel}</span>
+                      <Icon className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-[#C8A96A]' : 'text-[#1F3A2E]'}`} />
+                      <span className={`font-bold text-xs truncate ${isSelected ? 'text-white' : 'text-[#1F3A2E]'}`}>{touch.channel}</span>
                     </div>
-                    <span className="text-[10.5px] text-slate-400 block truncate mt-0.5">
+                    <span className={`text-[10.5px] block truncate mt-0.5 ${isSelected ? 'text-white/70' : 'text-slate-500'}`}>
                       {touch.badge}
                     </span>
                   </div>
@@ -358,62 +358,62 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
             </div>
 
             {/* Right Touch Script & Copy Inspector (8 cols) */}
-            <div className={`lg:col-span-8 p-6 rounded-2xl ${cardBg} border shadow-2xl space-y-4`}>
+            <div className={`lg:col-span-8 p-6 rounded-2xl ${cardBg} border shadow-sm space-y-4`}>
               {(() => {
                 const t = abmTouches[activeTouchIndex];
                 const Icon = t.icon;
                 return (
                   <div className="space-y-4">
-                    <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+                    <div className="flex items-start justify-between border-b border-[#DDE3DD] pb-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30 uppercase">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#C8A96A]/20 text-[#8A6D3B] border border-[#C8A96A]/30 uppercase">
                             {t.step}
                           </span>
-                          <span className="text-xs text-slate-400 font-medium">
+                          <span className="text-xs text-[#6B7269] font-medium">
                             {t.timing}
                           </span>
                         </div>
-                        <h3 className="text-base font-bold text-white mt-1 flex items-center gap-2">
-                          <Icon className="w-4 h-4 text-amber-400" />
+                        <h3 className="text-base font-bold text-[#1F3A2E] mt-1 flex items-center gap-2 font-heading">
+                          <Icon className="w-4 h-4 text-[#C8A96A]" />
                           <span>{t.channel} — {t.badge}</span>
                         </h3>
                       </div>
 
                       <button
                         onClick={() => handleCopyTouch(activeTouchIndex, t.body)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white hover:bg-slate-50 text-[#1F3A2E] border border-[#DDE3DD] shadow-2xs transition cursor-pointer"
                       >
                         {copiedTouchIndex === activeTouchIndex ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
                         ) : (
-                          <Copy className="w-3.5 h-3.5" />
+                          <Copy className="w-3.5 h-3.5 text-[#C8A96A]" />
                         )}
                         <span>{copiedTouchIndex === activeTouchIndex ? 'Copied' : 'Copy Script'}</span>
                       </button>
                     </div>
 
                     {/* Subject Line */}
-                    <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">
+                    <div className="p-3 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] text-xs">
+                      <span className="text-[10px] font-bold text-[#6B7269] uppercase block mb-0.5 font-heading">
                         Subject Line / Touch Header
                       </span>
-                      <p className="font-mono text-white font-semibold">{t.subject}</p>
+                      <p className="font-mono text-[#1F3A2E] font-semibold">{t.subject}</p>
                     </div>
 
                     {/* Body Script */}
-                    <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-xs space-y-2">
-                      <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider block">
+                    <div className="p-4 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] text-xs space-y-2">
+                      <span className="text-[10px] font-bold text-[#8A6D3B] uppercase tracking-wider block font-heading">
                         Verified Execution Copy
                       </span>
-                      <div className="font-sans text-slate-200 leading-relaxed whitespace-pre-line select-text">
+                      <div className="font-sans text-[#1A1A1A] leading-relaxed whitespace-pre-line select-text">
                         {t.body}
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                    <div className="flex items-center justify-between text-[11px] text-[#6B7269] pt-2 border-t border-[#DDE3DD]">
                       <span>Multi-threaded buying committee alignment</span>
-                      <span className="text-emerald-400 font-semibold">15-Minute SDR SLA Response Target</span>
+                      <span className="text-emerald-700 font-semibold">15-Minute SDR SLA Response Target</span>
                     </div>
                   </div>
                 );
@@ -428,12 +428,12 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
           ========================================================================= */}
       {activeTab === 'KLAVIYO_FLOWS' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] text-xs text-[#6B7269] shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <span className="font-bold text-white text-sm block">
+              <span className="font-bold text-[#1F3A2E] text-sm block font-heading">
                 Automated Lifecycle Engine (Driving 30%+ of Direct E-Commerce Revenue)
               </span>
-              Global Rule: 16-hour Smart Sending enabled on low-intent touches. Non-freemail corporate domains auto-tagged <code className="text-amber-300">B2B_Corporate_Lead = True</code> and synced to HubSpot.
+              Global Rule: 16-hour Smart Sending enabled on low-intent touches. Non-freemail corporate domains auto-tagged <code className="text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 font-mono">B2B_Corporate_Lead = True</code> and synced to HubSpot.
             </div>
           </div>
 
@@ -448,17 +448,21 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                     onClick={() => setActiveFlowIndex(idx)}
                     className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-[#003B73] border-blue-400 text-white shadow-lg'
-                        : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-850 hover:text-white'
+                        ? 'bg-[#1F3A2E] border-[#1F3A2E] text-white shadow-md'
+                        : 'bg-white border-[#DDE3DD] text-[#1A1A1A] hover:bg-slate-50'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-xs">{flow.name}</span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-950/60 text-amber-300">
+                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                        isSelected ? 'bg-white/20 text-[#C8A96A]' : 'bg-[#F8FAF8] border border-[#DDE3DD] text-[#8A6D3B]'
+                      }`}>
                         {flow.steps.length} Steps
                       </span>
                     </div>
-                    <span className="text-[10.5px] text-slate-400 block truncate mt-1">
+                    <span className={`text-[10.5px] block truncate mt-1 ${
+                      isSelected ? 'text-white/80' : 'text-[#6B7269]'
+                    }`}>
                       {flow.trigger}
                     </span>
                   </div>
@@ -467,19 +471,19 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
             </div>
 
             {/* Flow Steps Detail (8 cols) */}
-            <div className={`lg:col-span-8 p-6 rounded-2xl ${cardBg} border shadow-xl space-y-4`}>
+            <div className={`lg:col-span-8 p-6 rounded-2xl ${cardBg} border shadow-sm space-y-4`}>
               {(() => {
                 const currentFlow = klaviyoFlows[activeFlowIndex];
                 return (
                   <div className="space-y-4">
-                    <div className="border-b border-slate-800 pb-3">
-                      <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider block font-mono">
+                    <div className="border-b border-[#DDE3DD] pb-3">
+                      <span className="text-[10px] font-bold text-[#8A6D3B] uppercase tracking-wider block font-mono">
                         {currentFlow.id.toUpperCase()}
                       </span>
-                      <h3 className="text-base font-bold text-white mt-0.5">
+                      <h3 className="text-base font-bold text-[#1F3A2E] font-heading mt-0.5">
                         {currentFlow.name}
                       </h3>
-                      <p className="text-xs text-slate-400 mt-0.5">
+                      <p className="text-xs text-[#6B7269] mt-0.5">
                         Trigger: {currentFlow.trigger}
                       </p>
                     </div>
@@ -488,18 +492,18 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                       {currentFlow.steps.map((step, sIdx) => (
                         <div
                           key={sIdx}
-                          className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5"
+                          className="p-3.5 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] space-y-1.5"
                         >
                           <div className="flex items-center justify-between text-xs">
-                            <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-bold font-mono text-[10px]">
+                            <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200 font-bold font-mono text-[10px]">
                               {step.type} ({step.timing})
                             </span>
                           </div>
-                          <p className="text-xs font-bold text-white">
+                          <p className="text-xs font-bold text-[#1A1A1A]">
                             {step.hook}
                           </p>
                           {step.angle && (
-                            <p className="text-[11px] text-slate-300 leading-relaxed">
+                            <p className="text-[11px] text-[#6B7269] leading-relaxed">
                               {step.angle}
                             </p>
                           )}
@@ -519,17 +523,17 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
           ========================================================================= */}
       {activeTab === 'SPRINTS' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-[#DDE3DD] shadow-sm">
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-slate-400 px-2 font-medium">Filter Track:</span>
+              <span className="text-[#6B7269] px-2 font-medium">Filter Track:</span>
               {(['ALL', 'B2B', 'B2C', 'SHARED'] as const).map((tr) => (
                 <button
                   key={tr}
                   onClick={() => setSprintTrackFilter(tr)}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                     sprintTrackFilter === tr
-                      ? 'bg-[#C8A96A] text-[#0A1A2F] font-bold shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#1F3A2E] text-white font-bold shadow-xs'
+                      : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
                   }`}
                 >
                   {tr === 'ALL' ? 'All 12 Weeks' : tr === 'B2B' ? 'B2B Track' : tr === 'B2C' ? 'B2C Track' : 'Shared MarTech'}
@@ -537,14 +541,14 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
               ))}
             </div>
 
-            <span className="text-xs text-slate-400 font-mono">
+            <span className="text-xs text-[#6B7269] font-mono">
               Sprints 1–3 (Weeks 1 through 12)
             </span>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-800">
-            <table className="w-full text-left text-xs text-slate-300 bg-slate-900/90 divide-y divide-slate-800">
-              <thead className="bg-slate-950 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+          <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+            <table className="w-full text-left text-xs text-[#1A1A1A] bg-white divide-y divide-[#DDE3DD]">
+              <thead className="bg-[#F8FAF8] text-[10px] font-bold uppercase tracking-wider text-[#6B7269] font-mono border-b border-[#DDE3DD]">
                 <tr>
                   <th className="p-3 w-28">Week / Phase</th>
                   {(sprintTrackFilter === 'ALL' || sprintTrackFilter === 'B2B') && (
@@ -559,31 +563,31 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                   <th className="p-3 w-24">DRI</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 font-sans">
+              <tbody className="divide-y divide-[#DDE3DD] font-sans">
                 {sprintWeeks.map((w, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="p-3 font-mono font-bold text-white whitespace-nowrap">
+                  <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-mono font-bold text-[#1F3A2E] whitespace-nowrap">
                       <div>{w.week}</div>
-                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-amber-300 font-sans">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-[#8A6D3B] font-sans">
                         {w.phase}
                       </span>
                     </td>
                     {(sprintTrackFilter === 'ALL' || sprintTrackFilter === 'B2B') && (
-                      <td className="p-3 leading-relaxed text-slate-200">
+                      <td className="p-3 leading-relaxed text-[#1A1A1A]">
                         {w.b2b}
                       </td>
                     )}
                     {(sprintTrackFilter === 'ALL' || sprintTrackFilter === 'B2C') && (
-                      <td className="p-3 leading-relaxed text-slate-300">
+                      <td className="p-3 leading-relaxed text-[#4A5568]">
                         {w.b2c}
                       </td>
                     )}
                     {(sprintTrackFilter === 'ALL' || sprintTrackFilter === 'SHARED') && (
-                      <td className="p-3 leading-relaxed text-slate-300">
+                      <td className="p-3 leading-relaxed text-[#4A5568]">
                         {w.shared}
                       </td>
                     )}
-                    <td className="p-3 font-mono text-[10.5px] font-bold text-[#C8A96A] whitespace-nowrap">
+                    <td className="p-3 font-mono text-[10.5px] font-bold text-[#1F3A2E] whitespace-nowrap">
                       {w.dri}
                     </td>
                   </tr>
@@ -600,9 +604,9 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
       {activeTab === 'BUDGET' && (
         <div className="space-y-5">
           {/* Tier Switcher */}
-          <div className="flex items-center justify-between gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-[#DDE3DD] shadow-sm">
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-slate-400 px-2 font-medium">Budget Scenario:</span>
+              <span className="text-[#6B7269] px-2 font-medium">Budget Scenario:</span>
               {[
                 { id: 'CONSERVATIVE' as const, label: 'Conservative ($150,000)' },
                 { id: 'TARGET' as const, label: 'Target Baseline ($200,000) ✓' },
@@ -611,10 +615,10 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                 <button
                   key={tier.id}
                   onClick={() => setBudgetTier(tier.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                     budgetTier === tier.id
-                      ? 'bg-[#C8A96A] text-[#0A1A2F] font-bold shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#1F3A2E] text-white font-bold shadow-xs'
+                      : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
                   }`}
                 >
                   {tier.label}
@@ -622,15 +626,15 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
               ))}
             </div>
 
-            <span className="text-xs text-emerald-400 font-mono">
+            <span className="text-xs text-emerald-700 font-mono font-semibold">
               Pacing: Q1 20% • Q2 25% • Q3 25% • Q4 30%
             </span>
           </div>
 
           {/* Budget Table */}
-          <div className="overflow-x-auto rounded-xl border border-slate-800">
-            <table className="w-full text-left text-xs text-slate-300 bg-slate-900/90 divide-y divide-slate-800">
-              <thead className="bg-slate-950 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+          <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+            <table className="w-full text-left text-xs text-[#1A1A1A] bg-white divide-y divide-[#DDE3DD]">
+              <thead className="bg-[#F8FAF8] text-[10px] font-bold uppercase tracking-wider text-[#6B7269] font-mono border-b border-[#DDE3DD]">
                 <tr>
                   <th className="p-3">Expense Category</th>
                   <th className="p-3 w-20">% Share</th>
@@ -638,7 +642,7 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                   <th className="p-3">Line-Item Tactical Breakdown</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 font-sans">
+              <tbody className="divide-y divide-[#DDE3DD] font-sans">
                 {[
                   {
                     cat: '1. B2C Performance Media',
@@ -681,13 +685,13 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
                     desc: 'HubSpot Pro, Klaviyo, Shopify Plus Apps, Apollo/Clay Enrichment, Triple Whale/Attribution.'
                   },
                 ].map((row, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/40">
-                    <td className="p-3 font-bold text-white">{row.cat}</td>
-                    <td className="p-3 font-mono text-amber-300 font-bold">{row.pct}</td>
-                    <td className="p-3 font-mono text-emerald-400 font-bold text-sm">
+                  <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">{row.cat}</td>
+                    <td className="p-3 font-mono text-[#8A6D3B] font-bold">{row.pct}</td>
+                    <td className="p-3 font-mono text-emerald-700 font-bold text-sm">
                       {budgetTier === 'CONSERVATIVE' ? row.cons : budgetTier === 'TARGET' ? row.target : row.aggr}
                     </td>
-                    <td className="p-3 text-slate-300">{row.desc}</td>
+                    <td className="p-3 text-[#6B7269]">{row.desc}</td>
                   </tr>
                 ))}
               </tbody>
@@ -695,13 +699,13 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
           </div>
 
           {/* CMO 15% Marginal Reallocation Mandate Notice */}
-          <div className="p-4 rounded-xl bg-slate-950 border border-amber-500/30 text-xs text-slate-300 space-y-1.5">
-            <div className="flex items-center gap-2 text-amber-300 font-bold">
-              <Zap className="w-4 h-4" />
+          <div className="p-4 rounded-xl bg-amber-50/80 border border-amber-200 text-xs text-[#1A1A1A] space-y-1.5 shadow-sm">
+            <div className="flex items-center gap-2 text-amber-900 font-bold">
+              <Zap className="w-4 h-4 text-[#C8A96A]" />
               <span>CMO Governance Rule — The 15% Marginal Reallocation Mandate</span>
             </div>
-            <p className="leading-relaxed">
-              At the conclusion of each 30-day operating sprint, the CMO reviews blended CAC payback between the B2B pipeline and B2C media. Up to <strong>15% of working media capital</strong> may be reallocated between tracks without board intervention, shifting funds to whichever engine demonstrates the lowest marginal payback horizon.
+            <p className="leading-relaxed text-[#6B7269]">
+              At the conclusion of each 30-day operating sprint, the CMO reviews blended CAC payback between the B2B pipeline and B2C media. Up to <strong className="text-[#1A1A1A]">15% of working media capital</strong> may be reallocated between tracks without board intervention, shifting funds to whichever engine demonstrates the lowest marginal payback horizon.
             </p>
           </div>
         </div>
@@ -714,38 +718,38 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
         <div className="space-y-5">
           {/* Brand Voice Table */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-[#1F3A2E] font-heading uppercase tracking-wider">
               1.1 Brand Voice &amp; Messaging Architecture (B2B vs B2C)
             </h4>
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left text-xs text-slate-300 bg-slate-900 divide-y divide-slate-800">
-                <thead className="bg-slate-950 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+            <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+              <table className="w-full text-left text-xs text-[#1A1A1A] bg-white divide-y divide-[#DDE3DD]">
+                <thead className="bg-[#F8FAF8] text-[10px] font-bold uppercase tracking-wider text-[#6B7269] font-mono border-b border-[#DDE3DD]">
                   <tr>
                     <th className="p-3 w-32">Dimension</th>
                     <th className="p-3">B2B (Enterprise &amp; Commercial Clients)</th>
                     <th className="p-3">B2C / D2C (Individual Consumers)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
-                  <tr>
-                    <td className="p-3 font-bold text-white">Persona Mindset</td>
-                    <td className="p-3">Risk-averse, ROI-driven, consensus-bound, efficiency-focused.</td>
-                    <td className="p-3">Aspirational, immediate-gratification, identity-driven, value-conscious.</td>
+                <tbody className="divide-y divide-[#DDE3DD]">
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Persona Mindset</td>
+                    <td className="p-3 text-[#1A1A1A]">Risk-averse, ROI-driven, consensus-bound, efficiency-focused.</td>
+                    <td className="p-3 text-[#6B7269]">Aspirational, immediate-gratification, identity-driven, value-conscious.</td>
                   </tr>
-                  <tr>
-                    <td className="p-3 font-bold text-white">Brand Tone</td>
-                    <td className="p-3 text-emerald-400 font-semibold">Authoritative, Consultative, Precision-Oriented (Zero fluff).</td>
-                    <td className="p-3 text-amber-300 font-semibold">Empathetic, Energetic, Accessible, Community-Centric.</td>
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Brand Tone</td>
+                    <td className="p-3 text-emerald-800 font-semibold">Authoritative, Consultative, Precision-Oriented (Zero fluff).</td>
+                    <td className="p-3 text-[#8A6D3B] font-semibold">Empathetic, Energetic, Accessible, Community-Centric.</td>
                   </tr>
-                  <tr>
-                    <td className="p-3 font-bold text-white">Primary Value Pillar</td>
-                    <td className="p-3">Scalability, operational reliability, Total Cost of Ownership (TCO), and competitive moat.</td>
-                    <td className="p-3">Lifestyle transformation, ease of use, immediate utility, and emotional resonance.</td>
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Primary Value Pillar</td>
+                    <td className="p-3 text-[#1A1A1A]">Scalability, operational reliability, Total Cost of Ownership (TCO), and competitive moat.</td>
+                    <td className="p-3 text-[#6B7269]">Lifestyle transformation, ease of use, immediate utility, and emotional resonance.</td>
                   </tr>
-                  <tr>
-                    <td className="p-3 font-bold text-white">Copy Guardrails</td>
-                    <td className="p-3">Avoid hyperbole ("revolutionary"). Anchor claims in case studies, percentages, and time-saved metrics.</td>
-                    <td className="p-3">Avoid corporate jargon ("synergy," "turnkey"). Write at a 7th-to-8th-grade reading level for rapid mobile scanning.</td>
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Copy Guardrails</td>
+                    <td className="p-3 text-[#1A1A1A]">Avoid hyperbole ("revolutionary"). Anchor claims in case studies, percentages, and time-saved metrics.</td>
+                    <td className="p-3 text-[#6B7269]">Avoid corporate jargon ("synergy," "turnkey"). Write at a 7th-to-8th-grade reading level for rapid mobile scanning.</td>
                   </tr>
                 </tbody>
               </table>
@@ -754,37 +758,37 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
 
           {/* Channel Authorization Matrix */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-[#1F3A2E] font-heading uppercase tracking-wider">
               1.3 Channel Authorization Matrix
             </h4>
-            <div className="overflow-x-auto rounded-xl border border-slate-800">
-              <table className="w-full text-left text-xs text-slate-300 bg-slate-900 divide-y divide-slate-800">
-                <thead className="bg-slate-950 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+            <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+              <table className="w-full text-left text-xs text-[#1A1A1A] bg-white divide-y divide-[#DDE3DD]">
+                <thead className="bg-[#F8FAF8] text-[10px] font-bold uppercase tracking-wider text-[#6B7269] font-mono border-b border-[#DDE3DD]">
                   <tr>
                     <th className="p-3">Category</th>
                     <th className="p-3">Approved B2B Channels</th>
                     <th className="p-3">Approved B2C Channels</th>
-                    <th className="p-3 text-rose-400">Restricted / Prohibited</th>
+                    <th className="p-3 text-rose-700">Restricted / Prohibited</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
-                  <tr>
-                    <td className="p-3 font-bold text-white">Paid Social &amp; Video</td>
-                    <td className="p-3">LinkedIn Ads, YouTube B2B Intent</td>
-                    <td className="p-3">Meta (IG/FB), TikTok (Spark), Shorts, Pinterest</td>
-                    <td className="p-3 text-rose-300">Unmoderated programmatic display; politically adjacent placements.</td>
+                <tbody className="divide-y divide-[#DDE3DD]">
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Paid Social &amp; Video</td>
+                    <td className="p-3 text-[#1A1A1A]">LinkedIn Ads, YouTube B2B Intent</td>
+                    <td className="p-3 text-[#6B7269]">Meta (IG/FB), TikTok (Spark), Shorts, Pinterest</td>
+                    <td className="p-3 text-rose-700 font-medium">Unmoderated programmatic display; politically adjacent placements.</td>
                   </tr>
-                  <tr>
-                    <td className="p-3 font-bold text-white">Paid Search &amp; Intent</td>
-                    <td className="p-3">Google Search (High-intent), Bing Corporate, G2/Capterra</td>
-                    <td className="p-3">Google Shopping (PMax), Google Search (Brand &amp; Non-brand)</td>
-                    <td className="p-3 text-rose-300">Competitor trademark insertion in ad headlines.</td>
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Paid Search &amp; Intent</td>
+                    <td className="p-3 text-[#1A1A1A]">Google Search (High-intent), Bing Corporate, G2/Capterra</td>
+                    <td className="p-3 text-[#6B7269]">Google Shopping (PMax), Google Search (Brand &amp; Non-brand)</td>
+                    <td className="p-3 text-rose-700 font-medium">Competitor trademark insertion in ad headlines.</td>
                   </tr>
-                  <tr>
-                    <td className="p-3 font-bold text-white">Outreach &amp; Field</td>
-                    <td className="p-3">Account-Based Direct Mail (Sendoso), VIP Regional Dinners</td>
-                    <td className="p-3">Creator Seeding (50 boxes/mo), Retail Pop-ups</td>
-                    <td className="p-3 text-rose-300">Cold SMS blasting (B2B or B2C); automated LinkedIn connection bots.</td>
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-bold text-[#1F3A2E]">Outreach &amp; Field</td>
+                    <td className="p-3 text-[#1A1A1A]">Account-Based Direct Mail (Sendoso), VIP Regional Dinners</td>
+                    <td className="p-3 text-[#6B7269]">Creator Seeding (50 boxes/mo), Retail Pop-ups</td>
+                    <td className="p-3 text-rose-700 font-medium">Cold SMS blasting (B2B or B2C); automated LinkedIn connection bots.</td>
                   </tr>
                 </tbody>
               </table>
@@ -800,30 +804,32 @@ Curious if point #2 on {{Specific_Bottleneck}} matches what you're seeing intern
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Flywheel 1: B2C -> B2B */}
-            <div className={`p-6 rounded-2xl ${cardBg} border shadow-xl space-y-3`}>
-              <div className="flex items-center gap-2 text-amber-400 font-bold">
-                <Sparkles className="w-5 h-5" />
-                <h4 className="text-base text-white">Bottom-Up Trojan Horse (B2C &rarr; B2B)</h4>
+            <div className={`p-6 rounded-2xl ${cardBg} border shadow-sm space-y-3`}>
+              <div className="flex items-center gap-2 text-amber-600 font-bold font-heading">
+                <Sparkles className="w-5 h-5 text-[#C8A96A]" />
+                <h4 className="text-base text-[#1F3A2E]">Bottom-Up Trojan Horse (B2C &rarr; B2B)</h4>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Automated Shopify webhook monitors customer email domains and executive shipping addresses. When <strong>5+ employees</strong> from a single corporate entity buy ArielMC products on consumer cards, an instant Slack trigger alerts B2B SDRs to pitch an enterprise volume consolidation contract (saving the client 28–35% while securing high-ARR contracts).
+              <p className="text-xs text-[#6B7269] leading-relaxed">
+                Automated Shopify webhook monitors customer email domains and executive shipping addresses. When <strong className="text-[#1A1A1A]">5+ employees</strong> from a single corporate entity buy ArielMC products on consumer cards, an instant Slack trigger alerts B2B SDRs to pitch an enterprise volume consolidation contract (saving the client 28–35% while securing high-ARR contracts).
               </p>
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
-                ⚡ Alert: 12 Users at Target Enterprise identified &rarr; Automated Trojan Horse Play Initialized
+              <div className="p-3 rounded-xl bg-amber-50/90 border border-amber-200/90 text-[11px] font-mono text-amber-900 flex items-center gap-2">
+                <span className="text-amber-600">⚡</span>
+                <span>Alert: 12 Users at Target Enterprise identified &rarr; Automated Trojan Horse Play Initialized</span>
               </div>
             </div>
 
             {/* Flywheel 2: B2B -> B2C */}
-            <div className={`p-6 rounded-2xl ${cardBg} border shadow-xl space-y-3`}>
-              <div className="flex items-center gap-2 text-blue-400 font-bold">
-                <ShieldCheck className="w-5 h-5" />
-                <h4 className="text-base text-white">Institutional Halo Effect (B2B &rarr; B2C)</h4>
+            <div className={`p-6 rounded-2xl ${cardBg} border shadow-sm space-y-3`}>
+              <div className="flex items-center gap-2 text-emerald-700 font-bold font-heading">
+                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                <h4 className="text-base text-[#1F3A2E]">Institutional Halo Effect (B2B &rarr; B2C)</h4>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-[#6B7269] leading-relaxed">
                 B2B enterprise client authority badges ("Trusted by 500+ Industry Leaders") are embedded directly across D2C e-commerce product pages to elevate buyer confidence. Concurrently, B2B enterprise contracts include exclusive employee perk portals, generating zero-CAC D2C repeat customers.
               </p>
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-400">
-                🛡️ Social Proof: Verified LWG Gold &amp; Sedex Authority Strip Active on Storefront
+              <div className="p-3 rounded-xl bg-emerald-50/90 border border-emerald-200/90 text-[11px] font-mono text-emerald-900 flex items-center gap-2">
+                <span>🛡️</span>
+                <span>Social Proof: Verified LWG Gold &amp; Sedex Authority Strip Active on Storefront</span>
               </div>
             </div>
           </div>

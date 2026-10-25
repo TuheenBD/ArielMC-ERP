@@ -8,8 +8,10 @@ import {
   CompanyEntity,
   CurrencyRate,
   BuyerSalesOrder,
-  SampleDevelopmentOrder
+  SampleDevelopmentOrder,
+  EmailProviderType
 } from '@/types/erp';
+import { dispatchErpEmail } from '@/lib/emailService';
 import { ThemeProfile } from '@/components/Sidebar';
 import initialActivitiesData from '@/data/initialCrmActivities.json';
 import initialTasksData from '@/data/initialCrmTasks.json';
@@ -140,7 +142,7 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
 }) => {
   // Theme Flags
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
   const isCalifornia = theme === 'california-beaches';
   const isMossy = theme === 'mossy-hollow';
   const isInkWash = theme === 'ink-wash';
@@ -149,8 +151,8 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
 
   const activeTabClass = isRoyal
     ? 'bg-[#1E293B] text-white shadow-2xs'
-    : isHeritage
-    ? 'bg-[#244232] text-white shadow-2xs'
+    : isHydrangea
+    ? 'bg-[#341344] text-white shadow-2xs'
     : isCalifornia
     ? 'bg-[#1B2F3B] text-white shadow-2xs'
     : isMossy
@@ -165,8 +167,8 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
 
   const actionBtnGradient = isRoyal
     ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-blue-950/20'
-    : isHeritage
-    ? 'bg-gradient-to-r from-[#8A6D3B] to-[#735626] hover:from-[#9C7B43] hover:to-[#85652D] shadow-[#735626]/20'
+    : isHydrangea
+    ? 'bg-gradient-to-r from-[#AD56C4] to-[#7E22CE] hover:from-[#C084FC] hover:to-[#9333EA] shadow-purple-950/20'
     : isCalifornia
     ? 'bg-gradient-to-r from-[#2B6B88] to-[#1E526B] hover:from-[#357F9F] hover:to-[#2B6B88] shadow-[#1E526B]/20'
     : isMossy
@@ -181,8 +183,8 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
 
   const tableHeaderBg = isRoyal
     ? 'bg-[#0F172A] text-white'
-    : isHeritage
-    ? 'bg-[#1C3627] text-white'
+    : isHydrangea
+    ? 'bg-[#230C2E] text-white'
     : isCalifornia
     ? 'bg-[#13232C] text-white'
     : isMossy
@@ -309,6 +311,7 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
   const [selectedInterest, setSelectedInterest] = useState<string>('ALL');
   const [selectedContactability, setSelectedContactability] = useState<string>('ALL');
   const [selectedOwner, setSelectedOwner] = useState<string>('ALL');
+  const [activePresetView, setActivePresetView] = useState<'ALL' | 'TODAY' | 'CALL_FIRST' | 'PRIORITY_A' | 'IN_SAMPLING'>('ALL');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Pagination State for Leads Table
@@ -326,6 +329,13 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
   const [isLeadFormOpen, setIsLeadFormOpen] = useState(false);
   const [leadFormMode, setLeadFormMode] = useState<'add' | 'edit'>('add');
   const [leadFormData, setLeadFormData] = useState<Partial<CrmLead>>({});
+
+  // B2B Pitch Campaign Modal State
+  const [b2bPitchModalLead, setB2bPitchModalLead] = useState<CrmLead | null>(null);
+  const [b2bCampaignPreset, setB2bCampaignPreset] = useState<'RETAIL_PITCH' | 'SAMPLE_OFFER' | 'LOOKBOOK' | 'ESG_DOSSIER'>('RETAIL_PITCH');
+  const [b2bGateway, setB2bGateway] = useState<EmailProviderType>('RESEND');
+  const [b2bCustomNote, setB2bCustomNote] = useState('');
+  const [isDispatchingPitch, setIsDispatchingPitch] = useState(false);
 
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [activityFormData, setActivityFormData] = useState<{
@@ -399,9 +409,37 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
     return `${currencySymbol}${Number(val).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
   };
 
+  // Master Operating Guide Preset Counts
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const presetCounts = useMemo(() => {
+    let today = 0;
+    let callFirst = 0;
+    let priorityA = 0;
+    let inSampling = 0;
+    leads.forEach((l) => {
+      if (l.nextDate && l.nextDate <= todayIso && l.stage !== '8 Won' && l.stage !== '9 Lost or Nurture') today++;
+      if (!l.email && !!l.phone) callFirst++;
+      if (l.priority === 'A') priorityA++;
+      if (l.stage && l.stage.includes('Sample')) inSampling++;
+    });
+    return { today, callFirst, priorityA, inSampling };
+  }, [leads, todayIso]);
+
   // Filtered Leads
   const filteredLeads = useMemo(() => {
     return leads.filter((lead) => {
+      // Master Operating Guide Preset Views: TODAY, CALL-FIRST, PRIORITY A, IN SAMPLING
+      if (activePresetView === 'TODAY') {
+        const isActionDue = !!(lead.nextDate && lead.nextDate <= todayIso && lead.stage !== '8 Won' && lead.stage !== '9 Lost or Nurture');
+        if (!isActionDue) return false;
+      } else if (activePresetView === 'CALL_FIRST') {
+        if (!(!lead.email && !!lead.phone)) return false;
+      } else if (activePresetView === 'PRIORITY_A') {
+        if (lead.priority !== 'A') return false;
+      } else if (activePresetView === 'IN_SAMPLING') {
+        if (!lead.stage?.includes('Sample')) return false;
+      }
+
       // Search
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
@@ -464,7 +502,9 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
     selectedStage,
     selectedInterest,
     selectedOwner,
-    selectedContactability
+    selectedContactability,
+    activePresetView,
+    todayIso
   ]);
 
   // Pagination Slicing
@@ -862,6 +902,89 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
     showToast(`Converted ${lead.company} to Confirmed Order ${soNum}! Opening Order Management...`);
     if (onNavigateTab) {
       setTimeout(() => onNavigateTab('ORDERS'), 600);
+    }
+  };
+
+  // B2B Campaign Outreach Dispatcher
+  const handleDispatchB2bPitch = async () => {
+    if (!b2bPitchModalLead) return;
+
+    const targetEmail = b2bPitchModalLead.email || `sourcing@${b2bPitchModalLead.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+    
+    let campaignTitle = `ArielMC Sourcing Partnership — Ethical Export Manufacturing for ${b2bPitchModalLead.company}`;
+    let customMsg = b2bCustomNote;
+
+    if (b2bCampaignPreset === 'SAMPLE_OFFER') {
+      campaignTitle = `Complimentary 48h Prototype & Swatch Kit — ArielMC for ${b2bPitchModalLead.company}`;
+      if (!customMsg) customMsg = 'We have allocated priority prototyping slots at our UK 3PL buffer (Dartford) to ship verified leather swatches and physical samples within 24-48 hours.';
+    } else if (b2bCampaignPreset === 'LOOKBOOK') {
+      campaignTitle = `Autumn/Winter 2026 Wholesale Sourcing Collection — ArielMC Ltd`;
+      if (!customMsg) customMsg = 'Enclosed is our confidential Autumn/Winter export lookbook detailing FOB Chittagong Port price structures and scalable MOQ volumes.';
+    } else if (b2bCampaignPreset === 'ESG_DOSSIER') {
+      campaignTitle = `ArielMC ESG & Compliance Audit Portfolio — LWG Gold & BSCI Grade-A`;
+      if (!customMsg) customMsg = 'Review our statutory ESG audit certifications across our Savar tannery and factory clusters, ensuring zero Chromium VI and ethical labor standards.';
+    }
+
+    setIsDispatchingPitch(true);
+    try {
+      await dispatchErpEmail({
+        to: targetEmail,
+        recipientName: b2bPitchModalLead.contact || b2bPitchModalLead.company,
+        subject: campaignTitle,
+        templateId: 'B2B_PITCH',
+        variables: {
+          buyerCompany: b2bPitchModalLead.company,
+          buyerContact: b2bPitchModalLead.contact || 'Category Sourcing Director',
+          buyerCountry: b2bPitchModalLead.country,
+          categoryInterest: b2bPitchModalLead.interest || b2bPitchModalLead.focus,
+          campaignTitle,
+          customMessage: customMsg,
+          catalogUrl: 'https://www.arielmc.com',
+          uk3plBufferAvailability: true,
+        },
+        provider: b2bGateway,
+      });
+
+      // Update lead stage to '2 Contacted' if currently at 0 or 1
+      const today = new Date().toISOString().slice(0, 10);
+      const updatedLeads = leads.map((l) => {
+        if (l.id === b2bPitchModalLead.id) {
+          const newStage = (l.stage === '0 Watchlist' || l.stage === '1 Prospect') ? '2 Contacted' : l.stage;
+          return {
+            ...l,
+            stage: newStage,
+            touches: (l.touches || 0) + 1,
+            lastContact: today,
+            nextAction: `Follow up on B2B campaign: ${campaignTitle}`,
+          };
+        }
+        return l;
+      });
+      persistLeads(updatedLeads);
+
+      // Record Activity
+      const newAct: CrmActivity = {
+        id: `A-${Date.now().toString(36).toUpperCase()}`,
+        date: new Date().toISOString(),
+        leadId: b2bPitchModalLead.id,
+        company: b2bPitchModalLead.company,
+        type: 'Email sent',
+        outcome: `Dispatched B2B Campaign: ${b2bCampaignPreset} (via ${b2bGateway})`,
+        note: customMsg || campaignTitle,
+        stage: '2 Contacted',
+        ts: new Date().toISOString(),
+        user: 'Syed Akramul Hassan',
+      };
+      persistActivities([newAct, ...activities]);
+      persistCrmActivity(newAct);
+
+      showToast(`B2B Campaign dispatched to ${b2bPitchModalLead.company} (${targetEmail})!`);
+      setB2bPitchModalLead(null);
+      setB2bCustomNote('');
+    } catch (err: any) {
+      showToast(`Error dispatching email: ${err.message}`);
+    } finally {
+      setIsDispatchingPitch(false);
     }
   };
 
@@ -1678,6 +1801,90 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
                   <span>+ Add Lead</span>
                 </button>
               </div>
+            </div>
+
+            {/* Master Operating Guide Preset Views Bar */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-2 pb-1 border-t border-slate-100 text-xs">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1 flex items-center gap-1">
+                <Filter className="w-3 h-3 text-slate-400" />
+                <span>Operating Views:</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => { setActivePresetView('ALL'); setCurrentPage(1); }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all text-xs flex items-center gap-1.5 cursor-pointer ${
+                  activePresetView === 'ALL'
+                    ? 'bg-[#1F3A2E] text-white shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                }`}
+              >
+                <span>All Accounts</span>
+                <span className="text-[10px] opacity-80 font-mono">({leads.length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setActivePresetView('TODAY'); setCurrentPage(1); }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all text-xs flex items-center gap-1.5 cursor-pointer ${
+                  activePresetView === 'TODAY'
+                    ? 'bg-rose-700 text-white shadow-2xs ring-1 ring-rose-500'
+                    : 'bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200'
+                }`}
+                title="Rule 2: Filter Next Action Date <= today and not Won/Lost (Your daily call list)"
+              >
+                <Clock className="w-3 h-3" />
+                <span>⚡ TODAY (Due / Overdue)</span>
+                <span className="text-[10px] font-bold font-mono px-1.5 py-0.2 rounded-full bg-rose-900/30">
+                  {presetCounts.today}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setActivePresetView('CALL_FIRST'); setCurrentPage(1); }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all text-xs flex items-center gap-1.5 cursor-pointer ${
+                  activePresetView === 'CALL_FIRST'
+                    ? 'bg-amber-600 text-white shadow-2xs ring-1 ring-amber-400'
+                    : 'bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300'
+                }`}
+                title="Rule 4 & Section 7.3: Filter Email is blank and Phone is not blank (Call-First Amber rows)"
+              >
+                <Phone className="w-3 h-3" />
+                <span>📞 CALL-FIRST (48 Phone-Only)</span>
+                <span className="text-[10px] font-bold font-mono px-1.5 py-0.2 rounded-full bg-amber-900/30">
+                  {presetCounts.callFirst}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setActivePresetView('PRIORITY_A'); setCurrentPage(1); }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all text-xs flex items-center gap-1.5 cursor-pointer ${
+                  activePresetView === 'PRIORITY_A'
+                    ? 'bg-indigo-700 text-white shadow-2xs'
+                    : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200'
+                }`}
+                title="Priority A: High-value flagship retailer & wholesaler targets"
+              >
+                <Sparkles className="w-3 h-3 text-[#C8A96A]" />
+                <span>🏆 Priority A</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-indigo-900/30">
+                  {presetCounts.priorityA}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setActivePresetView('IN_SAMPLING'); setCurrentPage(1); }}
+                className={`px-2.5 py-1 rounded-lg font-semibold transition-all text-xs flex items-center gap-1.5 cursor-pointer ${
+                  activePresetView === 'IN_SAMPLING'
+                    ? 'bg-purple-700 text-white shadow-2xs'
+                    : 'bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200'
+                }`}
+                title="Stage 5: Leads with physical prototype or swatch kit in transit"
+              >
+                <Package className="w-3 h-3" />
+                <span>🔬 In Sampling</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-purple-900/30">
+                  {presetCounts.inSampling}
+                </span>
+              </button>
             </div>
 
             {/* Multi-Select Filters Row */}
@@ -2852,6 +3059,13 @@ POST /api/crm
 
                 <div className="flex items-center gap-2.5">
                   <button
+                    onClick={() => setB2bPitchModalLead(selectedLead)}
+                    className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#C8A96A] to-[#DFCA98] text-[#1F3A2E] font-bold hover:brightness-105 text-xs transition-all shadow-xs flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-[#1F3A2E]" />
+                    <span>📬 Dispatch B2B Campaign Pitch</span>
+                  </button>
+                  <button
                     onClick={() => {
                       handleConvertLeadToSdo(selectedLead);
                       setSelectedLead(null);
@@ -3308,6 +3522,229 @@ POST /api/crm
                 className="px-4 py-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white font-bold shadow-sm"
               >
                 Apply to {selectedLeadIds.length} Accounts
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================================= */}
+      {/* MODAL 5: B2B CAMPAIGN PITCH DISPATCHER MODAL */}
+      {/* ========================================================================================= */}
+      {b2bPitchModalLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white border border-[#DDE3DD] shadow-2xl p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1F3A2E] to-[#2C5240] flex items-center justify-center text-white shadow-xs">
+                  <Mail className="w-5 h-5 text-[#C8A96A]" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base font-heading text-[#1F3A2E] flex items-center gap-2">
+                    B2B Campaign Pitch Dispatcher
+                    <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+                      Live Delivery Engine
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-[#6B7269]">
+                    Personalized cold outreach &amp; buyer lookbook dispatch for <strong className="text-[#1F3A2E]">{b2bPitchModalLead.company}</strong> ({b2bPitchModalLead.country})
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setB2bPitchModalLead(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Recipient Details & Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Buyer Contact</span>
+                <span className="font-semibold text-slate-800 text-[12px]">{b2bPitchModalLead.contact || 'Category Sourcing Director'}</span>
+                <span className="text-[10px] text-slate-500 block truncate">{b2bPitchModalLead.email || `sourcing@${b2bPitchModalLead.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`}</span>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Focus / Segment</span>
+                <span className="font-semibold text-slate-800 text-[12px]">{b2bPitchModalLead.interest || b2bPitchModalLead.focus || 'Leather Goods & Footwear'}</span>
+                <span className="text-[10px] text-emerald-700 font-medium block">Tier: {b2bPitchModalLead.tier || 'Tier 1 Target'}</span>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">Current Pipeline Stage</span>
+                <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                  {b2bPitchModalLead.stage} ({b2bPitchModalLead.touches || 0} touches)
+                </span>
+                <span className="text-[10px] text-slate-500 block">Will advance to &apos;2 Contacted&apos;</span>
+              </div>
+            </div>
+
+            {/* Campaign Preset Playbooks */}
+            <div>
+              <label className="block font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span>Select Outreach Playbook Preset</span>
+                <span className="text-[11px] font-normal text-slate-400">Pre-engineered for high executive response</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  {
+                    id: 'RETAIL_PITCH',
+                    title: '🎯 Direct Sourcing Partnership',
+                    desc: 'Full-service ethical leather manufacturing, FOB pricing & UK buffer support.',
+                  },
+                  {
+                    id: 'SAMPLE_OFFER',
+                    title: '🔬 48h Prototype & Swatch Kit',
+                    desc: 'Complimentary physical swatches shipped from Dartford 3PL buffer.',
+                  },
+                  {
+                    id: 'LOOKBOOK',
+                    title: '📖 AW 2026 Wholesale Lookbook',
+                    desc: 'Confidential seasonal line-sheets, factory MOQs & spec sheets.',
+                  },
+                  {
+                    id: 'ESG_DOSSIER',
+                    title: '🌿 ESG & Compliance Dossier',
+                    desc: 'LWG Gold tannery credentials, BSCI Grade-A audit & zero Cr(VI) proof.',
+                  },
+                ].map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => setB2bCampaignPreset(preset.id as any)}
+                    className={`p-2.5 rounded-xl border text-left transition-all ${
+                      b2bCampaignPreset === preset.id
+                        ? 'bg-emerald-50/70 border-emerald-600 shadow-xs ring-1 ring-emerald-600'
+                        : 'bg-white border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="font-bold text-[12px] text-slate-800">{preset.title}</div>
+                    <div className="text-[10px] text-slate-500 mt-0.5 leading-snug">{preset.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Gateway Selection */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Delivery Gateway Provider
+                </label>
+                <select
+                  value={b2bGateway}
+                  onChange={(e) => setB2bGateway(e.target.value as EmailProviderType)}
+                  className="w-full p-2 bg-[#F8FAF8] border border-[#DDE3DD] rounded-lg font-medium text-slate-800"
+                >
+                  <option value="RESEND">Resend API (Dedicated Transactional Engine)</option>
+                  <option value="POSTMARK">Postmark (High Deliverability Stream)</option>
+                  <option value="HOSTINGER">Hostinger Business SMTP (arielmc.com)</option>
+                  <option value="GMAIL">Google Workspace / Gmail API (1:1 Direct)</option>
+                </select>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  {b2bGateway === 'RESEND' && '⚡ Sub-second delivery with open/click telemetry tracking.'}
+                  {b2bGateway === 'POSTMARK' && '🛡️ Isolated IP pool strictly protected against spam filtering.'}
+                  {b2bGateway === 'HOSTINGER' && '🏢 Sends directly authenticated as info@arielmc.com via Hostinger.'}
+                  {b2bGateway === 'GMAIL' && '✉️ High-touch personal sender inbox for senior executive buy-in.'}
+                </p>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Target Destination Address
+                </label>
+                <input
+                  type="text"
+                  readOnly
+                  value={b2bPitchModalLead.email || `sourcing@${b2bPitchModalLead.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`}
+                  className="w-full p-2 bg-slate-100 border border-slate-200 rounded-lg text-slate-600 cursor-not-allowed font-mono text-[11px]"
+                />
+                <p className="text-[10px] text-emerald-700 font-medium mt-1">
+                  ✓ Verified against ArielMC CRM buyer registry
+                </p>
+              </div>
+            </div>
+
+            {/* Custom Addendum / Note */}
+            <div>
+              <label className="block font-bold text-slate-700 mb-1 flex items-center justify-between">
+                <span>Executive Custom Addendum (Optional Override)</span>
+                <span className="text-[10px] text-slate-400">Leave blank to use playbook default messaging</span>
+              </label>
+              <textarea
+                rows={3}
+                placeholder="Add bespoke references (e.g. 'Enjoyed your recent AW footwear drop in London...', 'Offering 15% discount on initial test container FOB Chittagong')..."
+                value={b2bCustomNote}
+                onChange={(e) => setB2bCustomNote(e.target.value)}
+                className="w-full p-2.5 bg-[#F8FAF8] border border-[#DDE3DD] rounded-xl text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-600"
+              />
+            </div>
+
+            {/* Live Template Visual Preview */}
+            <div className="p-3 bg-gradient-to-br from-[#1F3A2E] to-[#162B22] rounded-xl text-white border border-[#C8A96A]/30 space-y-1.5">
+              <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                <span className="text-[10px] font-bold text-[#C8A96A] tracking-wider uppercase flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-[#C8A96A]" />
+                  ArielMC B2B Pitch Preview
+                </span>
+                <span className="text-[10px] text-slate-300">HTML Luxury Template</span>
+              </div>
+              <div className="text-[11px] text-slate-200 leading-relaxed font-sans">
+                <p className="font-semibold text-white">
+                  Dear {b2bPitchModalLead.contact || 'Category Sourcing Director'},
+                </p>
+                <p className="mt-1 line-clamp-2 text-slate-300">
+                  {b2bCustomNote || (
+                    b2bCampaignPreset === 'SAMPLE_OFFER'
+                      ? 'We have allocated priority prototyping slots at our UK 3PL buffer (Dartford) to ship verified leather swatches and physical samples within 24-48 hours.'
+                      : b2bCampaignPreset === 'LOOKBOOK'
+                      ? 'Enclosed is our confidential Autumn/Winter export lookbook detailing FOB Chittagong Port price structures and scalable MOQ volumes.'
+                      : b2bCampaignPreset === 'ESG_DOSSIER'
+                      ? 'Review our statutory ESG audit certifications across our Savar tannery and factory clusters, ensuring zero Chromium VI and ethical labor standards.'
+                      : `ArielMC Ltd is pleased to present our private-label manufacturing capabilities in leather goods and footwear for ${b2bPitchModalLead.company}.`
+                  )}
+                </p>
+                <div className="flex items-center gap-2 mt-2 pt-2 border-t border-white/10 text-[10px] text-amber-200">
+                  <span>🇬🇧 UK Buffer Stock: Available in Dartford</span>
+                  <span>•</span>
+                  <span>🌿 LWG Gold Certified</span>
+                  <span>•</span>
+                  <span>🚢 FOB Chittagong</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setB2bPitchModalLead(null)}
+                className="px-4 py-2 rounded-xl border border-[#DDE3DD] text-[#6B7269] hover:bg-slate-50 transition-colors font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDispatchingPitch}
+                onClick={handleDispatchB2bPitch}
+                className={`px-5 py-2 rounded-xl bg-gradient-to-r from-[#1F3A2E] to-[#2C5240] hover:from-[#264839] hover:to-[#35634d] text-white font-bold shadow-md flex items-center gap-2 transition-all active:scale-95 cursor-pointer ${
+                  isDispatchingPitch ? 'opacity-70 cursor-wait' : ''
+                }`}
+              >
+                {isDispatchingPitch ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin text-[#C8A96A]" />
+                    <span>Dispatching via {b2bGateway}...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 text-[#C8A96A]" />
+                    <span>Dispatch B2B Pitch Now</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

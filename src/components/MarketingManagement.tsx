@@ -106,28 +106,14 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
 
   // Theme Helpers
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
   const isCalifornia = theme === 'california-beaches';
   const isMossy = theme === 'mossy-hollow';
   const isInkWash = theme === 'ink-wash';
   const isPeach = theme === 'fresh-peach';
   const isStormy = theme === 'stormy-morning';
 
-  const cardBg = isRoyal
-    ? 'bg-[#1E293B] border-[#334155]'
-    : isHeritage
-    ? 'bg-[#1A3828] border-[#2C553E]'
-    : isCalifornia
-    ? 'bg-[#162B37] border-[#244558]'
-    : isMossy
-    ? 'bg-[#313521] border-[#494F32]'
-    : isInkWash
-    ? 'bg-[#2D3035] border-[#444850]'
-    : isPeach
-    ? 'bg-[#382622] border-[#523A34]'
-    : isStormy
-    ? 'bg-[#253240] border-[#394C61]'
-    : 'bg-[#1E3B2F] border-[#2E5A47]'; // crm-green default
+  const cardBg = 'bg-white border-[#DDE3DD] shadow-sm text-[#1A1A1A]';
 
   const handleCopyLink = (code: string) => {
     const url = `${typeof window !== 'undefined' ? window.location.origin : 'https://www.arielmc.com'}/lookbook/${code}`;
@@ -165,7 +151,10 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
       {/* =========================================================================
           TOP EXECUTIVE COMMAND BAR: Header & KPI Summary
           ========================================================================= */}
-      <div className={`p-6 rounded-2xl ${cardBg} border shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 text-white`}>
+      {/* =========================================================================
+          TOP EXECUTIVE COMMAND BAR: Header & KPI Summary
+          ========================================================================= */}
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-[#1F3A2E] via-[#162B22] to-[#0F1E18] border border-[#2E5A47] shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 text-white">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2.5">
             <div className="p-2.5 rounded-xl bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30 shadow-inner">
@@ -180,7 +169,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                   Global Hub
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-0.5">
+              <p className="text-xs text-white/80 mt-0.5 max-w-2xl font-['Open_Sans']">
                 Strategic B2B campaigns, downloadable lookbooks, A4 stationery studio &amp; international trade show presence
               </p>
             </div>
@@ -191,15 +180,15 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setIsLetterheadStudioOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-900/90 hover:bg-slate-900 text-slate-200 border border-slate-700 shadow transition-all hover:border-[#C8A96A]"
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow transition-all hover:border-[#C8A96A] cursor-pointer"
           >
-            <Printer className="w-4 h-4 text-amber-400" />
+            <Printer className="w-4 h-4 text-[#C8A96A]" />
             <span>Stationery &amp; Letterhead Studio</span>
           </button>
 
           <button
             onClick={() => setIsCreateCampaignOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] shadow-lg transition-all transform active:scale-95"
+            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-[#C8A96A] hover:bg-[#b89552] text-[#1F3A2E] shadow-lg transition-all transform active:scale-95 cursor-pointer font-['Montserrat']"
           >
             <Plus className="w-4 h-4" />
             <span>Launch New Campaign</span>
@@ -212,91 +201,91 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
           ========================================================================= */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Metric 1 */}
-        <div className={`p-4 rounded-xl ${cardBg} border shadow flex items-center justify-between`}>
+        <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex items-center justify-between text-[#1F3A2E]">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-heading">
               Active B2B Campaigns
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-white font-mono">
+              <span className="text-2xl font-black text-[#1F3A2E] font-mono">
                 {campaigns.filter((c) => c.status === 'ACTIVE').length}
               </span>
-              <span className="text-xs text-emerald-400 font-semibold">
+              <span className="text-xs text-emerald-700 font-semibold font-mono">
                 of {campaigns.length} total
               </span>
             </div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">
+            <span className="text-[10px] text-slate-500 mt-0.5 block font-mono">
               Est. Pipeline: ${(analytics.pipelineAttributedUsd / 1000000).toFixed(2)}M
             </span>
           </div>
-          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <div className="p-2.5 rounded-xl bg-blue-50 text-blue-700 border border-blue-200">
             <Megaphone className="w-5 h-5" />
           </div>
         </div>
 
         {/* Metric 2 */}
-        <div className={`p-4 rounded-xl ${cardBg} border shadow flex items-center justify-between`}>
+        <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex items-center justify-between text-[#1F3A2E]">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-heading">
               Digital Lookbooks &amp; Collaterals
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-white font-mono">
+              <span className="text-2xl font-black text-[#8A6D3B] font-mono">
                 {collaterals.length}
               </span>
-              <span className="text-xs text-[#C8A96A] font-semibold">
+              <span className="text-xs text-amber-800 font-semibold font-mono">
                 Across 5 Sectors
               </span>
             </div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">
+            <span className="text-[10px] text-slate-500 mt-0.5 block font-mono">
               {analytics.totalDownloads.toLocaleString()} Buyer Downloads
             </span>
           </div>
-          <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <div className="p-2.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-200">
             <BookOpen className="w-5 h-5" />
           </div>
         </div>
 
         {/* Metric 3 */}
-        <div className={`p-4 rounded-xl ${cardBg} border shadow flex items-center justify-between`}>
+        <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex items-center justify-between text-[#1F3A2E]">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-heading">
               International Expos &amp; Trade Shows
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-white font-mono">
+              <span className="text-2xl font-black text-[#1F3A2E] font-mono">
                 {tradeShows.length}
               </span>
-              <span className="text-xs text-emerald-400 font-semibold">
+              <span className="text-xs text-emerald-700 font-semibold font-mono">
                 Scheduled
               </span>
             </div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">
+            <span className="text-[10px] text-slate-500 mt-0.5 block font-mono">
               Ambiente, Spring Fair, NY NOW, Reed AU
             </span>
           </div>
-          <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+          <div className="p-2.5 rounded-xl bg-purple-50 text-purple-700 border border-purple-200">
             <Calendar className="w-5 h-5" />
           </div>
         </div>
 
         {/* Metric 4 */}
-        <div className={`p-4 rounded-xl ${cardBg} border shadow flex items-center justify-between`}>
+        <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm flex items-center justify-between text-[#1F3A2E]">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block font-heading">
               Global Sovereign Markets
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-white font-mono">5 Stations</span>
-              <span className="text-xs text-slate-400 font-semibold">
+              <span className="text-2xl font-black text-[#1F3A2E] font-mono">5 Stations</span>
+              <span className="text-xs text-slate-500 font-semibold font-mono">
                 UK • US • EU • AU • BD
               </span>
             </div>
-            <span className="text-[10px] text-slate-400 mt-0.5 block">
+            <span className="text-[10px] text-slate-500 mt-0.5 block font-mono">
               In-Country Invoicing &amp; Direct Contracts
             </span>
           </div>
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
             <Globe2 className="w-5 h-5" />
           </div>
         </div>
@@ -305,7 +294,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
       {/* =========================================================================
           NAVIGATION SUB-TABS
           ========================================================================= */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-white">
+      <div className="bg-white border border-[#DDE3DD] rounded-xl p-1.5 shadow-xs flex flex-wrap items-center gap-1.5 text-xs font-semibold">
         {[
           { id: 'ROI_CALCULATOR' as MarketingSubTab, label: 'B2B ROI & TCO Engine', icon: Calculator, badge: 'CFO Model' },
           { id: 'STRATEGY_PLAYBOOK' as MarketingSubTab, label: '12-Mo Strategy & Playbooks', icon: Target, badge: 'Deliverable 2' },
@@ -323,24 +312,24 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveSubTab(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#C8A96A] text-[#0A1A2F] font-bold shadow'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  ? 'bg-[#1F3A2E] text-white font-bold shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50 border border-slate-200/60 bg-slate-50/50'
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#C8A96A]' : 'text-slate-500'}`} />
               <span>{tab.label}</span>
               {tab.count !== undefined && (
                 <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
-                  isActive ? 'bg-[#0A1A2F]/20 text-[#0A1A2F]' : 'bg-slate-800 text-slate-300'
+                  isActive ? 'bg-[#C8A96A] text-[#12231B] font-bold' : 'bg-slate-200 text-slate-700 font-bold'
                 }`}>
                   {tab.count}
                 </span>
               )}
               {tab.badge && (
                 <span className={`px-1.5 py-0.2 rounded text-[9px] uppercase font-bold tracking-wider ${
-                  isActive ? 'bg-[#0A1A2F] text-amber-300' : 'bg-amber-500/20 text-amber-300'
+                  isActive ? 'bg-[#C8A96A] text-[#12231B]' : 'bg-amber-100 text-amber-900 border border-amber-300'
                 }`}>
                   {tab.badge}
                 </span>
@@ -382,16 +371,16 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
         <div className="space-y-4">
           {/* Status Filter Bar */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
-              <span className="text-slate-400 px-2 font-medium">Status:</span>
+            <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-[#DDE3DD] text-xs shadow-xs">
+              <span className="text-[#6B7269] px-2 font-medium">Status:</span>
               {(['ALL', 'ACTIVE', 'SCHEDULED', 'COMPLETED'] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setCampaignStatusFilter(st)}
-                  className={`px-2.5 py-1 rounded text-xs font-semibold transition ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
                     campaignStatusFilter === st
-                      ? 'bg-[#003B73] text-white shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-[#1F3A2E] text-white shadow-xs'
+                      : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
                   }`}
                 >
                   {st === 'ALL' ? 'All Campaigns' : st}
@@ -399,7 +388,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
               ))}
             </div>
 
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-[#6B7269]">
               Showing {filteredCampaigns.length} of {campaigns.length} active initiatives
             </span>
           </div>
@@ -419,30 +408,30 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
               return (
                 <div
                   key={camp.id}
-                  className={`p-5 rounded-xl ${cardBg} border shadow-lg flex flex-col justify-between space-y-4 transition-all hover:border-slate-500`}
+                  className={`p-5 rounded-xl ${cardBg} border shadow-sm flex flex-col justify-between space-y-4 transition-all hover:border-[#1F3A2E]/50`}
                 >
                   <div className="space-y-3">
                     {/* Header line */}
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[10px] font-mono font-bold text-amber-300">
+                          <span className="px-2 py-0.5 rounded bg-[#F8FAF8] border border-[#DDE3DD] text-[10px] font-mono font-bold text-[#8A6D3B]">
                             {camp.code}
                           </span>
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                             camp.status === 'ACTIVE'
-                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                               : camp.status === 'SCHEDULED'
-                              ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                              : 'bg-slate-700 text-slate-300'
+                              ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                              : 'bg-slate-100 text-slate-700 border border-slate-200'
                           }`}>
                             {camp.status}
                           </span>
                         </div>
-                        <h3 className="text-base font-bold text-white mt-1.5 leading-snug">
+                        <h3 className="text-base font-bold text-[#1F3A2E] mt-1.5 leading-snug font-heading">
                           {camp.title}
                         </h3>
-                        <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                        <p className="text-xs text-[#6B7269] mt-0.5 leading-relaxed">
                           {camp.tagline}
                         </p>
                       </div>
@@ -451,18 +440,18 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                     {/* Target Markets & Sectors */}
                     <div className="flex flex-wrap items-center gap-2 pt-1">
                       <div className="flex items-center gap-1">
-                        <span className="text-[10px] text-slate-400 uppercase font-bold">Markets:</span>
+                        <span className="text-[10px] text-[#6B7269] uppercase font-bold">Markets:</span>
                         {camp.targetMarkets.map((m, idx) => (
-                          <span key={idx} className="px-1.5 py-0.5 rounded bg-slate-900 text-[10px] font-semibold text-slate-200 border border-slate-800">
+                          <span key={idx} className="px-1.5 py-0.5 rounded bg-[#F8FAF8] text-[10px] font-semibold text-[#1A1A1A] border border-[#DDE3DD]">
                             {m}
                           </span>
                         ))}
                       </div>
 
                       <div className="flex items-center gap-1 ml-2">
-                        <span className="text-[10px] text-slate-400 uppercase font-bold">Sectors:</span>
+                        <span className="text-[10px] text-[#6B7269] uppercase font-bold">Sectors:</span>
                         {camp.targetSectors.map((s, idx) => (
-                          <span key={idx} className="px-1.5 py-0.5 rounded bg-amber-500/10 text-[10px] font-semibold text-amber-300 border border-amber-500/20">
+                          <span key={idx} className="px-1.5 py-0.5 rounded bg-amber-50 text-[10px] font-semibold text-[#8A6D3B] border border-amber-200">
                             {s}
                           </span>
                         ))}
@@ -471,29 +460,29 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
 
                     {/* Progress Bars: Leads & Budget */}
                     <div className="grid grid-cols-2 gap-3 pt-2">
-                      <div className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 space-y-1">
+                      <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] space-y-1">
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Leads Acquired</span>
-                          <span className="font-bold text-white font-mono">
+                          <span className="text-[#6B7269]">Leads Acquired</span>
+                          <span className="font-bold text-[#1F3A2E] font-mono">
                             {camp.kpis.leadsAcquired} / {camp.kpis.targetLeads} ({leadProgress}%)
                           </span>
                         </div>
-                        <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div className="w-full bg-[#E5EAE5] h-1.5 rounded-full overflow-hidden">
                           <div
-                            className="bg-emerald-400 h-full rounded-full transition-all"
+                            className="bg-emerald-600 h-full rounded-full transition-all"
                             style={{ width: `${leadProgress}%` }}
                           />
                         </div>
                       </div>
 
-                      <div className="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 space-y-1">
+                      <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] space-y-1">
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Budget Spent</span>
-                          <span className="font-bold text-white font-mono">
+                          <span className="text-[#6B7269]">Budget Spent</span>
+                          <span className="font-bold text-[#1F3A2E] font-mono">
                             {camp.budget.currency} {camp.budget.spent.toLocaleString()} / {camp.budget.planned.toLocaleString()}
                           </span>
                         </div>
-                        <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div className="w-full bg-[#E5EAE5] h-1.5 rounded-full overflow-hidden">
                           <div
                             className="bg-[#C8A96A] h-full rounded-full transition-all"
                             style={{ width: `${budgetProgress}%` }}
@@ -503,13 +492,13 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                     </div>
 
                     {/* Channels & Deliverables preview */}
-                    <div className="space-y-1.5 text-xs text-slate-300 pt-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    <div className="space-y-1.5 text-xs text-[#1A1A1A] pt-1">
+                      <span className="text-[10px] font-bold text-[#6B7269] uppercase tracking-wider block font-heading">
                         Deployment Channels
                       </span>
                       <div className="flex flex-wrap gap-1">
                         {camp.channels.map((ch, idx) => (
-                          <span key={idx} className="px-2 py-0.5 rounded text-[10px] bg-slate-900 text-slate-300 border border-slate-800">
+                          <span key={idx} className="px-2 py-0.5 rounded text-[10px] bg-[#F8FAF8] text-[#1A1A1A] border border-[#DDE3DD]">
                             {ch}
                           </span>
                         ))}
@@ -518,9 +507,9 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                   </div>
 
                   {/* Card Footer: Dates, Manager & Quick Action */}
-                  <div className="pt-3 border-t border-slate-700/60 flex items-center justify-between gap-3 text-xs">
-                    <div className="text-[11px] text-slate-400">
-                      <span className="font-medium text-slate-300">{camp.manager}</span>
+                  <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-between gap-3 text-xs">
+                    <div className="text-[11px] text-[#6B7269]">
+                      <span className="font-medium text-[#1F3A2E]">{camp.manager}</span>
                       <span className="block text-[10px]">
                         {camp.startDate} to {camp.endDate}
                       </span>
@@ -528,7 +517,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
 
                     <button
                       onClick={() => setActiveSubTab('COLLATERALS')}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#003B73] hover:bg-[#002D59] text-white text-xs font-semibold shadow transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
                     >
                       <span>View Collaterals</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -547,18 +536,18 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
       {activeSubTab === 'COLLATERALS' && (
         <div className="space-y-5">
           {/* Filter and Search Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 rounded-xl border border-[#DDE3DD] shadow-sm">
             {/* Sector Filters */}
             <div className="flex flex-wrap items-center gap-1.5 text-xs">
-              <span className="text-slate-400 px-2 font-medium">Sector:</span>
+              <span className="text-[#6B7269] px-2 font-medium">Sector:</span>
               {(['ALL', 'CERAMICS', 'LEATHER', 'JUTE', 'HOME_TEXTILES', 'TERRACOTTA'] as ProductSector[]).map((sec) => (
                 <button
                   key={sec}
                   onClick={() => setCollateralSectorFilter(sec)}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                     collateralSectorFilter === sec
-                      ? 'bg-[#C8A96A] text-[#0A1A2F] font-bold shadow'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                      ? 'bg-[#1F3A2E] text-white font-bold shadow-xs'
+                      : 'text-[#6B7269] hover:text-[#1F3A2E] hover:bg-slate-50'
                   }`}
                 >
                   {sec === 'ALL' ? 'All Sectors' : sec.replace('_', ' ')}
@@ -568,13 +557,13 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
 
             {/* Search Input */}
             <div className="relative w-full sm:w-64">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-[#6B7269] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={collateralSearchQuery}
                 onChange={(e) => setCollateralSearchQuery(e.target.value)}
                 placeholder="Search lookbooks & specs..."
-                className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-[#C8A96A]"
+                className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] text-[#1A1A1A] placeholder-slate-400 focus:outline-none focus:border-[#1F3A2E] focus:bg-white shadow-2xs"
               />
             </div>
           </div>
@@ -584,12 +573,12 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
             {filteredCollaterals.map((col) => (
               <div
                 key={col.id}
-                className={`rounded-2xl ${cardBg} border shadow-xl overflow-hidden flex flex-col justify-between transition-all hover:border-[#C8A96A]/60 group`}
+                className={`rounded-2xl ${cardBg} border shadow-sm overflow-hidden flex flex-col justify-between transition-all hover:border-[#1F3A2E]/50 group`}
               >
                 {/* Cover Image Stage */}
                 <div
                   onClick={() => setSelectedCollateralForView(col)}
-                  className="relative h-56 w-full cursor-pointer overflow-hidden bg-slate-950"
+                  className="relative h-56 w-full cursor-pointer overflow-hidden bg-[#1F3A2E]"
                   title="Click to open interactive lookbook viewer"
                 >
                   <Image
@@ -599,25 +588,25 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-black/30" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
 
                   {/* Badges on Cover */}
                   <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="px-2 py-0.5 rounded bg-black/70 backdrop-blur text-[10px] font-mono font-bold text-amber-300 border border-white/10">
+                    <span className="px-2 py-0.5 rounded bg-black/70 backdrop-blur text-[10px] font-mono font-bold text-[#C8A96A] border border-white/10">
                       {col.code}
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-[#003B73]/90 backdrop-blur text-[10px] font-bold text-white border border-blue-400/20">
+                    <span className="px-2 py-0.5 rounded bg-[#1F3A2E]/90 backdrop-blur text-[10px] font-bold text-white border border-[#C8A96A]/30">
                       {col.sector}
                     </span>
                   </div>
 
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur text-[10px] text-slate-300 border border-white/10">
+                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur text-[10px] text-gray-200 border border-white/10">
                     {col.pages} Pages
                   </div>
 
                   {/* Hover Quick Action Indicator */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-xs">
-                    <div className="px-4 py-2 rounded-xl bg-[#C8A96A] text-[#0A1A2F] text-xs font-bold shadow-xl flex items-center gap-2">
+                    <div className="px-4 py-2 rounded-xl bg-[#C8A96A] text-[#12231B] text-xs font-bold shadow-xl flex items-center gap-2">
                       <Eye className="w-4 h-4" />
                       <span>Open Lookbook Viewer</span>
                     </div>
@@ -627,16 +616,16 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                 {/* Card Information */}
                 <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
                   <div className="space-y-1.5">
-                    <h4 className="text-sm font-bold text-white leading-snug group-hover:text-[#C8A96A] transition-colors">
+                    <h4 className="text-sm font-bold text-[#1F3A2E] leading-snug group-hover:text-[#8A6D3B] transition-colors font-heading">
                       {col.title}
                     </h4>
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-[#6B7269] line-clamp-2 leading-relaxed">
                       {col.subtitle}
                     </p>
 
                     <div className="flex flex-wrap gap-1 pt-1">
                       {col.tags.slice(0, 3).map((tag, idx) => (
-                        <span key={idx} className="px-2 py-0.5 rounded text-[9.5px] bg-slate-900 text-slate-400 border border-slate-800">
+                        <span key={idx} className="px-2 py-0.5 rounded text-[9.5px] bg-[#F8FAF8] text-[#6B7269] border border-[#DDE3DD]">
                           {tag}
                         </span>
                       ))}
@@ -644,8 +633,8 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                   </div>
 
                   {/* Metrics & Actions */}
-                  <div className="pt-3 border-t border-slate-700/60 space-y-3">
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                  <div className="pt-3 border-t border-[#DDE3DD] space-y-3">
+                    <div className="flex items-center justify-between text-[11px] text-[#6B7269] font-mono">
                       <span>Downloads: {col.downloadCount}</span>
                       <span>Format: {col.fileFormat} ({col.fileSize})</span>
                     </div>
@@ -653,28 +642,28 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                     <div className="grid grid-cols-3 gap-2">
                       <button
                         onClick={() => setSelectedCollateralForView(col)}
-                        className="col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+                        className="col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#F8FAF8] hover:bg-slate-100 text-[#1F3A2E] text-xs font-semibold border border-[#DDE3DD] transition cursor-pointer"
                       >
-                        <Eye className="w-3.5 h-3.5" />
+                        <Eye className="w-3.5 h-3.5 text-[#1F3A2E]" />
                         <span>Preview</span>
                       </button>
 
                       <a
                         href={col.downloadUrl}
                         download
-                        className="col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] text-xs font-bold shadow transition"
+                        className="col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold shadow-xs transition"
                       >
-                        <Download className="w-3.5 h-3.5" />
+                        <Download className="w-3.5 h-3.5 text-[#C8A96A]" />
                         <span>PDF</span>
                       </a>
 
                       <button
                         onClick={() => handleCopyLink(col.code)}
-                        className="col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+                        className="col-span-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#F8FAF8] hover:bg-slate-100 text-[#1F3A2E] text-xs font-semibold border border-[#DDE3DD] transition cursor-pointer"
                         title="Copy share link"
                       >
                         {copiedCode === col.code ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
                         ) : (
                           <Share2 className="w-3.5 h-3.5" />
                         )}
@@ -694,9 +683,9 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
           ========================================================================= */}
       {activeSubTab === 'SECTORS' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+          <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] text-xs text-[#6B7269] shadow-sm flex items-center justify-between">
             <div>
-              <span className="font-bold text-white text-sm block">Bangladesh Generational Pride Sectors</span>
+              <span className="font-bold text-[#1F3A2E] text-sm block font-heading">Bangladesh Generational Pride Sectors</span>
               ArielMC manages industrial manufacturing across 5 Sovereign pillars, eliminating intermediaries and guaranteeing institutional compliance.
             </div>
           </div>
@@ -752,15 +741,15 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                 filterCode: 'ALL' as ProductSector
               }
             ].map((sec, idx) => (
-              <div key={idx} className={`rounded-2xl ${cardBg} border shadow-xl overflow-hidden flex flex-col justify-between`}>
-                <div className="relative h-48 w-full bg-slate-950">
+              <div key={idx} className={`rounded-2xl ${cardBg} border shadow-sm overflow-hidden flex flex-col justify-between`}>
+                <div className="relative h-48 w-full bg-[#1F3A2E]">
                   <Image src={sec.image} alt={sec.sector} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-black/20" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
                   <div className="absolute bottom-3 left-3 right-3">
-                    <h4 className="text-base font-bold text-white tracking-tight drop-shadow-md">
+                    <h4 className="text-base font-bold text-white tracking-tight drop-shadow-md font-heading">
                       {sec.sector}
                     </h4>
-                    <span className="text-[11px] text-amber-300 font-medium">
+                    <span className="text-[11px] text-[#C8A96A] font-medium">
                       {sec.region}
                     </span>
                   </div>
@@ -768,14 +757,14 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
 
                 <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                   <div className="space-y-2 text-xs">
-                    <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Compliance</span>
-                      <p className="text-[11px] text-emerald-400 font-semibold">{sec.standards}</p>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD]">
+                      <span className="text-[10px] font-bold text-[#6B7269] uppercase block mb-0.5 font-heading">Compliance</span>
+                      <p className="text-[11px] text-emerald-800 font-semibold">{sec.standards}</p>
                     </div>
 
-                    <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">Highlights</span>
-                      <p className="text-[11px] text-slate-300">{sec.highlights}</p>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD]">
+                      <span className="text-[10px] font-bold text-[#6B7269] uppercase block mb-0.5 font-heading">Highlights</span>
+                      <p className="text-[11px] text-[#1A1A1A]">{sec.highlights}</p>
                     </div>
                   </div>
 
@@ -784,7 +773,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                       setCollateralSectorFilter(sec.filterCode);
                       setActiveSubTab('COLLATERALS');
                     }}
-                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-semibold shadow-xs transition cursor-pointer"
                   >
                     <span>Browse {sec.filterCode === 'ALL' ? 'All' : sec.filterCode} Lookbooks</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -802,22 +791,22 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
       {activeSubTab === 'STATIONERY' && (
         <div className="space-y-5">
           {/* Banner Promo to launch the Interactive Studio */}
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-[#003B73] via-[#0A2540] to-[#1E3B2F] border border-blue-400/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 text-white">
+          <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-r from-[#1F3A2E] via-[#162B22] to-[#0F1E18] border border-[#2E5A47] shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6 text-white">
             <div className="space-y-2">
-              <span className="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 tracking-wider">
+              <span className="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md bg-[#C8A96A] text-[#12231B] tracking-wider">
                 Interactive Stationery Studio
               </span>
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight">
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight font-heading">
                 Calibrated 38mm Official ArielMC Letterhead &amp; Correspondence Generator
               </h3>
-              <p className="text-xs text-slate-200 max-w-2xl leading-relaxed">
+              <p className="text-xs text-gray-300 max-w-2xl leading-relaxed">
                 Draft official executive letters, B2B wholesale proposals, and trade show invitations directly on the official A4 stationery. Export to borderless vector PDF or copy letterhead text with one click.
               </p>
             </div>
 
             <button
               onClick={() => setIsLetterheadStudioOpen(true)}
-              className="px-5 py-3 rounded-xl bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] text-xs font-bold shadow-xl transition transform active:scale-95 flex items-center gap-2 whitespace-nowrap"
+              className="px-5 py-3 rounded-xl bg-[#C8A96A] hover:bg-[#b89552] text-[#12231B] text-xs font-bold shadow-md transition transform active:scale-95 flex items-center gap-2 whitespace-nowrap cursor-pointer shrink-0"
             >
               <Printer className="w-4 h-4" />
               <span>Open Letterhead Studio</span>
@@ -826,7 +815,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
 
           {/* Master Brand Assets Suite */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-[#1F3A2E] font-heading uppercase tracking-wider">
               Official Master Brand Assets &amp; Guidelines
             </h4>
 
@@ -834,10 +823,10 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
               {brandAssets.map((asset) => (
                 <div
                   key={asset.id}
-                  className={`p-4 rounded-xl ${cardBg} border shadow flex flex-col justify-between space-y-3`}
+                  className={`p-4 rounded-xl ${cardBg} border shadow-sm flex flex-col justify-between space-y-3`}
                 >
                   <div className="space-y-2">
-                    <div className="relative h-28 w-full rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center p-3 overflow-hidden">
+                    <div className="relative h-28 w-full rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex items-center justify-center p-3 overflow-hidden">
                       <Image
                         src={asset.previewImage}
                         alt={asset.title}
@@ -848,26 +837,26 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                     </div>
 
                     <div>
-                      <span className="px-2 py-0.5 rounded text-[9.5px] font-mono font-bold bg-slate-900 text-amber-400 border border-slate-800">
+                      <span className="px-2 py-0.5 rounded text-[9.5px] font-mono font-bold bg-[#F8FAF8] text-[#8A6D3B] border border-[#DDE3DD]">
                         {asset.format}
                       </span>
-                      <h5 className="text-xs font-bold text-white mt-1 leading-snug">
+                      <h5 className="text-xs font-bold text-[#1F3A2E] mt-1 leading-snug font-heading">
                         {asset.title}
                       </h5>
-                      <p className="text-[11px] text-slate-400 mt-0.5 leading-normal">
+                      <p className="text-[11px] text-[#6B7269] mt-0.5 leading-normal">
                         {asset.usageDescription}
                       </p>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-400">
+                  <div className="pt-2 border-t border-[#DDE3DD] flex items-center justify-between text-[11px] text-[#6B7269]">
                     <span>{asset.fileSize}</span>
                     <a
                       href={asset.fileUrl}
                       download
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#C8A96A] hover:bg-[#b89552] text-[#0A1A2F] text-xs font-bold shadow transition"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold shadow-xs transition"
                     >
-                      <Download className="w-3.5 h-3.5" />
+                      <Download className="w-3.5 h-3.5 text-[#C8A96A]" />
                       <span>Download</span>
                     </a>
                   </div>
@@ -877,18 +866,18 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
           </div>
 
           {/* Strict Brand Style Guide Card */}
-          <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3 text-xs text-slate-300">
-            <div className="flex items-center gap-2 text-amber-400 font-bold">
-              <ShieldCheck className="w-4 h-4" />
+          <div className="p-5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-3 text-xs text-[#1A1A1A] shadow-sm">
+            <div className="flex items-center gap-2 text-amber-900 font-bold font-heading">
+              <ShieldCheck className="w-4 h-4 text-[#C8A96A]" />
               <span>ArielMC Mandatory Brand Capitalization &amp; Spelling Rule</span>
             </div>
-            <p className="leading-relaxed">
+            <p className="leading-relaxed text-[#6B7269]">
               In all marketing collateral, web portals, print media, and email correspondence, the brand name must <strong>strictly</strong> be rendered as <ArielMC /> (Capital <strong>A</strong>, lowercase <strong>riel</strong>, capital <strong>M</strong>, capital <strong>C</strong>, zero spaces). Prohibited variants: <em>Ariel MC, Arielmc, arielmc, ARIELMC</em>.
             </p>
             <div className="flex flex-wrap gap-4 text-[11px] pt-1">
-              <div><strong className="text-white">Primary Navy:</strong> <span className="font-mono text-blue-400">#003B73 / #0A1A2F</span></div>
-              <div><strong className="text-white">Heritage Amber Gold:</strong> <span className="font-mono text-amber-400">#C8A96A / #EAA023</span></div>
-              <div><strong className="text-white">Logo Calibration:</strong> <span className="font-mono text-emerald-400">38mm Standard Golden Ratio</span></div>
+              <div><strong className="text-[#1F3A2E]">Primary Heritage Green:</strong> <span className="font-mono text-emerald-800 font-semibold">#1F3A2E / #12231B</span></div>
+              <div><strong className="text-[#1F3A2E]">Heritage Sand Gold:</strong> <span className="font-mono text-[#8A6D3B] font-semibold">#C8A96A / #8A6D3B</span></div>
+              <div><strong className="text-[#1F3A2E]">Logo Calibration:</strong> <span className="font-mono text-[#1F3A2E] font-semibold">38mm Standard Golden Ratio</span></div>
             </div>
           </div>
         </div>
@@ -903,49 +892,49 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
             {tradeShows.map((show) => (
               <div
                 key={show.id}
-                className={`p-5 rounded-2xl ${cardBg} border shadow-xl flex flex-col justify-between space-y-4`}
+                className={`p-5 rounded-2xl ${cardBg} border shadow-sm flex flex-col justify-between space-y-4`}
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-xl">{show.countryFlag}</span>
-                        <h4 className="text-base font-black text-white font-heading">
+                        <h4 className="text-base font-bold text-[#1F3A2E] font-heading">
                           {show.name}
                         </h4>
                       </div>
-                      <p className="text-xs text-amber-300 font-medium mt-0.5">
+                      <p className="text-xs text-[#8A6D3B] font-semibold mt-0.5">
                         {show.edition}
                       </p>
                     </div>
 
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-50 text-purple-800 border border-purple-200 shrink-0">
                       {show.status}
                     </span>
                   </div>
 
                   {/* Logistics Detail Box */}
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Dates &amp; Venue</span>
-                      <p className="text-slate-200 font-semibold mt-0.5">{show.dates}</p>
-                      <p className="text-[11px] text-slate-400">{show.venue}, {show.city}</p>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD]">
+                      <span className="text-[10px] font-bold text-[#6B7269] uppercase block font-heading">Dates &amp; Venue</span>
+                      <p className="text-[#1F3A2E] font-semibold mt-0.5">{show.dates}</p>
+                      <p className="text-[11px] text-[#6B7269]">{show.venue}, {show.city}</p>
                     </div>
 
-                    <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Stand / Booth</span>
-                      <p className="text-amber-400 font-semibold mt-0.5">{show.boothNumber}</p>
-                      <p className="text-[11px] text-slate-400">Station Lead: {show.assignedStation}</p>
+                    <div className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD]">
+                      <span className="text-[10px] font-bold text-[#6B7269] uppercase block font-heading">Stand / Booth</span>
+                      <p className="text-[#8A6D3B] font-semibold mt-0.5">{show.boothNumber}</p>
+                      <p className="text-[11px] text-[#6B7269]">Station Lead: {show.assignedStation}</p>
                     </div>
                   </div>
 
                   {/* Confirmed Meetings */}
                   <div className="space-y-2 pt-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-300 uppercase text-[10px] tracking-wider">
+                      <span className="font-bold text-[#6B7269] uppercase text-[10px] tracking-wider font-heading">
                         Confirmed Executive Buyer Meetings ({show.confirmedMeetings.length})
                       </span>
-                      <span className="text-[11px] text-emerald-400 font-mono">
+                      <span className="text-[11px] text-emerald-800 font-mono font-semibold">
                         Target: {show.expectedBuyerVisits}+ Visitors
                       </span>
                     </div>
@@ -954,20 +943,20 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                       {show.confirmedMeetings.map((m) => (
                         <div
                           key={m.id}
-                          className="p-2 rounded-lg bg-slate-900/90 border border-slate-800 text-xs flex items-center justify-between gap-2"
+                          className="p-2.5 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] text-xs flex items-center justify-between gap-2"
                         >
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="text-sm shrink-0">{m.countryFlag}</span>
                             <div className="min-w-0">
-                              <span className="font-bold text-white block truncate">
+                              <span className="font-bold text-[#1F3A2E] block truncate font-heading">
                                 {m.buyerName} — {m.company}
                               </span>
-                              <span className="text-[10px] text-slate-400 truncate block">
+                              <span className="text-[10px] text-[#6B7269] truncate block">
                                 {m.interest}
                               </span>
                             </div>
                           </div>
-                          <span className="text-[10px] font-mono text-amber-300 font-semibold shrink-0">
+                          <span className="text-[10px] font-mono text-[#8A6D3B] font-semibold shrink-0">
                             {m.time}
                           </span>
                         </div>
@@ -977,8 +966,8 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                 </div>
 
                 {/* Footer link to official site */}
-                <div className="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs">
-                  <div className="text-[11px] text-slate-400 font-mono">
+                <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-between text-xs">
+                  <div className="text-[11px] text-[#6B7269] font-mono">
                     Budget: {show.budget.currency} {show.budget.planned.toLocaleString()}
                   </div>
 
@@ -986,7 +975,7 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                     href={show.websiteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs text-sky-400 hover:text-sky-300 font-semibold"
+                    className="inline-flex items-center gap-1.5 text-xs text-[#1F3A2E] hover:text-[#12231B] font-semibold cursor-pointer"
                   >
                     <span>Official Exhibition Portal</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -1005,9 +994,9 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
         <div className="space-y-5">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Regional Breakdown */}
-            <div className={`p-5 rounded-2xl ${cardBg} border shadow-xl space-y-4`}>
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Globe2 className="w-4 h-4 text-sky-400" />
+            <div className={`p-5 rounded-2xl ${cardBg} border shadow-sm space-y-4`}>
+              <h4 className="text-sm font-bold text-[#1F3A2E] font-heading uppercase tracking-wider flex items-center gap-2">
+                <Globe2 className="w-4 h-4 text-emerald-700" />
                 <span>B2B Buyer Geographic Interest Breakdown</span>
               </h4>
 
@@ -1015,17 +1004,17 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                 {analytics.regionalInterest.map((reg, idx) => (
                   <div key={idx} className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-200 font-medium flex items-center gap-2">
+                      <span className="text-[#1A1A1A] font-medium flex items-center gap-2">
                         <span>{reg.flag}</span>
                         <span>{reg.region}</span>
                       </span>
-                      <span className="text-slate-300 font-mono font-bold">
+                      <span className="text-[#6B7269] font-mono font-bold">
                         {reg.inquiries} Inquiries ({reg.percentage}%)
                       </span>
                     </div>
-                    <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-full bg-[#E5EAE5] h-2 rounded-full overflow-hidden border border-[#DDE3DD]">
                       <div
-                        className="bg-[#003B73] h-full rounded-full transition-all"
+                        className="bg-[#1F3A2E] h-full rounded-full transition-all"
                         style={{ width: `${reg.percentage}%` }}
                       />
                     </div>
@@ -1035,9 +1024,9 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
             </div>
 
             {/* Sector Lookbook Downloads */}
-            <div className={`p-5 rounded-2xl ${cardBg} border shadow-xl space-y-4`}>
-              <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-amber-400" />
+            <div className={`p-5 rounded-2xl ${cardBg} border shadow-sm space-y-4`}>
+              <h4 className="text-sm font-bold text-[#1F3A2E] font-heading uppercase tracking-wider flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-[#8A6D3B]" />
                 <span>Sector Lookbook &amp; Spec Sheet Download Volume</span>
               </h4>
 
@@ -1045,14 +1034,14 @@ export const MarketingManagement: React.FC<MarketingManagementProps> = ({
                 {analytics.sectorBreakdown.map((sec, idx) => (
                   <div key={idx} className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-200 font-medium">
+                      <span className="text-[#1A1A1A] font-medium">
                         {sec.sector} Sector
                       </span>
-                      <span className="text-slate-300 font-mono font-bold">
+                      <span className="text-[#6B7269] font-mono font-bold">
                         {sec.downloads} Downloads ({sec.percentage}%)
                       </span>
                     </div>
-                    <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-full bg-[#E5EAE5] h-2 rounded-full overflow-hidden border border-[#DDE3DD]">
                       <div
                         className="bg-[#C8A96A] h-full rounded-full transition-all"
                         style={{ width: `${sec.percentage}%` }}

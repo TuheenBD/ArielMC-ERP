@@ -11,6 +11,8 @@ import {
   CrmLead,
   TimeAndActionMilestone,
   AqlInspectionReport,
+  CompanyEntity,
+  CurrencyRate,
 } from '@/types/erp';
 import {
   Repeat,
@@ -58,6 +60,8 @@ interface OrderManagementProps {
   factories: SupplierFactory[];
   products: ProductItem[];
   crmLeads: CrmLead[];
+  activeEntity?: CompanyEntity;
+  currencies?: CurrencyRate[];
   onAddOrder: (newOrder: BuyerSalesOrder) => void;
   onUpdateOrderStatus: (orderId: string, newStatus: OrderStatus) => void;
   onUpdateMilestoneStatus: (
@@ -138,11 +142,16 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   factories,
   products,
   crmLeads,
+  activeEntity,
+  currencies,
   onAddOrder,
   onUpdateOrderStatus,
   onUpdateMilestoneStatus,
   onOpenDocumentCenter,
 }) => {
+  const isBdStation = activeEntity?.code === 'ARIEL_BD' || activeEntity?.baseCurrency === 'BDT';
+  const bdtRate = currencies?.find((c) => c.code === 'BDT')?.rateToUsd || 121.5;
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMarket, setSelectedMarket] = useState<'ALL' | 'UK' | 'EU' | 'US' | 'AU'>('ALL');
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | 'ALL'>('ALL');
@@ -530,7 +539,13 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           : `$${order.totalAmountBuyerCurrency.toLocaleString()}`}
                       </div>
                       <div className="text-[10px] text-[#6B7269] font-sans font-normal">
-                        ≈ ${order.totalAmountUsd.toLocaleString()} USD
+                        {isBdStation ? (
+                          <>
+                            <strong className="text-emerald-800 font-mono">(৳{Math.round(order.totalAmountUsd * bdtRate).toLocaleString('en-IN')} BDT)</strong> • ≈ ${order.totalAmountUsd.toLocaleString()} USD
+                          </>
+                        ) : (
+                          `≈ $${order.totalAmountUsd.toLocaleString()} USD`
+                        )}
                       </div>
                     </td>
 
@@ -546,6 +561,11 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                     <td className="py-3 px-4 font-mono">
                       <div className="text-[#14512C] font-bold">
                         ${order.marginProtection.netMarginUsd.toLocaleString()}
+                        {isBdStation && (
+                          <span className="block text-[10px] text-emerald-800 font-mono font-semibold">
+                            (৳{Math.round(order.marginProtection.netMarginUsd * bdtRate).toLocaleString('en-IN')} BDT)
+                          </span>
+                        )}
                       </div>
                       <div className="text-[10px] text-[#14512C] font-sans font-semibold flex items-center gap-1">
                         <span>{order.marginProtection.marginPercentage}% Locked</span>
@@ -909,8 +929,17 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           )}
                           <div className="pt-2 border-t border-[#DDE3DD] flex justify-between font-bold text-sm">
                             <span className="text-[#8A5A00]">Factory Cost:</span>
-                            <span className="text-[#8A5A00] font-mono">
-                              ${selectedOrder.linkedPo.totalCostUsd.toLocaleString()} USD
+                            <span className="text-[#8A5A00] font-mono text-right">
+                              {isBdStation ? (
+                                <>
+                                  <span>৳{(selectedOrder.linkedPo.totalCostBdt || Math.round(selectedOrder.linkedPo.totalCostUsd * bdtRate)).toLocaleString('en-IN')} BDT</span>
+                                  <span className="text-[10px] text-slate-500 font-normal block">
+                                    (~${selectedOrder.linkedPo.totalCostUsd.toLocaleString()} USD)
+                                  </span>
+                                </>
+                              ) : (
+                                `$${selectedOrder.linkedPo.totalCostUsd.toLocaleString()} USD`
+                              )}
                             </span>
                           </div>
                         </div>

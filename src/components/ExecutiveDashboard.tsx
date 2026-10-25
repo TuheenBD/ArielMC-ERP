@@ -23,7 +23,8 @@ import {
   CheckCircle2,
   ChevronRight,
   LayoutDashboard,
-  ExternalLink
+  ExternalLink,
+  TrendingUp
 } from 'lucide-react';
 
 interface ExecutiveDashboardProps {
@@ -53,7 +54,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
 }) => {
   // Theme color accents
   const isRoyalBlue = theme === 'royal-blue';
-  const isHeritageTan = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
   const isCalifornia = theme === 'california-beaches';
   const isMossy = theme === 'mossy-hollow';
   const isInkWash = theme === 'ink-wash';
@@ -62,6 +63,8 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
 
   const headerAccent = isRoyalBlue
     ? 'text-[#64B5F6]'
+    : isHydrangea
+    ? 'text-[#FF9CE9]'
     : isCalifornia
     ? 'text-[#FFC067]'
     : isMossy
@@ -72,12 +75,12 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
     ? 'text-[#E39A7B]'
     : isStormy
     ? 'text-[#88BDF2]'
-    : isHeritageTan
-    ? 'text-[#C8A96A]'
     : 'text-[#C8A96A]';
 
   const cardHoverBorder = isRoyalBlue
     ? 'hover:border-[#1E3A8A]'
+    : isHydrangea
+    ? 'hover:border-[#AD56C4]'
     : isCalifornia
     ? 'hover:border-[#66C4FF]'
     : isMossy
@@ -88,12 +91,12 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
     ? 'hover:border-[#E39A7B]'
     : isStormy
     ? 'hover:border-[#6A89A7]'
-    : isHeritageTan
-    ? 'hover:border-[#A27B5C]'
     : 'hover:border-[#2C5240]';
 
   const bannerBg = isRoyalBlue
     ? 'bg-gradient-to-r from-[#0B132B] via-[#0F172A] to-[#0B132B] border-[#1E293B]'
+    : isHydrangea
+    ? 'bg-gradient-to-r from-[#230C2E] via-[#380C3F] to-[#230C2E] border-[#4E2064]'
     : isCalifornia
     ? 'bg-gradient-to-r from-[#101C24] via-[#14232C] to-[#101C24] border-[#203642]'
     : isMossy
@@ -104,8 +107,6 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
     ? 'bg-gradient-to-r from-[#1D1412] via-[#2A1D1A] to-[#1D1412] border-[#422E29]'
     : isStormy
     ? 'bg-gradient-to-r from-[#141B21] via-[#1E2730] to-[#141B21] border-[#2E3C4A]'
-    : isHeritageTan
-    ? 'bg-gradient-to-r from-[#11231A] via-[#183124] to-[#11231A] border-[#2A4837]'
     : 'bg-gradient-to-r from-[#12231B] via-[#1F3A2E] to-[#12231B] border-[#2C5240]';
 
   // Quick launch modules for ArielMC ERP
@@ -153,6 +154,17 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       color: 'text-[#1E6B3A]',
       bg: 'bg-emerald-50/70',
       border: 'border-emerald-200',
+    },
+    {
+      tab: 'SALES' as ActiveTab,
+      title: 'Sales Management & Commercial Hub',
+      phase: 'Core Engine (Live)',
+      description: 'Unified commercial command for B2B Sales Orders (SO), export Proforma Invoices (PI), wholesale buyer accounts, and gross margin protection.',
+      icon: TrendingUp,
+      badge: `${totalOrders} Active SOs`,
+      color: 'text-[#1F3A2E]',
+      bg: 'bg-[#F8FAF8]',
+      border: 'border-[#C8A96A]',
     },
     {
       tab: 'CRM' as ActiveTab,

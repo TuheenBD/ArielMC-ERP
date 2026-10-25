@@ -590,3 +590,55 @@ CREATE TRIGGER trg_pos_txns_updated_at BEFORE UPDATE ON pos_transactions FOR EAC
 
 DROP TRIGGER IF EXISTS trg_documents_updated_at ON official_documents;
 CREATE TRIGGER trg_documents_updated_at BEFORE UPDATE ON official_documents FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+-- ==============================================================================
+-- TABLE 12: EMAIL QUEUE (High-Performance Asynchronous Outbox)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.email_queue (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    recipient TEXT NOT NULL,
+    recipient_name TEXT,
+    template_id TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status TEXT DEFAULT 'queued' NOT NULL CHECK (status IN ('queued', 'processing', 'sent', 'delivered', 'bounced', 'failed')),
+    external_message_id TEXT,
+    delivery_error_details TEXT,
+    attempts INTEGER DEFAULT 0,
+    provider TEXT DEFAULT 'RESEND'
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_queue_status ON public.email_queue(status);
+CREATE INDEX IF NOT EXISTS idx_email_queue_created_at ON public.email_queue(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_email_queue_recipient ON public.email_queue(recipient);
+
+DROP TRIGGER IF EXISTS trg_email_queue_updated_at ON email_queue;
+CREATE TRIGGER trg_email_queue_updated_at BEFORE UPDATE ON email_queue FOR EACH ROW EXECUTE FUNCTION set_updated_at_timestamp();
+
+-- ==============================================================================
+-- TABLE 13: EMAIL AUDIT LEDGER (Webhook Feedback & Delivery Telemetry)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.email_audit_ledger (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    queue_id UUID REFERENCES public.email_queue(id) ON DELETE SET NULL,
+    external_message_id TEXT,
+    event_type TEXT NOT NULL, -- 'queued', 'sent', 'delivery', 'bounce', 'open', 'click', 'spam'
+    recipient TEXT NOT NULL,
+    raw_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_audit_queue_id ON public.email_audit_ledger(queue_id);
+CREATE INDEX IF NOT EXISTS idx_email_audit_event_type ON public.email_audit_ledger(event_type);
+CREATE INDEX IF NOT EXISTS idx_email_audit_created_at ON public.email_audit_ledger(created_at DESC);
+
+-- Enable RLS
+ALTER TABLE public.email_queue ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.email_audit_ledger ENABLE ROW LEVEL SECURITY;
+
+-- Allow authenticated and service role full access
+CREATE POLICY "Allow public read/write to email_queue" ON public.email_queue FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public read/write to email_audit_ledger" ON public.email_audit_ledger FOR ALL USING (true) WITH CHECK (true);
+

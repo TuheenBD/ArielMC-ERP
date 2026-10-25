@@ -194,6 +194,28 @@ CREATE TABLE purchase_orders (
   amount NUMERIC(14,2)
 );`,
         };
+      case 'ECOM':
+        return {
+          title: 'E-Com Multichannel Sales Operations (Amazon FBA/FBM, Shopify & Etsy)',
+          subtitle: 'Direct consumer marketplace order aggregation, marketplace settlement audit, and channel profitability',
+          icon: Store,
+          color: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
+          deliverables: [
+            'Amazon SP-API & Shopify GraphQL webhook ingestion',
+            'FBA vs FBM automated fulfillment classification',
+            'Real-time multi-currency settlement and foreign exchange repatriation',
+            'Dynamic marketplace commission tracking and sales point configurations',
+          ],
+          schemaPreview: `CREATE TABLE ecom_sale_orders (
+  id UUID PRIMARY KEY,
+  platform_order_id VARCHAR(100),
+  platform VARCHAR(50) NOT NULL,
+  total_amount NUMERIC(12,2) NOT NULL,
+  currency VARCHAR(3) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);`,
+        };
       case 'POS':
         return {
           title: 'Phase 9: Omnichannel Physical Store POS (Year 2+ Expansion)',

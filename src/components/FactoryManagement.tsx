@@ -1,7 +1,11 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { SupplierFactory, ProductSector, VendorEnlistmentDocument, VendorClassification } from '@/types/erp';
+import { FactorySupplierPortfolio } from '@/types/factoryPortfolio';
+import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
+import { fetchFactoryPortfolios, persistFactoryPortfolios } from '@/lib/erpPersistence';
+import { FactorySupplierPortfolioModal } from './FactorySupplierPortfolioModal';
 import {
   Factory,
   ShieldCheck,
@@ -58,6 +62,125 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   const [isRatingModelOpen, setIsRatingModelOpen] = useState(false);
   const [ratingModelFactory, setRatingModelFactory] = useState<SupplierFactory | null>(null);
   const [factoryViewMode, setFactoryViewMode] = useState<'FACILITIES' | 'CHEMICAL_COMPLIANCE'>('FACILITIES');
+
+  // Factory & Supplier Portfolio States & Persistence
+  const [factoryPortfolios, setFactoryPortfolios] = useState<FactorySupplierPortfolio[]>(INITIAL_FACTORY_PORTFOLIOS);
+  const [selectedPortfolioFactory, setSelectedPortfolioFactory] = useState<FactorySupplierPortfolio | null>(null);
+
+  useEffect(() => {
+    fetchFactoryPortfolios().then((persisted) => {
+      if (persisted && persisted.length > 0) {
+        setFactoryPortfolios(persisted);
+      }
+    });
+  }, []);
+
+  const handleSaveFactoryPortfolio = (updated: FactorySupplierPortfolio) => {
+    setFactoryPortfolios((prev) => {
+      const idx = prev.findIndex((f) => f.id === updated.id || f.factoryCode === updated.factoryCode);
+      let next: FactorySupplierPortfolio[];
+      if (idx >= 0) {
+        next = [...prev];
+        next[idx] = updated;
+      } else {
+        next = [updated, ...prev];
+      }
+      persistFactoryPortfolios(next);
+      return next;
+    });
+    setSelectedPortfolioFactory(updated);
+  };
+
+  const getPortfolioForFactory = (fac: SupplierFactory): FactorySupplierPortfolio => {
+    const found = factoryPortfolios.find(
+      (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName.toLowerCase() === fac.name.toLowerCase()
+    );
+    if (found) return found;
+
+    return {
+      id: fac.id,
+      factoryCode: fac.code,
+      factoryName: fac.name,
+      vendorClassification: fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY'),
+      sectors: fac.sectors,
+      clusterRegion: fac.cluster,
+      factoryAddress: fac.factoryAddress,
+      establishedYear: 2010,
+      tier: fac.tier,
+      lastUpdated: new Date().toISOString().split('T')[0],
+      keyManagementContacts: [
+        {
+          name: fac.contactPerson,
+          designation: fac.designation,
+          phone: fac.phone,
+          email: fac.email,
+        },
+      ],
+      digitalChannels: {
+        website: fac.website,
+        facebook: fac.facebookUrl,
+        linkedIn: fac.linkedInUrl,
+      },
+      capacityAndMachinery: {
+        monthlyCapacityUnits: fac.capacity.monthlyCapacityUnits,
+        allocatedCapacityUnits: fac.capacity.allocatedUnits,
+        arielMcReservedCapacityUnits: Math.round(fac.capacity.monthlyCapacityUnits * 0.35),
+        utilizationRatePct: Math.round((fac.capacity.allocatedUnits / (fac.capacity.monthlyCapacityUnits || 1)) * 100),
+        activeLinesCount: fac.capacity.activeLines,
+        totalWorkforce: 450,
+        shiftStructure: 'Single Shift',
+        machinery: fac.capacity.machineryList.map((m) => ({
+          machineName: m,
+          originCountry: 'Germany / Japan',
+          quantity: 8,
+          purpose: 'Precision manufacturing line equipment',
+        })),
+      },
+      complianceAudits: fac.complianceAudits.map((a) => ({
+        id: a.id,
+        standardName: a.standardName,
+        status: a.status as any,
+        ratingGrade: a.ratingGrade,
+        auditBody: a.auditBody,
+        auditDate: '2025-05-10',
+        validUntil: a.validUntil,
+        reportNumber: a.reportNumber,
+      })),
+      subSupplierNetwork: [
+        {
+          id: `sub-${fac.id}-1`,
+          materialType: fac.sectors.includes('LEATHER') ? 'Raw Full-Grain Wet-Blue Leather' : 'Certified Organic Cotton Yarn',
+          supplierName: 'Savar Relocated Tannery Estate Unit',
+          locationCluster: 'Savar, Dhaka',
+          complianceTier: 'Certified Tier 1',
+          traceabilityVerified: true,
+        },
+      ],
+      financialAndBanking: {
+        bankName: fac.bankDetails?.bankName || 'Eastern Bank PLC',
+        branchName: fac.bankDetails?.branch || 'Corporate Branch',
+        routingNumber: fac.bankDetails?.routingNumber || '090264182',
+        backToBackLcAccepted: true,
+        preferredLcTenorDays: 90,
+        nbrBinNumber: fac.binNumber || '001892837-0101',
+        tinNumber: fac.tinNumber || '8492817291',
+        epbRegistrationNo: fac.epbRegistrationNo || 'EPB-REG-0941',
+        totalSpendYtdBdt: 36000000,
+        totalSpendYtdUsd: 300000,
+        outstandingPayablesBdt: 4500000,
+        creditTerms: fac.paymentTerms || '30% Advance, 70% Upon FRI Inspection Pass',
+        paymentPunctualityScorePct: 98.8,
+      },
+      qualityScorecard: {
+        aqlPassRatePct: fac.scorecard.aqlPassRatePct,
+        onTimeDeliveryRatePct: fac.scorecard.onTimeDeliveryPct,
+        averageDefectRatePct: 0.9,
+        sampleApprovalTurnaroundDays: 4.5,
+        overallRatingScore: fac.scorecard.ratingScore,
+      },
+      operationalNotes: `Strategic vendor partner in ${fac.cluster}. Maintains reliable production lead time of ${fac.leadTimeDays} days.`,
+    };
+  };
 
   // Filter factories
   const filteredFactories = useMemo(() => {
@@ -588,6 +711,15 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    onClick={() => setSelectedPortfolioFactory(getPortfolioForFactory(fac))}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold transition-colors shadow-sm"
+                    title="View living Factory & Supplier Portfolio (5 Pillars)"
+                  >
+                    <Layers className="w-3.5 h-3.5 text-[#C8A96A]" />
+                    <span>Portfolio</span>
+                  </button>
+
+                  <button
                     onClick={() => setViewingPdfFactory(fac)}
                     className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#1F3A2E] text-xs font-semibold text-[#1F3A2E] hover:bg-[#F4F6F4] transition-colors"
                     title="Export Official 2-Page B2B Vendor Profile Form (PDF)"
@@ -870,6 +1002,18 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => {
+                    setSelectedPortfolioFactory(getPortfolioForFactory(selectedFactory));
+                    setSelectedFactory(null);
+                  }}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#C8A96A] hover:bg-[#b59556] text-[#1F3A2E] text-xs font-bold shadow-sm transition-colors"
+                  title="Open Living Factory & Supplier Portfolio (5 Pillars)"
+                >
+                  <Layers className="w-4 h-4 text-[#1F3A2E]" />
+                  <span>Open Factory Portfolio Dossier</span>
+                </button>
+
+                <button
+                  onClick={() => {
                     setRatingModelFactory(selectedFactory);
                     setIsRatingModelOpen(true);
                   }}
@@ -930,6 +1074,17 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         }}
         factory={ratingModelFactory}
       />
+
+      {/* Modal: Living Factory & Supplier Portfolio Dossier (5 Pillars) */}
+      {selectedPortfolioFactory && (
+        <FactorySupplierPortfolioModal
+          portfolio={selectedPortfolioFactory}
+          onClose={() => setSelectedPortfolioFactory(null)}
+          onSavePortfolio={handleSaveFactoryPortfolio}
+          isBdStation={true}
+          bdtRate={120}
+        />
+      )}
     </div>
   );
 };

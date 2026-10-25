@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { CompanyEntity } from '@/types/erp';
+import { CompanyEntity, EntityCode } from '@/types/erp';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import {
   Building2,
@@ -28,7 +28,11 @@ import {
   FolderLock,
   LayoutDashboard,
   Megaphone,
-  Wrench
+  Wrench,
+  ChevronDown,
+  Globe2,
+  Check,
+  TrendingUp
 } from 'lucide-react';
 import {
   LinkedinIcon as Linkedin,
@@ -47,7 +51,8 @@ export type ActiveTab =
   | 'UTILITIES'
   | 'STATIONS' 
   | 'DOCUMENTS'
-  | 'PRODUCTS' 
+  | 'PRODUCTS'
+  | 'SALES'
   | 'FACTORIES' 
   | 'RND' 
   | 'CRM' 
@@ -56,6 +61,7 @@ export type ActiveTab =
   | 'INVENTORY' 
   | 'FINANCE' 
   | 'REPORTS'
+  | 'ECOM'
   | 'POS' 
   | 'COMMUNICATIONS'
   | 'MARKETING';
@@ -63,7 +69,7 @@ export type ActiveTab =
 export type ThemeProfile = 
   | 'crm-green' 
   | 'royal-blue' 
-  | 'heritage-tan'
+  | 'hydrangea'
   | 'california-beaches'
   | 'mossy-hollow'
   | 'ink-wash'
@@ -74,16 +80,51 @@ interface SidebarProps {
   activeTab: ActiveTab;
   onSelectTab: (tab: ActiveTab) => void;
   activeEntity: CompanyEntity;
+  companies?: CompanyEntity[];
+  onSelectEntity?: (code: EntityCode) => void;
   theme?: ThemeProfile;
 }
+
+const getStationBrandName = (code: EntityCode) => {
+  switch (code) {
+    case 'ARIEL_BD':
+      return 'ArielMC BD';
+    case 'ARIEL_UK':
+      return 'ArielMC UK';
+    case 'ARIEL_US':
+      return 'ArielMC US';
+    case 'ARIEL_EU':
+      return 'ArielMC EU';
+    case 'ARIEL_AU':
+      return 'ArielMC AU';
+    default:
+      return typeof code === 'string' && code.startsWith('ARIEL_')
+        ? `ArielMC ${code.replace('ARIEL_', '')}`
+        : 'ArielMC';
+  }
+};
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onSelectTab,
   activeEntity,
+  companies = [],
+  onSelectEntity,
   theme = 'crm-green',
 }) => {
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
+  const [isStationMenuOpen, setIsStationMenuOpen] = useState(false);
+  const stationMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (stationMenuRef.current && !stationMenuRef.current.contains(event.target as Node)) {
+        setIsStationMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const navSections = [
     {
@@ -151,6 +192,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
+      group: 'Sales & Commercial Command',
+      items: [
+        {
+          id: 'SALES' as ActiveTab,
+          label: 'Sales Management Hub',
+          icon: TrendingUp,
+          badge: 'Core Engine',
+          phase: 'Live Hub',
+        },
+        {
+          id: 'ORDERS' as ActiveTab,
+          label: 'B2B Sales Orders (SO)',
+          icon: Repeat,
+          badge: '5 Live SOs',
+          phase: 'Phase 5',
+        },
+        {
+          id: 'CRM' as ActiveTab,
+          label: 'Global CRM & B2B Leads',
+          icon: Users2,
+          badge: '254 Leads',
+          phase: 'Live Suite',
+        },
+        {
+          id: 'ECOM' as ActiveTab,
+          label: 'E-Com Sales',
+          icon: Globe2,
+          badge: 'Amazon • Shopify • Etsy',
+          phase: 'Multichannel',
+        },
+        {
+          id: 'POS' as ActiveTab,
+          label: 'Store POS',
+          icon: Store,
+          badge: 'Showroom & Retail',
+          phase: 'Live Register',
+        },
+      ],
+    },
+    {
       group: 'Brand & Marketing',
       items: [
         {
@@ -159,18 +240,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Megaphone,
           badge: 'Campaigns Live',
           phase: 'Live Hub',
-        },
-      ],
-    },
-    {
-      group: 'Global CRM & Sales Pipeline',
-      items: [
-        {
-          id: 'CRM' as ActiveTab,
-          label: 'Global CRM & B2B Leads',
-          icon: Users2,
-          badge: '254 Leads',
-          phase: 'Live Suite',
         },
       ],
     },
@@ -203,13 +272,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: '8 SDOs',
           phase: 'Phase 3',
         },
-        {
-          id: 'ORDERS' as ActiveTab,
-          label: 'Two-Way Order Management',
-          icon: Repeat,
-          badge: '5 Orders',
-          phase: 'Phase 5',
-        },
       ],
     },
     {
@@ -231,23 +293,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         },
       ],
     },
-    {
-      group: 'Omnichannel Expansion',
-      items: [
-        {
-          id: 'POS' as ActiveTab,
-          label: 'Omnichannel Store POS',
-          icon: Store,
-          badge: 'Year 2+',
-          phase: 'Phase 9',
-        },
-      ],
-    },
   ];
 
   // Theme-specific styling variables
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
   const isCalifornia = theme === 'california-beaches';
   const isMossy = theme === 'mossy-hollow';
   const isInkWash = theme === 'ink-wash';
@@ -256,8 +306,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const containerBg = isRoyal
     ? 'bg-[#0B132B] border-r border-[#1E293B]'
-    : isHeritage
-    ? 'bg-[#183124] border-r border-[#2A4837]'
+    : isHydrangea
+    ? 'bg-[#230C2E] border-r border-[#3D1A4D]'
     : isCalifornia
     ? 'bg-[#14232C] border-r border-[#203642]'
     : isMossy
@@ -272,8 +322,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const headerBg = isRoyal
     ? 'bg-[#0F172A] border-b border-[#1E293B]'
-    : isHeritage
-    ? 'bg-[#11231A] border-b border-[#2A4837]'
+    : isHydrangea
+    ? 'bg-[#1C0824] border-b border-[#3D1A4D]'
     : isCalifornia
     ? 'bg-[#0E1A21] border-b border-[#203642]'
     : isMossy
@@ -289,6 +339,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const brandText = 'text-white';
   const brandSubtext = isRoyal
     ? 'text-[#93C5FD]'
+    : isHydrangea
+    ? 'text-[#FF9CE9]'
     : isCalifornia
     ? 'text-[#66F4FF]'
     : isMossy
@@ -303,8 +355,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const entityBoxBg = isRoyal
     ? 'bg-[#1E293B] border border-[#334155]'
-    : isHeritage
-    ? 'bg-[#244232] border border-[#345943]'
+    : isHydrangea
+    ? 'bg-[#341344] border border-[#4E2064]'
     : isCalifornia
     ? 'bg-[#1B2F3B] border border-[#2B4B5C]'
     : isMossy
@@ -320,6 +372,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const entityTitle = 'text-white';
   const entitySub = isRoyal
     ? 'text-[#94A3B8]'
+    : isHydrangea
+    ? 'text-[#FFC2BA]'
     : isCalifornia
     ? 'text-[#BACDD6]'
     : isMossy
@@ -334,6 +388,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const sectionGroupText = isRoyal
     ? 'text-[#60A5FA]'
+    : isHydrangea
+    ? 'text-[#FF8DA1]'
     : isCalifornia
     ? 'text-[#FFC067]'
     : isMossy
@@ -348,8 +404,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const footerBg = isRoyal
     ? 'bg-[#0F172A] border-t border-[#1E293B]'
-    : isHeritage
-    ? 'bg-[#11231A] border-t border-[#2A4837]'
+    : isHydrangea
+    ? 'bg-[#1C0824] border-t border-[#3D1A4D]'
     : isCalifornia
     ? 'bg-[#0E1A21] border-t border-[#203642]'
     : isMossy
@@ -364,6 +420,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const footerText = isRoyal
     ? 'text-[#94A3B8]'
+    : isHydrangea
+    ? 'text-[#FFC2BA]'
     : isCalifornia
     ? 'text-[#BACDD6]'
     : isMossy
@@ -378,8 +436,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const dividerBorder = isRoyal
     ? 'border-[#1E293B]'
-    : isHeritage
-    ? 'border-[#2A4837]'
+    : isHydrangea
+    ? 'border-[#3D1A4D]'
     : isCalifornia
     ? 'border-[#203642]'
     : isMossy
@@ -430,27 +488,93 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          {/* Active Operating Entity Bar */}
-          <div className={`mt-3.5 p-2 rounded-lg ${entityBoxBg} flex items-center justify-between text-xs text-left`}>
-            <div className="flex items-center gap-2 text-left">
-              <span className="text-base shrink-0">{activeEntity.flag}</span>
-              <div className="text-left min-w-0">
-                <span className={`font-bold ${entityTitle} block text-[11px] leading-tight font-heading text-left truncate`}>
-                  {activeEntity.code.replace('ARIEL_', 'ArielMC ')}
-                </span>
-                <span className={`text-[9px] ${entitySub} text-left block truncate`}>
-                  {activeEntity.city} Station
-                </span>
+          {/* Active Operating Entity Bar & Station Switcher Dropdown */}
+          <div className="relative mt-3.5" ref={stationMenuRef}>
+            <button
+              id="sidebar-entity-selector-btn"
+              type="button"
+              onClick={() => setIsStationMenuOpen(prev => !prev)}
+              className={`w-full p-2.5 rounded-lg ${entityBoxBg} flex items-center justify-between text-xs text-left transition-all hover:border-[#C8A96A] cursor-pointer group shadow-xs`}
+              title="Click to Switch Operating Station (ArielMC Multi-Entity Network)"
+            >
+              <div className="flex items-center gap-2.5 text-left min-w-0">
+                <span className="text-lg shrink-0">{activeEntity.flag}</span>
+                <div className="text-left min-w-0">
+                  <span className={`font-bold ${entityTitle} block text-xs leading-tight font-heading text-left truncate group-hover:text-[#C8A96A] transition-colors`}>
+                    {getStationBrandName(activeEntity.code)}
+                  </span>
+                  <span className={`text-[10px] ${entitySub} text-left block truncate mt-0.5`}>
+                    {activeEntity.city} Station
+                  </span>
+                </div>
               </div>
-            </div>
-            <span className="px-1.5 py-0.5 rounded bg-[#C8A96A]/20 text-[#C8A96A] font-mono text-[10px] font-bold border border-[#C8A96A]/40 text-left shrink-0">
-              {activeEntity.baseCurrency}
-            </span>
+              <div className="flex items-center gap-1.5 shrink-0 ml-1">
+                <span className="px-1.5 py-0.5 rounded bg-[#C8A96A]/20 text-[#C8A96A] font-mono text-[10px] font-bold border border-[#C8A96A]/40 text-left">
+                  {activeEntity.baseCurrency}
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 text-[#C8A96A] transition-transform duration-200 ${isStationMenuOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </button>
+
+            {/* Station Dropdown Menu Overlay */}
+            {isStationMenuOpen && (
+              <div 
+                className="absolute left-0 top-full mt-1.5 w-full bg-white border border-[#DDE3DD] rounded-xl shadow-2xl p-2 text-[#1A1A1A] animate-in fade-in slide-in-from-top-1 duration-150 z-50 max-h-80 overflow-y-auto"
+              >
+                <div className="px-3 py-2 border-b border-[#DDE3DD] text-[11px] font-semibold text-[#6B7269] uppercase tracking-wider flex items-center justify-between sticky top-0 bg-white z-10">
+                  <span>Switch Operating Station</span>
+                  <Globe2 className="w-3.5 h-3.5 text-[#1F3A2E]" />
+                </div>
+                <div className="mt-1 space-y-1">
+                  {(companies.length > 0 ? companies : [activeEntity]).map((comp) => {
+                    const isSelected = comp.code === activeEntity.code;
+                    return (
+                      <button
+                        key={comp.code}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          onSelectEntity?.(comp.code);
+                          setIsStationMenuOpen(false);
+                        }}
+                        onClick={() => {
+                          onSelectEntity?.(comp.code);
+                          setIsStationMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-left text-xs transition-colors cursor-pointer ${
+                          isSelected 
+                            ? 'bg-[#E8F0EA] border border-[#C8A96A] text-[#1F3A2E] font-semibold shadow-xs' 
+                            : 'hover:bg-[#F4F6F4] text-[#1A1A1A]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-base shrink-0">{comp.flag}</span>
+                          <div className="min-w-0">
+                            <div className="font-bold text-[#1A1A1A] flex items-center gap-1 leading-snug truncate">
+                              <span>{getStationBrandName(comp.code)}</span>
+                              <span className="text-[10px] text-gray-500 font-normal">({comp.city})</span>
+                            </div>
+                            <div className="text-[10px] text-[#6B7269] truncate">{comp.taxIdentifier.type}: {comp.taxIdentifier.number}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0 ml-1">
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#F4F6F4] text-[#1F3A2E] border border-[#DDE3DD] font-bold">
+                            {comp.baseCurrency}
+                          </span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Navigation List */}
         <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-270px)] text-left">
+          {/* Standard Navigation Sections */}
           {navSections.map((section, idx) => (
             <div key={idx} className="space-y-1 text-left">
               <div className={`px-2.5 py-1 text-[10px] font-bold tracking-wider ${sectionGroupText} uppercase font-heading text-left`}>
@@ -460,7 +584,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
-                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS' || item.id === 'LOGISTICS' || item.id === 'FINANCE' || item.id === 'COMMUNICATIONS' || item.id === 'MARKETING';
+                  const isLive = item.id === 'STATIONS' || item.id === 'PRODUCTS' || item.id === 'FACTORIES' || item.id === 'CRM' || item.id === 'RND' || item.id === 'ORDERS' || item.id === 'LOGISTICS' || item.id === 'FINANCE' || item.id === 'COMMUNICATIONS' || item.id === 'MARKETING' || item.id === 'ECOM';
                   
                   // Active / Inactive Button Styling
                   let buttonClass = '';
@@ -514,8 +638,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       buttonClass = 'text-[#BDDDFC] hover:bg-[#283542] hover:text-white';
                       iconClass = isLive ? 'text-[#88BDF2]' : 'text-[#6A89A7]';
                     }
+                  } else if (isHydrangea) {
+                    if (isActive) {
+                      buttonClass = 'bg-[#AD56C4] text-white font-bold shadow-md shadow-[#AD56C4]/30';
+                      iconClass = 'text-white';
+                    } else {
+                      buttonClass = 'text-[#FFC2BA] hover:bg-[#341344] hover:text-white';
+                      iconClass = isLive ? 'text-[#FF9CE9]' : 'text-[#FF8DA1]';
+                    }
                   } else {
-                    // crm-green or heritage-tan
+                    // crm-green default (Heritage Leather & Sand)
                     if (isActive) {
                       buttonClass = 'bg-[#C8A96A] text-[#1F3A2E] font-bold shadow-md shadow-[#C8A96A]/20';
                       iconClass = 'text-[#1F3A2E]';

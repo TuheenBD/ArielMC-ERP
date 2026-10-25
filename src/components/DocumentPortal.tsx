@@ -95,7 +95,8 @@ export const DocumentPortal: React.FC<DocumentPortalProps> = ({
   initialStationFilter = 'ALL',
 }) => {
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
+  const isHeritage = isHydrangea;
 
   // State
   const [documents, setDocuments] = useState<OfficialDocument[]>(INITIAL_OFFICIAL_DOCUMENTS);

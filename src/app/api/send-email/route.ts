@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { getSupabaseClient } from '@/lib/supabaseClient';
+import { resolveEmailContent } from '@/lib/emailService';
+import { EmailTemplateType, EmailProviderType } from '@/types/erp';
 
-export interface SendEmailRequest {
-  provider: 'HOSTINGER' | 'GMAIL';
-  fromAccount?: string;
+export interface SendEmailPayload {
   to: string;
-  subject: string;
-  body: string;
+  recipientName?: string;
+  subject?: string;
+  templateId?: EmailTemplateType;
+  templateName?: string; // backward compat with blueprint
+  variables?: Record<string, any>;
+  templateVariables?: Record<string, any>; // backward compat with blueprint
+  provider?: EmailProviderType;
+  body?: string;
   smtpConfig?: {
     host?: string;
     port?: number;
@@ -18,8 +25,12 @@ export interface SendEmailRequest {
 
 export async function POST(req: NextRequest) {
   try {
-    const payload: SendEmailRequest = await req.json();
-    const { provider, fromAccount, to, subject, body, smtpConfig } = payload;
+    const payload: SendEmailPayload = await req.json();
+    const to = payload.to;
+    const recipientName = payload.recipientName || '';
+    const templateId: EmailTemplateType = (payload.templateId || payload.templateName || 'CUSTOM') as EmailTemplateType;
+    const variables = payload.variables || payload.templateVariables || {};
+    const provider = payload.provider || 'RESEND';
 
     if (!to || !to.includes('@')) {
       return NextResponse.json(
@@ -28,117 +39,188 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!subject || !subject.trim()) {
-      return NextResponse.json(
-        { success: false, error: 'Email subject line is required.' },
-        { status: 400 }
-      );
+    // Resolve template and render corporate HTML
+    const rendered = resolveEmailContent(
+      templateId,
+      { ...variables, to, recipientName },
+      payload.subject,
+      payload.body
+    );
+
+    const subject = payload.subject || rendered.subject;
+    const html = rendered.html;
+
+    // 1. Ingest into Supabase email_queue (Persistence Queue System)
+    let queueId = `msg-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const supabase = getSupabaseClient();
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('email_queue')
+          .insert([
+            {
+              recipient: to,
+              recipient_name: recipientName || null,
+              template_id: templateId,
+              subject,
+              payload: variables,
+              status: 'queued',
+              attempts: 1,
+              provider,
+            },
+          ])
+          .select()
+          .single();
+
+        if (data && data.id) {
+          queueId = data.id;
+        }
+      } catch (dbErr) {
+        console.warn('Notice: Supabase email_queue insert bypassed:', dbErr);
+      }
     }
 
-    if (!body || !body.trim()) {
-      return NextResponse.json(
-        { success: false, error: 'Email body text is required.' },
-        { status: 400 }
-      );
-    }
+    // 2. Dispatch Vector: Resend API, Postmark API, Hostinger/Gmail SMTP, or Simulated Sandbox
+    let externalMessageId = queueId;
+    let dispatchMode: 'RESEND_API' | 'POSTMARK_API' | 'LIVE_SMTP' | 'SIMULATED' = 'SIMULATED';
 
-    // Determine Host / Port / User / Pass
-    let host: string;
-    let port: number;
-    let secure: boolean;
-    let user: string;
-    let pass: string | undefined;
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const postmarkToken = process.env.POSTMARK_SERVER_TOKEN;
 
-    if (provider === 'HOSTINGER') {
-      host = smtpConfig?.host || process.env.HOSTINGER_SMTP_HOST || 'smtp.hostinger.com';
-      port = smtpConfig?.port || Number(process.env.HOSTINGER_SMTP_PORT || 465);
-      secure = smtpConfig?.secure !== undefined ? smtpConfig.secure : true;
-      user = smtpConfig?.user || process.env.HOSTINGER_SMTP_USER || fromAccount || 'info@arielmc.com';
-      pass = smtpConfig?.pass || process.env.HOSTINGER_SMTP_PASS;
-    } else {
-      // GMAIL
-      host = smtpConfig?.host || process.env.GMAIL_SMTP_HOST || 'smtp.gmail.com';
-      port = smtpConfig?.port || Number(process.env.GMAIL_SMTP_PORT || 465);
-      secure = smtpConfig?.secure !== undefined ? smtpConfig.secure : true;
-      user = smtpConfig?.user || process.env.GMAIL_SMTP_USER || fromAccount || 'TuheenBD@gmail.com';
-      pass = smtpConfig?.pass || process.env.GMAIL_SMTP_PASS;
-    }
-
-    // If password is not configured yet, provide seamless simulated mode with instructions
-    if (!pass) {
-      const simulatedId = `sim-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-      return NextResponse.json({
-        success: true,
-        mode: 'SIMULATED',
-        provider,
-        from: user,
-        to,
-        subject,
-        messageId: simulatedId,
-        timestamp: new Date().toISOString(),
-        note: `Email simulated successfully. To dispatch to real external inboxes, configure your ${
-          provider === 'HOSTINGER' ? 'Hostinger mailbox password' : 'Google App Password'
-        } in ERP Settings or .env.local.`,
+    if (provider === 'RESEND' && resendApiKey) {
+      // Dispatched via Resend Transactional API
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: process.env.RESEND_FROM_EMAIL || 'ArielMC ERP <invoicing@arielmc.com>',
+          to: [to],
+          reply_to: process.env.ERP_REPLY_TO_EMAIL || 'tuheen@arielmc.com',
+          subject,
+          html,
+          headers: {
+            'X-ArielMC-Queue-ID': queueId,
+          },
+        }),
       });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw new Error(resData.message || 'Resend API returned dispatch error');
+      }
+      externalMessageId = resData.id || queueId;
+      dispatchMode = 'RESEND_API';
+    } else if (provider === 'POSTMARK' && postmarkToken) {
+      // Dispatched via Postmark Transactional API
+      const res = await fetch('https://api.postmarkapp.com/email', {
+        method: 'POST',
+        headers: {
+          'X-Postmark-Server-Token': postmarkToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          From: process.env.POSTMARK_FROM_EMAIL || 'invoicing@arielmc.com',
+          To: to,
+          ReplyTo: process.env.ERP_REPLY_TO_EMAIL || 'tuheen@arielmc.com',
+          Subject: subject,
+          HtmlBody: html,
+          Metadata: {
+            internal_queue_id: queueId,
+          },
+        }),
+      });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw new Error(resData.Message || 'Postmark API returned dispatch error');
+      }
+      externalMessageId = resData.MessageID || queueId;
+      dispatchMode = 'POSTMARK_API';
+    } else if ((provider === 'HOSTINGER' || provider === 'GMAIL') && payload.smtpConfig?.pass) {
+      // Live SMTP Transporter
+      const isHostinger = provider === 'HOSTINGER';
+      const host = payload.smtpConfig.host || (isHostinger ? 'smtp.hostinger.com' : 'smtp.gmail.com');
+      const port = payload.smtpConfig.port || 465;
+      const user = payload.smtpConfig.user || (isHostinger ? 'info@arielmc.com' : 'TuheenBD@gmail.com');
+      const pass = payload.smtpConfig.pass;
+
+      const transporter = nodemailer.createTransport({
+        host,
+        port,
+        secure: port === 465,
+        auth: { user, pass },
+        tls: { rejectUnauthorized: false },
+      });
+
+      const info = await transporter.sendMail({
+        from: `ArielMC Enterprise ERP <${user}>`,
+        to,
+        replyTo: 'tuheen@arielmc.com',
+        subject,
+        html,
+      });
+
+      externalMessageId = info.messageId || queueId;
+      dispatchMode = 'LIVE_SMTP';
+    } else {
+      // High-performance Simulated Mode with zero UI delay
+      externalMessageId = `sim-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+      dispatchMode = 'SIMULATED';
     }
 
-    // Initialize real SMTP transporter
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure,
-      auth: {
-        user,
-        pass,
-      },
-      tls: {
-        rejectUnauthorized: false, // Prevents self-signed / local proxy cert drop
-      },
-    });
+    // 3. Update status in Supabase email_queue
+    if (supabase) {
+      try {
+        await supabase
+          .from('email_queue')
+          .update({
+            status: 'sent',
+            external_message_id: externalMessageId,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', queueId);
 
-    // Format plain text into clean HTML email with corporate ArielMC footer
-    const htmlContent = `
-      <div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.6; color: #1a1a1a; max-width: 650px; margin: 0 auto; border: 1px solid #dde3dd; border-radius: 12px; overflow: hidden;">
-        <div style="background-color: #1F3A2E; padding: 20px 24px; border-bottom: 3px solid #C8A96A; color: #ffffff;">
-          <h2 style="margin: 0; font-size: 18px; font-weight: bold; letter-spacing: 0.5px;">Ariel Marketing & Communications Limited</h2>
-          <p style="margin: 4px 0 0; font-size: 11px; color: #C8A96A; font-family: monospace;">Global Merchandising & Sourcing Desk</p>
-        </div>
-        <div style="padding: 24px; background-color: #ffffff; white-space: pre-wrap; font-size: 13px;">${body}</div>
-        <div style="background-color: #f8f6f2; padding: 16px 24px; border-top: 1px solid #dde3dd; font-size: 11px; color: #6b7269;">
-          <p style="margin: 0 0 4px; font-weight: bold; color: #1F3A2E;">Ariel Marketing & Communications Limited</p>
-          <p style="margin: 0;">Dhaka HQ: House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan, Dhaka-1212, Bangladesh</p>
-          <p style="margin: 2px 0 0;">Tel: +880 2410 811 91 | WhatsApp / Hotline: +8801819273458 | info@arielmc.com | tuheen@arielmc.com</p>
-        </div>
-      </div>
-    `;
+        // Also add initial audit log
+        await supabase
+          .from('email_audit_ledger')
+          .insert([
+            {
+              queue_id: queueId,
+              external_message_id: externalMessageId,
+              event_type: 'sent',
+              recipient: to,
+              raw_payload: { mode: dispatchMode, subject },
+            },
+          ]);
+      } catch (updateErr) {
+        console.warn('Notice: Supabase queue status update bypassed:', updateErr);
+      }
+    }
 
-    const info = await transporter.sendMail({
-      from: `"${provider === 'HOSTINGER' ? 'ArielMC Trade Desk' : 'Syed Akramul Hassan'}" <${user}>`,
-      to,
-      subject,
-      text: body,
-      html: htmlContent,
-      replyTo: user,
-    });
-
-    return NextResponse.json({
-      success: true,
-      mode: 'LIVE_SMTP',
-      provider,
-      from: user,
-      to,
-      subject,
-      messageId: info.messageId,
-      timestamp: new Date().toISOString(),
-      note: `Email successfully delivered to ${to} via ${provider} SMTP.`,
-    });
-  } catch (error: any) {
-    console.error('SMTP Dispatch Error:', error);
+    // Return immediate 202 Accepted status
     return NextResponse.json(
       {
-        success: false,
-        error: error.message || 'Failed to dispatch email via SMTP server.',
+        success: true,
+        messageId: queueId,
+        externalMessageId,
+        status: 'sent',
+        mode: dispatchMode,
+        recipient: to,
+        subject,
+        note: dispatchMode === 'SIMULATED' 
+          ? 'Email queued & verified in simulated mode. Configure RESEND_API_KEY in .env.local to send to real buyer inboxes.'
+          : 'Email dispatched successfully through enterprise gateway.',
       },
+      { status: 202 }
+    );
+  } catch (error: any) {
+    console.error('Email Dispatch Error:', error);
+    return NextResponse.json(
+      { success: false, error: error.message || 'Internal Email Pipeline Gateway Error' },
       { status: 500 }
     );
   }

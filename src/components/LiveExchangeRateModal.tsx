@@ -60,7 +60,7 @@ export const LiveExchangeRateModal: React.FC<LiveExchangeRateModalProps> = ({
   };
 
   const isRoyal = theme === 'royal-blue';
-  const isHeritage = theme === 'heritage-tan';
+  const isHydrangea = theme === 'hydrangea';
 
   // Get current rates with fallbacks
   const getRate = (code: string, fallback: number) => {
@@ -97,7 +97,7 @@ export const LiveExchangeRateModal: React.FC<LiveExchangeRateModalProps> = ({
       >
         {/* Header Banner */}
         <div className={`px-6 py-4 flex items-center justify-between text-white border-b ${
-          isRoyal ? 'bg-[#0F172A] border-[#1E293B]' : isHeritage ? 'bg-[#183124] border-[#2A4837]' : 'bg-[#1F3A2E] border-[#2C5240]'
+          isRoyal ? 'bg-[#0F172A] border-[#1E293B]' : isHydrangea ? 'bg-[#230C2E] border-[#3D1A4D]' : 'bg-[#1F3A2E] border-[#2C5240]'
         }`}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/10 border border-[#C8A96A] p-2 flex items-center justify-center shadow-inner">

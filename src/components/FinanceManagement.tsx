@@ -275,183 +275,214 @@ arielmc.com | arielmc.co.uk`;
         </div>
       </div>
 
-      {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-[#DDE3DD] text-xs font-semibold">
-        <button
-          onClick={() => setActiveTab('OVERVIEW')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'OVERVIEW'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>The Growth Flywheel</span>
-        </button>
+      {/* Navigation Sub-Tabs: Structured 3-Line Operational Layout */}
+      <div className="bg-white border border-[#DDE3DD] rounded-2xl p-3 shadow-xs space-y-2.5 text-xs font-semibold">
+        {/* LINE 1: Financial Operations, Reports & Working Capital */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:w-28 shrink-0 pl-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span>Line 1 • Core:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 flex-1">
+            <button
+              onClick={() => setActiveTab('OVERVIEW')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'OVERVIEW'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span>The Growth Flywheel</span>
+            </button>
 
-        <button
-          id="btn-finance-reports-suite"
-          onClick={() => setActiveTab('REPORTS_SUITE')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'REPORTS_SUITE'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-[#1E6B3A] bg-emerald-50/60 hover:text-[#1F3A2E] hover:bg-emerald-100/60 border border-emerald-200 font-bold'
-          }`}
-        >
-          <BarChart3 className="w-3.5 h-3.5 text-[#C8A96A]" />
-          <span>Reports &amp; Accounts Payable</span>
-        </button>
+            <button
+              id="btn-finance-reports-suite"
+              onClick={() => setActiveTab('REPORTS_SUITE')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'REPORTS_SUITE'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#1E6B3A] bg-emerald-50/70 hover:text-[#1F3A2E] hover:bg-emerald-100/70 border border-emerald-200 font-bold'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span>Reports &amp; Accounts Payable</span>
+            </button>
 
-        <button
-          id="btn-finance-daily-expenses"
-          onClick={() => setActiveTab('DAILY_EXPENSES_AUDIT')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
-            activeTab === 'DAILY_EXPENSES_AUDIT'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-[#1E6B3A] bg-emerald-50/80 hover:text-[#1F3A2E] hover:bg-emerald-100/80 border border-emerald-300 font-bold'
-          }`}
-        >
-          <Receipt className="w-3.5 h-3.5 text-[#C8A96A]" />
-          <span>Voucher Center (Purchase &amp; Receive)</span>
-          <span className="px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#12231B] font-mono text-[9px] font-bold">
-            4 Heads &amp; Memos
-          </span>
-        </button>
+            <button
+              id="btn-finance-daily-expenses"
+              onClick={() => setActiveTab('DAILY_EXPENSES_AUDIT')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'DAILY_EXPENSES_AUDIT'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#1E6B3A] bg-emerald-50/80 hover:text-[#1F3A2E] hover:bg-emerald-100/80 border border-emerald-300 font-bold'
+              }`}
+            >
+              <Receipt className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span>Voucher Center (Purchase &amp; Receive)</span>
+              <span className="px-1.5 py-0.2 rounded bg-[#C8A96A] text-[#12231B] font-mono text-[9px] font-bold">
+                4 Heads &amp; Memos
+              </span>
+            </button>
 
-        <button
-          id="btn-finance-london-hybrid"
-          onClick={() => setActiveTab('LONDON_HYBRID_LAUNCH')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'LONDON_HYBRID_LAUNCH'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-[#17456F] bg-blue-50/70 hover:text-[#1F3A2E] hover:bg-blue-100/70 border border-blue-200 font-bold'
-          }`}
-        >
-          <Plane className="w-3.5 h-3.5 text-[#17456F]" />
-          <span>London Hybrid Launch (£113k)</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('CASH_FLOW_PVA')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'CASH_FLOW_PVA'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Working Capital &amp; PVA Tax Shield</span>
+            </button>
+          </div>
+        </div>
 
-        <button
-          id="btn-finance-b2b-expansion"
-          onClick={() => setActiveTab('B2B_EXPANSION_PLAN')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
-            activeTab === 'B2B_EXPANSION_PLAN'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-[#7A5508] bg-amber-50/70 hover:text-[#1F3A2E] hover:bg-amber-100/70 border border-amber-200 font-bold'
-          }`}
-        >
-          <Globe2 className="w-3.5 h-3.5 text-[#C8A96A]" />
-          <span>Global B2B Expansion (24-Mo)</span>
-        </button>
+        <div className="border-t border-slate-100"></div>
 
-        <button
-          id="btn-finance-raw-materials-strategy"
-          onClick={() => setActiveTab('RAW_MATERIALS_STRATEGY')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
-            activeTab === 'RAW_MATERIALS_STRATEGY'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-[#1F3A2E] bg-emerald-50/80 hover:text-[#1F3A2E] hover:bg-emerald-100/80 border border-emerald-300 font-bold'
-          }`}
-        >
-          <Boxes className="w-3.5 h-3.5 text-[#1F3A2E]" />
-          <span>Raw Materials to Global (2026–2030)</span>
-          <span className="px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-900 font-mono text-[9px] font-bold">
-            95% Retained
-          </span>
-        </button>
+        {/* LINE 2: Strategic Launch, Global Expansion & Logistics */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:w-28 shrink-0 pl-1">
+            <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+            <span>Line 2 • Strategy:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 flex-1">
+            <button
+              id="btn-finance-london-hybrid"
+              onClick={() => setActiveTab('LONDON_HYBRID_LAUNCH')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'LONDON_HYBRID_LAUNCH'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#17456F] bg-blue-50/70 hover:text-[#1F3A2E] hover:bg-blue-100/70 border border-blue-200 font-bold'
+              }`}
+            >
+              <Plane className="w-3.5 h-3.5 text-[#17456F]" />
+              <span>London Hybrid Launch (£113k)</span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('B2C_PNL')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'B2C_PNL'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <DollarSign className="w-3.5 h-3.5" />
-          <span>B2C Retail P&amp;L (Lot / Shipment Wise)</span>
-          <span className="px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800 font-mono text-[9px] font-bold">
-            Consignment Lots
-          </span>
-        </button>
+            <button
+              id="btn-finance-b2b-expansion"
+              onClick={() => setActiveTab('B2B_EXPANSION_PLAN')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'B2B_EXPANSION_PLAN'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#7A5508] bg-amber-50/70 hover:text-[#1F3A2E] hover:bg-amber-100/70 border border-amber-200 font-bold'
+              }`}
+            >
+              <Globe2 className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span>Global B2B Expansion (24-Mo)</span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('B2B_PNL')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'B2B_PNL'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <Building2 className="w-3.5 h-3.5" />
-          <span>B2B Wholesale P&amp;L (Order Wise)</span>
-          <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 font-mono text-[9px] font-bold">
-            Sales Orders
-          </span>
-        </button>
+            <button
+              id="btn-finance-raw-materials-strategy"
+              onClick={() => setActiveTab('RAW_MATERIALS_STRATEGY')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'RAW_MATERIALS_STRATEGY'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-[#1F3A2E] bg-emerald-50/80 hover:text-[#1F3A2E] hover:bg-emerald-100/80 border border-emerald-300 font-bold'
+              }`}
+            >
+              <Boxes className="w-3.5 h-3.5 text-[#1F3A2E]" />
+              <span>Raw Materials to Global (2026–2030)</span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-900 font-mono text-[9px] font-bold">
+                95% Retained
+              </span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('UNIT_ECONOMICS')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'UNIT_ECONOMICS'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <Percent className="w-3.5 h-3.5" />
-          <span>Per-Bag Unit Economics</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('SHIPPING_CADENCE')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'SHIPPING_CADENCE'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <Ship className="w-3.5 h-3.5 text-blue-600" />
+              <span>Quarterly Shipping Cadence</span>
+            </button>
+          </div>
+        </div>
 
-        <button
-          onClick={() => setActiveTab('CHANNEL_SIMULATOR')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'CHANNEL_SIMULATOR'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
-          <span>Channel Profitability Simulator</span>
-          <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 font-mono text-[9px] font-bold">
-            Part 5
-          </span>
-        </button>
+        <div className="border-t border-slate-100"></div>
 
-        <button
-          onClick={() => setActiveTab('CASH_FLOW_PVA')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'CASH_FLOW_PVA'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Working Capital & PVA Tax Shield</span>
-        </button>
+        {/* LINE 3: P&L Accounts, Unit Economics & Sampling */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:w-28 shrink-0 pl-1">
+            <span className="w-2 h-2 rounded-full bg-amber-600"></span>
+            <span>Line 3 • P&amp;L / Units:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 flex-1">
+            <button
+              onClick={() => setActiveTab('B2C_PNL')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'B2C_PNL'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <DollarSign className="w-3.5 h-3.5 text-cyan-600" />
+              <span>B2C Retail P&amp;L</span>
+              <span className="px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800 font-mono text-[9px] font-bold">
+                Consignments
+              </span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('SHIPPING_CADENCE')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'SHIPPING_CADENCE'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <Ship className="w-3.5 h-3.5" />
-          <span>Quarterly Shipping Cadence</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('B2B_PNL')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'B2B_PNL'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <Building2 className="w-3.5 h-3.5 text-amber-600" />
+              <span>B2B Wholesale P&amp;L</span>
+              <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 font-mono text-[9px] font-bold">
+                Sales Orders
+              </span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('SPECIMEN_ROI')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap font-['Montserrat'] ${
-            activeTab === 'SPECIMEN_ROI'
-              ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
-              : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-transparent'
-          }`}
-        >
-          <Mail className="w-3.5 h-3.5" />
-          <span>Specimen Kit Outbound</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('UNIT_ECONOMICS')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'UNIT_ECONOMICS'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <Percent className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Per-Bag Unit Economics</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('CHANNEL_SIMULATOR')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'CHANNEL_SIMULATOR'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <TrendingUp className="w-3.5 h-3.5 text-[#C8A96A]" />
+              <span>Channel Profitability Simulator</span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 font-mono text-[9px] font-bold">
+                Part 5
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('SPECIMEN_ROI')}
+              className={`px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap font-['Montserrat'] cursor-pointer ${
+                activeTab === 'SPECIMEN_ROI'
+                  ? 'bg-[#1F3A2E] text-white shadow-sm border border-[#1F3A2E]'
+                  : 'text-gray-600 hover:text-[#1F3A2E] hover:bg-[#E8EFE8] border border-slate-200/80 bg-slate-50/50'
+              }`}
+            >
+              <Mail className="w-3.5 h-3.5 text-purple-600" />
+              <span>Specimen Kit Outbound</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* TAB: DAILY EXPENSES ENTRY UNDER ACCOUNT HEADS */}
