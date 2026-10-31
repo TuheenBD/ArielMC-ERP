@@ -5,9 +5,15 @@ export const metadata: Metadata = {
   title: "ArielMC™ Enterprise Resource Planning System | Global Sourcing & Supply Chain",
   description: "ArielMC™ Enterprise Resource Planning System — © Ariel Marketing & Communications Limited | All Right Reserve",
   icons: {
-    icon: "/images/ArielMC_ERP_Icon.png",
-    apple: "/images/ArielMC_ERP_Icon.png",
-    shortcut: "/images/ArielMC_ERP_Icon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/ArielMC_ERP_Icon.png", type: "image/png", sizes: "512x512" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
   },
 };
 

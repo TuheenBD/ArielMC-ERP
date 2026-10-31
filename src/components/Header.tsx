@@ -55,6 +55,8 @@ interface HeaderProps {
   favoritePages?: FavoriteKey[];
   onToggleFavorite?: (id: FavoriteKey) => void;
   onSelectFavorite?: (id: FavoriteKey) => void;
+  onOpenNotifications?: () => void;
+  unreadNotificationsCount?: number;
 }
 
 const getStationBrandName = (code: EntityCode) => {
@@ -108,6 +110,8 @@ export const Header: React.FC<HeaderProps> = ({
   favoritePages = [],
   onToggleFavorite,
   onSelectFavorite,
+  onOpenNotifications,
+  unreadNotificationsCount = 0,
 }) => {
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const themeMenuRef = useRef<HTMLDivElement>(null);
@@ -995,11 +999,18 @@ export const Header: React.FC<HeaderProps> = ({
           <button 
             id="header-notifications-btn"
             type="button"
+            onClick={onOpenNotifications}
             className={notifBtnH10}
-            title="Station Notifications"
+            title="Station Notifications Center"
           >
             <Bell className="w-4 h-4 text-white" />
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#C8A96A] ring-2 ring-[#1F3A2E]" />
+            {unreadNotificationsCount > 0 ? (
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#C8A96A] text-[#1F3A2E] text-[10px] font-bold flex items-center justify-center ring-2 ring-[#1F3A2E] shadow-sm animate-pulse">
+                {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+              </span>
+            ) : (
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#C8A96A]/60 ring-2 ring-[#1F3A2E]" />
+            )}
           </button>
 
           {/* Executive User Profile & Account Control (Prominent on Line 2) */}

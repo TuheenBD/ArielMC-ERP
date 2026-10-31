@@ -48,6 +48,7 @@ import { OfficialDocumentCenter, DocumentType } from '@/components/OfficialDocum
 import { DatabaseSettingsModal } from '@/components/DatabaseSettingsModal';
 import { AuthWelcomeModal } from '@/components/auth/AuthWelcomeModal';
 import { ProfileControlModal } from '@/components/profile/ProfileControlModal';
+import { NotificationCenterModal, ErpNotification, INITIAL_NOTIFICATIONS } from '@/components/NotificationCenterModal';
 import { ArielMCAICopilot } from '@/components/ai/ArielMCAICopilot';
 import { UserGuideModal } from '@/components/UserGuideModal';
 import { LiveExchangeRateModal } from '@/components/LiveExchangeRateModal';
@@ -242,13 +243,18 @@ export default function Home() {
     }
   };
 
-  // User Profile & Authentication State
+  // User Profile & Authentication State (Enforced 2SA)
   const [users, setUsers] = useState<UserProfile[]>(INITIAL_USERS);
   const [currentUser, setCurrentUser] = useState<UserProfile>(INITIAL_USERS[0]);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  // Load and persist users from localStorage
+  // Station Notifications State
+  const [notifications, setNotifications] = useState<ErpNotification[]>(INITIAL_NOTIFICATIONS);
+  const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
+
+  // Load and persist users & notifications from localStorage
   React.useEffect(() => {
     try {
       const cachedUsers = localStorage.getItem('arielmc_erp_all_users_v1');
@@ -259,8 +265,44 @@ export default function Home() {
       if (cachedCurrent) {
         setCurrentUser(JSON.parse(cachedCurrent));
       }
+      const cachedNotifs = localStorage.getItem('arielmc_erp_notifications_v1');
+      if (cachedNotifs) {
+        setNotifications(JSON.parse(cachedNotifs));
+      }
+      const authSessionActive = localStorage.getItem('arielmc_erp_auth_session_active');
+      if (authSessionActive === 'false') {
+        setIsAuthenticated(false);
+        setIsAuthModalOpen(true);
+      }
     } catch {}
   }, []);
+
+  const handleToggleNotificationRead = (id: string) => {
+    setNotifications((prev) => {
+      const updated = prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n));
+      try {
+        localStorage.setItem('arielmc_erp_notifications_v1', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const handleMarkAllNotificationsRead = () => {
+    setNotifications((prev) => {
+      const updated = prev.map((n) => ({ ...n, read: true }));
+      try {
+        localStorage.setItem('arielmc_erp_notifications_v1', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const handleClearAllNotifications = () => {
+    setNotifications([]);
+    try {
+      localStorage.setItem('arielmc_erp_notifications_v1', JSON.stringify([]));
+    } catch {}
+  };
 
   const handleUpdateCurrentUser = (updated: UserProfile) => {
     setCurrentUser(updated);
@@ -278,8 +320,10 @@ export default function Home() {
 
   const handleLoginSuccess = (user: UserProfile) => {
     setCurrentUser(user);
+    setIsAuthenticated(true);
     try {
       localStorage.setItem('arielmc_erp_current_user_v1', JSON.stringify(user));
+      localStorage.setItem('arielmc_erp_auth_session_active', 'true');
     } catch {}
     setIsAuthModalOpen(false);
   };
@@ -295,8 +339,12 @@ export default function Home() {
   };
 
   const handleSignOut = () => {
+    setIsAuthenticated(false);
     setIsProfileModalOpen(false);
     setIsAuthModalOpen(true);
+    try {
+      localStorage.setItem('arielmc_erp_auth_session_active', 'false');
+    } catch {}
   };
 
   // Modals
@@ -584,6 +632,8 @@ export default function Home() {
           favoritePages={favoritePages}
           onToggleFavorite={handleToggleFavorite}
           onSelectFavorite={handleSelectFavorite}
+          onOpenNotifications={() => setIsNotificationCenterOpen(true)}
+          unreadNotificationsCount={notifications.filter((n) => !n.read).length}
         />
 
         {/* Dashboard Workspace (Independent Smooth Scroll) */}
@@ -957,13 +1007,29 @@ export default function Home() {
         theme={theme}
       />
 
-      {/* Enterprise Authentication Gateway & Welcome Modal */}
+      {/* Enterprise Authentication Gateway & Welcome Modal (Strict 2SA Enforcement) */}
       <AuthWelcomeModal
         isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+        onClose={isAuthenticated ? () => setIsAuthModalOpen(false) : undefined}
+        forceLock={!isAuthenticated}
         onLoginSuccess={handleLoginSuccess}
         allUsers={users}
         onRegisterUser={handleRegisterUser}
+      />
+
+      {/* Station Notifications Center Modal */}
+      <NotificationCenterModal
+        isOpen={isNotificationCenterOpen}
+        onClose={() => setIsNotificationCenterOpen(false)}
+        notifications={notifications}
+        onNavigateTab={(tab) => {
+          if (tab in ALL_PAGE_DEFINITIONS || tab === 'SAMPLES' || tab === 'LOGISTICS' || tab === 'CYBER_SECURITY') {
+            setActiveTab(tab as ActiveTab);
+          }
+        }}
+        onMarkAllAsRead={handleMarkAllNotificationsRead}
+        onClearAll={handleClearAllNotifications}
+        onToggleRead={handleToggleNotificationRead}
       />
 
       {/* User Profile Control & 2SA Management Modal */}

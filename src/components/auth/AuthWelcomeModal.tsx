@@ -23,6 +23,7 @@ import {
 import { UserProfile, UserRole, UserDepartment } from '@/types/auth';
 import { EntityCode } from '@/types/erp';
 import { INITIAL_USERS } from '@/data/initialUsers';
+import { verifyTOTP } from '@/lib/totp';
 
 interface AuthWelcomeModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ interface AuthWelcomeModalProps {
   onLoginSuccess: (user: UserProfile) => void;
   allUsers: UserProfile[];
   onRegisterUser: (newUser: UserProfile) => void;
+  forceLock?: boolean;
 }
 
 type AuthMode = 'LOGIN' | 'REGISTER' | 'FORGOT_PASSWORD' | 'TWO_FACTOR';
@@ -40,6 +42,7 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
   onLoginSuccess,
   allUsers,
   onRegisterUser,
+  forceLock = false,
 }) => {
   const [mode, setMode] = useState<AuthMode>('LOGIN');
 
@@ -55,6 +58,8 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
   const [pendingUser, setPendingUser] = useState<UserProfile | null>(null);
   const [twoFactorCode, setTwoFactorCode] = useState('');
   const [simulatedOtp, setSimulatedOtp] = useState('482910');
+  const [useRecoveryCode, setUseRecoveryCode] = useState(false);
+  const [resendTimer, setResendTimer] = useState(60);
 
   // Register Form State
   const [regName, setRegName] = useState('');
@@ -112,18 +117,57 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
     }, 600);
   };
 
-  const handleTwoFactorVerify = (e: React.FormEvent) => {
+  const handleTwoFactorVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!pendingUser) return;
 
-    if (twoFactorCode.trim() !== simulatedOtp && twoFactorCode.trim() !== '123456') {
-      setErrorMessage('Invalid 6-digit verification code. Please check your authenticator or SMS.');
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    const inputCode = twoFactorCode.trim().toUpperCase();
+
+    // 1. Emergency Recovery Code Validation (e.g. AMC-XXXX-XXXX)
+    if (pendingUser.recoveryCodes && pendingUser.recoveryCodes.some(c => c.toUpperCase() === inputCode)) {
+      setIsLoading(false);
+      onLoginSuccess(pendingUser);
+      setPendingUser(null);
+      if (onClose) onClose();
       return;
     }
 
-    onLoginSuccess(pendingUser);
-    setPendingUser(null);
-    if (onClose) onClose();
+    // 2. RFC 6238 Standard Authenticator TOTP Validation
+    if (pendingUser.twoFactorMethod === 'AUTHENTICATOR_APP') {
+      const secret = pendingUser.twoFactorSecret || 'JBSWY3DPEHPK3PXP';
+      const isValid = await verifyTOTP(inputCode, secret);
+      if (isValid) {
+        setIsLoading(false);
+        onLoginSuccess(pendingUser);
+        setPendingUser(null);
+        if (onClose) onClose();
+        return;
+      }
+    }
+
+    // 3. SMS / WhatsApp OTP Validation
+    if (pendingUser.twoFactorMethod === 'SMS_WHATSAPP') {
+      if (inputCode === simulatedOtp) {
+        setIsLoading(false);
+        onLoginSuccess(pendingUser);
+        setPendingUser(null);
+        if (onClose) onClose();
+        return;
+      }
+    }
+
+    setIsLoading(false);
+    setErrorMessage('Invalid 6-digit authentication token or recovery key. Please check your Authenticator App.');
+  };
+
+  const handleResendSmsOtp = () => {
+    if (resendTimer > 0) return;
+    const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+    setSimulatedOtp(newCode);
+    setResendTimer(60);
   };
 
   const handleQuickDemoSelect = (demoUser: UserProfile) => {
@@ -249,11 +293,11 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
       >
         {/* Modal Header */}
         <div className="relative px-6 py-6 border-b border-[#2C5240] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-center">
-          {onClose && (
+          {onClose && !forceLock && (
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white rounded-lg hover:bg-black/20 transition-colors"
-              title="Close / Guest Preview"
+              title="Close"
             >
               <X className="w-5 h-5" />
             </button>
@@ -410,28 +454,12 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
                 )}
               </button>
 
-              {/* 1-Click Quick Demo Sign-in */}
-              <div className="pt-4 border-t border-[#2C5240]/80">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2.5 block flex items-center gap-1.5">
-                  <Sparkles className="w-3 h-3 text-[#C8A96A]" /> Quick Demo Logins (Click to Populate):
+              {/* Enterprise Security Notice */}
+              <div className="pt-3 border-t border-[#2C5240]/80 text-center">
+                <span className="text-[11px] text-gray-400 flex items-center justify-center gap-1.5 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Strict Two-Step Authentication (2SA) Enforced</span>
                 </span>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {allUsers.slice(0, 3).map((u) => (
-                    <button
-                      key={u.id}
-                      type="button"
-                      onClick={() => handleQuickDemoSelect(u)}
-                      className={`p-2 rounded-lg border text-left transition-all text-xs ${
-                        email === u.email 
-                          ? 'bg-[#1F3A2E] border-[#C8A96A] text-white shadow-sm' 
-                          : 'bg-[#0F1E16] border-[#2C5240] text-gray-300 hover:border-gray-500'
-                      }`}
-                    >
-                      <div className="font-semibold truncate">{u.name}</div>
-                      <div className="text-[10px] text-[#C8A96A] truncate">{u.designation}</div>
-                    </button>
-                  ))}
-                </div>
               </div>
             </form>
           )}
@@ -439,57 +467,96 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
           {/* 2. TWO-STEP AUTHENTICATION (2SA) VERIFICATION */}
           {mode === 'TWO_FACTOR' && pendingUser && (
             <form onSubmit={handleTwoFactorVerify} className="space-y-5">
-              <div className="p-4 rounded-xl bg-[#162B22] border border-[#2C5240] text-center space-y-2">
-                <div className="w-10 h-10 mx-auto rounded-full bg-[#C8A96A]/20 border border-[#C8A96A]/30 flex items-center justify-center text-[#C8A96A]">
-                  <Fingerprint className="w-5 h-5" />
+              <div className="p-4 rounded-xl bg-[#162B22] border border-[#2C5240] text-center space-y-2.5">
+                <div className="w-12 h-12 mx-auto rounded-full bg-[#C8A96A]/20 border border-[#C8A96A]/30 flex items-center justify-center text-[#C8A96A]">
+                  <Fingerprint className="w-6 h-6" />
                 </div>
                 <h3 className="text-sm font-bold text-white">
                   Two-Step Authentication Required (2SA)
                 </h3>
                 <p className="text-xs text-[#CFE0D5] leading-relaxed">
-                  Enter the 6-digit verification code from your {pendingUser.twoFactorMethod === 'AUTHENTICATOR_APP' ? 'Authenticator App (Google / Microsoft)' : 'WhatsApp OTP notification'}.
+                  Enter the dynamic security token from your {pendingUser.twoFactorMethod === 'AUTHENTICATOR_APP' ? 'Authenticator App (Google / Microsoft / Apple)' : 'WhatsApp / SMS notification'}.
                 </p>
 
-                <div className="p-2.5 rounded-lg bg-black/40 border border-[#C8A96A]/30 text-[11px] text-[#C8A96A] font-mono flex items-center justify-between">
-                  <span>Simulated OTP Code:</span>
-                  <button
-                    type="button"
-                    onClick={() => setTwoFactorCode(simulatedOtp)}
-                    className="font-bold underline hover:text-white"
-                  >
-                    {simulatedOtp} (Click to Fill)
-                  </button>
-                </div>
+                {pendingUser.twoFactorMethod === 'AUTHENTICATOR_APP' ? (
+                  <div className="p-3 rounded-lg bg-black/40 border border-[#2C5240] text-xs text-slate-300 text-left space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px] text-[#C8A96A] font-semibold">
+                      <span>Authenticator Profile:</span>
+                      <span className="font-mono text-gray-300">{pendingUser.email}</span>
+                    </div>
+                    <div className="text-[11px] text-gray-400">
+                      Open your Authenticator app to view the current 30-second 6-digit dynamic code.
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 rounded-lg bg-black/40 border border-[#2C5240] text-xs text-slate-300 text-center space-y-1.5">
+                    <div className="text-[11px] text-[#C8A96A] font-semibold">
+                      Security code dispatched to: {pendingUser.phone?.replace(/(\d{4})\d{4}(\d{2})/, '$1-****-$2') || '+880 1819-****58'}
+                    </div>
+                    <div className="text-[11px] text-gray-400">
+                      {resendTimer > 0 ? (
+                        <span>Resend available in {resendTimer}s</span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={handleResendSmsOtp}
+                          className="text-[#C8A96A] underline font-bold hover:text-white"
+                        >
+                          Resend WhatsApp / SMS Code Now
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-[#CFE0D5] mb-1.5 text-center">
-                  6-Digit Verification Code
+                  {useRecoveryCode ? 'Enter Single-Use Recovery Code' : '6-Digit Authentication Code'}
                 </label>
                 <input
                   type="text"
-                  maxLength={6}
+                  maxLength={useRecoveryCode ? 16 : 6}
                   value={twoFactorCode}
                   onChange={(e) => setTwoFactorCode(e.target.value)}
                   required
-                  placeholder="000000"
-                  className="w-48 mx-auto block text-center tracking-[0.4em] font-mono text-lg py-2.5 rounded-xl bg-[#0F1E16] border border-[#2C5240] text-white focus:outline-none focus:border-[#C8A96A]"
+                  autoFocus
+                  placeholder={useRecoveryCode ? 'AMC-9281-4092' : '000000'}
+                  className={`mx-auto block text-center font-mono py-2.5 rounded-xl bg-[#0F1E16] border border-[#2C5240] text-white focus:outline-none focus:border-[#C8A96A] ${
+                    useRecoveryCode ? 'w-64 tracking-widest text-base' : 'w-48 tracking-[0.4em] text-lg'
+                  }`}
                 />
+              </div>
+
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUseRecoveryCode(!useRecoveryCode);
+                    setTwoFactorCode('');
+                    setErrorMessage(null);
+                  }}
+                  className="text-[11px] text-[#C8A96A] hover:underline cursor-pointer"
+                >
+                  {useRecoveryCode ? '← Return to 6-digit Authenticator code' : 'Lost authenticator? Enter emergency recovery key'}
+                </button>
               </div>
 
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => { setMode('LOGIN'); setPendingUser(null); }}
+                  onClick={() => { setMode('LOGIN'); setPendingUser(null); setTwoFactorCode(''); }}
                   className="flex-1 py-2.5 rounded-xl bg-[#1F3A2E] text-white hover:bg-[#2C5240] border border-[#2C5240] text-xs font-semibold"
                 >
                   Back to Sign In
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-[#C8A96A] text-[#1F3A2E] hover:bg-[#d6ba7f] text-xs font-bold shadow-md"
+                  disabled={isLoading}
+                  className="flex-1 py-2.5 rounded-xl bg-[#C8A96A] text-[#1F3A2E] hover:bg-[#d6ba7f] text-xs font-bold shadow-md flex items-center justify-center space-x-1"
                 >
-                  Verify & Enter
+                  {isLoading && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+                  <span>Verify &amp; Unlock</span>
                 </button>
               </div>
             </form>

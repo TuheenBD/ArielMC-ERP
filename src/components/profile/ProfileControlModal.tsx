@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, UserRole, UserDepartment, TwoFactorMethod } from '@/types/auth';
 import { EntityCode } from '@/types/erp';
+import { getTotpUri } from '@/lib/totp';
 
 interface ProfileControlModalProps {
   isOpen: boolean;
@@ -864,11 +865,12 @@ export const ProfileControlModal: React.FC<ProfileControlModalProps> = ({
                   {/* QR Code Simulation & Secret Key */}
                   {twoFactorMethod === 'AUTHENTICATOR_APP' && (
                     <div className="p-5 rounded-xl bg-[#0F1E16] border border-[#2C5240] flex flex-col md:flex-row items-center gap-6">
-                      <div className="w-36 h-36 bg-white p-2.5 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
-                        {/* High-contrast authentic QR code matrix simulation */}
-                        <svg className="w-full h-full text-black" viewBox="0 0 100 100" fill="currentColor">
-                          <path d="M10 10h30v30h-30z M15 15h20v20h-20z M20 20h10v10h-10z M60 10h30v30h-30z M65 15h20v20h-20z M70 20h10v10h-10z M10 60h30v30h-30z M15 65h20v20h-20z M20 70h10v10h-10z M45 15h10v10h-10z M45 35h10v10h-10z M55 45h10v10h-10z M25 45h10v10h-10z M65 55h10v10h-10z M75 65h15v15h-15z M45 65h10v25h-10z M55 75h10v15h-10z" />
-                        </svg>
+                      <div className="w-36 h-36 bg-white p-2 rounded-xl flex items-center justify-center shrink-0 shadow-lg overflow-hidden">
+                        <img 
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(getTotpUri('ArielMC ERP', currentUser.email, twoFactorSecret))}`} 
+                          alt="Scan with Authenticator App" 
+                          className="w-full h-full object-contain"
+                        />
                       </div>
 
                       <div className="space-y-3 flex-1 text-xs">
