@@ -4,7 +4,7 @@ export const INITIAL_USERS: UserProfile[] = [
   {
     id: 'usr_md_01',
     name: 'Syed Akramul Hassan',
-    email: 'TuheenBD@gmail.com',
+    email: 'tuheen@arielmc.com',
     phone: '+880 1819-273458',
     designation: 'Managing Director & Founder',
     department: 'EXECUTIVE',
@@ -18,17 +18,17 @@ export const INITIAL_USERS: UserProfile[] = [
     twoFactorMethod: 'AUTHENTICATOR_APP',
     twoFactorSecret: 'JBSWY3DPEHPK3PXP',
     recoveryCodes: [
+      'AMC-9841-2026',
+      'AMC-8821-4091',
+      'AMC-7714-3019',
+      'AMC-6651-1194',
       'AMC-9281-4092',
       'AMC-8819-2734',
-      'AMC-1049-5821',
-      'AMC-7731-9024',
-      'AMC-6629-1145',
-      'AMC-3482-9910',
     ],
     status: 'ACTIVE',
     lastLogin: '2026-10-16 21:45 UTC',
     createdDate: '2024-01-01',
-    passwordHash: 'arielmc2026',
+    passwordHash: 'arielmc-executive-2026',
     activeSessions: [
       {
         id: 'sess-01',

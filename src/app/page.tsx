@@ -259,11 +259,19 @@ export default function Home() {
     try {
       const cachedUsers = localStorage.getItem('arielmc_erp_all_users_v1');
       if (cachedUsers) {
-        setUsers(JSON.parse(cachedUsers));
+        const parsed: UserProfile[] = JSON.parse(cachedUsers);
+        const updatedUsers = parsed.map((u) =>
+          u.id === 'usr_md_01' ? { ...u, email: 'tuheen@arielmc.com' } : u
+        );
+        setUsers(updatedUsers);
       }
       const cachedCurrent = localStorage.getItem('arielmc_erp_current_user_v1');
       if (cachedCurrent) {
-        setCurrentUser(JSON.parse(cachedCurrent));
+        const parsedCurrent: UserProfile = JSON.parse(cachedCurrent);
+        if (parsedCurrent.id === 'usr_md_01') {
+          parsedCurrent.email = 'tuheen@arielmc.com';
+        }
+        setCurrentUser(parsedCurrent);
       }
       const cachedNotifs = localStorage.getItem('arielmc_erp_notifications_v1');
       if (cachedNotifs) {
