@@ -66,7 +66,7 @@ export const fetchProducts = async (): Promise<ProductItem[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map((row: any) => ({
           id: row.id,
           sku: row.sku,
@@ -150,7 +150,7 @@ export const fetchFactories = async (): Promise<SupplierFactory[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('factories').select('*').order('created_at', { ascending: true });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map((row: any) => ({
           id: row.id,
           code: row.code,
@@ -236,7 +236,7 @@ export const fetchSamples = async (): Promise<SampleDevelopmentOrder[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('sample_development_orders').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map((row: any) => ({
           id: row.id,
           sdoNumber: row.sdo_number,
@@ -330,7 +330,7 @@ export const fetchOrders = async (): Promise<BuyerSalesOrder[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('sales_orders').select('*').order('order_date', { ascending: false });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map((row: any) => ({
           id: row.id,
           soNumber: row.so_number,
@@ -416,7 +416,7 @@ export const fetchCrmLeads = async (): Promise<CrmLead[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('crm_leads').select('*').limit(300);
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map((r: any) => ({
           id: r.id,
           company: r.company,
@@ -472,7 +472,7 @@ export const fetchInventory = async (): Promise<{
         supabase.from('stock_transfers').select('*'),
       ]);
 
-      if (!whRes.error && whRes.data && whRes.data.length > 0) {
+      if (!whRes.error && whRes.data) {
         const warehouses = whRes.data.map((r: any) => ({
           id: r.id,
           code: r.code,
@@ -938,7 +938,7 @@ export const fetchVouchers = async (): Promise<StandardVoucher[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('vouchers').select('*').order('date', { ascending: false });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map((row: any) => ({
           id: row.id,
           voucherNumber: row.voucher_number || row.voucherNumber,
@@ -1066,7 +1066,7 @@ export const fetchAccountHeads = async (): Promise<AccountHead[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('account_heads').select('*').order('created_at', { ascending: true });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         const mapped = data.map((row: any) => ({
           id: row.id,
           name: row.name,
@@ -1138,7 +1138,7 @@ export const fetchOfficialDocuments = async (): Promise<OfficialDocument[]> => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         const mapped: OfficialDocument[] = data.map((row: any) => ({
           id: row.id,
           title: row.title,
@@ -1273,7 +1273,7 @@ export const fetchComplianceChecklist = async (): Promise<ComplianceChecklistIte
         .select('*')
         .order('step_sequence', { ascending: true });
 
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         const mapped: ComplianceChecklistItem[] = data.map((row: any) => ({
           id: row.checklist_id ?? Number(row.id?.replace('chk-', '')) ?? 1,
           title: row.title,
@@ -1366,7 +1366,7 @@ export const fetchPosRegisterShifts = async (): Promise<Record<string, PosRegist
   if (supabase) {
     try {
       const { data, error } = await supabase.from('pos_register_shifts').select('*');
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         const mapped: Record<string, PosRegisterShift> = {};
         data.forEach((row: any) => {
           mapped[row.store_id] = {
@@ -1466,7 +1466,7 @@ export const fetchPosTransactions = async (): Promise<PosTransaction[]> => {
         .select('*')
         .order('date', { ascending: false });
 
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         const mapped: PosTransaction[] = data.map((row: any) => ({
           id: row.id,
           receiptNumber: row.receipt_number || row.receiptNumber,
