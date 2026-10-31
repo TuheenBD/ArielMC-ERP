@@ -12,6 +12,11 @@ export const revalidate = 0;
 
 const DB_FILE_PATH = path.join(process.cwd(), 'src', 'data', 'crmDatabaseSnapshot.json');
 
+// Real-Time Sync Configuration with Master CRM (Strictly scoped to ARIELMC entity)
+const STRICT_COMPANY_CODE = 'ARIELMC';
+const MASTER_CRM_SYNC_URL = process.env.MASTER_CRM_SYNC_URL || 'https://crm.arielmc.com/api/sync/arielmc';
+const SYNC_SECRET = process.env.ARIELMC_SYNC_SECRET || 'arielmc-sovereign-sync-key-2026';
+
 interface CrmDatabasePayload {
   leads: any[];
   activities: any[];
@@ -115,6 +120,10 @@ export async function POST(request: NextRequest) {
         if (!payload || !payload.id) {
           return NextResponse.json({ success: false, error: 'Lead payload with ID required' }, { status: 400 });
         }
+        // Force ARIELMC entity tag
+        payload.companyCode = STRICT_COMPANY_CODE;
+        payload.company_id = STRICT_COMPANY_CODE;
+
         const existingIdx = db.leads.findIndex((l) => l.id === payload.id);
         if (existingIdx >= 0) {
           db.leads[existingIdx] = { ...db.leads[existingIdx], ...payload, updatedAt: new Date().toISOString() };
@@ -122,6 +131,24 @@ export async function POST(request: NextRequest) {
           db.leads.unshift({ ...payload, createdAt: payload.createdAt || new Date().toISOString() });
         }
         await writeCrmDatabase(db);
+
+        // Bi-directional relay to Master CRM (ARIELMC entity only)
+        if (MASTER_CRM_SYNC_URL) {
+          fetch(MASTER_CRM_SYNC_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-arielmc-sync-key': SYNC_SECRET,
+            },
+            body: JSON.stringify({
+              action: 'UPSERT_LEAD',
+              company_id: STRICT_COMPANY_CODE,
+              payload,
+              forwardToErp: false, // Prevents ping-pong loop
+            }),
+          }).catch((err) => console.warn('Master CRM sync relay warning (non-blocking):', err));
+        }
+
         return NextResponse.json({ success: true, action, lead: payload, totalLeads: db.leads.length });
       }
 
@@ -134,6 +161,24 @@ export async function POST(request: NextRequest) {
         // Also remove associated tasks and activities
         db.tasks = db.tasks.filter((t) => t.leadId !== leadId);
         await writeCrmDatabase(db);
+
+        // Bi-directional relay to Master CRM (ARIELMC entity only)
+        if (MASTER_CRM_SYNC_URL) {
+          fetch(MASTER_CRM_SYNC_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-arielmc-sync-key': SYNC_SECRET,
+            },
+            body: JSON.stringify({
+              action: 'DELETE_LEAD',
+              company_id: STRICT_COMPANY_CODE,
+              id: leadId,
+              forwardToErp: false, // Prevents ping-pong loop
+            }),
+          }).catch(() => {});
+        }
+
         return NextResponse.json({ success: true, action, deletedId: leadId, totalLeads: db.leads.length });
       }
 
