@@ -74,7 +74,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
 }) => {
   const [docType, setDocType] = useState<DocumentType>(initialDocumentType);
   const [selectedOrderId, setSelectedOrderId] = useState<string>(
-    initialOrderId || INITIAL_ORDERS[0].id
+    initialOrderId || INITIAL_ORDERS[0]?.id || 'AMC-ORD-INIT-001'
   );
   const [copiedHtml, setCopiedHtml] = useState(false);
 
@@ -86,8 +86,26 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
   const [watermark, setWatermark] = useState<WatermarkType>('ORIGINAL');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  // Fallback order when orders list is cleared
+  const fallbackOrder = {
+    id: 'AMC-ORD-INIT-001',
+    orderNumber: 'AMC-ORD-2026-001',
+    buyerName: 'ArielMC Enterprise Client',
+    buyerCompany: 'Global Sourcing & Retail Group Ltd',
+    buyerCountry: 'United Kingdom',
+    deliveryAddress: 'Central Sourcing Desk, 12 Bishopsgate, London EC2N 4BQ',
+    incoterm: 'FOB Chattogram' as const,
+    currency: 'USD',
+    status: 'CONFIRMED' as const,
+    totalQuantity: 100,
+    totalAmountUsd: 5000,
+    paymentTerms: '100% Irrevocable At Sight L/C' as const,
+    items: [],
+    createdAt: new Date().toISOString(),
+  };
+
   // Active Order Data
-  const activeOrder = INITIAL_ORDERS.find((o) => o.id === selectedOrderId) || INITIAL_ORDERS[0];
+  const activeOrder = INITIAL_ORDERS.find((o) => o.id === selectedOrderId) || INITIAL_ORDERS[0] || fallbackOrder;
 
   // Editable fields state (synced to active order)
   const [customDocNumber, setCustomDocNumber] = useState('');

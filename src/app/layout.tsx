@@ -6,14 +6,14 @@ export const metadata: Metadata = {
   description: "ArielMC™ Enterprise Resource Planning System — © Ariel Marketing & Communications Limited | All Right Reserve",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/images/ArielMC_ERP_Icon.png", type: "image/png", sizes: "512x512" },
-      { url: "/icon.png", type: "image/png", sizes: "192x192" },
+      { url: "/favicon.ico?v=arielmc3", sizes: "any" },
+      { url: "/icon.png?v=arielmc3", type: "image/png", sizes: "192x192" },
+      { url: "/images/ArielMC_ERP_Icon.png?v=arielmc3", type: "image/png", sizes: "512x512" },
     ],
     apple: [
-      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-icon.png?v=arielmc3", sizes: "180x180", type: "image/png" },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "/favicon.ico?v=arielmc3",
   },
 };
 
@@ -25,6 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full light" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico?v=arielmc3" sizes="any" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon.png?v=arielmc3" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png?v=arielmc3" />
+        <link rel="shortcut icon" href="/favicon.ico?v=arielmc3" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

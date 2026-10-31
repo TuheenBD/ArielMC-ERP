@@ -319,3 +319,4 @@ export const NotificationCenterModal: React.FC<NotificationCenterModalProps> = (
     </div>
   );
 };
+
