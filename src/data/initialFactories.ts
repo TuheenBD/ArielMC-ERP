@@ -437,10 +437,24 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
     minimumOrderQuantity: 300,
     paymentTerms: '30% Advance for raw jute yarn procurement, 70% against clean B/L & AQL pass',
     bankDetails: {
-      bankName: 'Dutch-Bangla Bank PLC',
+      bankName: 'Dutch-Bangla Bank PLC (Pending Collection)',
       branch: 'Mirpur Branch, Dhaka',
       routingNumber: '090262104',
+      accountNumber: 'PENDING_VENDOR_COLLECTION',
     },
+    enlistmentDocuments: [
+      {
+        id: 'doc_bnk_rdl_01',
+        docType: 'BANK_DETAIL',
+        title: 'Bank Solvency & Cheque Copy (Pending Vendor Collection)',
+        fileName: 'pending_bank_solvency_rodela.pdf',
+        fileSize: '0 KB',
+        uploadedAt: '2026-11-02',
+        status: 'PENDING_REVIEW',
+        mandatory: true,
+        notes: 'ACTION REQUIRED: Official bank account number and MICR cheque scan pending collection from proprietor.',
+      },
+    ],
     associatedSkus: [
       'JD-EDC-21-RDL',
       'JD-EDC-22-RDL',
@@ -519,10 +533,24 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
     minimumOrderQuantity: 100,
     paymentTerms: '40% Advance for customized tooling/screen preparation, 60% upon FRI inspection pass',
     bankDetails: {
-      bankName: 'City Bank PLC',
+      bankName: 'City Bank PLC (Pending Collection)',
       branch: 'Tejgaon Industrial Area Branch, Dhaka',
       routingNumber: '225264819',
+      accountNumber: 'PENDING_VENDOR_COLLECTION',
     },
+    enlistmentDocuments: [
+      {
+        id: 'doc_bnk_ffc_01',
+        docType: 'BANK_DETAIL',
+        title: 'Bank Solvency & Cheque Copy (Pending Vendor Collection)',
+        fileName: 'pending_bank_solvency_finefair.pdf',
+        fileSize: '0 KB',
+        uploadedAt: '2026-11-02',
+        status: 'PENDING_REVIEW',
+        mandatory: true,
+        notes: 'ACTION REQUIRED: Official corporate account number and authorized signatory bank certificate pending collection.',
+      },
+    ],
     associatedSkus: [
       'JD-PKG-33',
       'JD-PKG-34',
