@@ -385,6 +385,7 @@ export interface SupplierFactory {
 export type VendorClassification = 
   | 'FULL_FLEDGED_FACTORY'  // Own Raw materials (Such as Tannery) & Make the production to produce finished goods
   | 'FACTORY'               // Manufacturer (Raw Material Source from Open Market) - Make the production to produce finished goods
+  | 'FACTORY_CUM_SUPPLIER'  // In-House Handcrafted Production + Open Market Sourcing & Finished Goods Supply
   | 'SUPPLIER';             // Collect Finished goods & Supply
 
 export type VendorEnlistmentDocType = 
