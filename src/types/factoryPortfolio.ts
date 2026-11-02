@@ -64,6 +64,68 @@ export interface FactoryQualityScorecard {
   overallRatingScore: number; // e.g. 4.9 / 5.0
 }
 
+
+// Active Sourced Products & Published Catalog SKUs
+export interface SupplierActiveProduct {
+  id: string;
+  sku: string; // e.g. "JD-MLD-26-HPD"
+  productName: string; // e.g. "ArielMC Hand-Painted Botanical Oval Jute Doormat"
+  category: string; // e.g. "Jute"
+  divisionTitle?: string; // e.g. "02 The Golden Fiber Edit"
+  imageUrl?: string;
+  specifications?: string; // e.g. "20" x 30" (508 x 762 mm), 10mm profile, 1.45 kg"
+  
+  // Pricing & Commercial Spread
+  factoryPurchasePriceBdt: number; // e.g. 744 BDT
+  factoryPurchasePriceUsd: number; // e.g. $6.20 USD
+  publishedExportFobUsd: number; // e.g. $9.50 USD
+  marginUsd: number; // e.g. $3.30 USD
+  marginPct: number; // e.g. 34.7%
+  
+  // Lifetime Production History
+  totalUnitsProduced: number; // e.g. 1,800 units
+  totalSpendBdt: number; // e.g. 1,339,200 BDT
+  totalSpendUsd: number; // e.g. $11,160 USD
+  firstBatchDate?: string;
+  lastBatchDate?: string;
+  
+  // Live Pipeline / Active Purchase Order
+  activePoNumber?: string; // e.g. "PO-AMC-2026-038"
+  pipelineUnits?: number; // e.g. 400 pcs
+  pipelineStatus?: 'IN_CUTTING' | 'IN_BRAIDING' | 'IN_STENCIL_PAINTING' | 'IN_PACKING' | 'READY_FOR_INSPECTION' | 'COMPLETED';
+  targetDispatchDate?: string;
+}
+
+// Factory Product Catalog & Future Potential Products (What else they produce)
+export interface SupplierPotentialProduct {
+  id: string;
+  factoryItemCode: string; // e.g. "BEN-RN-01"
+  name: string; // e.g. "Hand-Braided Oval Botanical Table Runner"
+  category: string; // e.g. "Home Living & Kitchen"
+  imageUrl?: string;
+  material: string; // e.g. "100% Biodegradable Natural Bengal Golden Jute"
+  specifications: string; // e.g. "14" x 48" (35 x 122 cm), 6mm thickness"
+  factoryOfferedPriceBdt: number; // e.g. 540 BDT
+  factoryOfferedPriceUsd: number; // e.g. $4.50 USD
+  projectedExportFobUsd: number; // e.g. $7.90 USD
+  projectedMarginPct: number; // e.g. 43.0%
+  factoryMoq: number; // e.g. 200 pcs
+  sampleStatus: 'OFF_SHELF_AVAILABLE' | 'COUNTER_SAMPLE_APPROVED' | 'DEVELOPMENT_REQUIRED' | 'PRICE_UNDER_NEGOTIATION';
+  evaluationVerdict: 'HIGHLY_RECOMMENDED' | 'PRICE_TOO_HIGH' | 'SEASONAL_HOLIDAY' | 'FUTURE_RESEARCH';
+  merchandiserNotes: string;
+}
+
+// Detailed Factory Plant & Head Office Locations
+export interface SupplierLocationProfile {
+  headOfficeAddress: string;
+  factoryPlantAddress: string;
+  showroomAddress?: string;
+  industrialCluster: string;
+  googleMapsUrl?: string;
+  gpsCoordinates?: string;
+  totalFloorAreaSqFt?: number;
+}
+
 export interface FactorySupplierPortfolio {
   id: string;
   factoryCode: string;
@@ -96,4 +158,9 @@ export interface FactorySupplierPortfolio {
 
   // Operational Notes
   operationalNotes: string;
+
+  // Comprehensive Sourcing Pillars:
+  activeProducts?: SupplierActiveProduct[];          // Pillar 1: Active SKUs, Purchase vs Published, Units & BDT Spend, Pipeline
+  potentialProducts?: SupplierPotentialProduct[];   // Pillar 2: Factory Catalog & Future Products with specifications & pricing
+  locationProfile?: SupplierLocationProfile;        // Factory Plant, Head Office & Showroom details
 }

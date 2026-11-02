@@ -98,7 +98,19 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     const found = factoryPortfolios.find(
       (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName.toLowerCase() === fac.name.toLowerCase()
     );
-    if (found) return found;
+    if (found) {
+      return {
+        ...found,
+        activeProducts: found.activeProducts || [],
+        potentialProducts: found.potentialProducts || [],
+        locationProfile: found.locationProfile || {
+          factoryPlantAddress: fac.factoryAddress,
+          headOfficeAddress: fac.factoryAddress,
+          industrialCluster: fac.cluster,
+        totalFloorAreaSqFt: 45000,
+        },
+      };
+    }
 
     return {
       id: fac.id,
@@ -111,6 +123,14 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
       establishedYear: 2010,
       tier: fac.tier,
       lastUpdated: new Date().toISOString().split('T')[0],
+      activeProducts: [],
+      potentialProducts: [],
+      locationProfile: {
+        factoryPlantAddress: fac.factoryAddress,
+        headOfficeAddress: fac.factoryAddress,
+        industrialCluster: fac.cluster,
+        totalFloorAreaSqFt: 45000,
+      },
       keyManagementContacts: [
         {
           name: fac.contactPerson,
