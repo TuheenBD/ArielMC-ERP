@@ -66,7 +66,7 @@ export const fetchProducts = async (): Promise<ProductItem[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         return data.map((row: any) => ({
           id: row.id,
           sku: row.sku,
@@ -101,7 +101,10 @@ export const fetchProducts = async (): Promise<ProductItem[]> => {
   if (typeof window !== 'undefined') {
     try {
       const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.PRODUCTS);
-      if (cached) return JSON.parse(cached);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch {}
   }
   return INITIAL_PRODUCTS;
@@ -150,7 +153,7 @@ export const fetchFactories = async (): Promise<SupplierFactory[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('factories').select('*').order('created_at', { ascending: true });
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         return data.map((row: any) => ({
           id: row.id,
           code: row.code,
@@ -185,7 +188,10 @@ export const fetchFactories = async (): Promise<SupplierFactory[]> => {
   if (typeof window !== 'undefined') {
     try {
       const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.FACTORIES);
-      if (cached) return JSON.parse(cached);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch {}
   }
   return INITIAL_FACTORIES;
@@ -236,7 +242,7 @@ export const fetchSamples = async (): Promise<SampleDevelopmentOrder[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('sample_development_orders').select('*').order('created_at', { ascending: false });
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         return data.map((row: any) => ({
           id: row.id,
           sdoNumber: row.sdo_number,
@@ -330,7 +336,7 @@ export const fetchOrders = async (): Promise<BuyerSalesOrder[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('sales_orders').select('*').order('order_date', { ascending: false });
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         return data.map((row: any) => ({
           id: row.id,
           soNumber: row.so_number,
@@ -938,7 +944,7 @@ export const fetchVouchers = async (): Promise<StandardVoucher[]> => {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('vouchers').select('*').order('date', { ascending: false });
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         return data.map((row: any) => ({
           id: row.id,
           voucherNumber: row.voucher_number || row.voucherNumber,

@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { SupplierFactory, ProductSector, VendorEnlistmentDocument, VendorClassification } from '@/types/erp';
 import { FactorySupplierPortfolio } from '@/types/factoryPortfolio';
 import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
+import { INITIAL_FACTORIES } from '@/data/initialFactories';
 import { fetchFactoryPortfolios, persistFactoryPortfolios } from '@/lib/erpPersistence';
 import { FactorySupplierPortfolioModal } from './FactorySupplierPortfolioModal';
 import {
@@ -44,14 +45,15 @@ import { FactoryRatingModelModal } from './FactoryRatingModelModal';
 import { QualityChemicalComplianceTracker } from './QualityChemicalComplianceTracker';
 
 interface FactoryManagementProps {
-  factories: SupplierFactory[];
+  factories?: SupplierFactory[];
   onAddFactory: (newFactory: SupplierFactory) => void;
 }
 
 export const FactoryManagement: React.FC<FactoryManagementProps> = ({
-  factories,
+  factories: propFactories,
   onAddFactory,
 }) => {
+  const factories = (propFactories && propFactories.length > 0) ? propFactories : INITIAL_FACTORIES;
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedCluster, setSelectedCluster] = useState<string>('ALL');
   const [selectedVendorType, setSelectedVendorType] = useState<VendorClassification | 'ALL'>('ALL');

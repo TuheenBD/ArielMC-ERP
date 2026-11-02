@@ -448,10 +448,10 @@ export default function Home() {
         fetchOrders(),
       ]);
 
-      if (persistedProds) setProducts(persistedProds);
-      if (persistedFacs) setFactories(persistedFacs);
-      if (persistedSmps) setSamples(persistedSmps);
-      if (persistedOrds) setOrders(persistedOrds);
+      if (persistedProds && persistedProds.length > 0) setProducts(persistedProds);
+      if (persistedFacs && persistedFacs.length > 0) setFactories(persistedFacs);
+      if (persistedSmps && persistedSmps.length > 0) setSamples(persistedSmps);
+      if (persistedOrds && persistedOrds.length > 0) setOrders(persistedOrds);
     } catch (e) {
       console.warn('ArielMC ERP persistence hydration fallback active:', e);
     }
