@@ -17,7 +17,9 @@ import {
   RefreshCw, 
   Wrench, 
   X,
-  Star
+  Star,
+  Users2,
+  Factory
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 import { ALL_PAGE_DEFINITIONS } from '@/lib/favoritesManager';
@@ -35,6 +37,7 @@ interface HeaderProps {
   theme?: ThemeProfile;
   onSelectTheme?: (t: ThemeProfile) => void;
   activeTab?: ActiveTab;
+  salesActiveSubTab?: string;
   onSelectTab?: (tab: ActiveTab) => void;
   onOpenDocumentCenter?: () => void;
   onOpenDatabaseSettings?: () => void;
@@ -90,6 +93,7 @@ export const Header: React.FC<HeaderProps> = ({
   theme = 'crm-green',
   onSelectTheme,
   activeTab,
+  salesActiveSubTab,
   onSelectTab,
   onOpenDocumentCenter,
   onOpenDatabaseSettings,
@@ -424,8 +428,58 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Side: Operational Tools (Comm Hub, Database, AI, Utilities) */}
+        {/* Right Side: Operational Tools (Buyers, Suppliers, Comm Hub, Database, AI, Utilities) */}
         <div className="flex items-center gap-2 shrink-0">
+          {/* Quick Access: Buyers & Key Accounts Directory */}
+          {onSelectTab && (
+            <button
+              id="header-buyers-quick-btn"
+              type="button"
+              onClick={() => onSelectTab('BUYERS' as ActiveTab)}
+              className={`h-9 flex items-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer select-none shrink-0 whitespace-nowrap ${
+                activeTab === 'BUYERS' || (activeTab === 'SALES' && salesActiveSubTab === 'BUYERS')
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] border-[#C8A96A] shadow-md ring-1 ring-[#C8A96A]/30 font-bold'
+                  : toolBtn
+              }`}
+              title="Buyers & Strategic Accounts Directory (Living Portfolio, Tier-1 International Accounts & Credit Terms)"
+            >
+              <Users2 className={`w-3.5 h-3.5 ${activeTab === 'BUYERS' || (activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`} />
+              <span className="font-heading tracking-wide">Buyers</span>
+              <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-bold ${
+                activeTab === 'BUYERS' || (activeTab === 'SALES' && salesActiveSubTab === 'BUYERS')
+                  ? 'bg-[#1F3A2E] text-[#C8A96A]'
+                  : 'bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/40'
+              }`}>
+                5
+              </span>
+            </button>
+          )}
+
+          {/* Quick Access: Suppliers & Factory Directory */}
+          {onSelectTab && (
+            <button
+              id="header-suppliers-quick-btn"
+              type="button"
+              onClick={() => onSelectTab('FACTORIES')}
+              className={`h-9 flex items-center gap-1.5 px-3 rounded-lg border text-xs font-semibold transition-all shadow-xs cursor-pointer select-none shrink-0 whitespace-nowrap ${
+                activeTab === 'FACTORIES'
+                  ? 'bg-[#C8A96A] text-[#1F3A2E] border-[#C8A96A] shadow-md ring-1 ring-[#C8A96A]/30 font-bold'
+                  : toolBtn
+              }`}
+              title="Suppliers & Factory Directory (13 Verified Bangladesh Partners, Beni Boonon, Apex, SMETA, BSCI & Compliance)"
+            >
+              <Factory className={`w-3.5 h-3.5 ${activeTab === 'FACTORIES' ? 'text-[#1F3A2E]' : 'text-[#C8A96A]'}`} />
+              <span className="font-heading tracking-wide">Suppliers</span>
+              <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-bold ${
+                activeTab === 'FACTORIES'
+                  ? 'bg-[#1F3A2E] text-[#C8A96A]'
+                  : 'bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/40'
+              }`}>
+                13
+              </span>
+            </button>
+          )}
+
           {/* Communication Hub Tab Button (Line 1) */}
           {onSelectTab && (
             <button

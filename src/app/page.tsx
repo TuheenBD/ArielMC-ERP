@@ -134,6 +134,16 @@ export default function Home() {
     } else if (favId in ALL_PAGE_DEFINITIONS) {
       setActiveTab(favId as ActiveTab);
     }
+  }
+
+  const handleSelectTab = (tab: ActiveTab) => {
+    if (tab === 'BUYERS') {
+      setActiveTab('SALES');
+      setSalesInitialSubTab('BUYERS');
+      setSalesActiveSubTab('BUYERS');
+    } else {
+      setActiveTab(tab);
+    }
   };
 
   React.useEffect(() => {

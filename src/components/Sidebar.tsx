@@ -53,6 +53,7 @@ export type ActiveTab =
   | 'DOCUMENTS'
   | 'PRODUCTS'
   | 'SALES'
+  | 'BUYERS'
   | 'FACTORIES' 
   | 'RND' 
   | 'CRM' 
@@ -143,6 +144,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: BarChart3,
           badge: 'Executive',
           phase: 'Live Hub',
+        },
+      ],
+    },
+    {
+      group: 'Buyer & Supplier Command (Core Focus)',
+      items: [
+        {
+          id: 'BUYERS' as ActiveTab,
+          label: 'Buyers & Strategic Accounts',
+          icon: Users2,
+          badge: '5 Portfolios',
+          phase: 'Direct Hub',
+        },
+        {
+          id: 'FACTORIES' as ActiveTab,
+          label: 'Suppliers & Factory Directory',
+          icon: Factory,
+          badge: '13 Verified Hubs',
+          phase: 'Direct Hub',
         },
       ],
     },
@@ -258,13 +278,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       group: 'Supply Chain & Manufacturing',
       items: [
-        {
-          id: 'FACTORIES' as ActiveTab,
-          label: 'BD Factory & Compliance',
-          icon: Factory,
-          badge: '8 Factories',
-          phase: 'Phase 2',
-        },
         {
           id: 'RND' as ActiveTab,
           label: 'R&D, Tech Packs & Sampling',

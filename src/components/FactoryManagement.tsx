@@ -62,6 +62,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   const [isRatingModelOpen, setIsRatingModelOpen] = useState(false);
   const [ratingModelFactory, setRatingModelFactory] = useState<SupplierFactory | null>(null);
   const [factoryViewMode, setFactoryViewMode] = useState<'FACILITIES' | 'CHEMICAL_COMPLIANCE'>('FACILITIES');
+  const [viewFormat, setViewFormat] = useState<'CARDS' | 'TABLE'>('CARDS');
 
   // Factory & Supplier Portfolio States & Persistence
   const [factoryPortfolios, setFactoryPortfolios] = useState<FactorySupplierPortfolio[]>(INITIAL_FACTORY_PORTFOLIOS);
@@ -188,7 +189,10 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
       const matchesSector = selectedSector === 'ALL' || fac.sectors.includes(selectedSector);
       const matchesCluster = selectedCluster === 'ALL' || fac.cluster.toLowerCase().includes(selectedCluster.toLowerCase());
       const currentVendorType: VendorClassification = fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY');
-      const matchesVendorType = selectedVendorType === 'ALL' || currentVendorType === selectedVendorType;
+      const matchesVendorType =
+        selectedVendorType === 'ALL' ||
+        currentVendorType === selectedVendorType ||
+        (selectedVendorType === 'SUPPLIER' && (currentVendorType === 'SUPPLIER' || currentVendorType === 'FACTORY_CUM_SUPPLIER'));
       const matchesSearch =
         searchQuery === '' ||
         fac.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -337,13 +341,13 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
               <span className="text-xs text-[#6B7269]">Bangladesh Manufacturing Hubs</span>
             </div>
             <h1 className="text-2xl font-bold font-heading text-[#1F3A2E] mt-1 flex items-center gap-2.5">
-              <span>Bangladesh Factory Sourcing & Compliance</span>
+              <span>Verified Bangladesh Suppliers &amp; Factory Directory</span>
               <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-[#E4F3E9] text-[#14512C] border border-[#BBE3C7] font-bold">
-                {factories.length} Partner Facilities
+                {factories.length} Verified Partners
               </span>
             </h1>
             <p className="text-xs text-[#6B7269] mt-1 max-w-2xl leading-relaxed">
-              Industrial cluster tracking across Savar, Gazipur, Narsingdi, and Dhamrai. Audited for BSCI, SEDEX, LWG, GOTS, and FDA food-contact standards.
+              Industrial cluster tracking across Savar, Gazipur, Narsingdi, Dhamrai &amp; Faridpur. Comprehensive directory of verified suppliers, manufacturing factories, artisan workshops (including Beni Boonon), and compliance audits.
             </p>
           </div>
 
@@ -528,11 +532,42 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
             onChange={(e) => setSelectedVendorType(e.target.value as any)}
             className="bg-white border border-[#DDE3DD] text-xs text-[#1A1A1A] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#1F3A2E] shadow-sm font-semibold"
           >
-            <option value="ALL">All Vendor Entities (3 Tiers)</option>
+            <option value="ALL">All Vendor Types (Suppliers &amp; Factories)</option>
+            <option value="SUPPLIER">🏢 Suppliers &amp; Cum-Suppliers</option>
+            <option value="FACTORY_CUM_SUPPLIER">🌿 Factory-cum-Suppliers (Artisan &amp; Workshop)</option>
             <option value="FULL_FLEDGED_FACTORY">🏭 Full-Fledged Factories (Own Raw Materials)</option>
-            <option value="FACTORY">🏗️ Factories (Open Market Raw Materials)</option>
-            <option value="SUPPLIER">🏢 Suppliers (Collect &amp; Supply)</option>
+            <option value="FACTORY">🏗️ Open-Market Factories</option>
           </select>
+
+          {/* Cards vs Table View Toggle */}
+          <div className="flex items-center gap-1 bg-[#F4F6F4] p-1 rounded-lg border border-[#DDE3DD]">
+            <button
+              type="button"
+              onClick={() => setViewFormat('CARDS')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                viewFormat === 'CARDS'
+                  ? 'bg-[#1F3A2E] text-white shadow-xs'
+                  : 'text-[#6B7269] hover:text-[#1A1A1A]'
+              }`}
+              title="Card Grid View"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Cards</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewFormat('TABLE')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                viewFormat === 'TABLE'
+                  ? 'bg-[#1F3A2E] text-white shadow-xs'
+                  : 'text-[#6B7269] hover:text-[#1A1A1A]'
+              }`}
+              title="Supplier List Directory Table"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Supplier List Table</span>
+            </button>
+          </div>
 
           <select
             value={selectedCluster}
@@ -548,8 +583,117 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         </div>
       </div>
 
-      {/* Factory Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Supplier & Factory Directory: Table View */}
+      {viewFormat === 'TABLE' ? (
+        <div className="rounded-2xl bg-white border border-[#DDE3DD] shadow-sm overflow-hidden text-[#1A1A1A]">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#F8FAF8] border-b border-[#DDE3DD] text-[11px] font-bold text-[#1F3A2E] font-heading uppercase tracking-wider">
+                <tr>
+                  <th className="py-3 px-4">Supplier / Factory</th>
+                  <th className="py-3 px-4">Entity Type</th>
+                  <th className="py-3 px-4">Sectors &amp; Cluster</th>
+                  <th className="py-3 px-4">Key Contact Person</th>
+                  <th className="py-3 px-4">Phone &amp; Email</th>
+                  <th className="py-3 px-4">Monthly Capacity</th>
+                  <th className="py-3 px-4">AQL Pass</th>
+                  <th className="py-3 px-4 text-right">Quick Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#DDE3DD]">
+                {filteredFactories.map((fac) => {
+                  const vType: VendorClassification = fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY');
+                  return (
+                    <tr key={fac.id} className="hover:bg-[#F9FAF9] transition-colors">
+                      <td className="py-3 px-4">
+                        <div className="font-bold text-[#1F3A2E] text-xs font-heading">{fac.name}</div>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[#FAF5EC] text-[#8A6D3B] font-semibold border border-[#C8A96A]/40">
+                            {fac.code}
+                          </span>
+                          <span className="text-[10px] font-mono text-[#14512C] font-semibold">
+                            {fac.tier.replace(/_/g, ' ')}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        {vType === 'FULL_FLEDGED_FACTORY' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-amber-50 text-amber-900 border-amber-300">
+                            🏭 Full-Fledged
+                          </span>
+                        )}
+                        {vType === 'FACTORY' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-emerald-50 text-emerald-800 border-emerald-200">
+                            🏗️ Factory
+                          </span>
+                        )}
+                        {vType === 'SUPPLIER' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-blue-50 text-blue-700 border-blue-200">
+                            🏢 Supplier
+                          </span>
+                        )}
+                        {vType === 'FACTORY_CUM_SUPPLIER' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-purple-50 text-purple-800 border-purple-300">
+                            🌿 Factory-cum-Supplier
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="font-semibold text-slate-700">{fac.sectors.join(', ')}</div>
+                        <div className="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-3 h-3 text-[#8A6D3B]" />
+                          <span>{fac.cluster}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="font-semibold text-[#1A1A1A]">{fac.contactPerson}</div>
+                        <div className="text-[10px] text-slate-500">{fac.designation}</div>
+                      </td>
+                      <td className="py-3 px-4 font-mono text-[11px]">
+                        <div className="text-slate-800">{fac.phone}</div>
+                        <div className="text-[10px] text-slate-500">{fac.email}</div>
+                      </td>
+                      <td className="py-3 px-4 font-mono">
+                        <div className="font-bold text-[#1F3A2E]">
+                          {(fac.capacity.monthlyCapacityUnits / 1000).toFixed(0)}k <span className="text-[10px] font-normal text-slate-500">units</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {((fac.capacity.allocatedUnits / fac.capacity.monthlyCapacityUnits) * 100).toFixed(0)}% allocated
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#14512C]">
+                        {fac.scorecard.aqlPassRatePct}%
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedPortfolioFactory(getPortfolioForFactory(fac))}
+                            className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-[11px] font-semibold transition cursor-pointer shadow-xs"
+                            title="Open Strategic Supplier & Factory Living Portfolio"
+                          >
+                            Living Portfolio
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setViewingPdfFactory(fac)}
+                            className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition cursor-pointer"
+                            title="View Official Vendor Profile PDF"
+                          >
+                            <Printer className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        /* Factory Grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredFactories.map((fac) => {
           const utilPct = ((fac.capacity.allocatedUnits / fac.capacity.monthlyCapacityUnits) * 100).toFixed(0);
           const vType: VendorClassification = fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY');
@@ -579,6 +723,11 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                     {vType === 'SUPPLIER' && (
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-blue-50 text-blue-700 border-blue-200" title="Supplier: Collect Finished Goods & Supply">
                         🏢 Supplier
+                      </span>
+                    )}
+                    {vType === 'FACTORY_CUM_SUPPLIER' && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-purple-50 text-purple-800 border-purple-300" title="Factory-cum-Supplier: Manufacturer with Sourcing & Artisan Production">
+                        🌿 Factory-cum-Supplier
                       </span>
                     )}
                     <span className="text-[11px] font-medium text-[#6B7269]">{fac.sectors.join(', ')}</span>
@@ -741,6 +890,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
           );
         })}
       </div>
+      )}
 
       {/* Modal: Factory Detail View */}
       {selectedFactory && (
