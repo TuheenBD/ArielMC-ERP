@@ -597,8 +597,8 @@ export default function Home() {
     >
       {/* Sidebar Navigation */}
       <Sidebar
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
+        activeTab={(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') || (activeTab as any) === 'BUYERS' ? ('BUYERS' as any) : activeTab}
+        onSelectTab={handleSelectTab}
         activeEntity={activeEntity}
         companies={companies}
         onSelectEntity={setActiveEntityCode}
@@ -661,12 +661,12 @@ export default function Home() {
             <div className="flex items-center gap-3 min-w-0">
               <div className="flex items-center gap-2 min-w-0">
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 hidden sm:inline">
-                  {activeTab === 'SALES' && salesActiveSubTab === 'BUYERS'
+                  {(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') || (activeTab as any) === 'BUYERS'
                     ? 'Sales & Commercial'
                     : ALL_PAGE_DEFINITIONS[activeTab]?.category || 'Module'}
                 </span>
 
-                {activeTab === 'SALES' && salesActiveSubTab === 'BUYERS' ? (
+                {(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') || (activeTab as any) === 'BUYERS' ? (
                   <div className="flex items-center gap-1.5 min-w-0 text-xs">
                     <span className="text-slate-500 font-medium truncate">Sales Hub</span>
                     <span className="text-slate-400">/</span>
@@ -680,7 +680,7 @@ export default function Home() {
                   </span>
                 )}
 
-                {ALL_PAGE_DEFINITIONS[activeTab]?.badge && !(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') && (
+                {ALL_PAGE_DEFINITIONS[activeTab]?.badge && !((activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') || (activeTab as any) === 'BUYERS') && (
                   <span className="text-[10px] px-2 py-0.2 rounded-full bg-[#C8A96A]/20 text-[#8B6B2E] font-bold border border-[#C8A96A]/40 font-mono hidden md:inline">
                     {ALL_PAGE_DEFINITIONS[activeTab]?.badge}
                   </span>
@@ -690,7 +690,7 @@ export default function Home() {
 
             {/* "Add to Fav" / "Favorited" Action Buttons */}
             <div className="flex items-center gap-2 shrink-0">
-              {activeTab === 'SALES' && salesActiveSubTab === 'BUYERS' ? (
+              {(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') || (activeTab as any) === 'BUYERS' ? (
                 <>
                   {/* Primary Favorite: Strategic Accounts */}
                   <button
@@ -823,7 +823,7 @@ export default function Home() {
             />
           )}
 
-          {activeTab === 'SALES' && (
+          {(activeTab === 'SALES' || (activeTab as any) === 'BUYERS') && (
             <SalesManagement
               orders={orders}
               crmLeads={crmLeads}
@@ -832,11 +832,11 @@ export default function Home() {
               activeEntity={activeEntity}
               activeCurrency={activeCurrency}
               currencies={currencies}
-              onNavigateTab={setActiveTab}
+              onNavigateTab={handleSelectTab}
               onAddOrder={handleAddOrder}
               onOpenDocumentCenter={handleOpenDocCenter}
               theme={theme}
-              initialSubTab={salesInitialSubTab}
+              initialSubTab={activeTab === 'BUYERS' || salesActiveSubTab === 'BUYERS' ? 'BUYERS' : salesInitialSubTab}
               initialBuyerCompany={salesInitialBuyerCompany}
               onSubTabChange={(subTab) => setSalesActiveSubTab(subTab)}
               favoritePages={favoritePages}

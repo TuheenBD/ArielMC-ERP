@@ -89,6 +89,18 @@ export const ALL_PAGE_DEFINITIONS: Record<string, PageDefinition> = {
     description: 'Central commercial command, quotation proposals, and proforma invoices (PI).',
     iconName: 'TrendingUp',
   },
+  BUYERS: {
+    id: "BUYERS" as any,
+    targetTab: "SALES",
+    subTab: "BUYERS",
+    label: "Buyers & Strategic Accounts",
+    shortLabel: "Buyers Directory",
+    category: "Sales & Commercial Command",
+    badge: "5 Living Portfolios",
+    phase: "Tier-1 Buyers",
+    description: "Direct access to international strategic buyer accounts, living portfolios, credit ratings & commercial terms.",
+    iconName: "Users2",
+  },
   STRATEGIC_ACCOUNTS: {
     id: 'STRATEGIC_ACCOUNTS',
     targetTab: 'SALES',
