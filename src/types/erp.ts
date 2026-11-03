@@ -833,6 +833,17 @@ export interface ChemicalComplianceTest {
   notes: string;
 }
 
+export interface FactoryMilestone {
+  id: string;
+  stage: 'RAW_MATERIAL' | 'FABRICATION' | 'MID_LINE_QA' | 'FINAL_AQL' | 'PACKING_STUFFING' | 'PORT_HANDOVER';
+  label: string;
+  plannedDate: string;
+  actualDate?: string;
+  status: 'COMPLETED' | 'IN_PROGRESS' | 'PENDING' | 'DELAYED';
+  signOffParty: string;
+  completionPercentage: number;
+}
+
 export interface FactoryPurchaseOrder {
   id: string;
   poNumber: string; // PO-2026-FAC-001
@@ -848,6 +859,43 @@ export interface FactoryPurchaseOrder {
   paymentTerms: string;
   backToBackLcNumber?: string;
   items: OrderLineItem[];
+  factoryMilestones?: FactoryMilestone[];
+  factoryPaymentTermsBreakdown?: {
+    termsName: string; // '30% Advance | 50% FRI Pass | 20% Delivery NOC'
+    advance30CostUsd: number;
+    advance30Paid: boolean;
+    fri50CostUsd: number;
+    fri50Settled: boolean;
+    noc20CostUsd: number;
+    noc20Released: boolean;
+  };
+}
+
+export interface SampleFeeVoucherCredit {
+  voucherCode: string; // e.g. 'SFV-2026-UK-154'
+  sampleOrderRef: string; // e.g. 'SDO-2026-001'
+  productDescription: string;
+  originalFeeUsd: number;
+  creditedAmountUsd: number;
+  deductionMilestone: 'CLEAN_BL_50'; // Credited against final 50% Clean B/L balance
+  qualifyingMoqMet: boolean;
+  qualifyingThresholdText: string;
+  appliedDate: string;
+  verifiedBy: string;
+}
+
+export interface NocPaymentTermsBreakdown {
+  termsName: string; // '30/50/20 NOC'
+  advance30PercentUsd: number;
+  advance30PercentPaid: boolean;
+  cleanBl50PercentGrossUsd: number;
+  sampleFeeVoucherCreditUsd: number;
+  cleanBl50PercentNetUsd: number;
+  cleanBl50PercentSettled: boolean;
+  deliveryNoc20PercentUsd: number;
+  deliveryNoc20PercentReleased: boolean;
+  nocStatus: 'ADVANCE_PENDING' | 'ADVANCE_RECEIVED' | 'FRI_BL_SETTLED' | 'NOC_RELEASED_FINAL';
+  notes?: string;
 }
 
 export interface OrderFulfillmentRouting {
@@ -895,6 +943,8 @@ export interface BuyerSalesOrder {
   timeAndAction: TimeAndActionMilestone[];
   inspections: AqlInspectionReport[];
   fulfillmentRouting?: OrderFulfillmentRouting;
+  sampleFeeVoucher?: SampleFeeVoucherCredit;
+  nocPaymentTerms?: NocPaymentTermsBreakdown;
 }
 
 // -------------------------------------------------------------

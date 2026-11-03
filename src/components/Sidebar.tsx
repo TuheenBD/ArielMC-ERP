@@ -155,7 +155,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      group: 'Buyer & Supplier Command (Core Focus)',
+      group: 'Buyer & Supplier Command',
       items: [
         {
           id: 'BUYERS' as ActiveTab,
@@ -221,6 +221,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
+      group: 'Commercial & Global Trade',
+      items: [
+        {
+          id: 'LOGISTICS' as ActiveTab,
+          label: 'Logistics & Export Docs',
+          icon: Ship,
+          badge: 'Dual-Hub Live',
+          phase: 'Phase 6',
+        },
+        {
+          id: 'INVENTORY' as ActiveTab,
+          label: 'Multi-Warehouse Inventory',
+          icon: Boxes,
+          badge: '12 Hubs Live',
+          phase: 'Phase 7 Live',
+        },
+      ],
+    },
+    {
       group: 'Brand & Marketing',
       items: [
         {
@@ -241,25 +260,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Landmark,
           badge: '10k P&L Live',
           phase: 'Phase 8',
-        },
-      ],
-    },
-    {
-      group: 'Commercial & Global Trade',
-      items: [
-        {
-          id: 'LOGISTICS' as ActiveTab,
-          label: 'Logistics & Export Docs',
-          icon: Ship,
-          badge: 'Dual-Hub Live',
-          phase: 'Phase 6',
-        },
-        {
-          id: 'INVENTORY' as ActiveTab,
-          label: 'Multi-Warehouse Inventory',
-          icon: Boxes,
-          badge: '12 Hubs Live',
-          phase: 'Phase 7 Live',
         },
       ],
     },

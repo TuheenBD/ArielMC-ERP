@@ -47,6 +47,10 @@ import {
   Award,
   Globe2,
   Webhook,
+  Ticket,
+  FileCheck2,
+  BadgePercent,
+  Check,
 } from 'lucide-react';
 import { CommunicationChannelsModal } from '@/components/CommunicationChannelsModal';
 import { TimeAndActionGanttCalendar } from '@/components/TimeAndActionGanttCalendar';
@@ -158,7 +162,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedOrder, setSelectedOrder] = useState<BuyerSalesOrder | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [activeDrawerTab, setActiveDrawerTab] = useState<'OVERVIEW' | 'MARGIN' | 'TNA' | 'AQL'>('OVERVIEW');
+  const [activeDrawerTab, setActiveDrawerTab] = useState<'OVERVIEW' | 'NOC_TERMS' | 'FACTORY_PO' | 'MARGIN' | 'TNA' | 'AQL'>('OVERVIEW');
   const [isChannelsModalOpen, setIsChannelsModalOpen] = useState(false);
   const [mainView, setMainView] = useState<'ORDERS' | 'TNA_GANTT' | 'GEO_ROUTING' | 'WEBHOOK_INGESTION'>('ORDERS');
   const [selectedGanttOrderId, setSelectedGanttOrderId] = useState<string | null>(null);
@@ -526,6 +530,15 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                       <div className="text-[10px] text-[#6B7269] truncate max-w-[160px]">
                         {order.linkedPo.factoryName.split('-')[0]}
                       </div>
+                      {order.linkedPo.factoryMilestones && (
+                        <div className="text-[9px] font-mono text-[#8A5A00] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 mt-1 inline-flex items-center gap-1">
+                          <Factory className="w-2.5 h-2.5" />
+                          <span>
+                            {order.linkedPo.factoryMilestones.filter((m) => m.status === 'COMPLETED').length}/
+                            {order.linkedPo.factoryMilestones.length} Milestones
+                          </span>
+                        </div>
+                      )}
                     </td>
 
                     <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
@@ -547,6 +560,12 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           `≈ $${order.totalAmountUsd.toLocaleString()} USD`
                         )}
                       </div>
+                      {order.sampleFeeVoucher && (
+                        <div className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 mt-1 inline-flex items-center gap-1">
+                          <Ticket className="w-2.5 h-2.5 text-emerald-600" />
+                          <span>Voucher -${order.sampleFeeVoucher.creditedAmountUsd} (Clean B/L)</span>
+                        </div>
+                      )}
                     </td>
 
                     <td className="py-3 px-4 font-mono">
@@ -800,10 +819,10 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                 </div>
 
                 {/* Drawer Tabs */}
-                <div className="flex items-center gap-2 border-b border-[#DDE3DD] text-xs">
+                <div className="flex items-center gap-2 border-b border-[#DDE3DD] text-xs overflow-x-auto pb-1">
                   <button
                     onClick={() => setActiveDrawerTab('OVERVIEW')}
-                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all shrink-0 cursor-pointer ${
                       activeDrawerTab === 'OVERVIEW'
                         ? 'border-[#1F3A2E] text-[#1F3A2E]'
                         : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -812,8 +831,41 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                     Two-Way Order Overview
                   </button>
                   <button
+                    onClick={() => setActiveDrawerTab('NOC_TERMS')}
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                      activeDrawerTab === 'NOC_TERMS'
+                        ? 'border-[#1F3A2E] text-[#1F3A2E]'
+                        : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    <Ticket className="w-3.5 h-3.5 text-[#C8A96A]" />
+                    <span>30/50/20 NOC &amp; Voucher</span>
+                    {selectedOrder.sampleFeeVoucher && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold border border-emerald-300">
+                        -${selectedOrder.sampleFeeVoucher.creditedAmountUsd}
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setActiveDrawerTab('FACTORY_PO')}
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                      activeDrawerTab === 'FACTORY_PO'
+                        ? 'border-[#1F3A2E] text-[#1F3A2E]'
+                        : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
+                    }`}
+                  >
+                    <Factory className="w-3.5 h-3.5 text-[#8A5A00]" />
+                    <span>Factory PO Milestones</span>
+                    {selectedOrder.linkedPo.factoryMilestones && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-amber-100 text-[#8A5A00] text-[9px] font-bold border border-amber-300">
+                        {selectedOrder.linkedPo.factoryMilestones.filter((m) => m.status === 'COMPLETED').length}/
+                        {selectedOrder.linkedPo.factoryMilestones.length}
+                      </span>
+                    )}
+                  </button>
+                  <button
                     onClick={() => setActiveDrawerTab('MARGIN')}
-                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all shrink-0 cursor-pointer ${
                       activeDrawerTab === 'MARGIN'
                         ? 'border-[#1F3A2E] text-[#1F3A2E]'
                         : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -823,7 +875,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                   </button>
                   <button
                     onClick={() => setActiveDrawerTab('TNA')}
-                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all shrink-0 cursor-pointer ${
                       activeDrawerTab === 'TNA'
                         ? 'border-[#1F3A2E] text-[#1F3A2E]'
                         : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -833,7 +885,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                   </button>
                   <button
                     onClick={() => setActiveDrawerTab('AQL')}
-                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all ${
+                    className={`pb-2.5 px-3 border-b-2 font-semibold transition-all shrink-0 cursor-pointer ${
                       activeDrawerTab === 'AQL'
                         ? 'border-[#1F3A2E] text-[#1F3A2E]'
                         : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -874,7 +926,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           </div>
                           <div className="flex justify-between">
                             <span className="text-[#6B7269]">Payment:</span>
-                            <span>{selectedOrder.paymentTerms}</span>
+                            <span className="font-semibold text-emerald-800">{selectedOrder.paymentTerms}</span>
                           </div>
                           {selectedOrder.masterLcNumber && (
                             <div className="flex justify-between font-mono text-emerald-700">
@@ -918,8 +970,8 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-[#6B7269]">Payment:</span>
-                            <span>{selectedOrder.linkedPo.paymentTerms}</span>
+                            <span className="text-[#6B7269]">Factory Payment:</span>
+                            <span className="font-medium text-[#8A5A00]">{selectedOrder.linkedPo.paymentTerms}</span>
                           </div>
                           {selectedOrder.linkedPo.backToBackLcNumber && (
                             <div className="flex justify-between font-mono text-[#8A5A00]">
@@ -928,7 +980,7 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                             </div>
                           )}
                           <div className="pt-2 border-t border-[#DDE3DD] flex justify-between font-bold text-sm">
-                            <span className="text-[#8A5A00]">Factory Cost:</span>
+                            <span className="text-[#8A5A00]">Factory Spend:</span>
                             <span className="text-[#8A5A00] font-mono text-right">
                               {isBdStation ? (
                                 <>
@@ -942,6 +994,82 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                               )}
                             </span>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 30/50/20 NOC Payment Terms & Sample Fee Voucher Credit Snapshot */}
+                    <div className="p-4 rounded-xl bg-gradient-to-r from-[#F7FAF8] via-white to-[#F4F8F5] border border-[#C8A96A]/40 shadow-xs space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#DDE3DD]">
+                        <div className="flex items-center gap-2">
+                          <Ticket className="w-4 h-4 text-[#8A6D3B]" />
+                          <span className="font-bold text-[#1F3A2E] text-xs">
+                            Payment Structure: 30/50/20 NOC Protocol
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full bg-[#1F3A2E] text-[#C8A96A] font-mono text-[10px] font-bold">
+                            Standard Export Terms
+                          </span>
+                        </div>
+                        {selectedOrder.sampleFeeVoucher && (
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>100% Sample Fee Voucher Applied (-${selectedOrder.sampleFeeVoucher.creditedAmountUsd}.00)</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* 3 Tranches Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {/* 30% Advance */}
+                        <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-xs">
+                          <div className="flex items-center justify-between text-[10px] font-bold text-[#6B7269] uppercase">
+                            <span>1. 30% Advance Deposit</span>
+                            <span className="text-emerald-700 font-bold">✔ Cleared</span>
+                          </div>
+                          <div className="text-base font-bold font-mono text-[#1F3A2E] mt-1">
+                            ${(selectedOrder.nocPaymentTerms?.advance30PercentUsd || selectedOrder.totalAmountUsd * 0.3).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </div>
+                          <p className="text-[10px] text-[#6B7269] mt-0.5">
+                            Triggered upon SO / PI sign-off. Direct raw material procurement allocation.
+                          </p>
+                        </div>
+
+                        {/* 50% Clean B/L */}
+                        <div className="p-3 rounded-lg bg-amber-50/50 border border-amber-200/80 shadow-xs relative overflow-hidden">
+                          <div className="flex items-center justify-between text-[10px] font-bold text-[#8A5A00] uppercase">
+                            <span>2. 50% Clean B/L Balance</span>
+                            <span className="font-mono text-[9px] bg-amber-200 text-[#8A5A00] px-1.5 py-0.2 rounded font-bold">
+                              FRI Pass &amp; B/L
+                            </span>
+                          </div>
+                          <div className="text-base font-bold font-mono text-[#8A5A00] mt-1">
+                            ${(selectedOrder.nocPaymentTerms?.cleanBl50PercentNetUsd || (selectedOrder.totalAmountUsd * 0.5 - (selectedOrder.sampleFeeVoucher?.creditedAmountUsd || 0))).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </div>
+                          <div className="text-[10px] text-[#8A6D3B] mt-0.5 font-medium">
+                            {selectedOrder.sampleFeeVoucher ? (
+                              <span className="text-emerald-800 font-mono block">
+                                Gross ${(selectedOrder.totalAmountUsd * 0.5).toLocaleString()} - ${selectedOrder.sampleFeeVoucher.creditedAmountUsd} Voucher Credit
+                              </span>
+                            ) : (
+                              'Settled against Clean On-Board B/L copy & FRI AQL Pass Certificate'
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 20% Delivery NOC */}
+                        <div className="p-3 rounded-lg bg-white border border-[#DDE3DD] shadow-xs">
+                          <div className="flex items-center justify-between text-[10px] font-bold text-[#6B7269] uppercase">
+                            <span>3. 20% Delivery NOC</span>
+                            <span className="font-mono text-[9px] bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded font-bold">
+                              Destination
+                            </span>
+                          </div>
+                          <div className="text-base font-bold font-mono text-[#1F3A2E] mt-1">
+                            ${(selectedOrder.nocPaymentTerms?.deliveryNoc20PercentUsd || selectedOrder.totalAmountUsd * 0.2).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </div>
+                          <p className="text-[10px] text-[#6B7269] mt-0.5">
+                            Released upon container destination port customs clearance &amp; Delivery NOC release.
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -993,6 +1121,340 @@ export const OrderManagement: React.FC<OrderManagementProps> = ({
                           })}
                         </tbody>
                       </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab: 30/50/20 NOC & Sample Voucher Deep Dive */}
+                {activeDrawerTab === 'NOC_TERMS' && (
+                  <div className="space-y-4 text-xs font-['Open_Sans']">
+                    {/* Header Card */}
+                    <div className="p-4 rounded-xl bg-[#1F3A2E] text-white border-b-2 border-[#C8A96A] space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono text-[#C8A96A] font-bold uppercase tracking-wider">
+                          ArielMC Commercial Export Settlement Architecture
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-white/20 text-white font-mono text-[10px] font-bold">
+                          Protocol: 30/50/20 NOC
+                        </span>
+                      </div>
+                      <h4 className="text-base font-bold text-white font-montserrat flex items-center gap-2">
+                        <Ticket className="w-4 h-4 text-[#C8A96A]" />
+                        <span>3-Stage NOC Payment Terms &amp; Automated Sample Fee Reimbursement</span>
+                      </h4>
+                      <p className="text-[11px] text-white/80 leading-relaxed">
+                        Enforces milestone-locked trade financing. Sample fees previously invested by the buyer are 100% credited against the 50% Clean B/L balance upon PO confirmation, ensuring intact 30% advance capital for Bangladesh manufacturing.
+                      </p>
+                    </div>
+
+                    {/* Sample Fee Voucher Credit Card */}
+                    {selectedOrder.sampleFeeVoucher ? (
+                      <div className="p-4 rounded-xl bg-emerald-50/80 border border-emerald-300 shadow-xs space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-200">
+                          <div className="flex items-center gap-2">
+                            <span className="p-1 rounded-md bg-emerald-600 text-white">
+                              <Ticket className="w-4 h-4" />
+                            </span>
+                            <div>
+                              <span className="font-bold text-emerald-900 text-xs font-montserrat">
+                                Automated Sample Fee Voucher: {selectedOrder.sampleFeeVoucher.voucherCode}
+                              </span>
+                              <span className="text-[10px] text-emerald-700 block font-mono">
+                                Linked SDO: {selectedOrder.sampleFeeVoucher.sampleOrderRef} • {selectedOrder.sampleFeeVoucher.productDescription}
+                              </span>
+                            </div>
+                          </div>
+                          <span className="px-2.5 py-1 rounded-full bg-emerald-700 text-white font-mono text-xs font-bold">
+                            -${selectedOrder.sampleFeeVoucher.creditedAmountUsd}.00 USD 100% REFUND
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                          <div className="p-2.5 rounded-lg bg-white border border-emerald-200">
+                            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Original Sample Fee</span>
+                            <span className="text-sm font-bold font-mono text-slate-800">${selectedOrder.sampleFeeVoucher.originalFeeUsd.toFixed(2)} USD</span>
+                            <span className="text-[9px] text-emerald-700 block mt-0.5">Paid during R&amp;D prototyping</span>
+                          </div>
+                          <div className="p-2.5 rounded-lg bg-white border border-emerald-200">
+                            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Qualifying Condition</span>
+                            <span className="text-[11px] font-bold text-emerald-900 block truncate">{selectedOrder.sampleFeeVoucher.qualifyingThresholdText.split('(')[0]}</span>
+                            <span className="text-[9px] text-emerald-700 block mt-0.5">Threshold Verified ✔</span>
+                          </div>
+                          <div className="p-2.5 rounded-lg bg-white border border-emerald-200">
+                            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Deduction Milestone</span>
+                            <span className="text-xs font-bold font-mono text-[#8A5A00] block">50% Clean B/L Balance</span>
+                            <span className="text-[9px] text-slate-500 block mt-0.5">Auto-deducted at B/L stage</span>
+                          </div>
+                          <div className="p-2.5 rounded-lg bg-white border border-emerald-200">
+                            <span className="text-[10px] text-slate-500 uppercase font-semibold block">Audit Sign-off</span>
+                            <span className="text-[10px] font-semibold text-slate-800 block truncate">{selectedOrder.sampleFeeVoucher.verifiedBy.split('&')[0]}</span>
+                            <span className="text-[9px] text-slate-500 block mt-0.5">Applied: {selectedOrder.sampleFeeVoucher.appliedDate}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 flex items-center justify-between">
+                        <span className="text-xs">No prior sample fee voucher linked to this commercial order.</span>
+                        <span className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-slate-300">Standard Terms</span>
+                      </div>
+                    )}
+
+                    {/* Detailed Milestone Comparison & Settlement Flow */}
+                    <div className="space-y-3">
+                      {/* Milestone 1 */}
+                      <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-xs space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs">
+                              1
+                            </span>
+                            <div>
+                              <span className="font-bold text-[#1F3A2E] text-xs">Stage 1: 30% Advance Production Deposit</span>
+                              <span className="text-[10px] text-slate-500 block">Trigger: Proforma Invoice (PI) acceptance &amp; Master L/C receipt</span>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold border border-emerald-300 flex items-center gap-1">
+                            <Check className="w-3 h-3" />
+                            <span>Advance Paid &amp; Cleared</span>
+                          </span>
+                        </div>
+                        <div className="p-3 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex flex-wrap items-center justify-between gap-3 font-mono">
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">Buyer Payment (30%)</span>
+                            <span className="text-sm font-bold text-[#1F3A2E]">
+                              ${(selectedOrder.totalAmountUsd * 0.3).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">Factory Raw Material Allocation</span>
+                            <span className="text-sm font-bold text-[#8A5A00]">
+                              ৳{Math.round(selectedOrder.linkedPo.totalCostBdt * 0.3).toLocaleString('en-IN')} BDT
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">Released To</span>
+                            <span className="text-xs font-semibold text-slate-700 font-sans">
+                              {selectedOrder.linkedPo.factoryName.split('-')[0]}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Milestone 2 */}
+                      <div className="p-4 rounded-xl bg-amber-50/40 border border-amber-300 shadow-xs space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-amber-200 text-[#8A5A00] font-bold flex items-center justify-center text-xs">
+                              2
+                            </span>
+                            <div>
+                              <span className="font-bold text-[#8A5A00] text-xs">Stage 2: 50% Clean B/L Balance (Less Sample Voucher)</span>
+                              <span className="text-[10px] text-slate-500 block">Trigger: Final Random Inspection (FRI) Pass &amp; Clean On-Board B/L Copy</span>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-amber-100 text-[#8A5A00] font-mono text-[10px] font-bold border border-amber-300">
+                            {selectedOrder.status === 'SHIPPED_CHITTAGONG' || selectedOrder.status === 'READY_TO_SHIP' ? 'Ready for Settlement' : 'In Production'}
+                          </span>
+                        </div>
+                        <div className="p-3 rounded-lg bg-white border border-amber-200 flex flex-wrap items-center justify-between gap-3 font-mono">
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">Gross 50% Tranche</span>
+                            <span className="text-xs text-slate-700 line-through">
+                              ${(selectedOrder.totalAmountUsd * 0.5).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                          </div>
+                          {selectedOrder.sampleFeeVoucher && (
+                            <div>
+                              <span className="text-[10px] text-emerald-700 block font-sans font-bold">Sample Fee Credit</span>
+                              <span className="text-xs font-bold text-emerald-700">
+                                - ${selectedOrder.sampleFeeVoucher.creditedAmountUsd}.00
+                              </span>
+                            </div>
+                          )}
+                          <div className="bg-amber-100/70 px-3 py-1.5 rounded-md border border-amber-300">
+                            <span className="text-[10px] text-[#8A5A00] block font-sans font-bold">Net 50% Payable by Buyer</span>
+                            <span className="text-base font-bold text-[#8A5A00]">
+                              ${((selectedOrder.totalAmountUsd * 0.5) - (selectedOrder.sampleFeeVoucher?.creditedAmountUsd || 0)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Milestone 3 */}
+                      <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-xs space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-xs">
+                              3
+                            </span>
+                            <div>
+                              <span className="font-bold text-[#1F3A2E] text-xs">Stage 3: 20% Delivery NOC (No Objection Certificate)</span>
+                              <span className="text-[10px] text-slate-500 block">Trigger: Port of destination customs clearance &amp; warehouse delivery inspection</span>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono text-[10px] font-bold border border-slate-300">
+                            Port Destination Release
+                          </span>
+                        </div>
+                        <div className="p-3 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] flex flex-wrap items-center justify-between gap-3 font-mono">
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">Final 20% Balance</span>
+                            <span className="text-sm font-bold text-[#1F3A2E]">
+                              ${(selectedOrder.totalAmountUsd * 0.2).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">NOC Release Condition</span>
+                            <span className="text-xs text-slate-700 font-sans">Destination Cargo Receiving Tally &amp; Zero Damage Sign-off</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-500 block font-sans">Target Date</span>
+                            <span className="text-xs font-semibold text-[#1F3A2E] font-sans">{selectedOrder.targetDeliveryDate}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab: Certified Factory PO Milestones */}
+                {activeDrawerTab === 'FACTORY_PO' && (
+                  <div className="space-y-4 text-xs font-['Open_Sans']">
+                    {/* Factory Header Card */}
+                    <div className="p-4 rounded-xl bg-[#8A5A00] text-white border-b-2 border-amber-300 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono text-amber-200 font-bold uppercase tracking-wider">
+                          Certified Bangladesh Manufacturing Partner
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-white/20 text-white font-mono text-[10px] font-bold">
+                          PO: {selectedOrder.linkedPo.poNumber}
+                        </span>
+                      </div>
+                      <h4 className="text-base font-bold text-white font-montserrat flex items-center gap-2">
+                        <Factory className="w-4 h-4 text-amber-300" />
+                        <span>{selectedOrder.linkedPo.factoryName}</span>
+                      </h4>
+                      <div className="flex flex-wrap items-center gap-4 text-[11px] text-amber-100 pt-1">
+                        <span>PO Cost: <b>${selectedOrder.linkedPo.totalCostUsd.toLocaleString()} USD</b> (৳{(selectedOrder.linkedPo.totalCostBdt / 100000).toFixed(2)} Lakh BDT)</span>
+                        <span>Units: <b>{selectedOrder.linkedPo.totalQuantity.toLocaleString()} pcs</b></span>
+                        <span>Ex-Factory: <b>{selectedOrder.linkedPo.targetExFactoryDate}</b></span>
+                      </div>
+                    </div>
+
+                    {/* Milestone Progress List */}
+                    <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-3">
+                      <div className="flex items-center justify-between pb-2 border-b border-[#DDE3DD]">
+                        <span className="font-bold text-[#1F3A2E] text-xs font-montserrat flex items-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4 text-[#C8A96A]" />
+                          <span>Factory Production Milestones &amp; QA Sign-Offs</span>
+                        </span>
+                        <span className="text-[10px] font-mono text-[#8A5A00] font-bold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          {selectedOrder.linkedPo.factoryMilestones
+                            ? `${selectedOrder.linkedPo.factoryMilestones.filter((m) => m.status === 'COMPLETED').length} of ${selectedOrder.linkedPo.factoryMilestones.length} Stages Completed`
+                            : 'Tracking Active'}
+                        </span>
+                      </div>
+
+                      <div className="space-y-3 pt-1">
+                        {(selectedOrder.linkedPo.factoryMilestones || [
+                          {
+                            id: 'fms-def-1',
+                            stage: 'RAW_MATERIAL' as const,
+                            label: 'Raw Material Sourcing & Lab Testing',
+                            plannedDate: selectedOrder.linkedPo.issueDate,
+                            actualDate: selectedOrder.linkedPo.issueDate,
+                            status: 'COMPLETED' as const,
+                            signOffParty: 'Certified Factory Lab',
+                            completionPercentage: 100,
+                          },
+                          {
+                            id: 'fms-def-2',
+                            stage: 'FABRICATION' as const,
+                            label: 'Cutting, Weaving & Preparation',
+                            plannedDate: selectedOrder.linkedPo.targetExFactoryDate,
+                            status: 'IN_PROGRESS' as const,
+                            signOffParty: 'Floor Supervisor',
+                            completionPercentage: 60,
+                          },
+                          {
+                            id: 'fms-def-3',
+                            stage: 'FINAL_AQL' as const,
+                            label: 'Pre-Shipment FRI AQL 1.5/2.5 Inspection',
+                            plannedDate: selectedOrder.linkedPo.targetExFactoryDate,
+                            status: 'PENDING' as const,
+                            signOffParty: 'ArielMC Lead Inspector',
+                            completionPercentage: 0,
+                          },
+                        ]).map((fms, idx) => {
+                          const isDone = fms.status === 'COMPLETED';
+                          const isInProg = fms.status === 'IN_PROGRESS';
+                          return (
+                            <div
+                              key={fms.id}
+                              className={`p-3 rounded-xl border transition-all ${
+                                isDone
+                                  ? 'bg-[#F9FCFA] border-emerald-300'
+                                  : isInProg
+                                  ? 'bg-[#FEFDF9] border-amber-300 shadow-xs'
+                                  : 'bg-white border-[#E5E9E5]'
+                              }`}
+                            >
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                  <span
+                                    className={`w-6 h-6 rounded-full font-mono text-[11px] font-bold flex items-center justify-center shrink-0 ${
+                                      isDone
+                                        ? 'bg-emerald-600 text-white'
+                                        : isInProg
+                                        ? 'bg-amber-500 text-white animate-pulse'
+                                        : 'bg-slate-100 text-slate-500'
+                                    }`}
+                                  >
+                                    {idx + 1}
+                                  </span>
+                                  <div>
+                                    <div className="font-bold text-[#1A1A1A] text-xs">{fms.label}</div>
+                                    <div className="text-[10px] text-[#6B7269] flex items-center gap-2 mt-0.5">
+                                      <span>Sign-off: <b>{fms.signOffParty}</b></span>
+                                      <span>•</span>
+                                      <span>Target: <b>{fms.plannedDate}</b></span>
+                                      {fms.actualDate && (
+                                        <>
+                                          <span>•</span>
+                                          <span className="text-emerald-700">Completed: <b>{fms.actualDate}</b></span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                                      isDone
+                                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                        : isInProg
+                                        ? 'bg-amber-100 text-[#8A5A00] border border-amber-300'
+                                        : 'bg-slate-100 text-slate-600 border border-slate-200'
+                                    }`}
+                                  >
+                                    {isDone ? 'COMPLETED' : isInProg ? 'IN PROGRESS' : 'PENDING'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Progress bar */}
+                              <div className="mt-2.5 w-full bg-[#E8EDE8] rounded-full h-1.5 overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full transition-all duration-300 ${
+                                    isDone ? 'bg-emerald-600' : isInProg ? 'bg-amber-500' : 'bg-slate-300'
+                                  }`}
+                                  style={{ width: `${fms.completionPercentage}%` }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 )}
