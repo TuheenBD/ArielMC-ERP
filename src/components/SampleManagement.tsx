@@ -48,6 +48,7 @@ import {
   PackageCheck,
   Package,
   Share2,
+  FileCheck2,
 } from 'lucide-react';
 import { SAMPLE_PRICING_MATRIX } from '@/data/samplePricingMatrix';
 import { ThemeProfile } from '@/components/Sidebar';
@@ -57,6 +58,7 @@ import { buildStandardFactoryTechPack } from '@/data/standardTechPacks';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
 import { SampleDispatchProtocolSection } from './SampleDispatchProtocolSection';
+import { SampleInvoiceModal } from './SampleInvoiceModal';
 
 interface SampleManagementProps {
   samples: SampleDevelopmentOrder[];
@@ -203,7 +205,8 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeDrawerTab, setActiveDrawerTab] = useState<'TECHPACK' | 'COURIER' | 'COSTING' | 'FEEDBACK'>('TECHPACK');
   const [viewingTechPack, setViewingTechPack] = useState<StandardFactoryTechPack | null>(null);
-  const [activeModuleTab, setActiveSampleModuleTab] = useState<'TRACKER' | 'SOP_POLICY' | 'PRICING_MATRIX' | 'REIMBURSEMENT_CALC' | 'DISPATCH_PROTOCOL'>('TRACKER');
+  const [viewingSampleInvoice, setViewingSampleInvoice] = useState<SampleDevelopmentOrder | null>(null);
+  const [activeModuleTab, setActiveSampleModuleTab] = useState<'TRACKER' | 'INVOICING' | 'SOP_POLICY' | 'PRICING_MATRIX' | 'REIMBURSEMENT_CALC' | 'DISPATCH_PROTOCOL'>('TRACKER');
   const [showSopModal, setShowSopModal] = useState(false);
   const [calcPoQty, setCalcPoQty] = useState(1200);
   const [calcPoValue, setCalcPoValue] = useState(8400);
@@ -331,6 +334,18 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         >
           <FlaskConical className="w-4 h-4 text-[#C8A96A]" />
           <span>Active SDO Pipeline ({samples.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSampleModuleTab('INVOICING')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
+            activeModuleTab === 'INVOICING'
+              ? 'bg-[#1F3A2E] text-white shadow-sm'
+              : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-white'
+          }`}
+        >
+          <FileCheck2 className="w-4 h-4 text-[#C8A96A]" />
+          <span>Sample Fee Invoices (SPI) &amp; SOP-V1 Vouchers</span>
         </button>
 
         <button
@@ -671,6 +686,17 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
+                              setViewingSampleInvoice(sample);
+                            }}
+                            className="px-2 py-1 rounded bg-[#E8EFE8] hover:bg-[#D5E2D5] text-[#1F3A2E] border border-[#2C5240]/40 text-[11px] font-bold shadow-sm transition-all flex items-center gap-1"
+                            title="View Official Sample Proforma Invoice (SPI) & SOP-V1 Credit Guarantee"
+                          >
+                            <FileCheck2 className="w-3 h-3 text-[#C8A96A]" />
+                            <span>SPI</span>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setViewingTechPack(
                                 sample.standardTechPack ||
                                   buildStandardFactoryTechPack({
@@ -758,6 +784,42 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                             <span className="truncate max-w-[80px]">{sample.courier.awbNumber}</span>
                           </div>
                         )}
+
+                        <div className="pt-2 flex items-center justify-end gap-1.5 border-t border-[#DDE3DD]/60">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setViewingSampleInvoice(sample);
+                            }}
+                            className="px-2 py-0.5 rounded bg-[#E8EFE8] hover:bg-[#D5E2D5] text-[#1F3A2E] text-[10px] font-bold border border-[#2C5240]/30 transition-all flex items-center gap-1"
+                            title="View Sample Proforma Invoice (SPI)"
+                          >
+                            <FileCheck2 className="w-3 h-3 text-[#C8A96A]" />
+                            <span>SPI</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setViewingTechPack(
+                                sample.standardTechPack ||
+                                  buildStandardFactoryTechPack({
+                                    modelName: sample.styleName,
+                                    styleCode: sample.styleCode,
+                                    sector: sample.sector,
+                                    originHub: 'Dhaka / Narayanganj / Savar Export Cluster',
+                                    factoryName: sample.factoryName,
+                                  })
+                              );
+                            }}
+                            className="px-2 py-0.5 rounded bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] text-[10px] font-bold border border-[#C8A96A] transition-all flex items-center gap-1"
+                            title="Tech-Pack"
+                          >
+                            <FileText className="w-3 h-3" />
+                            <span>TP</span>
+                          </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -774,6 +836,315 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         </div>
       )}
         </>
+      )}
+
+      {/* TAB: SAMPLE FEE INVOICING & 100% BULK REIMBURSEMENT VOUCHERS */}
+      {activeModuleTab === 'INVOICING' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          {/* Header Banner */}
+          <div className="p-6 rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white shadow-md space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#C8A96A]/20 text-[#C8A96A] font-mono text-xs font-semibold border border-[#C8A96A]/30">
+                    SOP-B2B-SMP-2026-V1
+                  </span>
+                  <span className="text-xs text-[#E8EFE8] font-mono">
+                    Official Prototyping &amp; Commercial Billing Desk
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/30">
+                    AD Code: 0902 (Eastern Bank PLC)
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight font-montserrat flex items-center gap-2">
+                  <FileCheck2 className="w-5 h-5 text-[#C8A96A]" />
+                  <span>Sample Proforma Invoices (SPI) &amp; Bulk PO Credit Vouchers</span>
+                </h2>
+                <p className="text-xs text-[#E8EFE8] max-w-3xl leading-relaxed">
+                  Strictly enforcing ArielMC Sample Policy: All physical rapid prototypes, lab dips, precision CAD patterns, and express international air freight (DHL / FedEx) are invoiced and paid upfront. 100% of the sample fee is credited against the buyer&apos;s qualifying bulk order upon final Clean B/L balance settlement.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowSopModal(true)}
+                  className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-[#C8A96A] border border-[#C8A96A]/40 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm font-montserrat"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>SOP-V1 Legal Clause</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* 4-Card KPI Strip */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-1">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-montserrat">
+                <span>Total Invoiced (SPI)</span>
+                <DollarSign className="w-4 h-4 text-[#1F3A2E]" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-[#1F3A2E]">
+                ${samples.reduce((acc, s) => acc + s.costing.totalCostUsd, 0).toLocaleString()}
+              </div>
+              <div className="text-[11px] text-[#6B7269] font-mono">
+                ≈ ৳{(samples.reduce((acc, s) => acc + s.costing.totalCostUsd, 0) * 124.3879).toLocaleString('en-US', { maximumFractionDigits: 0 })} BDT (Ex. 124.39)
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-1">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-montserrat">
+                <span>Air Courier Freight</span>
+                <Plane className="w-4 h-4 text-[#0284C7]" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-[#0284C7]">
+                ${samples.reduce((acc, s) => acc + s.costing.courierCostUsd, 0).toLocaleString()}
+              </div>
+              <div className="text-[11px] text-[#6B7269] font-mono">
+                DHL Express &amp; FedEx Priority via Dhaka (DAC)
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-1">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-montserrat">
+                <span>Upfront Collected</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-emerald-600">
+                ${samples.filter((s) => s.costing.paymentStatus === 'PAID').reduce((acc, s) => acc + s.costing.totalCostUsd, 0).toLocaleString()}
+              </div>
+              <div className="text-[11px] text-emerald-700 font-mono font-medium">
+                {samples.filter((s) => s.costing.paymentStatus === 'PAID').length} / {samples.length} Invoices Settled Upfront
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-sm space-y-1">
+              <div className="flex items-center justify-between text-[#6B7269] text-xs font-montserrat">
+                <span>100% Bulk Credit Vouchers</span>
+                <Award className="w-4 h-4 text-[#8A6D3B]" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-[#8A6D3B]">
+                ${samples.reduce((acc, s) => acc + s.costing.totalCostUsd, 0).toLocaleString()}
+              </div>
+              <div className="text-[11px] text-[#8A6D3B] font-mono font-medium">
+                100% Reimbursable on 1st Qualifying Bulk PO
+              </div>
+            </div>
+          </div>
+
+          {/* SOP-V1 Policy Three-Pillar Banner */}
+          <div className="p-4 rounded-xl bg-[#FAF5EC] border border-[#C8A96A] text-[#1A1A1A] text-xs space-y-2">
+            <div className="flex items-center gap-2 font-bold text-[#8A6D3B] font-montserrat text-sm">
+              <ShieldAlert className="w-4 h-4" />
+              <span>SOP-B2B-SMP-2026-V1 Commercial Rules &amp; Reimbursement Protocol</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div className="p-2.5 rounded-lg bg-white border border-[#C8A96A]/30 space-y-1">
+                <div className="font-bold text-[#1F3A2E] font-montserrat">1. Zero Free Prototyping</div>
+                <p className="text-[#6B7269] text-[11px] leading-relaxed">
+                  All bespoke CAD patterns, dye baths, tooling, and rapid turnaround sets are billed upfront to protect artisan workshop capacity.
+                </p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-white border border-[#C8A96A]/30 space-y-1">
+                <div className="font-bold text-[#1F3A2E] font-montserrat">2. 100% Credit Voucher Guarantee</div>
+                <p className="text-[#6B7269] text-[11px] leading-relaxed">
+                  Every paid SPI generates an official voucher code guaranteeing 100% reimbursement when the buyer places a qualifying bulk PO meeting MOQ.
+                </p>
+              </div>
+              <div className="p-2.5 rounded-lg bg-white border border-[#C8A96A]/30 space-y-1">
+                <div className="font-bold text-[#1F3A2E] font-montserrat">3. Clean B/L Settlement Adjustment</div>
+                <p className="text-[#6B7269] text-[11px] leading-relaxed">
+                  Credit is automatically deducted from the final 50% Clean B/L balance prior to original negotiable export documentation release.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Table of Sample Proforma Invoices */}
+          <div className="bg-white border border-[#DDE3DD] rounded-xl shadow-sm overflow-hidden">
+            <div className="p-4 bg-[#F4F6F4] border-b border-[#DDE3DD] flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-[#1F3A2E] font-montserrat">
+                  Registered Sample Proforma Invoices (SPI)
+                </h3>
+                <p className="text-xs text-[#6B7269]">
+                  Click &apos;View SPI&apos; to inspect vector letterhead invoice, itemized courier charges, and 100% bulk PO credit guarantee clause.
+                </p>
+              </div>
+              <span className="font-mono text-xs text-[#1F3A2E] font-bold bg-[#E8EFE8] px-2.5 py-1 rounded border border-[#2C5240]/20">
+                {samples.length} Active Invoices
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-[#DDE3DD] bg-[#FAF5EC] text-[#8A6D3B] font-mono text-[11px]">
+                    <th className="py-3 px-4 font-bold">SPI INVOICE #</th>
+                    <th className="py-3 px-4 font-bold">SDO REF / STYLE</th>
+                    <th className="py-3 px-4 font-bold">STRATEGIC ACCOUNT</th>
+                    <th className="py-3 px-4 font-bold">DEV FEE</th>
+                    <th className="py-3 px-4 font-bold">AIR COURIER</th>
+                    <th className="py-3 px-4 font-bold">TOTAL ($ / ৳)</th>
+                    <th className="py-3 px-4 font-bold">UPFRONT PAYMENT</th>
+                    <th className="py-3 px-4 font-bold">BULK CREDIT STATUS</th>
+                    <th className="py-3 px-4 font-bold text-right">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#DDE3DD]">
+                  {samples.map((sample) => {
+                    const spiNumber = `SPI-2026-SMP-${sample.sdoNumber.split('-').slice(2).join('-')}`;
+                    const buyerCountryFlag =
+                      sample.buyerCompany.includes('Harrods') || sample.buyerCompany.includes('M&S')
+                        ? '🇬🇧'
+                        : sample.buyerCompany.includes('Ralph Lauren')
+                        ? '🇺🇸'
+                        : sample.buyerCompany.includes('Inditex') || sample.buyerCompany.includes('Zara')
+                        ? '🇪🇸'
+                        : sample.buyerCompany.includes('Country Road')
+                        ? '🇦🇺'
+                        : '🌐';
+
+                    return (
+                      <tr
+                        key={sample.id}
+                        className="hover:bg-[#F4F6F4]/70 transition-colors cursor-pointer"
+                        onClick={() => setViewingSampleInvoice(sample)}
+                      >
+                        <td className="py-3 px-4 font-mono">
+                          <div className="font-bold text-[#1F3A2E] flex items-center gap-1.5">
+                            <FileCheck2 className="w-3.5 h-3.5 text-[#C8A96A]" />
+                            <span>{spiNumber}</span>
+                          </div>
+                          <div className="text-[10px] text-[#6B7269]">
+                            {sample.requestDate}
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4">
+                          <div className="font-bold text-[#1A1A1A] font-montserrat">
+                            {sample.styleName}
+                          </div>
+                          <div className="text-[10px] text-[#6B7269] font-mono">
+                            {sample.sdoNumber} • {sample.sector} ({sample.stage})
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4">
+                          <div className="font-semibold text-[#1A1A1A] flex items-center gap-1.5">
+                            <span>{buyerCountryFlag}</span>
+                            <span>{sample.buyerCompany}</span>
+                          </div>
+                          <div className="text-[10px] text-[#6B7269]">
+                            {sample.targetMarket} Desk
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4 font-mono">
+                          <div className="font-semibold text-[#1A1A1A]">
+                            ${sample.costing.developmentCostUsd}
+                          </div>
+                          <div className="text-[10px] text-[#6B7269]">
+                            ৳{(sample.costing.developmentCostBdt).toLocaleString()}
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4 font-mono">
+                          <div className="font-semibold text-[#0284C7]">
+                            ${sample.costing.courierCostUsd}
+                          </div>
+                          <div className="text-[10px] text-[#6B7269]">
+                            {sample.courier ? sample.courier.courier.split(' ')[0] : 'DHL Express'}
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4 font-mono">
+                          <div className="font-bold text-[#1F3A2E] text-sm">
+                            ${sample.costing.totalCostUsd}
+                          </div>
+                          <div className="text-[10px] text-[#6B7269]">
+                            ৳{(sample.costing.totalCostUsd * 124.3879).toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4">
+                          {sample.costing.paymentStatus === 'PAID' ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono bg-emerald-100 text-emerald-800 border border-emerald-300">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                              <span>PAID UPFRONT</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold font-mono bg-amber-100 text-amber-800 border border-amber-300">
+                              <Clock className="w-3 h-3 text-amber-600" />
+                              <span>PAYMENT PENDING</span>
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-3 px-4">
+                          {sample.sdoNumber.includes('HAR') ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-purple-100 text-purple-800 border border-purple-300">
+                              <Award className="w-3 h-3 text-purple-600" />
+                              <span>CREDITED ON B/L</span>
+                            </span>
+                          ) : sample.costing.paymentStatus === 'PAID' ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-blue-100 text-blue-800 border border-blue-300">
+                              <ShieldCheck className="w-3 h-3 text-blue-600" />
+                              <span>CREDIT APPROVED</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-slate-500 bg-slate-100 border border-slate-300">
+                              <span>PENDING QUALIFYING PO</span>
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-3 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setViewingSampleInvoice(sample);
+                              }}
+                              className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#162A21] text-white text-[11px] font-bold transition-all shadow-sm flex items-center gap-1 font-montserrat cursor-pointer"
+                              title="Inspect Full Official SPI Invoice"
+                            >
+                              <FileCheck2 className="w-3 h-3 text-[#C8A96A]" />
+                              <span>View SPI</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setViewingTechPack(
+                                  sample.standardTechPack ||
+                                    buildStandardFactoryTechPack({
+                                      modelName: sample.styleName,
+                                      styleCode: sample.styleCode,
+                                      sector: sample.sector,
+                                      originHub: 'Dhaka / Narayanganj / Savar Export Cluster',
+                                      factoryName: sample.factoryName,
+                                    })
+                                );
+                              }}
+                              className="px-2 py-1 rounded bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-[11px] font-bold transition-all flex items-center gap-1"
+                              title="Inspect Factory Tech Pack"
+                            >
+                              <FileText className="w-3 h-3" />
+                              <span>TP</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* TAB 2: SOP SOURCING FRAMEWORK & 3-TIER CLASSIFICATION */}
@@ -1826,6 +2197,15 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                         {selectedSample.costing.paymentStatus}
                       </span>
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setViewingSampleInvoice(selectedSample)}
+                      className="w-full mt-3 py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-[#C8A96A] to-[#b59556] hover:from-[#b59556] hover:to-[#9e8045] text-[#1F3A2E] font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer font-montserrat"
+                    >
+                      <FileCheck2 className="w-4 h-4 text-[#1F3A2E]" />
+                      <span>View Sample Proforma Invoice (SPI) &amp; SOP-V1 Credit Guarantee</span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -2016,6 +2396,17 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         isOpen={!!viewingTechPack}
         onClose={() => setViewingTechPack(null)}
         techPack={viewingTechPack}
+      />
+
+      {/* Sample Proforma Invoice (SPI) & SOP-V1 Credit Guarantee Modal */}
+      <SampleInvoiceModal
+        isOpen={!!viewingSampleInvoice}
+        onClose={() => setViewingSampleInvoice(null)}
+        sample={viewingSampleInvoice}
+        bdtRate={124.3879}
+        gbpRate={0.7457}
+        eurRate={0.8933}
+        audRate={1.4279}
       />
     </div>
   );
