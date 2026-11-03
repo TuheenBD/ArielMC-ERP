@@ -185,97 +185,110 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
         </div>
       </div>
 
-      {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#DDE3DD] pb-2 overflow-x-auto text-xs font-['Montserrat']">
-        <button
-          onClick={() => setActiveTab('CONSIGNMENTS')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'CONSIGNMENTS'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <Ship className={`w-4 h-4 ${activeTab === 'CONSIGNMENTS' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>Active Ocean Consignments ({consignments.length})</span>
-        </button>
+      {/* Navigation Sub-Tabs (2-Line Full Width Layout - No Scroll) */}
+      <div className="space-y-2 border-b border-[#DDE3DD] pb-3 text-xs font-['Montserrat']">
+        {/* Line 1: Cargo Operations, Container Planning & 3PL Hubs (4 Buttons) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab('CONSIGNMENTS')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'CONSIGNMENTS'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <Ship className={`w-4 h-4 shrink-0 ${activeTab === 'CONSIGNMENTS' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">Ocean Consignments ({consignments.length})</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('CONTAINER_PLANNER')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'CONTAINER_PLANNER'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <Boxes className={`w-4 h-4 ${activeTab === 'CONTAINER_PLANNER' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>Container Load &amp; CBM Planner</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-[9px] font-bold">
-            FCL / CBM
-          </span>
-        </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('CONTAINER_PLANNER')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'CONTAINER_PLANNER'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <Boxes className={`w-4 h-4 shrink-0 ${activeTab === 'CONTAINER_PLANNER' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">Container &amp; CBM Planner</span>
+            <span className="hidden lg:inline px-1.5 py-0.2 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-[9px] font-bold">
+              FCL
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('DISPATCH_MANIFEST')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'DISPATCH_MANIFEST'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <Truck className={`w-4 h-4 ${activeTab === 'DISPATCH_MANIFEST' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>3PL Daily Dispatch Manifest &amp; Tracking Loop</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 font-mono text-[9px] font-bold">
-            Part 8
-          </span>
-        </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('DISPATCH_MANIFEST')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'DISPATCH_MANIFEST'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <Truck className={`w-4 h-4 shrink-0 ${activeTab === 'DISPATCH_MANIFEST' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">3PL Dispatch Manifest</span>
+            <span className="hidden lg:inline px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 font-mono text-[9px] font-bold">
+              Loop
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('HUBS')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'HUBS'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <Boxes className={`w-4 h-4 ${activeTab === 'HUBS' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>Dual 3PL Hub Architecture (UK & Germany)</span>
-        </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('HUBS')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'HUBS'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <Boxes className={`w-4 h-4 shrink-0 ${activeTab === 'HUBS' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">Dual 3PL Hubs (UK &amp; EU)</span>
+          </button>
+        </div>
 
-        <button
-          onClick={() => setActiveTab('HYBRID_FBA')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'HYBRID_FBA'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <Barcode className={`w-4 h-4 ${activeTab === 'HYBRID_FBA' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>Amazon Hybrid FBA / FBM Allocation</span>
-        </button>
+        {/* Line 2: Channels, Compliance & Statutory Security (3 Buttons) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab('HYBRID_FBA')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'HYBRID_FBA'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <Barcode className={`w-4 h-4 shrink-0 ${activeTab === 'HYBRID_FBA' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">Amazon Hybrid FBA / FBM Allocation</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('DOCS')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'DOCS'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <FileText className={`w-4 h-4 ${activeTab === 'DOCS' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>Export Compliance & Form EXP Registry</span>
-        </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('DOCS')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'DOCS'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <FileText className={`w-4 h-4 shrink-0 ${activeTab === 'DOCS' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">Export Compliance &amp; Form EXP Registry</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('SECURITY')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all shrink-0 ${
-            activeTab === 'SECURITY'
-              ? 'bg-[#1F3A2E] text-white shadow-sm'
-              : 'text-[#4A5568] hover:text-[#1F3A2E] hover:bg-white'
-          }`}
-        >
-          <ShieldCheck className={`w-4 h-4 ${activeTab === 'SECURITY' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
-          <span>SOP-SEC-2026-V1 Cyber Security Governance</span>
-        </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('SECURITY')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'SECURITY'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-1 ring-[#1F3A2E]'
+                : 'bg-white border border-[#DDE3DD] text-[#4A5568] hover:text-[#1F3A2E] hover:border-[#1F3A2E]/40'
+            }`}
+          >
+            <ShieldCheck className={`w-4 h-4 shrink-0 ${activeTab === 'SECURITY' ? 'text-[#C8A96A]' : 'text-gray-500'}`} />
+            <span className="truncate">SOP-SEC-2026-V1 Cyber Security</span>
+          </button>
+        </div>
       </div>
 
       {/* TAB 0: CONTAINER LOAD & CBM PLANNER */}
