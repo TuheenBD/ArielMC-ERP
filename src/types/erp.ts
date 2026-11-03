@@ -281,7 +281,9 @@ export interface ProductItem {
     leadTimeDays: number;
     moq: number;
     sampleTurnaroundDays?: number;
-    sampleCostPolicy?: "FOC_BUYER_COURIER" | "DEV_FEE_DEDUCTIBLE" | "TOOLING_BUYER";
+    sampleCostPolicy?: "PAID_UPFRONT_CREDITED_ON_BULK_PO" | "DEV_FEE_DEDUCTIBLE" | "TOOLING_BUYER";
+    samplePriceUsd?: number;
+    samplePackingUsd?: number;
     rating: number;
   };
   sampleStatus: 'PROTO_REQUESTED' | 'DEVELOPMENT_PASSED' | 'BUYER_APPROVED' | 'IN_BULK_PRODUCTION';

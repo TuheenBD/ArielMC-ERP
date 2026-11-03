@@ -420,7 +420,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] text-[#6B7269] pt-1 border-t border-slate-100">
-                      <span>Sample: <strong>{prod.partnerFactory?.sampleTurnaroundDays || 7}d (Buyer DHL)</strong></span>
+                      <div>
+                        Sample: <strong className="text-[#1F3A2E]">${prod.partnerFactory?.samplePriceUsd || 35}</strong>
+                        <span className="text-[9px] text-[#14512C] font-semibold ml-1">
+                          (100% Credited on Bulk PO)
+                        </span>
+                      </div>
                       {prod.partnerFactory?.contactPhone && (
                         <a
                           href={`https://wa.me/${prod.partnerFactory.contactPhone.replace(/[^0-9]/g, '')}`}
@@ -532,7 +537,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                           {prod.partnerFactory?.factoryName || 'Factory'}
                         </div>
                         <div className="text-[10px] text-[#6B7269]">
-                          Sample: {prod.partnerFactory?.sampleTurnaroundDays || 7}d (Buyer DHL)
+                          Sample: ${prod.partnerFactory?.samplePriceUsd || 35} (100% Credited on Bulk PO)
                         </div>
                       </td>
                       <td className="py-3 px-4 text-right">
