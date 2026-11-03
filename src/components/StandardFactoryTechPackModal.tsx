@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { StandardFactoryTechPack, TechPackBomItem, TechPackMeasurementItem } from '@/types/techPack';
 import {
   X,
@@ -32,38 +33,74 @@ interface StandardFactoryTechPackModalProps {
   onUpdateTechPack?: (updated: StandardFactoryTechPack) => void;
 }
 
+const EMPTY_TECH_PACK: StandardFactoryTechPack = {
+  id: '',
+  documentRef: '',
+  companyHeader: 'ARIEL MARKETING & COMMUNICATIONS LTD — SAMPLING TECH-PACK',
+  productName: '',
+  styleCode: '',
+  targetDeviceOrFit: '',
+  originHub: 'Dhaka R&D Lab / Narayanganj Textile Cluster',
+  referencePictures: [],
+  billOfMaterials: [],
+  measurementSpecs: [],
+  constructionDetails: [],
+  brandingDirectives: {
+    interiorComplianceLabel: '',
+  },
+  qualityControlClearances: [],
+  version: 'v1.0',
+  issueDate: '',
+  preparedBy: 'ArielMC Technical Sourcing Team',
+  status: 'DRAFT',
+};
+
 export const StandardFactoryTechPackModal: React.FC<StandardFactoryTechPackModalProps> = ({
   isOpen,
   onClose,
   techPack,
   onUpdateTechPack,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
-
-  if (!isOpen || !techPack) return null;
-
   const [activeTab, setActiveTab] = useState<'DOCUMENT' | 'EDIT' | 'TRANSMIT'>('DOCUMENT');
-  const [editedPack, setEditedPack] = useState<StandardFactoryTechPack>({ ...techPack });
+  const [editedPack, setEditedPack] = useState<StandardFactoryTechPack>(techPack || EMPTY_TECH_PACK);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [isPhotoZoomed, setIsPhotoZoomed] = useState<boolean>(false);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [newPhotoUrl, setNewPhotoUrl] = useState<string>('');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (techPack) {
+      setEditedPack({ ...techPack });
+      setSelectedPhotoIndex(0);
+      setActiveTab('DOCUMENT');
+    }
+  }, [techPack]);
+
+  if (!isOpen || !mounted || !techPack) return null;
+
+  const pack = editedPack;
 
   const handlePrint = () => {
     window.print();
   };
 
   const handleSaveEdits = () => {
-    if (onUpdateTechPack) {
-      onUpdateTechPack(editedPack);
+    if (onUpdateTechPack && pack) {
+      onUpdateTechPack(pack);
     }
     setActiveTab('DOCUMENT');
   };
 
   const handleAddPhoto = () => {
-    if (!newPhotoUrl.trim()) return;
-    const updatedPictures = [...(editedPack.referencePictures || []), newPhotoUrl.trim()];
-    const updated = { ...editedPack, referencePictures: updatedPictures };
+    if (!newPhotoUrl.trim() || !pack) return;
+    const updatedPictures = [...(pack.referencePictures || []), newPhotoUrl.trim()];
+    const updated = { ...pack, referencePictures: updatedPictures };
     setEditedPack(updated);
     if (onUpdateTechPack) {
       onUpdateTechPack(updated);
@@ -72,6 +109,7 @@ export const StandardFactoryTechPackModal: React.FC<StandardFactoryTechPackModal
   };
 
   const handleAddBomRow = () => {
+    if (!pack) return;
     const newBom: TechPackBomItem = {
       id: `bom-${Date.now()}`,
       component: 'New Component',
@@ -80,12 +118,13 @@ export const StandardFactoryTechPackModal: React.FC<StandardFactoryTechPackModal
       colorwayOptions: 'Matched to shell',
     };
     setEditedPack({
-      ...editedPack,
-      billOfMaterials: [...editedPack.billOfMaterials, newBom],
+      ...pack,
+      billOfMaterials: [...pack.billOfMaterials, newBom],
     });
   };
 
   const handleAddMeasurementRow = () => {
+    if (!pack) return;
     const newMeasurement: TechPackMeasurementItem = {
       id: `ms-${Date.now()}`,
       measurementPoint: 'New Measurement Point',
@@ -95,8 +134,8 @@ export const StandardFactoryTechPackModal: React.FC<StandardFactoryTechPackModal
       productionPurpose: 'Production fit clearance',
     };
     setEditedPack({
-      ...editedPack,
-      measurementSpecs: [...editedPack.measurementSpecs, newMeasurement],
+      ...pack,
+      measurementSpecs: [...pack.measurementSpecs, newMeasurement],
     });
   };
 
@@ -144,9 +183,9 @@ Issued by: ArielMC Technical Sourcing Team (tuheen@arielmc.com / +8801819273458)
     notes: `Official factory technical specification sheet, BOM inventory, grading tolerance table, and construction guidelines shared for factory technical review, cost sign-off, and production acknowledgement.`,
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[#12231B]/75 backdrop-blur-md animate-in fade-in duration-200 print:p-0 print:bg-white print:static print:z-auto">
-      <div className="relative w-full max-w-5xl max-h-[94vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col print:border-none print:shadow-none print:max-h-none print:w-full print:rounded-none">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200 print:p-0 print:bg-white print:static print:z-auto">
+      <div className="relative w-full max-w-5xl max-h-[94vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col z-[100000] print:border-none print:shadow-none print:max-h-none print:w-full print:rounded-none">
         {/* Top-Right Absolute Close Button (Standard Window Position) */}
         <button
           type="button"
@@ -950,6 +989,7 @@ Issued by: ArielMC Technical Sourcing Team (tuheen@arielmc.com / +8801819273458)
         onClose={() => setIsShareModalOpen(false)}
         document={techPackDoc}
       />
-    </div>
+    </div>,
+    document.body
   );
 };
