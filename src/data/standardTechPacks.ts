@@ -204,10 +204,12 @@ export const TECH_PACK_BLM_1612: StandardFactoryTechPack = {
   targetDeviceOrFit: 'Up to 15.6" Laptop / 16" MacBook Pro',
   originHub: 'Dhaka / Narayanganj / Savar',
   referencePictures: [
+    '/images/products/bangla_eco/bloom/bloom-front.jpg',
     '/images/techpacks/blm-ref-photo.png',
     '/images/techpacks/TP-AMC-BLM-1612-p1.png'
   ],
   referencePictureCaptions: [
+    'Bloom Series Front Assembly: Full-Grain Leather & Embroidered Denim',
     'Deep Indigo Denim Body with Wildflower Embroidery & Cognac Harness Leather',
     'Official Factory Sampling Tech-Pack Document'
   ],

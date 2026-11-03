@@ -74,7 +74,21 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   useEffect(() => {
     fetchFactoryPortfolios().then((persisted) => {
       if (persisted && persisted.length > 0) {
-        setFactoryPortfolios(persisted);
+        // Merge with INITIAL_FACTORY_PORTFOLIOS so newly added factories (e.g. Bangla Eco) are never lost
+        const merged = [...INITIAL_FACTORY_PORTFOLIOS];
+        persisted.forEach((p) => {
+          const idx = merged.findIndex((m) => m.id === p.id || m.factoryCode === p.factoryCode);
+          if (idx >= 0) {
+            if ((!p.activeProducts || p.activeProducts.length === 0) && merged[idx].activeProducts && merged[idx].activeProducts.length > 0) {
+              merged[idx] = { ...p, activeProducts: merged[idx].activeProducts };
+            } else {
+              merged[idx] = p;
+            }
+          } else {
+            merged.push(p);
+          }
+        });
+        setFactoryPortfolios(merged);
       }
     });
   }, []);
@@ -96,21 +110,34 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   };
 
   const getPortfolioForFactory = (fac: SupplierFactory): FactorySupplierPortfolio => {
+    const initialMatch = INITIAL_FACTORY_PORTFOLIOS.find(
+      (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName?.toLowerCase() === fac.name?.toLowerCase()
+    );
     const found = factoryPortfolios.find(
-      (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName.toLowerCase() === fac.name.toLowerCase()
+      (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName?.toLowerCase() === fac.name?.toLowerCase()
     );
     if (found) {
+      const activeProducts = (found.activeProducts && found.activeProducts.length > 0)
+        ? found.activeProducts
+        : (initialMatch?.activeProducts || []);
+      const potentialProducts = (found.potentialProducts && found.potentialProducts.length > 0)
+        ? found.potentialProducts
+        : (initialMatch?.potentialProducts || []);
       return {
         ...found,
-        activeProducts: found.activeProducts || [],
-        potentialProducts: found.potentialProducts || [],
-        locationProfile: found.locationProfile || {
+        activeProducts,
+        potentialProducts,
+        locationProfile: found.locationProfile || initialMatch?.locationProfile || {
           factoryPlantAddress: fac.factoryAddress,
           headOfficeAddress: fac.factoryAddress,
           industrialCluster: fac.cluster,
-        totalFloorAreaSqFt: 45000,
+          totalFloorAreaSqFt: 45000,
         },
       };
+    }
+
+    if (initialMatch) {
+      return initialMatch;
     }
 
     return {
