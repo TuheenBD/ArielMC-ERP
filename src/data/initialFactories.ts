@@ -224,8 +224,8 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
     leadTimeDays: 14,
     minimumOrderQuantity: 300,
     paymentTerms: '30% Advance | 50% FRI Pass | 20% Delivery NOC',
-    crmStatus: 'A Grade Certified Supplier • Active Mixed-Media Denim & Leather Prototyping',
-    lastInteractionMemo: 'Meeting with Director Shahrier Nyeem. Onboarded Bangla Eco as certified A-Grade Supplier for handcrafted mixed-media bags: Bloom Series Laptop Tote, Blossom Embroidered Bag, Elora Black Twill Tote, and Iris Denim Shoulder Bag. Stamped Deed of Sourcing & Clause 3 incentive waiver verified.',
+    crmStatus: 'A Grade Certified Supplier • Active Leather & Mixed-Media Small Goods Prototyping',
+    lastInteractionMemo: 'Meeting with Director Shahrier Nyeem. Onboarded Bangla Eco as certified A-Grade Supplier for handcrafted bags and wallets: Bloom Series Laptop Tote, Blossom Embroidered Bag, Elora Black Twill Tote, Iris Denim Shoulder Bag, Knox Crazy Horse Leather Wallet, and Loko Crazy Horse Long Wallet. Stamped Deed of Sourcing & Clause 3 incentive waiver verified.',
     sourcingDeedVerified: true,
     clause3IncentiveWaiverSigned: true,
     savarCetpPlotNo: 'Plot 18, Tannery Zone, Savar & Leather Crafts Workshop, Hazaribagh',
@@ -234,7 +234,7 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
       branch: 'Tejgaon Industrial Area Branch, Dhaka',
       routingNumber: '060264192',
     },
-    associatedSkus: ['LD-BLM-16', 'LD-BLS-18', 'LD-ELR-20', 'LD-IRS-14'],
+    associatedSkus: ['LD-BLM-16', 'LD-BLS-18', 'LD-ELR-20', 'LD-IRS-14', 'LD-KNX-08', 'LD-LOK-12'],
   },
 
   // 2. JUTE SECTOR

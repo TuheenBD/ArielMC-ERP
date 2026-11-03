@@ -865,6 +865,297 @@ export const TECH_PACK_IRS_1401: StandardFactoryTechPack = {
 };
 
 // =============================================================
+// 2E. BANGLA ECO — KNOX FULL-GRAIN CRAZY HORSE LEATHER WALLET
+// =============================================================
+export const TECH_PACK_KNX_0801: StandardFactoryTechPack = {
+  id: 'tp-knx-0801',
+  documentRef: 'TP-AMC-KNX-0801',
+  companyHeader: 'ARIEL MARKETING & COMMUNICATIONS LTD — SAMPLING TECH-PACK',
+  productName: 'ArielMC Knox Full-Grain Crazy Horse Leather Wallet',
+  styleCode: 'KNX-0801',
+  targetDeviceOrFit: 'Everyday Bifold Wallet / 3 Cards, 2 Currency Slots, Hidden Pouch & Coins',
+  originHub: 'Dhaka / Hazaribagh & Savar Export Cluster',
+  referencePictures: [
+    '/images/products/bangla_eco/knox/1.jpg',
+    '/images/products/bangla_eco/knox/2.jpg',
+    '/images/products/bangla_eco/knox/3.jpg',
+    '/images/products/bangla_eco/knox/4.jpg',
+  ],
+  referencePictureCaptions: [
+    'Front Exterior: Pull-Up Crazy Horse Leather with Vintage Wax Patina',
+    'Open Bifold Interior: 3 Card Slots, Flap Coin Pocket & Dual Currency Divider',
+    'Detail Profile: Hand-Burnished Beeswax Sealed Edges & Bonded Thread Stitching',
+    'Hidden Pocket & Coin Compartment Clearance',
+  ],
+  billOfMaterials: [
+    {
+      id: 'bom-knx-1',
+      component: 'Exterior & Interior Shell',
+      materialAndConstruction: '1.6–1.8 mm Full-Grain Vegetable-Tanned Crazy Horse Cowhide',
+      specificationOrGrade: 'Savar LWG-Audited Tannery; rich oil/wax pull-up finish that self-heals light scratches',
+      colorwayOptions: 'Vintage Saddle Brown / Tobacco',
+    },
+    {
+      id: 'bom-knx-2',
+      component: 'Card Slots',
+      materialAndConstruction: '3 Precision Die-Cut Leather Card Slots',
+      specificationOrGrade: 'Skived to 0.6 mm edges with heat-creased rim lines',
+      colorwayOptions: 'Saddle Brown',
+    },
+    {
+      id: 'bom-knx-3',
+      component: 'Cash Dividers',
+      materialAndConstruction: 'Dual Full-Length Bill Compartments',
+      specificationOrGrade: 'Separates domestic and international currencies cleanly',
+      colorwayOptions: 'Saddle Brown with Raw Suede Backing',
+    },
+    {
+      id: 'bom-knx-4',
+      component: 'Coin Pocket & Snaps',
+      materialAndConstruction: 'Gusseted Leather Coin Pouch with Hidden Magnetic / Brass Snap',
+      specificationOrGrade: 'Solid antique brass snap fastener tested for 5,000 cycles',
+      colorwayOptions: 'Antique Brass Hardware',
+    },
+    {
+      id: 'bom-knx-5',
+      component: 'Hidden Compartment',
+      materialAndConstruction: 'Discreet Sub-Pocket behind card bank',
+      specificationOrGrade: 'Provides secure concealment for emergency cash or transit cards',
+      colorwayOptions: 'Matched to interior',
+    },
+    {
+      id: 'bom-knx-6',
+      component: 'Stitching Thread',
+      materialAndConstruction: 'Tex 70 Bonded Nylon Thread',
+      specificationOrGrade: 'High-tensile rot-proof waxed nylon with reinforced back-stitching',
+      colorwayOptions: 'Warm Golden Tan Contrast',
+    },
+  ],
+  measurementSpecs: [
+    {
+      id: 'ms-knx-1',
+      measurementPoint: 'Width (Closed Bifold)',
+      specInches: '4.5"',
+      specMetric: '11.4 cm',
+      tolerance: '±0.2 cm',
+      productionPurpose: 'Fits standard back and front pants pockets',
+    },
+    {
+      id: 'ms-knx-2',
+      measurementPoint: 'Height',
+      specInches: '3.4"',
+      specMetric: '8.6 cm',
+      tolerance: '±0.2 cm',
+      productionPurpose: 'Comfortable hand grip and vertical pocket clearance',
+    },
+    {
+      id: 'ms-knx-3',
+      measurementPoint: 'Width (Fully Opened)',
+      specInches: '8.8"',
+      specMetric: '22.4 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Full flat horizontal spread for paper currency insertion',
+    },
+    {
+      id: 'ms-knx-4',
+      measurementPoint: 'Thickness (Empty)',
+      specInches: '0.5"',
+      specMetric: '1.3 cm',
+      tolerance: '±0.1 cm',
+      productionPurpose: 'Slim minimalist everyday carry footprint',
+    },
+  ],
+  constructionDetails: [
+    'Skiving & Thickness Control: All interior pocket margins must be skived down to 0.6 mm before folding and stitching to avoid bulk accumulation at bifold fold lines.',
+    'Edge Burnishing Protocol: Raw leather edges are hand-beveled, burnished with natural organic beeswax, and heat-polished for smooth water-resistant finish.',
+    'Corner Stress Bar-Tacks: Card slot entry mouths and cash compartment divider joints must receive dual lock-stitch bar-tacks.',
+    'Gusseted Coin Chamber: The coin pouch features an accordion side gusset allowing quick coin selection without deforming the wallet exterior.',
+  ],
+  brandingDirectives: {
+    frontClaspDie: 'Blind deboss of ArielMC monogram on bottom right front corner.',
+    leatherTagOrClochette: 'FSC-certified kraft paper hangtag detailing Crazy Horse leather care and patina characteristics.',
+    interiorBrandPlate: 'Heat-embossed inside cash divider:\nArielMC × Bangla Eco\nGenuine Full-Grain Crazy Horse Leather\nHandcrafted in Dhaka, Bangladesh',
+    interiorComplianceLabel: 'Compliance stamp inside coin pocket: 100% Cowhide Leather • REACH Certified • Made in Bangladesh',
+    packagingDirectives: 'Packaged in rigid black gift box with gold foil stamping, protected by soft non-woven dust pouch.',
+  },
+  qualityControlClearances: [
+    {
+      id: 'qc-knx-1',
+      testName: 'Leather Pull-Up & Oil Saturation',
+      standardOrRequirement: 'ASTM D2099 flex and surface scratching check',
+      passCriteria: 'Light fingernail scratches rub out cleanly with finger friction; rich pull-up hue transformation.',
+    },
+    {
+      id: 'qc-knx-2',
+      testName: 'Card Slot Extraction Fatigue',
+      standardOrRequirement: '1,000 card insertion/extraction cycles per slot',
+      passCriteria: 'Maintains snug card retention without stitch loosening or pocket tearing.',
+    },
+    {
+      id: 'qc-knx-3',
+      testName: 'Chemical & REACH Clearance',
+      standardOrRequirement: 'REACH Annex XVII compliance',
+      passCriteria: 'Chromium VI strictly non-detectable / < 3 ppm, zero toxic DMFu.',
+    },
+  ],
+  version: 'v1.0 - Factory Master',
+  issueDate: '2026-11-03',
+  preparedBy: 'ArielMC Technical Sourcing Team',
+  factoryName: 'Bangla Eco (FAC-BE-01)',
+  factoryLocation: 'East Nakhalpara, Tejgaon, Dhaka-1215 / Factory: Hazaribagh & Savar, Dhaka',
+  status: 'APPROVED_FOR_BULK',
+};
+
+// =============================================================
+// 2F. BANGLA ECO — LOKO FULL-GRAIN CRAZY HORSE LEATHER LONG WALLET
+// =============================================================
+export const TECH_PACK_LOK_1201: StandardFactoryTechPack = {
+  id: 'tp-lok-1201',
+  documentRef: 'TP-AMC-LOK-1201',
+  companyHeader: 'ARIEL MARKETING & COMMUNICATIONS LTD — SAMPLING TECH-PACK',
+  productName: 'ArielMC Loko Full-Grain Crazy Horse Leather Long Wallet',
+  styleCode: 'LOK-1201',
+  targetDeviceOrFit: 'Long Continental Wallet & Smartphone Clutch / 7 Cards, Phone & Coins',
+  originHub: 'Dhaka / Hazaribagh & Savar Export Cluster',
+  referencePictures: [
+    '/images/products/bangla_eco/loko/1.jpg',
+    '/images/products/bangla_eco/loko/2.jpg',
+    '/images/products/bangla_eco/loko/3.jpg',
+    '/images/products/bangla_eco/loko/4.jpg',
+  ],
+  referencePictureCaptions: [
+    'Front View: Sleek Long Continental Profile with 4-Point Magnetic Closure',
+    'Interior Architecture: 7 Card Slots, Smartphone Chamber, Zipped Pocket & Cash Dividers',
+    'Zero-Fabric Construction: 100% Pure Genuine Crazy Horse Leather Throughout',
+    'Concealed Magnetic Closure Alignment & Smooth Chain Zipper Pull',
+  ],
+  billOfMaterials: [
+    {
+      id: 'bom-lok-1',
+      component: 'Full Architecture Shell & Interior',
+      materialAndConstruction: '1.8–2.0 mm 100% Genuine Full-Grain Crazy Horse Cowhide',
+      specificationOrGrade: 'LWG Gold Savar Tannery; premium pull-up leather that develops rich vintage patina',
+      colorwayOptions: 'Deep Cognac Brown / Caramel',
+    },
+    {
+      id: 'bom-lok-2',
+      component: 'Internal Lining Architecture',
+      materialAndConstruction: 'ZERO FABRIC: Crafted entirely from genuine leather with no cloth lining',
+      specificationOrGrade: 'Natural velvety flesh-side leather backing eliminates tearing and synthetic wear',
+      colorwayOptions: 'Natural Cognac Leather Interior',
+    },
+    {
+      id: 'bom-lok-3',
+      component: 'Card Organization',
+      materialAndConstruction: '7 Dedicated Staggered Card Slots',
+      specificationOrGrade: 'Precision die-cut with burnished and wax-sealed edges',
+      colorwayOptions: 'Cognac Leather',
+    },
+    {
+      id: 'bom-lok-4',
+      component: 'Smartphone Chamber',
+      materialAndConstruction: 'Dedicated Internal Phone Compartment',
+      specificationOrGrade: 'Accommodates up to 6.8" smartphones (iPhone 16 Pro Max, Galaxy S25 Ultra)',
+      colorwayOptions: 'All-Leather Pocket',
+    },
+    {
+      id: 'bom-lok-5',
+      component: 'Zipped Chain Coin Pocket',
+      materialAndConstruction: 'Full-Length Security Coin & Key Compartment',
+      specificationOrGrade: '#4 Smooth Metal Chain Zipper with custom leather slider pull',
+      colorwayOptions: 'Antique Brass / Gold Finish',
+    },
+    {
+      id: 'bom-lok-6',
+      component: 'Cash & Document Dividers',
+      materialAndConstruction: '2 Full-Length Gusseted Currency / Passport Sections',
+      specificationOrGrade: 'Carries unfolding bills, receipts, checks, and travel tickets',
+      colorwayOptions: 'Cognac Leather',
+    },
+    {
+      id: 'bom-lok-7',
+      component: 'Magnetic Closure System',
+      materialAndConstruction: '4-Point High-Strength Concealed Neodymium Magnets',
+      specificationOrGrade: 'Embedded invisibly between leather layers for a clean snap lock',
+      colorwayOptions: 'Concealed (Invisible)',
+    },
+  ],
+  measurementSpecs: [
+    {
+      id: 'ms-lok-1',
+      measurementPoint: 'Height',
+      specInches: '7.5"',
+      specMetric: '19.0 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Comfortably clears flat unfolded bills, checkbooks, and passports',
+    },
+    {
+      id: 'ms-lok-2',
+      measurementPoint: 'Width (Closed)',
+      specInches: '3.75"',
+      specMetric: '9.5 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Ergonomic clutch hold in palm or handbag insertion',
+    },
+    {
+      id: 'ms-lok-3',
+      measurementPoint: 'Depth / Thickness (Closed)',
+      specInches: '0.75"',
+      specMetric: '1.9 cm',
+      tolerance: '±0.2 cm',
+      productionPurpose: 'Slim structured silhouette without bulk',
+    },
+    {
+      id: 'ms-lok-4',
+      measurementPoint: 'Width (Fully Opened)',
+      specInches: '7.7"',
+      specMetric: '19.5 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Bi-fold spread for clear access to all 7 cards and phone chamber',
+    },
+  ],
+  constructionDetails: [
+    'Zero-Fabric Pure Leather Integrity: No synthetic polyester or nylon lining is permitted. All interior dividers and card slots are crafted from skived 0.7–0.8 mm genuine leather to ensure lifetime durability.',
+    '4-Point Magnetic Calibration: Four ultra-strong neodymium disc magnets are sealed inside precision skived leather pockets before perimeter stitching, ensuring consistent snap closure even with a loaded phone.',
+    'Full-Length Zipped Vault: Central coin pocket features a metal chain zipper recessed to prevent zipper teeth from scratching cards or smartphone displays.',
+    'Edge Sealing & Burnishing: 100% hand-burnished edges sealed with natural beeswax and edge-ironing technique for enduring luxury.',
+  ],
+  brandingDirectives: {
+    frontClaspDie: 'Minimalist blind-debossed ArielMC insignia on bottom front right.',
+    leatherTagOrClochette: 'Artisan leather story card explaining Crazy Horse pull-up aging and zero-fabric construction.',
+    interiorBrandPlate: 'Interior leather heat deboss:\nArielMC × Bangla Eco\nFull-Grain Crazy Horse Leather • Zero-Fabric Construction\nHandcrafted in Dhaka, Bangladesh',
+    interiorComplianceLabel: 'Discreet stamp inside cash compartment: 100% Genuine Leather • LWG Audited • Made in Bangladesh',
+    packagingDirectives: 'Packaged in luxury presentation slide-box with debossed foil logo and branded tissue paper wrap.',
+  },
+  qualityControlClearances: [
+    {
+      id: 'qc-lok-1',
+      testName: 'Magnetic Snap Retention & Cycle Test',
+      standardOrRequirement: '5,000 opening and closing cycles loaded with phone and 7 cards',
+      passCriteria: 'Zero magnet displacement; closure remains aligned and securely engaged.',
+    },
+    {
+      id: 'qc-lok-2',
+      testName: 'Crazy Horse Patina & Abrasion Resistance',
+      standardOrRequirement: 'ASTM D2099 flex test and rubbing fastness',
+      passCriteria: 'Pull-up effect verified; scratches heal smoothly with thumb rubbing.',
+    },
+    {
+      id: 'qc-lok-3',
+      testName: 'Zipper Tensile & Cross-Seam Strength',
+      standardOrRequirement: 'BS 3084 zipper test & seam tensile load',
+      passCriteria: 'Withstand 200N lateral pull without tooth slippage or stitch burst.',
+    },
+  ],
+  version: 'v1.0 - Factory Master',
+  issueDate: '2026-11-03',
+  preparedBy: 'ArielMC Technical Sourcing Team',
+  factoryName: 'Bangla Eco (FAC-BE-01)',
+  factoryLocation: 'East Nakhalpara, Tejgaon, Dhaka-1215 / Factory: Hazaribagh & Savar, Dhaka',
+  status: 'APPROVED_FOR_BULK',
+};
+
+// =============================================================
 // STANDARD TECH PACK REGISTRY LOOKUP MAP
 // =============================================================
 export const STANDARD_TECH_PACKS_MAP: Record<string, StandardFactoryTechPack> = {
@@ -873,14 +1164,20 @@ export const STANDARD_TECH_PACKS_MAP: Record<string, StandardFactoryTechPack> = 
   'TP-AMC-BLS-1801': TECH_PACK_BLS_1801,
   'TP-AMC-ELR-2001': TECH_PACK_ELR_2001,
   'TP-AMC-IRS-1401': TECH_PACK_IRS_1401,
+  'TP-AMC-KNX-0801': TECH_PACK_KNX_0801,
+  'TP-AMC-LOK-1201': TECH_PACK_LOK_1201,
   'JD-EDC-17': TECH_PACK_JCT_1612,
   'LD-BLM-16': TECH_PACK_BLM_1612,
   'LD-BLS-18': TECH_PACK_BLS_1801,
   'LD-ELR-20': TECH_PACK_ELR_2001,
   'LD-IRS-14': TECH_PACK_IRS_1401,
+  'LD-KNX-08': TECH_PACK_KNX_0801,
+  'LD-LOK-12': TECH_PACK_LOK_1201,
   'BLS-1801': TECH_PACK_BLS_1801,
   'ELR-2001': TECH_PACK_ELR_2001,
   'IRS-1401': TECH_PACK_IRS_1401,
+  'KNX-0801': TECH_PACK_KNX_0801,
+  'LOK-1201': TECH_PACK_LOK_1201,
   'BLM': TECH_PACK_BLM_1612,
 };
 
@@ -1458,6 +1755,10 @@ export function buildStandardFactoryTechPack(input: BuildTechPackInput): Standar
     pictures.push('/images/products/bangla_eco/iris/1.jpg');
   } else if (modelLower.includes('bloom') || styleLower.includes('blm')) {
     pictures.push('/images/techpacks/blm-ref-photo.png');
+  } else if (modelLower.includes('knox') || styleLower.includes('knx')) {
+    pictures.push('/images/products/bangla_eco/knox/1.jpg');
+  } else if (modelLower.includes('loko') || styleLower.includes('lok')) {
+    pictures.push('/images/products/bangla_eco/loko/1.jpg');
   } else if (modelLower.includes('jct') || styleLower.includes('jct') || (sector === 'JUTE' && modelLower.includes('commuter'))) {
     pictures.push('/images/techpacks/jct-ref-photo.png');
   } else {
