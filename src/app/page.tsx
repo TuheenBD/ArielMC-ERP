@@ -137,14 +137,10 @@ export default function Home() {
   }
 
   const handleSelectTab = (tab: ActiveTab) => {
-    if (tab === 'BUYERS') {
-      setActiveTab('SALES');
+    if (tab === 'BUYERS' || tab === 'SALES') {
+      setActiveTab('BUYERS');
       setSalesInitialSubTab('BUYERS');
       setSalesActiveSubTab('BUYERS');
-    } else if (tab === 'SALES') {
-      setActiveTab('SALES');
-      setSalesInitialSubTab('OVERVIEW');
-      setSalesActiveSubTab('OVERVIEW');
       setSalesInitialBuyerCompany(undefined);
     } else {
       setActiveTab(tab);
@@ -602,7 +598,7 @@ export default function Home() {
     >
       {/* Sidebar Navigation */}
       <Sidebar
-        activeTab={(activeTab === 'SALES' && salesActiveSubTab === 'BUYERS') || (activeTab as any) === 'BUYERS' ? ('BUYERS' as any) : activeTab}
+        activeTab={activeTab === 'SALES' ? 'BUYERS' : activeTab}
         onSelectTab={handleSelectTab}
         activeEntity={activeEntity}
         companies={companies}

@@ -216,13 +216,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       group: 'Sales & Commercial Command',
       items: [
         {
-          id: 'SALES' as ActiveTab,
-          label: 'Sales Management Hub',
-          icon: TrendingUp,
-          badge: 'Core Engine',
-          phase: 'Live Hub',
-        },
-        {
           id: 'ORDERS' as ActiveTab,
           label: 'B2B Sales Orders (SO)',
           icon: Repeat,
