@@ -395,9 +395,493 @@ export const TECH_PACK_BLM_1612: StandardFactoryTechPack = {
   version: 'v1.0 - Factory Master',
   issueDate: '2026-10-16',
   preparedBy: 'ArielMC Technical Sourcing Team',
-  factoryName: 'Apex Artisan Leatherworks Ltd',
-  factoryLocation: 'Hemayetpur, Savar, Dhaka',
+  factoryName: 'Bangla Eco (FAC-BE-01)',
+  factoryLocation: 'East Nakhalpara, Tejgaon, Dhaka-1215 / Factory: Hazaribagh & Savar, Dhaka',
   status: 'APPROVED_FOR_BULK',
+};
+
+// =============================================================
+// 2B. BANGLA ECO — BLOSSOM FLORAL EMBROIDERED DENIM & LEATHER BAG
+// =============================================================
+export const TECH_PACK_BLS_1801: StandardFactoryTechPack = {
+  id: 'tp-bls-1801',
+  documentRef: 'TP-AMC-BLS-1801',
+  companyHeader: 'ARIEL MARKETING & COMMUNICATIONS LTD — SAMPLING TECH-PACK',
+  productName: 'ArielMC Blossom Floral Embroidered Denim & Leather Bag',
+  styleCode: 'BLS-1801',
+  targetDeviceOrFit: 'Everyday Shoulder Bag / 10" Tablet / Cosmetics & Essentials',
+  originHub: 'Dhaka / Hazaribagh & Savar Export Cluster',
+  referencePictures: [
+    '/images/products/bangla_eco/blossom/1-11.png',
+    '/images/products/bangla_eco/blossom/1-12.jpg',
+    '/images/products/bangla_eco/blossom/1-13.jpg',
+    '/images/products/bangla_eco/blossom/1-14.jpg',
+  ],
+  referencePictureCaptions: [
+    'Front Isometric Studio View: Deep Indigo Denim with Botanical Floral Embroidery',
+    'Hardware Detail: Imported Gold-Tone Zipper Pulls & Chain Accents',
+    'Back View: Secure Exterior Metal Zipper Compartment',
+    'Interior Organization: Brown Fabric Lining with 1 Zip & 1 Slip Pocket',
+  ],
+  billOfMaterials: [
+    {
+      id: 'bom-bls-1',
+      component: 'Shell Body',
+      materialAndConstruction: '12–14 oz Heavyweight Cotton Denim',
+      specificationOrGrade: 'Pre-shrunk, enzyme-washed deep indigo denim with anti-bleed wash',
+      colorwayOptions: 'Deep Indigo Blue',
+    },
+    {
+      id: 'bom-bls-2',
+      component: 'Leather Trim & Base',
+      materialAndConstruction: '1.4–1.6 mm 100% Genuine Full-Grain Cowhide Leather',
+      specificationOrGrade: 'LWG Audited; REACH Annex XVII certified tannery origin',
+      colorwayOptions: 'Classic Cognac Tan',
+    },
+    {
+      id: 'bom-bls-3',
+      component: 'Floral Embroidery',
+      materialAndConstruction: 'Multi-head precision botanical floral embroidery',
+      specificationOrGrade: 'High-tensile polyester embroidery thread with heat-fused 80 GSM stabilizer backing',
+      colorwayOptions: 'Multi-color Botanical (Ivory, Rust, Mustard, Sage)',
+    },
+    {
+      id: 'bom-bls-4',
+      component: 'Carry System',
+      materialAndConstruction: 'Dual Carry: Short Top Handle + Detachable Adjustable Leather Strap',
+      specificationOrGrade: 'Full-grain cowhide with burnished, hand-painted sealed edges',
+      colorwayOptions: 'Cognac Tan with Antique Gold Hardware',
+    },
+    {
+      id: 'bom-bls-5',
+      component: 'Zippers & Hardware',
+      materialAndConstruction: 'Imported Heavy-Duty Metallic Gold Hardware & Chain Zippers',
+      specificationOrGrade: 'Corrosion-resistant anti-tarnish dip; smooth glide teeth',
+      colorwayOptions: 'Polished Gold Tone',
+    },
+    {
+      id: 'bom-bls-6',
+      component: 'Interior Lining',
+      materialAndConstruction: 'Heavyweight Dyed Cotton-Twill Fabric',
+      specificationOrGrade: 'Abrasion-resistant 210T lining with bound interior seams',
+      colorwayOptions: 'Warm Earth Brown',
+    },
+    {
+      id: 'bom-bls-7',
+      component: 'Exterior Pocket',
+      materialAndConstruction: 'Full-width rear zipped quick-access compartment',
+      specificationOrGrade: 'Smooth gold-tone metal zipper with leather pull tab',
+      colorwayOptions: 'Matched to denim body',
+    },
+  ],
+  measurementSpecs: [
+    {
+      id: 'ms-bls-1',
+      measurementPoint: 'Body Width (Top)',
+      specInches: '9.5"',
+      specMetric: '24.1 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Comfortable hand and arm clearance',
+    },
+    {
+      id: 'ms-bls-2',
+      measurementPoint: 'Body Height',
+      specInches: '10.0"',
+      specMetric: '25.4 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Accommodates 10" tablet, journal, and daily essentials',
+    },
+    {
+      id: 'ms-bls-3',
+      measurementPoint: 'Base Gusset Depth',
+      specInches: '5.0"',
+      specMetric: '12.7 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Firm base structure allowing bag to stand freely',
+    },
+    {
+      id: 'ms-bls-4',
+      measurementPoint: 'Short Handle Drop',
+      specInches: '4.5"',
+      specMetric: '11.5 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Ergonomic hand-carry grip',
+    },
+    {
+      id: 'ms-bls-5',
+      measurementPoint: 'Adjustable Shoulder Strap',
+      specInches: '38.0" – 48.0"',
+      specMetric: '96.5 cm – 122.0 cm',
+      tolerance: '±1.0 cm',
+      productionPurpose: 'Customizable crossbody or shoulder fit with gold roller buckle',
+    },
+  ],
+  constructionDetails: [
+    'Embroidery Stabilizer Fusion: 80 GSM tear-away non-woven backing must be heat-fused behind the denim panel prior to multi-head embroidery execution to eliminate fabric puckering or wavy distortion.',
+    'Exterior Rear Pocket: The back wall features a horizontal metal zipper with leather frame welt, providing swift and scratch-free phone storage.',
+    'Dual Carry Assembly: Short rolled leather top handle is anchored with reinforced bar-tacks; D-rings for the long strap are mounted with dual-riveted leather loops.',
+    'Lining Construction: Brown cotton-twill lining is constructed with 1 zippered pocket on the back wall and 1 slip phone pocket on the front wall, finished with clean bias binding.',
+  ],
+  brandingDirectives: {
+    frontClaspDie: 'Clean brass deboss or woven artisan tag at side seam.',
+    leatherTagOrClochette: 'Detachable round leather charm debossed with ArielMC insignia.',
+    interiorBrandPlate: 'Genuine Leather patch stitched onto interior wall:\nArielMC × Bangla Eco\nHandcrafted in Bangladesh • Savar & Hazaribagh\nCustom Denim & Full-Grain Leather',
+    interiorComplianceLabel: 'Textile compliance label:\nShell: 65% Cotton Denim, 35% Genuine Cowhide Leather.\nLining: 100% Cotton.\nMade in Bangladesh.',
+    packagingDirectives: 'Each bag stuffed with acid-free tissue paper, wrapped in protective non-woven dustbag, and packed 24 pcs per 5-ply corrugated export master carton.',
+  },
+  qualityControlClearances: [
+    {
+      id: 'qc-bls-1',
+      testName: 'Indigo Crocking & Color Fastness',
+      standardOrRequirement: 'ISO 105-X12 testing',
+      passCriteria: 'Dry crocking score >= 4.0; Wet crocking score >= 3.5. Zero dye transfer onto light fabrics.',
+    },
+    {
+      id: 'qc-bls-2',
+      testName: 'Handle Pull & Seam Dynamic Load',
+      standardOrRequirement: 'Loaded with 6.0 kg dead weight',
+      passCriteria: '10 kg tensile pull test without stitch breakdown or rivet deformation.',
+    },
+    {
+      id: 'qc-bls-3',
+      testName: 'REACH & Chemical Clearance',
+      standardOrRequirement: 'REACH Annex XVII compliance',
+      passCriteria: 'Zero banned Azo dyes, Chromium VI < 3.0 mg/kg, zero toxic DMFu.',
+    },
+  ],
+  version: 'v1.0 - Factory Master',
+  issueDate: '2026-11-03',
+  preparedBy: 'ArielMC Technical Sourcing Team',
+  factoryName: 'Bangla Eco (FAC-BE-01)',
+  factoryLocation: 'East Nakhalpara, Tejgaon, Dhaka-1215 / Factory: Hazaribagh & Savar, Dhaka',
+  status: 'APPROVED_FOR_BULK',
+};
+
+// =============================================================
+// 2C. BANGLA ECO — ELORA FLORAL EMBROIDERED TWILL & LEATHER TOTE
+// =============================================================
+export const TECH_PACK_ELR_2001: StandardFactoryTechPack = {
+  id: 'tp-elr-2001',
+  documentRef: 'TP-AMC-ELR-2001',
+  companyHeader: 'ARIEL MARKETING & COMMUNICATIONS LTD — SAMPLING TECH-PACK',
+  productName: 'ArielMC Elora Floral Embroidered Twill & Leather Tote Bag',
+  styleCode: 'ELR-2001',
+  targetDeviceOrFit: 'Up to 15.6" Laptop / 16" MacBook Pro / Daily Executive Carry',
+  originHub: 'Dhaka / Hazaribagh & Savar Export Cluster',
+  referencePictures: [
+    '/images/products/bangla_eco/elora/1.jpg',
+    '/images/products/bangla_eco/elora/2.jpg',
+    '/images/products/bangla_eco/elora/3.jpg',
+    '/images/products/bangla_eco/elora/4.jpg',
+  ],
+  referencePictureCaptions: [
+    'Front View: Premium Black Twill with Botanical Floral Embroidery & Leather Accents',
+    'Interior Architecture: Generous Capacity for Laptop, Bottle, Diary & Essentials',
+    'Side Profile: Tapered Structure with Reinforced Leather Base Gusset',
+    'Hardware & Zipper Detail: Solid Gold-Tone Finish & Smooth Metal Sliders',
+  ],
+  billOfMaterials: [
+    {
+      id: 'bom-elr-1',
+      component: 'Shell Fabric',
+      materialAndConstruction: 'Premium Heavyweight 16 oz Black Twill Fabric',
+      specificationOrGrade: 'High-density weave with water-repellent and stain-resistant finish',
+      colorwayOptions: 'Onyx Black',
+    },
+    {
+      id: 'bom-elr-2',
+      component: 'Leather Trim & Straps',
+      materialAndConstruction: '1.6–1.8 mm Full-Grain Vegetable-Tanned Cowhide',
+      specificationOrGrade: 'LWG Gold Audited Savar Tannery; supple hand feel with high tensile strength',
+      colorwayOptions: 'Natural Saddle Brown / Cognac',
+    },
+    {
+      id: 'bom-elr-3',
+      component: 'Botanical Embroidery',
+      materialAndConstruction: 'High-density multi-colored botanical floral pattern',
+      specificationOrGrade: 'Tajima 12-color embroidery system with high-luster poly threads',
+      colorwayOptions: 'Multi-color Floral (Rose, Cream, Olive, Gold)',
+    },
+    {
+      id: 'bom-elr-4',
+      component: 'Shoulder Handles',
+      materialAndConstruction: 'Dual Flat Leather Shoulder Handles with Reinforced Base Box-Stitching',
+      specificationOrGrade: 'Folded edge construction with bonded nylon Tex 70 stitching',
+      colorwayOptions: 'Saddle Brown',
+    },
+    {
+      id: 'bom-elr-5',
+      component: 'Main Zipper Closure',
+      materialAndConstruction: '#5 Heavy-Duty Metal Zipper with Extended End Tabs',
+      specificationOrGrade: 'Gold-tone alloy slider with embossed leather puller',
+      colorwayOptions: 'Polished Gold',
+    },
+    {
+      id: 'bom-elr-6',
+      component: 'Internal Lining',
+      materialAndConstruction: 'Durable 240 GSM Cotton Canvas / Microfiber Blend',
+      specificationOrGrade: 'Tear-resistant, wipeable with reinforced seams',
+      colorwayOptions: 'Warm Biscuit Tan',
+    },
+    {
+      id: 'bom-elr-7',
+      component: 'Pockets & Organizers',
+      materialAndConstruction: 'Zippered Rear Pocket + Padded Laptop Sleeve + 2 Slip Organizers',
+      specificationOrGrade: 'Internal padded sleeve with elastic Velcro retainer',
+      colorwayOptions: 'Tan with Leather Trim Accents',
+    },
+  ],
+  measurementSpecs: [
+    {
+      id: 'ms-elr-1',
+      measurementPoint: 'Body Width (Top)',
+      specInches: '18.0"',
+      specMetric: '45.7 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Generous opening for 16" laptop, folders, and water bottles',
+    },
+    {
+      id: 'ms-elr-2',
+      measurementPoint: 'Body Height',
+      specInches: '12.0"',
+      specMetric: '30.5 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Vertical depth accommodating legal portfolios and tech gear',
+    },
+    {
+      id: 'ms-elr-3',
+      measurementPoint: 'Base Depth',
+      specInches: '5.5"',
+      specMetric: '14.0 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Wide stable base allowing the tote to stand upright',
+    },
+    {
+      id: 'ms-elr-4',
+      measurementPoint: 'Shoulder Strap Drop',
+      specInches: '10.5"',
+      specMetric: '26.7 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Comfortable over-shoulder clearance over jackets and winter coats',
+    },
+    {
+      id: 'ms-elr-5',
+      measurementPoint: 'External Back Pocket Width',
+      specInches: '8.5"',
+      specMetric: '21.6 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Rapid storage for passport, smartphone, and boarding passes',
+    },
+  ],
+  constructionDetails: [
+    'Laptop Compartment Suspension: Internal padded laptop compartment is suspended 2.0 cm above the base board to protect laptops from direct vertical drop shocks.',
+    'Bottom Panel Reinforcement: Base is reinforced with a triple-layer core: full-grain leather outer + 1.5 mm Texon structural board + interior canvas, fitted with 4 protective antique gold metal feet.',
+    'Handle Load Anchoring: Shoulder straps are anchored with reinforced box-X cross-stitching through twill shell, leather reinforcement patches, and inner webbing backer.',
+    'Zippered Top Security: Top zipper closure is recessed 1.5 cm below the rim to ensure clean aesthetic lines and protection from rain penetration.',
+  ],
+  brandingDirectives: {
+    frontClaspDie: 'Artisan leather emblem centered below front leather trim band.',
+    leatherTagOrClochette: 'Detachable 55 mm leather clochette with debossed ArielMC logo.',
+    interiorBrandPlate: 'Interior embossed leather certificate patch:\nArielMC × Bangla Eco\nCrafted in Dhaka, Bangladesh • Export Grade A\nPremium Heavy Twill & Full-Grain Leather',
+    interiorComplianceLabel: 'Official compliance label:\nShell: 60% Cotton Twill, 40% Full-Grain Cowhide Leather.\nLining: 100% Cotton.\nMade in Bangladesh.',
+    packagingDirectives: 'Packaged in breathable branded cotton dustbag, individual polybag with warning label, 18 pcs per 5-ply export carton.',
+  },
+  qualityControlClearances: [
+    {
+      id: 'qc-elr-1',
+      testName: 'Dynamic Load Capacity Test',
+      standardOrRequirement: 'Completed tote loaded with 10.0 kg weight',
+      passCriteria: '1,000 dynamic lift cycles without stitch failure or handle tear.',
+    },
+    {
+      id: 'qc-elr-2',
+      testName: 'Twill Rubbing & Abrasion Resistance',
+      standardOrRequirement: 'Martindale Abrasion Test (ASTM D4966)',
+      passCriteria: 'Exceeds 25,000 cycles without yarn breakage or surface pilling.',
+    },
+    {
+      id: 'qc-elr-3',
+      testName: 'Chemical & Environmental Safety',
+      standardOrRequirement: 'REACH Annex XVII + BSCI Grade A',
+      passCriteria: 'Non-detectable Azo dyes, Chromium VI < 3 ppm, zero banned plasticizers.',
+    },
+  ],
+  version: 'v1.0 - Factory Master',
+  issueDate: '2026-11-03',
+  preparedBy: 'ArielMC Technical Sourcing Team',
+  factoryName: 'Bangla Eco (FAC-BE-01)',
+  factoryLocation: 'East Nakhalpara, Tejgaon, Dhaka-1215 / Factory: Hazaribagh & Savar, Dhaka',
+  status: 'APPROVED_FOR_BULK',
+};
+
+// =============================================================
+// 2D. BANGLA ECO — IRIS DENIM & LEATHER SHOULDER BAG
+// =============================================================
+export const TECH_PACK_IRS_1401: StandardFactoryTechPack = {
+  id: 'tp-irs-1401',
+  documentRef: 'TP-AMC-IRS-1401',
+  companyHeader: 'ARIEL MARKETING & COMMUNICATIONS LTD — SAMPLING TECH-PACK',
+  productName: 'ArielMC Iris Denim & Leather Shoulder Bag with Crochet Charm',
+  styleCode: 'IRS-1401',
+  targetDeviceOrFit: 'Compact Shoulder Bag / Smartphone, Cardholder, Keys & Cosmetics',
+  originHub: 'Dhaka / Hazaribagh & Savar Export Cluster',
+  referencePictures: [
+    '/images/products/bangla_eco/iris/1.jpg',
+    '/images/products/bangla_eco/iris/2.jpg',
+    '/images/products/bangla_eco/iris/3.jpeg',
+    '/images/products/bangla_eco/iris/4.jpeg',
+  ],
+  referencePictureCaptions: [
+    'Front Perspective: Washed Blue Denim with Genuine Leather Piping & Artisan Crochet Charm',
+    'Hardware & Strap Detail: Custom-Colored Metal Chain & Polished Gold Hardware',
+    'Interior Organization: Brown Fabric Lining with 1 Chain Compartment & 1 Slip Pocket',
+    'Side Architecture: Ergonomic Under-Arm Silhouette with Firm Leather Trim',
+  ],
+  billOfMaterials: [
+    {
+      id: 'bom-irs-1',
+      component: 'Shell Body',
+      materialAndConstruction: '11–12 oz Soft-Washed Sky Blue Cotton Denim',
+      specificationOrGrade: 'Enzyme-washed with gentle marble fade and anti-fray selvedge',
+      colorwayOptions: 'Sky Blue Wash Denim',
+    },
+    {
+      id: 'bom-irs-2',
+      component: 'Leather Trim & Handle',
+      materialAndConstruction: '1.2–1.4 mm Supple Full-Grain Cowhide',
+      specificationOrGrade: 'LWG Audited Savar Tannery; hand-burnished edges',
+      colorwayOptions: 'Rich Cognac Tan',
+    },
+    {
+      id: 'bom-irs-3',
+      component: 'Artisan Crochet Charm',
+      materialAndConstruction: '100% Hand-Crocheted Botanical Flower Charm',
+      specificationOrGrade: 'Organic combed cotton yarn with gold-tone lobster clip',
+      colorwayOptions: 'Pastel Floral Accent (Peach, Cream, Mint)',
+    },
+    {
+      id: 'bom-irs-4',
+      component: 'Chain & Hardware',
+      materialAndConstruction: 'Custom-Colored Metallic Chain + Polished Gold Hardware',
+      specificationOrGrade: 'Multi-link chain with scratch-resistant electroplating',
+      colorwayOptions: 'Polished Gold & Matched Enamel Links',
+    },
+    {
+      id: 'bom-irs-5',
+      component: 'Dual Shoulder Straps',
+      materialAndConstruction: 'Short Denim Top Handle + Removable Adjustable Leather Shoulder Strap',
+      specificationOrGrade: 'Reinforced nylon core in strap for anti-stretch longevity',
+      colorwayOptions: 'Denim & Cognac Leather',
+    },
+    {
+      id: 'bom-irs-6',
+      component: 'Internal Lining',
+      materialAndConstruction: 'Smooth Brown Poly-Cotton Lining',
+      specificationOrGrade: '1 Secure zippered chain compartment + 1 slip pocket for cards/keys',
+      colorwayOptions: 'Cocoa Brown',
+    },
+  ],
+  measurementSpecs: [
+    {
+      id: 'ms-irs-1',
+      measurementPoint: 'Body Width',
+      specInches: '10.5"',
+      specMetric: '26.7 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Fits iPhone Pro Max, travel wallet, cosmetics compact',
+    },
+    {
+      id: 'ms-irs-2',
+      measurementPoint: 'Body Height',
+      specInches: '6.5"',
+      specMetric: '16.5 cm',
+      tolerance: '±0.5 cm',
+      productionPurpose: 'Sleek under-arm baguette silhouette',
+    },
+    {
+      id: 'ms-irs-3',
+      measurementPoint: 'Base Depth',
+      specInches: '3.0"',
+      specMetric: '7.6 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Streamlined base gusset',
+    },
+    {
+      id: 'ms-irs-4',
+      measurementPoint: 'Short Handle Drop',
+      specInches: '5.5"',
+      specMetric: '14.0 cm',
+      tolerance: '±0.3 cm',
+      productionPurpose: 'Chic hand or forearm crook carry',
+    },
+    {
+      id: 'ms-irs-5',
+      measurementPoint: 'Removable Long Strap Drop',
+      specInches: '20.0" – 24.0"',
+      specMetric: '50.8 cm – 61.0 cm',
+      tolerance: '±1.0 cm',
+      productionPurpose: 'Comfortable crossbody or shoulder conversion',
+    },
+  ],
+  constructionDetails: [
+    'Handmade Crochet Charm Attachment: Detachable crochet charm is anchored via custom gold dog-clip to the front left handle loop, allowing buyers to wear it with or without the ornament.',
+    'Custom Chain Accent: Chain is engineered with electroplated scratch-proof alloy linked alongside the denim strap for modern boutique styling.',
+    'Curved Baguette Contouring: Bag bottom and corners feature internal piping to retain its structured rectangular silhouette even when loaded.',
+    'Dual Internal Storage: Interior is partitioned with 1 full-length security zipper wall pocket and 1 quick-reach cardholder pouch.',
+  ],
+  brandingDirectives: {
+    frontClaspDie: 'Gold foil deboss on leather strap end.',
+    leatherTagOrClochette: 'Removable artisan crochet charm + miniature brass coin charm.',
+    interiorBrandPlate: 'Interior leather patch:\nArielMC × Bangla Eco\nHandcrafted in Dhaka, Bangladesh\nWashed Denim & Artisan Leather',
+    interiorComplianceLabel: 'Label inside lining:\nShell: 70% Cotton Denim, 30% Cowhide Leather.\nLining: 100% Polyester/Cotton Blend.\nMade in Bangladesh.',
+    packagingDirectives: 'Wrapped in branded tissue, placed in non-woven dustbag, 36 pcs per export carton.',
+  },
+  qualityControlClearances: [
+    {
+      id: 'qc-irs-1',
+      testName: 'Chain & Ring Tensile Strength',
+      standardOrRequirement: 'Chain link pull test',
+      passCriteria: 'Withstand 250N tensile pull without link separation or distortion.',
+    },
+    {
+      id: 'qc-irs-2',
+      testName: 'Denim Wash Fastness',
+      standardOrRequirement: 'ISO 105-C06 wash fastness',
+      passCriteria: 'Grade 4.0 minimum; zero color bleeding onto white testing cloth.',
+    },
+    {
+      id: 'qc-irs-3',
+      testName: 'Lead & Nickel Compliance',
+      standardOrRequirement: 'EN 1811 Nickel Release + REACH SVHC',
+      passCriteria: 'Passes nickel-free standard for all skin-contact metallic hardware.',
+    },
+  ],
+  version: 'v1.0 - Factory Master',
+  issueDate: '2026-11-03',
+  preparedBy: 'ArielMC Technical Sourcing Team',
+  factoryName: 'Bangla Eco (FAC-BE-01)',
+  factoryLocation: 'East Nakhalpara, Tejgaon, Dhaka-1215 / Factory: Hazaribagh & Savar, Dhaka',
+  status: 'APPROVED_FOR_BULK',
+};
+
+// =============================================================
+// STANDARD TECH PACK REGISTRY LOOKUP MAP
+// =============================================================
+export const STANDARD_TECH_PACKS_MAP: Record<string, StandardFactoryTechPack> = {
+  'TP-AMC-JCT-1612': TECH_PACK_JCT_1612,
+  'TP-AMC-BLM-1612': TECH_PACK_BLM_1612,
+  'TP-AMC-BLS-1801': TECH_PACK_BLS_1801,
+  'TP-AMC-ELR-2001': TECH_PACK_ELR_2001,
+  'TP-AMC-IRS-1401': TECH_PACK_IRS_1401,
+  'JD-EDC-17': TECH_PACK_JCT_1612,
+  'LD-BLM-16': TECH_PACK_BLM_1612,
+  'LD-BLS-18': TECH_PACK_BLS_1801,
+  'LD-ELR-20': TECH_PACK_ELR_2001,
+  'LD-IRS-14': TECH_PACK_IRS_1401,
+  'BLS-1801': TECH_PACK_BLS_1801,
+  'ELR-2001': TECH_PACK_ELR_2001,
+  'IRS-1401': TECH_PACK_IRS_1401,
+  'BLM': TECH_PACK_BLM_1612,
 };
 
 // -------------------------------------------------------------
@@ -927,6 +1411,19 @@ export interface BuildTechPackInput {
 }
 
 export function buildStandardFactoryTechPack(input: BuildTechPackInput): StandardFactoryTechPack {
+  // Check if a dedicated master tech pack exists for this SKU or styleCode
+  if (input.styleCode && STANDARD_TECH_PACKS_MAP[input.styleCode]) {
+    return STANDARD_TECH_PACKS_MAP[input.styleCode];
+  }
+  const codeKey = Object.keys(STANDARD_TECH_PACKS_MAP).find(
+    (k) =>
+      (input.styleCode && k.toLowerCase() === input.styleCode.toLowerCase()) ||
+      (input.modelName && input.modelName.toLowerCase().includes(k.toLowerCase()))
+  );
+  if (codeKey && STANDARD_TECH_PACKS_MAP[codeKey]) {
+    return STANDARD_TECH_PACKS_MAP[codeKey];
+  }
+
   const {
     modelName,
     styleCode = 'AMC-MOD',
@@ -946,15 +1443,25 @@ export function buildStandardFactoryTechPack(input: BuildTechPackInput): Standar
   const template = SECTOR_TECH_PACK_TEMPLATES[sector] || SECTOR_TECH_PACK_TEMPLATES.JUTE;
   const docRef = `TP-AMC-${(styleCode || sector.substring(0, 3)).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-  // Default picture logic: use uploaded URL, or if jute/bloom use default photos, or fall back to sector reference
+  // Default picture logic: prioritize exact product match or uploaded URL
   const pictures: string[] = [];
+  const modelLower = (modelName || '').toLowerCase();
+  const styleLower = (styleCode || '').toLowerCase();
+
   if (referencePictureUrl && referencePictureUrl.trim().length > 0) {
     pictures.push(referencePictureUrl.trim());
-  } else if (sector === 'JUTE') {
-    pictures.push('/images/techpacks/jct-ref-photo.png');
-  } else if (sector === 'LEATHER') {
+  } else if (modelLower.includes('blossom') || styleLower.includes('bls')) {
+    pictures.push('/images/products/bangla_eco/blossom/1-11.png');
+  } else if (modelLower.includes('elora') || styleLower.includes('elr')) {
+    pictures.push('/images/products/bangla_eco/elora/1.jpg');
+  } else if (modelLower.includes('iris') || styleLower.includes('irs')) {
+    pictures.push('/images/products/bangla_eco/iris/1.jpg');
+  } else if (modelLower.includes('bloom') || styleLower.includes('blm')) {
     pictures.push('/images/techpacks/blm-ref-photo.png');
+  } else if (modelLower.includes('jct') || styleLower.includes('jct') || (sector === 'JUTE' && modelLower.includes('commuter'))) {
+    pictures.push('/images/techpacks/jct-ref-photo.png');
   } else {
+    // Neutral fallback logo to prevent cross-product photo contamination
     pictures.push('/images/ArielMC_Logo.png');
   }
 
