@@ -1708,6 +1708,14 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
               const productCount = matchingPortfolio?.currentProducts.length || 0;
               const futureCount = matchingPortfolio?.futureReachPlanning.length || 0;
 
+              const primaryContact = matchingPortfolio?.businessPortfolio?.keyDecisionMakers?.[0];
+              const buyerPhone = primaryContact?.phone;
+              const courier = matchingPortfolio?.courierImportAccount;
+              const crmStatus = matchingPortfolio?.crmStatus || 'Range Planning Finalized • Commercial Quotation Active';
+              const commercialTerms = matchingPortfolio?.commercialPaymentTerms || '50% Advance Deposit, 50% Against B/L Copy';
+              const lastMemo = matchingPortfolio?.lastInteractionMemo;
+              const marketFlag = ba.market === 'UK' ? '🇬🇧' : ba.market === 'US' ? '🇺🇸' : ba.market === 'EU' ? '🇪🇺' : '🇦🇺';
+
               return (
                 <div
                   key={idx}
@@ -1716,20 +1724,108 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h4
-                          onClick={() => setSelectedBuyerPortfolio(getPortfolioForBuyer(ba.company, ba.market))}
-                          className="text-base font-bold text-[#1A1A1A] font-heading hover:text-[#C8A96A] cursor-pointer transition-colors"
-                          title="Click to open full Buyer Portfolio"
-                        >
-                          {ba.company}
-                        </h4>
-                        <p className="text-xs text-slate-500">{ba.contact}</p>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-base">{marketFlag}</span>
+                          <h4
+                            onClick={() => setSelectedBuyerPortfolio(getPortfolioForBuyer(ba.company, ba.market))}
+                            className="text-base font-bold text-[#1A1A1A] font-heading hover:text-[#C8A96A] cursor-pointer transition-colors"
+                            title="Click to open full Buyer Portfolio"
+                          >
+                            {ba.company}
+                          </h4>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {primaryContact ? `${primaryContact.name} (${primaryContact.designation})` : ba.contact}
+                        </p>
                       </div>
-                      <span className="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-[#1F3A2E] text-white">
+                      <span className="px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-[#1F3A2E] text-white shrink-0">
                         {ba.market} Station
                       </span>
                     </div>
 
+                    {/* 3-Second Glance CRM Cockpit Block */}
+                    <div className="space-y-2 pt-1 border-t border-[#DDE3DD]">
+                      {/* Live CRM Status Pill */}
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                        <span className="relative flex h-2 w-2 shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+                        </span>
+                        <span className="text-[11px] font-bold text-emerald-950 truncate">
+                          {crmStatus}
+                        </span>
+                      </div>
+
+                      {/* Contact & Direct Phone/WhatsApp Strip */}
+                      {buyerPhone && (
+                        <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD]">
+                          <div className="min-w-0">
+                            <span className="text-[10px] text-slate-500 block">Direct Procurement Channel:</span>
+                            <span className="text-[11px] font-mono font-bold text-[#1F3A2E] truncate block">
+                              {buyerPhone}
+                            </span>
+                          </div>
+                          <a
+                            href={`https://wa.me/${buyerPhone.replace(/[^0-9]/g, '')}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs shadow-xs transition-transform active:scale-95 shrink-0"
+                            title={`Chat on WhatsApp with ${ba.company}`}
+                          >
+                            <PhoneCall className="w-3 h-3" />
+                            <span>Direct</span>
+                          </a>
+                        </div>
+                      )}
+
+                      {/* Commercial Payment Terms (50/50 BL) */}
+                      <div className="p-2.5 rounded-xl bg-[#FAF5EC] border border-[#C8A96A]/40 flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-bold text-[#8A6D3B] uppercase tracking-wider block">
+                            Commercial Payment Terms:
+                          </span>
+                          <span className="font-mono text-xs font-bold text-[#1F3A2E] truncate block">
+                            {commercialTerms}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white text-[#8A6D3B] font-bold border border-[#C8A96A]/30 shrink-0">
+                          50/50 B/L
+                        </span>
+                      </div>
+
+                      {/* Corporate Courier Account Badge */}
+                      {courier ? (
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-blue-50/70 border border-blue-200 text-[11px]">
+                          <div className="flex items-center gap-1.5 text-blue-950 font-semibold truncate">
+                            <Ship className="w-3.5 h-3.5 text-blue-700 shrink-0" />
+                            <span className="truncate">{courier.carrier} #{courier.accountNumber}</span>
+                          </div>
+                          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-blue-100 text-blue-800 font-bold border border-blue-300 shrink-0">
+                            Zero-Cost Courier
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
+                          <span>Courier Account:</span>
+                          <span className="font-mono text-[10px] font-semibold">Buyer DHL / FedEx</span>
+                        </div>
+                      )}
+
+                      {/* Last Interaction Memo */}
+                      {lastMemo && (
+                        <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-slate-400" />
+                            <span>Last Interaction Memo:</span>
+                          </span>
+                          <p className="text-[11px] leading-relaxed line-clamp-2 italic text-slate-800 mt-0.5">
+                            &ldquo;{lastMemo}&rdquo;
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Spend & Assortment Summary */}
                     <div className="p-3 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] space-y-1.5 text-xs">
                       <div className="flex items-center justify-between">
                         <span className="text-slate-500">Verified Credit:</span>
@@ -1747,10 +1843,6 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
                             </span>
                           )}
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-500">Account Status:</span>
-                        <span className="font-semibold text-slate-700">{ba.activeStatus}</span>
                       </div>
                       <div className="flex items-center justify-between border-t border-slate-200 pt-1.5 text-[11px]">
                         <span className="text-slate-500">Portfolio Assortment:</span>

@@ -115,6 +115,14 @@ export interface BuyerPortfolio {
   marketStation: BuyerMarketStation;
   accountStatus: BuyerAccountStatus;
   lastUpdated: string;
+  crmStatus?: string;
+  lastInteractionMemo?: string;
+  commercialPaymentTerms?: string;
+  courierImportAccount?: {
+    carrier: "DHL Express" | "FedEx" | "UPS";
+    accountNumber: string;
+    routingCode?: string;
+  };
 
   // 5 Core Pillars:
   currentProducts: BuyerProductItem[];          // A. Current Product List, Picture & Sales Price

@@ -10,6 +10,14 @@ export const INITIAL_BUYER_PORTFOLIOS: BuyerPortfolio[] = [
     accountStatus: 'STRATEGIC_KEY_ACCOUNT',
     lastUpdated: '2026-10-18',
     websiteUrl: 'https://www.harrods.com',
+    crmStatus: 'Approved Range Plan • PI-2026-HAR-01 Issued ($124,500) • Awaiting 50% Advance Wire',
+    lastInteractionMemo: 'Direct Zoom call with Eleanor Vance (Senior Buyer). Confirmed bone china and artisan jute doormats for Knightsbridge Luxury Living Q2 feature. Courier: DHL #962817291.',
+    commercialPaymentTerms: '50% Advance Deposit, 50% Against B/L Copy (or Irrevocable L/C at Sight)',
+    courierImportAccount: {
+      carrier: 'DHL Express',
+      accountNumber: '962817291',
+      routingCode: 'LHR-EXP-01',
+    },
 
     // Pillar E: Business Portfolio
     businessPortfolio: {
@@ -207,6 +215,14 @@ export const INITIAL_BUYER_PORTFOLIOS: BuyerPortfolio[] = [
     accountStatus: 'STRATEGIC_KEY_ACCOUNT',
     lastUpdated: '2026-10-19',
     websiteUrl: 'https://www.ralphlauren.com',
+    crmStatus: 'SS27 Heritage Leather Specimen Kit Dispatched via Buyer FedEx • Fit Review Nov 14',
+    lastInteractionMemo: 'Email memo from Marcus Vance (VP Sourcing NYC). Sourcing trip planned to Savar tannery cluster in Jan 2027. FedEx #774910281.',
+    commercialPaymentTerms: '50% Advance Deposit, 50% Against B/L Copy (or Irrevocable L/C at Sight)',
+    courierImportAccount: {
+      carrier: 'FedEx',
+      accountNumber: '774910281',
+      routingCode: 'JFK-PRI-04',
+    },
 
     businessPortfolio: {
       legalEntityName: 'Ralph Lauren Corporation',
@@ -352,6 +368,14 @@ export const INITIAL_BUYER_PORTFOLIOS: BuyerPortfolio[] = [
     accountStatus: 'STRATEGIC_KEY_ACCOUNT',
     lastUpdated: '2026-10-17',
     websiteUrl: 'https://www.marksandspencer.com',
+    crmStatus: 'Ethical Cotton & Living Wage Audit Passed • Bulk PO Tender Under Review',
+    lastInteractionMemo: 'Compliance sign-off received from Leeds HQ for GOTS-certified Bengal handloom bedding lines. Courier: DHL #883910245.',
+    commercialPaymentTerms: '50% Advance Deposit, 50% Against B/L Copy (or Irrevocable L/C at Sight)',
+    courierImportAccount: {
+      carrier: 'DHL Express',
+      accountNumber: '883910245',
+      routingCode: 'MAN-STD-02',
+    },
 
     businessPortfolio: {
       legalEntityName: 'Marks and Spencer plc',
@@ -497,6 +521,14 @@ export const INITIAL_BUYER_PORTFOLIOS: BuyerPortfolio[] = [
     accountStatus: 'STRATEGIC_KEY_ACCOUNT',
     lastUpdated: '2026-10-18',
     websiteUrl: 'https://www.inditex.com',
+    crmStatus: 'Jute & Terracotta SS27 Tableware Sampling Stage • DHL Samples Cleared Madrid Hub',
+    lastInteractionMemo: 'Sample review session in Arteixo, Spain. Approved 4 rustic terracotta carafes and circular braided trivet sets. Courier: DHL #331902847.',
+    commercialPaymentTerms: '50% Advance Deposit, 50% Against B/L Copy (or Irrevocable L/C at Sight)',
+    courierImportAccount: {
+      carrier: 'DHL Express',
+      accountNumber: '331902847',
+      routingCode: 'MAD-EXP-08',
+    },
 
     businessPortfolio: {
       legalEntityName: 'Industria de Diseño Textil, S.A. (Inditex S.A.)',
@@ -640,6 +672,14 @@ export const INITIAL_BUYER_PORTFOLIOS: BuyerPortfolio[] = [
     accountStatus: 'ACTIVE_GROWTH',
     lastUpdated: '2026-10-16',
     websiteUrl: 'https://www.countryroad.com.au',
+    crmStatus: 'FOB Melbourne Direct Routing Finalized • Awaiting Irrevocable At-Sight L/C',
+    lastInteractionMemo: 'Commercial terms agreed on 50% deposit / 50% BL copy against Australian customs clearance. Courier: DHL #554910283.',
+    commercialPaymentTerms: '50% Advance Deposit, 50% Against B/L Copy (or Irrevocable L/C at Sight)',
+    courierImportAccount: {
+      carrier: 'DHL Express',
+      accountNumber: '554910283',
+      routingCode: 'MEL-EXP-03',
+    },
 
     businessPortfolio: {
       legalEntityName: 'Country Road Group Pty Ltd',

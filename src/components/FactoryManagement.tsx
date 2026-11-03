@@ -57,6 +57,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedCluster, setSelectedCluster] = useState<string>('ALL');
   const [selectedVendorType, setSelectedVendorType] = useState<VendorClassification | 'ALL'>('ALL');
+  const [factoryTierCategory, setFactoryTierCategory] = useState<'ALL' | 'ARTISAN' | 'INDUSTRIAL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFactory, setSelectedFactory] = useState<SupplierFactory | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -205,6 +206,16 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     };
   };
 
+  const isArtisanVendor = (fac: SupplierFactory): boolean => {
+    const artisanCodes = ['FAC-BEN-01', 'FAC-DHM-01', 'FAC-DHK-04', 'FAC-DHK-05', 'FAC-DHM-02', 'FAC-PAT-01'];
+    if (artisanCodes.includes(fac.code)) return true;
+    if (fac.code === 'FAC-GAZ-02' && fac.sectors.includes('JUTE')) return true;
+    return fac.vendorType === 'FACTORY_CUM_SUPPLIER' || fac.vendorType === 'SUPPLIER';
+  };
+
+  const artisanCount = useMemo(() => factories.filter(isArtisanVendor).length, [factories]);
+  const industrialCount = useMemo(() => factories.filter((f) => !isArtisanVendor(f)).length, [factories]);
+
   // Filter factories
   const filteredFactories = useMemo(() => {
     return factories.filter((fac) => {
@@ -215,6 +226,10 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         selectedVendorType === 'ALL' ||
         currentVendorType === selectedVendorType ||
         (selectedVendorType === 'SUPPLIER' && (currentVendorType === 'SUPPLIER' || currentVendorType === 'FACTORY_CUM_SUPPLIER'));
+      const matchesTierCategory =
+        factoryTierCategory === 'ALL' ||
+        (factoryTierCategory === 'ARTISAN' && isArtisanVendor(fac)) ||
+        (factoryTierCategory === 'INDUSTRIAL' && !isArtisanVendor(fac));
       const matchesSearch =
         searchQuery === '' ||
         fac.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -223,9 +238,9 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         fac.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()) ||
         fac.capacity.machineryList.some((m) => m.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      return matchesSector && matchesCluster && matchesVendorType && matchesSearch;
+      return matchesSector && matchesCluster && matchesVendorType && matchesTierCategory && matchesSearch;
     });
-  }, [factories, selectedSector, selectedCluster, selectedVendorType, searchQuery]);
+  }, [factories, selectedSector, selectedCluster, selectedVendorType, factoryTierCategory, searchQuery]);
 
   // Aggregate stats
   const totalCapacity = factories.reduce((acc, f) => acc + f.capacity.monthlyCapacityUnits, 0);
@@ -497,6 +512,69 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         </div>
       )}
 
+      {/* Classification Quick Toggles: Industrial vs Artisan Clusters */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2 rounded-xl bg-white border border-[#DDE3DD] shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-bold text-[#1F3A2E] font-heading uppercase tracking-wider px-2">
+            Supplier Classification:
+          </span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setFactoryTierCategory('ALL')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                factoryTierCategory === 'ALL'
+                  ? 'bg-[#1F3A2E] text-white shadow-xs'
+                  : 'bg-[#F4F6F4] text-[#4A5568] hover:text-[#1F3A2E] hover:bg-slate-200'
+              }`}
+            >
+              <span>All Partners</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${factoryTierCategory === 'ALL' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'}`}>
+                {factories.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFactoryTierCategory('ARTISAN')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+                factoryTierCategory === 'ARTISAN'
+                  ? 'bg-[#14512C] text-white border-[#14512C] shadow-xs'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+              }`}
+            >
+              <span>🌿</span>
+              <span>Artisan Clusters &amp; Workshops</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${factoryTierCategory === 'ARTISAN' ? 'bg-white/20 text-white' : 'bg-emerald-200 text-emerald-900'}`}>
+                {artisanCount}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFactoryTierCategory('INDUSTRIAL')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+                factoryTierCategory === 'INDUSTRIAL'
+                  ? 'bg-[#1F3A2E] text-white border-[#1F3A2E] shadow-xs'
+                  : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'
+              }`}
+            >
+              <span>🏭</span>
+              <span>Industrial Composite Plants</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${factoryTierCategory === 'INDUSTRIAL' ? 'bg-white/20 text-white' : 'bg-amber-200 text-amber-900'}`}>
+                {industrialCount}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="text-[11px] text-slate-500 font-medium px-2">
+          {factoryTierCategory === 'ALL' && 'Showing all 13 verified Bangladesh manufacturing facilities'}
+          {factoryTierCategory === 'ARTISAN' && 'Handcrafted jute, living wage terracotta studios & co-ops'}
+          {factoryTierCategory === 'INDUSTRIAL' && 'LWG tanneries, composite textile mills & bone china plants'}
+        </div>
+      </div>
+
       {/* Filter Tabs by Sector & Cluster */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#DDE3DD] pb-4">
         {/* Sector Pills */}
@@ -725,34 +803,27 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
               key={fac.id}
               className="group rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md text-[#1A1A1A]"
             >
-              <div className="p-5 space-y-4">
+              <div className="p-5 space-y-3.5">
                 {/* Header: Code, Entity Type & Tier */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#FAF5EC] text-[#8A6D3B] font-semibold border border-[#C8A96A]/40">
                       {fac.code}
                     </span>
-                    {vType === 'FULL_FLEDGED_FACTORY' && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-amber-50 text-amber-900 border-amber-300" title="Full-Fledged Factory: Own Raw Materials & Finished Goods Production">
-                        🏭 Full-Fledged
+                    {isArtisanVendor(fac) ? (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-emerald-50 text-emerald-900 border-emerald-300 flex items-center gap-1" title="Artisan Workshop & Heritage Cluster">
+                        <span>🌿</span>
+                        <span>Artisan Workshop</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-amber-50 text-amber-950 border-amber-300 flex items-center gap-1" title="Industrial Composite Manufacturing Plant">
+                        <span>🏭</span>
+                        <span>Industrial Composite</span>
                       </span>
                     )}
-                    {vType === 'FACTORY' && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-emerald-50 text-emerald-800 border-emerald-200" title="Factory: Manufacturer (Open Market Raw Materials)">
-                        🏗️ Factory
-                      </span>
-                    )}
-                    {vType === 'SUPPLIER' && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-blue-50 text-blue-700 border-blue-200" title="Supplier: Collect Finished Goods & Supply">
-                        🏢 Supplier
-                      </span>
-                    )}
-                    {vType === 'FACTORY_CUM_SUPPLIER' && (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider border bg-purple-50 text-purple-800 border-purple-300" title="Factory-cum-Supplier: Manufacturer with Sourcing & Artisan Production">
-                        🌿 Factory-cum-Supplier
-                      </span>
-                    )}
-                    <span className="text-[11px] font-medium text-[#6B7269]">{fac.sectors.join(', ')}</span>
+                    <span className="text-[11px] font-semibold text-[#1F3A2E] bg-[#F4F6F4] px-2 py-0.5 rounded">
+                      {fac.sectors.join(', ')}
+                    </span>
                   </div>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#E4F3E9] text-[#14512C] border border-[#BBE3C7] font-semibold shrink-0">
                     {fac.tier.replace(/_/g, ' ')}
@@ -764,10 +835,86 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                   <h3 className="text-base font-bold font-heading text-[#1F3A2E] group-hover:text-[#8A6D3B] transition-colors">
                     {fac.name}
                   </h3>
-                  <div className="flex items-center gap-1.5 text-xs text-[#6B7269] mt-1">
+                  <div className="flex items-center gap-1.5 text-xs text-[#6B7269] mt-0.5">
                     <MapPin className="w-3.5 h-3.5 text-[#8A6D3B] shrink-0" />
                     <span className="truncate">{fac.cluster}</span>
                   </div>
+                </div>
+
+                {/* 3-Second Glance CRM Cockpit Module */}
+                <div className="space-y-2 pt-1 border-t border-[#DDE3DD]">
+                  {/* Live CRM Status Pill */}
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+                    </span>
+                    <span className="text-[11px] font-bold text-emerald-950 truncate">
+                      {fac.crmStatus || 'Production In Line • AQL Inspection Scheduled'}
+                    </span>
+                  </div>
+
+                  {/* Direct WhatsApp Call & Phone Action Bar */}
+                  <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD]">
+                    <div className="min-w-0">
+                      <span className="text-[10px] text-slate-500 block truncate">
+                        {fac.contactPerson} ({fac.designation})
+                      </span>
+                      <span className="text-[11px] font-mono font-bold text-[#1F3A2E] truncate block">
+                        {fac.phone}
+                      </span>
+                    </div>
+
+                    <a
+                      href={`https://wa.me/${fac.phone.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs shadow-xs transition-transform active:scale-95 shrink-0"
+                      title={`Open WhatsApp chat with ${fac.contactPerson}`}
+                    >
+                      <Phone className="w-3 h-3 fill-current" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+
+                  {/* Master Compromise Payment Terms Snapshot */}
+                  <div className="p-2.5 rounded-xl bg-[#FAF5EC] border border-[#C8A96A]/40 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-bold text-[#8A6D3B] uppercase tracking-wider block">
+                        Payment Terms (30/50/20 NOC):
+                      </span>
+                      <span className="font-mono text-xs font-bold text-[#1F3A2E] truncate block">
+                        {fac.paymentTerms || '30% Advance | 50% FRI Pass | 20% Delivery NOC'}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white text-[#8A6D3B] font-bold border border-[#C8A96A]/30 shrink-0">
+                      30/50/20
+                    </span>
+                  </div>
+
+                  {/* Export Incentive Stamped Deed Badge */}
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-50/60 border border-emerald-200/80 text-[11px]">
+                    <div className="flex items-center gap-1.5 text-emerald-900 font-semibold truncate">
+                      <FileCheck2 className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                      <span className="truncate">Stamped Deed (Tk. 300)</span>
+                    </div>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 shrink-0">
+                      Clause 3 Waived ✔
+                    </span>
+                  </div>
+
+                  {/* Last Interaction Memo */}
+                  {fac.lastInteractionMemo && (
+                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-slate-400" />
+                        <span>Last Interaction Memo:</span>
+                      </span>
+                      <p className="text-[11px] leading-relaxed line-clamp-2 italic text-slate-800 mt-0.5">
+                        &ldquo;{fac.lastInteractionMemo}&rdquo;
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Capacity Allocation Meter */}

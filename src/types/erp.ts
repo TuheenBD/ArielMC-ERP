@@ -416,6 +416,12 @@ export interface SupplierFactory {
   leadTimeDays: number;
   minimumOrderQuantity: number;
   paymentTerms: string;
+  crmStatus?: string;
+  lastInteractionMemo?: string;
+  sourcingDeedVerified?: boolean;
+  clause3IncentiveWaiverSigned?: boolean;
+  juteDirectorateLicenseNo?: string;
+  savarCetpPlotNo?: string;
   bankDetails: {
     bankName: string;
     branch: string;
