@@ -145,6 +145,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: 'Executive',
           phase: 'Live Hub',
         },
+        {
+          id: 'STATIONS' as ActiveTab,
+          label: 'Multi-Entity Stations',
+          icon: Building2,
+          badge: '5 Stations',
+          phase: 'Foundation',
+        },
       ],
     },
     {
@@ -171,45 +178,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: '5 Sectors',
           phase: 'Costing & FOB',
         },
-      ],
-    },
-    {
-      group: 'Enterprise Utilities',
-      items: [
         {
-          id: 'UTILITIES' as ActiveTab,
-          label: 'Office & Enterprise Utilities',
-          icon: Wrench,
-          badge: '8 Tools',
-          phase: 'Head Section',
+          id: 'RND' as ActiveTab,
+          label: 'R&D, Tech Packs & Sampling',
+          icon: FlaskConical,
+          badge: '8 SDOs',
+          phase: 'Phase 4',
         },
-      ],
-    },
-    {
-      group: 'Foundation (Live)',
-      items: [
-        {
-          id: 'STATIONS' as ActiveTab,
-          label: 'Multi-Entity Stations',
-          icon: Building2,
-          badge: '5 Stations',
-          phase: 'Foundation',
-        },
-        {
-          id: 'DOCUMENTS' as ActiveTab,
-          label: 'Document Portal',
-          icon: FolderLock,
-          badge: 'All Stations',
-          phase: 'Statutory Hub',
-        },
-        {
-          id: 'COMMUNICATIONS' as ActiveTab,
-          label: 'Communications & Meetings',
-          icon: Video,
-          badge: 'Live Desks',
-          phase: 'Direct Hub',
-        },
-
       ],
     },
     {
@@ -270,18 +245,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ],
     },
     {
-      group: 'Supply Chain & Manufacturing',
-      items: [
-        {
-          id: 'RND' as ActiveTab,
-          label: 'R&D, Tech Packs & Sampling',
-          icon: FlaskConical,
-          badge: '8 SDOs',
-          phase: 'Phase 3',
-        },
-      ],
-    },
-    {
       group: 'Commercial & Global Trade',
       items: [
         {
@@ -297,6 +260,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Boxes,
           badge: '12 Hubs Live',
           phase: 'Phase 7 Live',
+        },
+      ],
+    },
+    {
+      group: 'Foundation (Live)',
+      items: [
+        {
+          id: 'DOCUMENTS' as ActiveTab,
+          label: 'Document Portal',
+          icon: FolderLock,
+          badge: 'All Stations',
+          phase: 'Statutory Hub',
+        },
+        {
+          id: 'COMMUNICATIONS' as ActiveTab,
+          label: 'Communications & Meetings',
+          icon: Video,
+          badge: 'Live Desks',
+          phase: 'Direct Hub',
+        },
+        {
+          id: 'UTILITIES' as ActiveTab,
+          label: 'Office & Enterprise Utilities',
+          icon: Wrench,
+          badge: '8 Tools',
+          phase: 'Head Section',
         },
       ],
     },

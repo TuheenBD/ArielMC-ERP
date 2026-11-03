@@ -1382,76 +1382,71 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
 
       {/* TAB 3: STANDARDIZED SAMPLE PRICING MATRIX */}
       {activeModuleTab === 'PRICING_MATRIX' && (
-        <div className="space-y-6">
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#12231B] border border-[#2C5240] space-y-2">
+        <div className="space-y-6 animate-in fade-in duration-200">
+          <div className="p-5 rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white shadow-md space-y-2">
             <div className="flex items-center gap-2">
               <Tag className="w-5 h-5 text-[#C8A96A]" />
-              <h2 className="text-base font-bold text-white font-['Montserrat']">
+              <h2 className="text-base font-bold text-white font-montserrat">
                 Section 5 Standardized Sample Pricing Matrix
               </h2>
             </div>
-            <p className="text-xs text-slate-300 font-['Open_Sans']">
-              Pre-approved sample development fees, tooling/brass die costs, development lead times, and qualifying bulk MOQs across ArielMC's premier manufacturing divisions.
+            <p className="text-xs text-[#E8EFE8] leading-relaxed">
+              Pre-approved sample development fees, tooling/brass die costs, development lead times, and qualifying bulk MOQs across ArielMC&apos;s premier manufacturing divisions.
             </p>
           </div>
 
           {/* Division 1: The Leather Compendium */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+              <h3 className="text-xs font-bold text-[#1F3A2E] uppercase tracking-wider font-montserrat flex items-center gap-2">
                 <span>💼</span>
-                <span>Division 01: The Leather Compendium (Everyday Carry, Tech & Executive Bags)</span>
+                <span>Division 01: The Leather Compendium (Everyday Carry, Tech &amp; Executive Bags)</span>
               </h3>
-              <span className="text-xs text-slate-400 font-mono">8 SKUs</span>
+              <span className="text-xs text-[#6B7269] font-mono">8 SKUs</span>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-xl">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800">
+            <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#FAF5EC] text-[#8A6D3B] uppercase text-[10px] font-bold tracking-wider border-b border-[#DDE3DD] font-mono">
                   <tr>
                     <th className="py-3 px-4">Code</th>
                     <th className="py-3 px-4">SKU Description</th>
                     <th className="py-3 px-4">Dev Sample Fee</th>
                     <th className="py-3 px-4">Brass Deboss / Tooling</th>
                     <th className="py-3 px-4">Lead Time</th>
-                    <th className="py-3 px-4 text-emerald-400">Qualifying MOQ (100% Credit)</th>
+                    <th className="py-3 px-4 text-emerald-800">Qualifying MOQ (100% Credit)</th>
                     <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-[#DDE3DD] bg-white text-[#1A1A1A]">
                   {SAMPLE_PRICING_MATRIX.filter((m) => m.division === 'The Leather Compendium').map((item) => (
-                    <tr key={item.categoryCode} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-[#C8A96A]">
+                    <tr key={item.categoryCode} className="hover:bg-[#F4F6F4] transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                         {item.categoryCode}
                       </td>
                       <td className="py-3 px-4">
-                        <strong className="text-white block">{item.skuDescription}</strong>
+                        <strong className="text-[#1A1A1A] block font-montserrat">{item.skuDescription}</strong>
                         {item.techPackRef && (
-                          <span className="text-[10px] text-emerald-400 font-mono">Ref: {item.techPackRef}</span>
+                          <span className="text-[10px] text-emerald-700 font-mono font-semibold">Ref: {item.techPackRef}</span>
                         )}
                       </td>
-                      <td className="py-3 px-4 font-mono font-bold text-white">
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                         ${item.developmentSampleFeeUsd.toFixed(2)}
                       </td>
-                      <td className="py-3 px-4 font-mono text-slate-300">
+                      <td className="py-3 px-4 font-mono text-[#6B7269]">
                         {item.toolingCostText}
                       </td>
-                      <td className="py-3 px-4 text-slate-300">
+                      <td className="py-3 px-4 text-[#6B7269]">
                         {item.developmentLeadTime}
                       </td>
-                      <td className="py-3 px-4 font-mono font-bold text-emerald-400">
+                      <td className="py-3 px-4 font-mono font-bold text-emerald-700">
                         {item.qualifyingBulkMoq.toLocaleString()} pcs
                       </td>
                       <td className="py-3 px-4 text-right">
                         <button
+                          type="button"
                           onClick={() => setIsAddModalOpen(true)}
-                          className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
-                            isRoyal
-                              ? 'bg-blue-600/20 text-blue-300 hover:bg-blue-600 hover:text-white border border-blue-500/30'
-                              : isHeritage
-                              ? 'bg-[#8A6D3B]/20 text-[#C8A96A] hover:bg-[#8A6D3B] hover:text-white border border-[#C8A96A]/40'
-                              : 'bg-[#1F3A2E] text-[#C8A96A] hover:bg-[#2C5240] hover:text-white border border-[#C8A96A]/40 shadow-sm'
-                          }`}
+                          className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#162A21] text-white border border-[#C8A96A]/40 text-xs font-semibold shadow-sm transition-all font-montserrat cursor-pointer"
                         >
                           Request SDO
                         </button>
@@ -1466,54 +1461,55 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
           {/* Division 2: The Golden Fiber Edit */}
           <div className="space-y-3 pt-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Montserrat'] flex items-center gap-2">
+              <h3 className="text-xs font-bold text-[#1F3A2E] uppercase tracking-wider font-montserrat flex items-center gap-2">
                 <span>🛍️</span>
-                <span>Division 02: The Golden Fiber Edit (Jute, Jute-Cotton & Natural Fibers)</span>
+                <span>Division 02: The Golden Fiber Edit (Jute, Jute-Cotton &amp; Natural Fibers)</span>
               </h3>
-              <span className="text-xs text-slate-400 font-mono">7 SKUs</span>
+              <span className="text-xs text-[#6B7269] font-mono">7 SKUs</span>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60 shadow-xl">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800">
+            <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#FAF5EC] text-[#8A6D3B] uppercase text-[10px] font-bold tracking-wider border-b border-[#DDE3DD] font-mono">
                   <tr>
                     <th className="py-3 px-4">Code</th>
                     <th className="py-3 px-4">SKU Description</th>
                     <th className="py-3 px-4">Dev Sample Fee</th>
                     <th className="py-3 px-4">Die / Screen Stencil</th>
                     <th className="py-3 px-4">Lead Time</th>
-                    <th className="py-3 px-4 text-emerald-400">Qualifying MOQ (100% Credit)</th>
+                    <th className="py-3 px-4 text-emerald-800">Qualifying MOQ (100% Credit)</th>
                     <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-[#DDE3DD] bg-white text-[#1A1A1A]">
                   {SAMPLE_PRICING_MATRIX.filter((m) => m.division === 'The Golden Fiber Edit').map((item) => (
-                    <tr key={item.categoryCode} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-[#C9A86A]">
+                    <tr key={item.categoryCode} className="hover:bg-[#F4F6F4] transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                         {item.categoryCode}
                       </td>
                       <td className="py-3 px-4">
-                        <strong className="text-white block">{item.skuDescription}</strong>
+                        <strong className="text-[#1A1A1A] block font-montserrat">{item.skuDescription}</strong>
                         {item.techPackRef && (
-                          <span className="text-[10px] text-amber-400 font-mono">Ref: {item.techPackRef}</span>
+                          <span className="text-[10px] text-amber-700 font-mono font-semibold">Ref: {item.techPackRef}</span>
                         )}
                       </td>
-                      <td className="py-3 px-4 font-mono font-bold text-white">
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
                         ${item.developmentSampleFeeUsd.toFixed(2)}
                       </td>
-                      <td className="py-3 px-4 font-mono text-slate-300">
+                      <td className="py-3 px-4 font-mono text-[#6B7269]">
                         {item.toolingCostText}
                       </td>
-                      <td className="py-3 px-4 text-slate-300">
+                      <td className="py-3 px-4 text-[#6B7269]">
                         {item.developmentLeadTime}
                       </td>
-                      <td className="py-3 px-4 font-mono font-bold text-emerald-400">
+                      <td className="py-3 px-4 font-mono font-bold text-emerald-700">
                         {item.qualifyingBulkMoq.toLocaleString()} pcs
                       </td>
                       <td className="py-3 px-4 text-right">
                         <button
+                          type="button"
                           onClick={() => setIsAddModalOpen(true)}
-                          className="px-2.5 py-1 rounded bg-[#C9A86A]/20 text-[#C9A86A] hover:bg-[#C9A86A] hover:text-[#1F3A2E] border border-[#C9A86A]/30 text-xs font-semibold transition-all"
+                          className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#162A21] text-white border border-[#C8A96A]/40 text-xs font-semibold shadow-sm transition-all font-montserrat cursor-pointer"
                         >
                           Request SDO
                         </button>
@@ -1529,48 +1525,48 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
 
       {/* TAB 4: 100% SAMPLE FEE REIMBURSEMENT CALCULATOR */}
       {activeModuleTab === 'REIMBURSEMENT_CALC' && (
-        <div className="space-y-6">
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 border border-emerald-500/30 space-y-2">
+        <div className="space-y-6 animate-in fade-in duration-200">
+          <div className="p-5 rounded-2xl bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white shadow-md space-y-2">
             <div className="flex items-center gap-2">
-              <Calculator className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-base font-bold text-white font-['Montserrat']">
-                Section 4 Commercial Credit & Reimbursement Engine
+              <Calculator className="w-5 h-5 text-[#C8A96A]" />
+              <h2 className="text-base font-bold text-white font-montserrat">
+                Section 4 Commercial Credit &amp; Reimbursement Engine
               </h2>
             </div>
-            <p className="text-xs text-slate-300 font-['Open_Sans']">
-              100% of the Sample Development Fee is credited against the buyer's final 50% balance invoice settled against the Bill of Lading (BL) copy once a qualifying bulk Purchase Order is placed within 90 calendar days.
+            <p className="text-xs text-[#E8EFE8] leading-relaxed">
+              100% of the Sample Development Fee is credited against the buyer&apos;s final 50% balance invoice settled against the Bill of Lading (BL) copy once a qualifying bulk Purchase Order is placed within 90 calendar days.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Calculator Controls */}
-            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-xl space-y-4">
-              <h3 className="text-sm font-bold text-white font-['Montserrat']">
+            <div className="p-6 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-4">
+              <h3 className="text-sm font-bold text-[#1F3A2E] font-montserrat">
                 Simulate Bulk Purchase Order Credit
               </h3>
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-slate-400 mb-1">Manufacturing Division</label>
+                  <label className="block text-[#6B7269] font-bold mb-1">Manufacturing Division</label>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setCalcSector('JUTE')}
-                      className={`p-2.5 rounded-lg border font-medium transition-all ${
+                      className={`p-2.5 rounded-lg border font-semibold transition-all cursor-pointer ${
                         calcSector === 'JUTE'
-                          ? 'bg-[#C9A86A]/20 text-[#C9A86A] border-[#C9A86A]'
-                          : 'bg-slate-950 text-slate-400 border-slate-800'
+                          ? 'bg-[#1F3A2E] text-white border-[#C8A96A] shadow-sm'
+                          : 'bg-[#F4F6F4] text-[#6B7269] border-[#DDE3DD] hover:bg-[#E8EFE8]'
                       }`}
                     >
-                      🛍️ Jute & Golden Fiber (MOQ ≥ 1,000)
+                      🛍️ Jute &amp; Golden Fiber (MOQ ≥ 1,000)
                     </button>
                     <button
                       type="button"
                       onClick={() => setCalcSector('LEATHER')}
-                      className={`p-2.5 rounded-lg border font-medium transition-all ${
+                      className={`p-2.5 rounded-lg border font-semibold transition-all cursor-pointer ${
                         calcSector === 'LEATHER'
-                          ? 'bg-[#C8A96A]/20 text-[#C8A96A] border-[#C8A96A]'
-                          : 'bg-slate-950 text-slate-400 border-slate-800'
+                          ? 'bg-[#1F3A2E] text-white border-[#C8A96A] shadow-sm'
+                          : 'bg-[#F4F6F4] text-[#6B7269] border-[#DDE3DD] hover:bg-[#E8EFE8]'
                       }`}
                     >
                       💼 Leather Compendium (MOQ ≥ 300)
@@ -1579,9 +1575,9 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-slate-400 mb-1">
+                  <div className="flex justify-between text-[#6B7269] font-semibold mb-1">
                     <span>Planned Bulk Order Quantity:</span>
-                    <strong className="text-white font-mono">{calcPoQty.toLocaleString()} units</strong>
+                    <strong className="text-[#1F3A2E] font-mono font-bold">{calcPoQty.toLocaleString()} units</strong>
                   </div>
                   <input
                     type="range"
@@ -1590,50 +1586,50 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                     step={50}
                     value={calcPoQty}
                     onChange={(e) => setCalcPoQty(Number(e.target.value))}
-                    className="w-full accent-emerald-500"
+                    className="w-full accent-[#1F3A2E]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-slate-400 mb-1">Total PO Value (USD)</label>
+                    <label className="block text-[#6B7269] font-bold mb-1">Total PO Value (USD)</label>
                     <input
                       type="number"
                       value={calcPoValue}
                       onChange={(e) => setCalcPoValue(Number(e.target.value))}
-                      className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white font-mono"
+                      className="w-full p-2 bg-[#F4F6F4] border border-[#DDE3DD] rounded-lg text-[#1A1A1A] font-mono font-bold focus:border-[#C8A96A] focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-400 mb-1">Sample Fee Paid (USD)</label>
+                    <label className="block text-[#6B7269] font-bold mb-1">Sample Fee Paid (USD)</label>
                     <input
                       type="number"
                       value={calcDevFee}
                       onChange={(e) => setCalcDevFee(Number(e.target.value))}
-                      className="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-white font-mono"
+                      className="w-full p-2 bg-[#F4F6F4] border border-[#DDE3DD] rounded-lg text-[#1A1A1A] font-mono font-bold focus:border-[#C8A96A] focus:outline-none"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Live Rule Verification */}
-              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
-                <div className="font-semibold text-slate-300">Criteria Check:</div>
+              <div className="p-3.5 rounded-xl bg-[#FAF5EC] border border-[#C8A96A]/40 text-xs space-y-1.5">
+                <div className="font-bold text-[#8A6D3B]">Criteria Check:</div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Qualifying Volume:</span>
-                  <span className={calcSector === 'JUTE' ? (calcPoQty >= 1000 ? 'text-emerald-400 font-semibold' : 'text-amber-400') : (calcPoQty >= 300 ? 'text-emerald-400 font-semibold' : 'text-amber-400')}>
+                  <span className="text-[#6B7269]">Qualifying Volume:</span>
+                  <span className={calcSector === 'JUTE' ? (calcPoQty >= 1000 ? 'text-emerald-700 font-bold' : 'text-amber-700 font-semibold') : (calcPoQty >= 300 ? 'text-emerald-700 font-bold' : 'text-amber-700 font-semibold')}>
                     {calcSector === 'JUTE' ? (calcPoQty >= 1000 ? '✓ Meets 1,000 pcs threshold' : '✗ Below 1,000 pcs') : (calcPoQty >= 300 ? '✓ Meets 300 pcs threshold' : '✗ Below 300 pcs')}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Minimum Order Value:</span>
-                  <span className={calcPoValue >= 3000 ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}>
+                  <span className="text-[#6B7269]">Minimum Order Value:</span>
+                  <span className={calcPoValue >= 3000 ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
                     {calcPoValue >= 3000 ? '✓ Meets $3,000 minimum' : '✗ Below $3,000 threshold'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Claim Validity:</span>
-                  <span className="text-emerald-400 font-semibold">✓ Active within 90 Calendar Days</span>
+                  <span className="text-[#6B7269]">Claim Validity:</span>
+                  <span className="text-emerald-700 font-bold">✓ Active within 90 Calendar Days</span>
                 </div>
               </div>
             </div>
@@ -1651,50 +1647,50 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
                 <div className="p-6 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-4 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500 uppercase tracking-wider font-mono font-semibold">
+                      <span className="text-xs text-[#6B7269] uppercase tracking-wider font-mono font-bold">
                         Commercial Credit Outcome
                       </span>
                       <span
                         className={`text-xs font-mono px-2.5 py-1 rounded font-bold ${
                           isFullCredit
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                             : isProRata
-                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                            : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                            ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                            : 'bg-rose-100 text-rose-800 border border-rose-300'
                         }`}
                       >
                         {isFullCredit ? '100% FULL REBATE' : isProRata ? '50% PRO-RATA REBATE' : 'NON-QUALIFYING'}
                       </span>
                     </div>
 
-                    <div className="mt-4 p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-center space-y-1">
-                      <div className="text-xs text-slate-400">Total Credit Amount Applied</div>
-                      <div className="text-3xl font-bold font-mono text-emerald-400">
+                    <div className="mt-4 p-5 rounded-xl bg-[#F4F6F4] border border-[#DDE3DD] text-center space-y-1">
+                      <div className="text-xs text-[#6B7269] font-medium">Total Credit Amount Applied</div>
+                      <div className="text-3xl font-bold font-mono text-[#1F3A2E]">
                         ${creditAmount.toFixed(2)} USD
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-[#6B7269]">
                         {isFullCredit ? '100% of sample development fee refunded' : isProRata ? '50% pro-rata credit for partial MOQ run' : 'Order does not meet qualifying volume'}
                       </div>
                     </div>
 
                     {/* Order Deduction Mechanism Breakdown */}
                     <div className="mt-4 space-y-2 text-xs">
-                      <div className="font-semibold text-white font-['Montserrat']">
+                      <div className="font-bold text-[#1F3A2E] font-montserrat">
                         Deduction Timing (Section 4.I):
                       </div>
-                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex justify-between">
-                        <span className="text-slate-400">1. Advance Production Deposit (50%):</span>
-                        <strong className="text-slate-200 font-mono">$0.00 Credit</strong>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#DDE3DD] flex justify-between text-[#6B7269]">
+                        <span>1. Advance Production Deposit (50%):</span>
+                        <strong className="text-[#1A1A1A] font-mono">$0.00 Credit</strong>
                       </div>
-                      <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 flex justify-between">
-                        <span className="text-emerald-300">2. Final Balance against Bill of Lading (50%):</span>
-                        <strong className="text-emerald-300 font-mono font-bold">-${creditAmount.toFixed(2)} Credited</strong>
+                      <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 flex justify-between text-emerald-800">
+                        <span className="font-semibold">2. Final Balance against Bill of Lading (50%):</span>
+                        <strong className="font-mono font-bold text-emerald-700">-${creditAmount.toFixed(2)} Credited</strong>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-                    <p>• <strong>Courier & Metal Dies:</strong> Third-party air express ($38–$60) and custom brass deboss dies ($35–$65) are strictly non-creditable.</p>
+                  <div className="p-3 rounded-lg bg-[#FAF5EC] border border-[#C8A96A]/30 text-[11px] text-[#6B7269] space-y-1">
+                    <p>• <strong>Courier &amp; Metal Dies:</strong> Third-party air express ($38–$60) and custom brass deboss dies ($35–$65) are strictly non-creditable.</p>
                     <p>• <strong>Repeat Orders:</strong> Client dies remain exclusive property of the buyer and are maintained free of charge in Dhaka for repeat manufacturing runs.</p>
                   </div>
                 </div>
