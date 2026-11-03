@@ -508,4 +508,6 @@ export const INITIAL_CURRENCIES: CurrencyRate[] = [
   { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka', rateToUsd: 121.5, symbolPosition: 'before' },
 ];
 
-export const INITIAL_PRODUCTS: ProductItem[] = [];
+import { INITIAL_PRODUCTS as SEED_INITIAL_PRODUCTS } from './initialProducts';
+
+export const INITIAL_PRODUCTS: ProductItem[] = SEED_INITIAL_PRODUCTS;

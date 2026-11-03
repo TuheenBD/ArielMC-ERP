@@ -813,6 +813,10 @@ export default function Home() {
               onOpenAddModal={() => setIsAddModalOpen(true)}
               onSelectProduct={setSelectedProduct}
               searchQuery={searchQuery}
+              onUpdateProduct={(updated) => {
+                setProducts((prev) => prev.map((p) => p.id === updated.id ? updated : p));
+                persistProduct(updated).catch(console.error);
+              }}
             />
           )}
 

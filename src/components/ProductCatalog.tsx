@@ -5,7 +5,8 @@ import { ProductItem, ProductSector, CurrencyRate } from '@/types/erp';
 import { StandardFactoryTechPack } from '@/types/techPack';
 import { StandardFactoryTechPackModal } from '@/components/StandardFactoryTechPackModal';
 import { ProductRoadmapModal } from '@/components/ProductRoadmapModal';
-import { buildStandardFactoryTechPack } from '@/data/standardTechPacks';
+import { ExportLandedCostingModal } from '@/components/ExportLandedCostingModal';
+import { SourcingVaultModal } from '@/components/SourcingVaultModal';
 import {
   Package,
   Plus,
@@ -24,7 +25,14 @@ import {
   Search,
   ExternalLink,
   Barcode,
-  BookOpen
+  BookOpen,
+  Calculator,
+  ShieldCheck,
+  TrendingUp,
+  Landmark,
+  Phone,
+  MessageCircle,
+  FileCheck2,
 } from 'lucide-react';
 
 interface ProductCatalogProps {
@@ -33,6 +41,7 @@ interface ProductCatalogProps {
   onOpenAddModal: () => void;
   onSelectProduct: (product: ProductItem) => void;
   searchQuery: string;
+  onUpdateProduct?: (updatedProduct: ProductItem) => void;
 }
 
 export const ProductCatalog: React.FC<ProductCatalogProps> = ({
@@ -41,208 +50,234 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   onOpenAddModal,
   onSelectProduct,
   searchQuery,
+  onUpdateProduct,
 }) => {
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
-  const [selectedMarket, setSelectedMarket] = useState<string>('ALL');
+  const [selectedStatusTab, setSelectedStatusTab] = useState<'ALL' | 'LIVE' | 'NEGOTIATION' | 'COSTING_DRAFT'>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'TABLE'>('GRID');
+  
+  // Modals state
   const [viewingTechPack, setViewingTechPack] = useState<StandardFactoryTechPack | null>(null);
   const [isRoadmapModalOpen, setIsRoadmapModalOpen] = useState(false);
+  const [costingProduct, setCostingProduct] = useState<ProductItem | null>(null);
+  const [vaultProduct, setVaultProduct] = useState<ProductItem | null>(null);
 
-  // Filter products by sector, market, and search query
+  // Filter products by sector, status, and search query
   const filteredProducts = products.filter((prod) => {
     const matchesSector = selectedSector === 'ALL' || prod.sector === selectedSector;
-    const matchesMarket = selectedMarket === 'ALL' || prod.targetMarkets.includes(selectedMarket as any);
-    const matchesSearch = 
+    
+    let matchesStatus = true;
+    if (selectedStatusTab === 'LIVE') {
+      matchesStatus = prod.sampleStatus === 'BUYER_APPROVED' || prod.sampleStatus === 'IN_BULK_PRODUCTION';
+    } else if (selectedStatusTab === 'NEGOTIATION') {
+      matchesStatus = prod.sampleStatus === 'PROTO_REQUESTED' || (prod.costing?.negotiatedSavingsUsd || 0) > 0;
+    } else if (selectedStatusTab === 'COSTING_DRAFT') {
+      matchesStatus = prod.sampleStatus === 'DEVELOPMENT_PASSED' || !prod.costing?.b2bFobPriceUsd;
+    }
+
+    const matchesSearch =
       searchQuery === '' ||
       prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prod.partnerFactory.factoryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prod.hsCode.includes(searchQuery);
+      (prod.partnerFactory?.factoryName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (prod.hsCode || '').includes(searchQuery);
 
-    return matchesSector && matchesMarket && matchesSearch;
+    return matchesSector && matchesStatus && matchesSearch;
   });
-
-  // Currency Converter Helper
-  const formatPrice = (usdAmount: number) => {
-    const converted = usdAmount * activeCurrency.rateToUsd;
-    return `${activeCurrency.symbol}${converted.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
-  };
 
   const getSectorBadge = (sector: ProductSector) => {
     switch (sector) {
       case 'LEATHER':
-        return {
-          label: 'Leather Goods',
-          icon: '💼',
-          color: 'bg-[#FAF5EC] text-[#8A6D3B] border-[#C8A96A]',
-        };
+        return { label: 'Leather Goods', icon: '💼', color: 'bg-[#FAF5EC] text-[#8A6D3B] border-[#C8A96A]' };
       case 'JUTE':
-        return {
-          label: 'Jute Products',
-          icon: '🛍️',
-          color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]',
-        };
+        return { label: 'Jute Products', icon: '🛍️', color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]' };
       case 'TEXTILE':
-        return {
-          label: 'Apparel & Home Textiles',
-          icon: '🧵',
-          color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]',
-        };
+        return { label: 'Apparel & Textiles', icon: '🧵', color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]' };
       case 'CERAMICS':
-        return {
-          label: 'Ceramics & Tableware',
-          icon: '🍽️',
-          color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
-        };
+        return { label: 'Ceramics & Tableware', icon: '🍽️', color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]' };
       case 'POTTERY':
-        return {
-          label: 'Pottery & Terracotta',
-          icon: '🏺',
-          color: 'bg-[#FDF3E7] text-[#9A3412] border-[#FDBA74]',
-        };
+        return { label: 'Pottery & Terracotta', icon: '🏺', color: 'bg-[#FDF3E7] text-[#9A3412] border-[#FDBA74]' };
     }
   };
 
   const getSampleStatusBadge = (status: ProductItem['sampleStatus']) => {
     switch (status) {
       case 'BUYER_APPROVED':
-        return {
-          label: 'Buyer Approved',
-          color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]',
-        };
+        return { label: 'Buyer Approved', color: 'bg-[#E4F3E9] text-[#14512C] border-[#BBE3C7]' };
       case 'IN_BULK_PRODUCTION':
-        return {
-          label: 'In Bulk Production',
-          color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]',
-        };
+        return { label: 'In Bulk Production', color: 'bg-[#E8F0FA] text-[#17456F] border-[#C5D7ED]' };
       case 'DEVELOPMENT_PASSED':
-        return {
-          label: 'R&D Passed',
-          color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]',
-        };
+        return { label: 'R&D Passed', color: 'bg-[#EDE7F6] text-[#4A2E7A] border-[#D6C7EC]' };
       case 'PROTO_REQUESTED':
-        return {
-          label: 'Proto Requested',
-          color: 'bg-[#FEF6E4] text-[#7A5508] border-[#FBE3B0]',
-        };
+        return { label: 'Proto Requested', color: 'bg-[#FEF6E4] text-[#7A5508] border-[#FBE3B0]' };
     }
   };
+
+  const bdtRate = 124.0;
 
   return (
     <div className="space-y-6">
       {/* Top Action Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-[#DDE3DD] shadow-xs">
         <div>
-          <h2 className="text-xl font-bold font-heading text-[#1F3A2E] flex items-center gap-2">
-            <Package className="w-5 h-5 text-[#1F3A2E]" />
-            <span>Master Product Catalog & Dynamic Taxonomy</span>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2 py-0.5 rounded bg-[#1F3A2E] text-[#C8A96A] text-[10px] font-mono font-bold tracking-wider uppercase">
+              Department 1
+            </span>
+            <span className="text-xs text-[#8A6D3B] font-semibold flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-[#8A6D3B]" />
+              <span>Product Master & Export Costing Engine</span>
+            </span>
+          </div>
+          <h2 className="text-xl font-bold font-heading text-[#1F3A2E]">
+            Export Product Master & Sourcing Vault
           </h2>
           <p className="text-xs text-[#6B7269] mt-0.5">
-            Technical specs, Bangladesh factory costs, locked sourcing margins, and export compliance.
+            “Win on purchase” tracking, 35-40% export landed costing, Bangladesh Bank 9.5% cash incentive, and verified factory MoUs.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* View mode toggle */}
-          <div className="flex items-center bg-white border border-[#DDE3DD] rounded-lg p-0.5 text-xs shadow-sm">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => setIsRoadmapModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#FAF5EC] border border-[#C8A96A]/60 hover:bg-[#F3EAD8] text-xs font-semibold text-[#8A6D3B] transition shadow-xs cursor-pointer"
+          >
+            <BookOpen className="w-4 h-4 text-[#8A6D3B]" />
+            <span>Master Roadmap (74 SKUs)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenAddModal}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#162B22] text-[#C8A96A] text-xs font-bold transition shadow-sm cursor-pointer"
+          >
+            <Plus className="w-4 h-4 text-[#C8A96A]" />
+            <span>+ Enlist New Product</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Sourcing Lifecycle Tabs & View Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-[#DDE3DD]">
+        {/* Status Lifecycle */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <button
+            type="button"
+            onClick={() => setSelectedStatusTab('ALL')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              selectedStatusTab === 'ALL'
+                ? 'bg-[#1F3A2E] text-white shadow-xs font-bold'
+                : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-slate-100'
+            }`}
+          >
+            All Products ({products.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedStatusTab('LIVE')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              selectedStatusTab === 'LIVE'
+                ? 'bg-[#14512C] text-white shadow-xs font-bold'
+                : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-slate-100'
+            }`}
+          >
+            <CheckCircle className="w-3.5 h-3.5 text-[#BBE3C7]" />
+            <span>Catalog Live (Published FOB)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedStatusTab('NEGOTIATION')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              selectedStatusTab === 'NEGOTIATION'
+                ? 'bg-[#8A6D3B] text-white shadow-xs font-bold'
+                : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-slate-100'
+            }`}
+          >
+            <TrendingUp className="w-3.5 h-3.5 text-[#FBE3B0]" />
+            <span>In Negotiation / Sourcing</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedStatusTab('COSTING_DRAFT')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              selectedStatusTab === 'COSTING_DRAFT'
+                ? 'bg-[#17456F] text-white shadow-xs font-bold'
+                : 'text-[#6B7269] hover:text-[#1A1A1A] hover:bg-slate-100'
+            }`}
+          >
+            <Calculator className="w-3.5 h-3.5 text-[#C5D7ED]" />
+            <span>Costing Draft</span>
+          </button>
+        </div>
+
+        {/* View Mode Switcher */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center rounded-lg border border-[#DDE3DD] bg-white p-0.5 text-xs">
             <button
+              type="button"
               onClick={() => setViewMode('GRID')}
-              className={`px-3 py-1 rounded-md font-semibold transition-colors ${
-                viewMode === 'GRID' ? 'bg-[#1F3A2E] text-white shadow-sm' : 'text-[#6B7269] hover:text-[#1A1A1A]'
+              className={`px-2.5 py-1 rounded-md font-semibold transition cursor-pointer ${
+                viewMode === 'GRID' ? 'bg-[#1F3A2E] text-white shadow-xs' : 'text-[#6B7269] hover:text-[#1A1A1A]'
               }`}
             >
-              Grid View
+              Cards
             </button>
             <button
+              type="button"
               onClick={() => setViewMode('TABLE')}
-              className={`px-3 py-1 rounded-md font-semibold transition-colors ${
-                viewMode === 'TABLE' ? 'bg-[#1F3A2E] text-white shadow-sm' : 'text-[#6B7269] hover:text-[#1A1A1A]'
+              className={`px-2.5 py-1 rounded-md font-semibold transition cursor-pointer ${
+                viewMode === 'TABLE' ? 'bg-[#1F3A2E] text-white shadow-xs' : 'text-[#6B7269] hover:text-[#1A1A1A]'
               }`}
             >
               Table View
             </button>
           </div>
-
-          {/* Official 5-Division Road Map Modal Trigger */}
-          <button
-            onClick={() => setIsRoadmapModalOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-xs font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
-            title="Browse official 74 product lines across all 5 industrial divisions"
-          >
-            <BookOpen className="w-4 h-4 text-[#8A6D3B]" />
-            <span>5-Division Road Map (74 Lines)</span>
-          </button>
-
-          {/* Add New Master Product */}
-          <button
-            id="add-new-sku-btn"
-            onClick={onOpenAddModal}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Plus className="w-4 h-4 text-[#C8A96A]" />
-            <span>Create Master SKU</span>
-          </button>
         </div>
       </div>
 
-      {/* Filter Tabs by Sector */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#DDE3DD] pb-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setSelectedSector('ALL')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              selectedSector === 'ALL'
-                ? 'bg-[#1F3A2E] text-white shadow-sm'
-                : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border border-[#DDE3DD]'
-            }`}
-          >
-            All 5 Sectors ({products.length})
-          </button>
+      {/* Sector Filter Bar */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <button
+          type="button"
+          onClick={() => setSelectedSector('ALL')}
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition border cursor-pointer ${
+            selectedSector === 'ALL'
+              ? 'bg-[#1F3A2E] text-white border-[#1F3A2E] shadow-xs'
+              : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border-[#DDE3DD]'
+          }`}
+        >
+          All 5 Sectors ({products.length})
+        </button>
 
-          {(['LEATHER', 'JUTE', 'TEXTILE', 'CERAMICS', 'POTTERY'] as ProductSector[]).map((sector) => {
-            const badge = getSectorBadge(sector);
-            const count = products.filter((p) => p.sector === sector).length;
-            const isSelected = selectedSector === sector;
+        {(["JUTE", "LEATHER", "CERAMICS", "POTTERY", "TEXTILE"] as ProductSector[]).map((sector) => {
+          const badge = getSectorBadge(sector);
+          const count = products.filter((p) => p.sector === sector).length;
+          const isSelected = selectedSector === sector;
 
-            return (
-              <button
-                key={sector}
-                onClick={() => setSelectedSector(sector)}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
-                  isSelected
-                    ? 'bg-[#1F3A2E] text-white border-[#1F3A2E] shadow-sm'
-                    : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border-[#DDE3DD]'
-                }`}
-              >
-                <span>{badge.icon}</span>
-                <span>{badge.label}</span>
-                <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#F0F4F1] text-[#1A1A1A]'}`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Target Market Selector */}
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-[#6B7269] font-medium">Target Zone:</span>
-          <select
-            value={selectedMarket}
-            onChange={(e) => setSelectedMarket(e.target.value)}
-            className="bg-white text-xs font-medium text-[#1A1A1A] border border-[#DDE3DD] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#1F3A2E] shadow-sm"
-          >
-            <option value="ALL">All Markets (UK / EU / US / AU)</option>
-            <option value="UK">🇬🇧 United Kingdom</option>
-            <option value="EU">🇪🇺 European Union</option>
-            <option value="US">🇺🇸 United States</option>
-            <option value="AU">🇦🇺 Australia</option>
-          </select>
-        </div>
+          return (
+            <button
+              key={sector}
+              type="button"
+              onClick={() => setSelectedSector(sector)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition border cursor-pointer shrink-0 ${
+                isSelected
+                  ? 'bg-[#1F3A2E] text-white border-[#1F3A2E] shadow-xs'
+                  : 'bg-white text-[#1A1A1A] hover:bg-[#F0F4F1] border-[#DDE3DD]'
+              }`}
+            >
+              <span>{badge.icon}</span>
+              <span>{badge.label}</span>
+              <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-[#F0F4F1] text-[#1A1A1A]'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Grid View */}
@@ -251,33 +286,38 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           {filteredProducts.map((prod) => {
             const sectorBadge = getSectorBadge(prod.sector);
             const statusBadge = getSampleStatusBadge(prod.sampleStatus);
+            const costing = prod.costing || {};
+            const savingsUsd = costing.negotiatedSavingsUsd || 0;
+            const savingsBdt = costing.negotiatedSavingsBdt || savingsUsd * bdtRate;
+            const purchaseUsd = costing.factoryCostUsd || 0;
+            const purchaseBdt = costing.factoryCostBdt || purchaseUsd * bdtRate;
+            const fobUsd = costing.b2bFobPriceUsd || 0;
+            const marginPct = costing.arielSourcingMarginPct || 35.0;
+            const netIncentivePct = costing.netIncentivePct ?? (prod.sector === 'JUTE' || prod.sector === 'LEATHER' ? 9.5 : 9.5);
+            const totalYieldPct = costing.totalEnterpriseMarginPct || Number((marginPct + netIncentivePct).toFixed(1));
 
             return (
               <div
                 key={prod.id}
-                className="group rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md text-[#1A1A1A]"
+                className="group rounded-2xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] flex flex-col justify-between overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 text-[#1A1A1A]"
               >
                 <div className="p-5 space-y-4">
-                  {/* Top: Sector & SKU */}
+                  {/* Top: Sector & Sample Status */}
                   <div className="flex items-start justify-between gap-2">
-                    <span
-                      className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${sectorBadge.color}`}
-                    >
+                    <span className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${sectorBadge.color}`}>
                       <span>{sectorBadge.icon}</span>
                       <span>{sectorBadge.label}</span>
                     </span>
 
-                    <span
-                      className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${statusBadge.color}`}
-                    >
+                    <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${statusBadge.color}`}>
                       {statusBadge.label}
                     </span>
                   </div>
 
-                  {/* Product Title & Category */}
+                  {/* Title & SKU */}
                   <div>
-                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                      <span className="font-mono text-[#1F3A2E] font-semibold text-xs bg-[#F4F6F4] px-2 py-0.5 rounded border border-[#DDE3DD]">
+                    <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
+                      <span className="font-mono text-[#1F3A2E] font-bold text-xs bg-[#F4F6F4] px-2 py-0.5 rounded border border-[#DDE3DD]">
                         {prod.sku}
                       </span>
                       {prod.roadmapCode && (
@@ -285,366 +325,284 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                           Ref #{prod.prodtId} • {prod.roadmapCode}
                         </span>
                       )}
-                      {prod.styleCode && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-semibold">
-                          Style {prod.styleCode}
-                        </span>
-                      )}
-                      {prod.eanBarcode && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] flex items-center gap-1 font-semibold">
-                          <Barcode className="w-3 h-3 text-[#7A5508]" />
-                          {prod.eanBarcode}
+                      {prod.hsCode && (
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                          HS {prod.hsCode}
                         </span>
                       )}
                     </div>
                     <h3 className="text-sm font-bold font-heading text-[#1F3A2E] group-hover:text-[#8A6D3B] transition-colors line-clamp-2">
                       {prod.name}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1.5 text-xs text-[#6B7269] flex-wrap">
-                      <span>HS {prod.hsCode}</span>
-                      {prod.subCategory && (
-                        <>
-                          <span>•</span>
-                          <span className="text-[11px] text-[#1A1A1A] font-medium">
-                            {prod.subCategory}
-                          </span>
-                        </>
-                      )}
-                      {prod.packagingMode && (
-                        <>
-                          <span>•</span>
-                          <span className="text-[11px] text-[#1A1A1A] font-medium bg-[#F8FAF8] px-2 py-0.5 rounded border border-[#DDE3DD]">
-                            📦 {prod.packagingMode}
-                          </span>
-                        </>
-                      )}
-                    </div>
+                    <p className="text-[11px] text-[#6B7269] mt-1 line-clamp-2 leading-relaxed">
+                      {prod.description}
+                    </p>
                   </div>
 
-                  {/* Sourcing Partner & Bangladesh Region */}
-                  <div className="p-3 rounded-lg bg-[#F8FAF8] border border-[#DDE3DD] text-xs space-y-1.5">
-                    <div className="flex items-center justify-between text-[#1A1A1A]">
-                      <span className="flex items-center gap-1.5 text-[#6B7269] text-[11px]">
+                  {/* Sourcing & Negotiation Section (Golden Rule) */}
+                  <div className="p-3 rounded-xl bg-[#FAF9F5] border border-[#DDE3DD] space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[#6B7269] flex items-center gap-1 font-medium">
                         <Factory className="w-3.5 h-3.5 text-[#8A6D3B]" />
-                        <span>Sourcing Factory:</span>
+                        <span>Factory Purchase Cost:</span>
                       </span>
-                      <span className="font-semibold text-[#1F3A2E] truncate max-w-[150px]">
-                        {prod.partnerFactory.factoryName}
-                      </span>
+                      <div className="text-right">
+                        <span className="font-mono font-bold text-[#1F3A2E] text-xs">
+                          ${purchaseUsd.toFixed(2)}
+                        </span>
+                        <span className="text-[10px] text-[#6B7269] block font-mono">
+                          (৳{purchaseBdt.toFixed(0)})
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between text-[11px] text-[#6B7269]">
-                      <span>{prod.partnerFactory.location}</span>
-                      <span className="text-[#1A1A1A] font-mono font-medium">
-                        Lead: {prod.partnerFactory.leadTimeDays}d • MOQ: {prod.partnerFactory.moq}
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Sector Key Attributes Summary */}
-                  <div className="text-[11px] text-[#1A1A1A] bg-[#F4F6F4] rounded-lg p-2.5 border border-[#DDE3DD] space-y-1">
-                    {prod.sector === 'LEATHER' && prod.attributes.sector === 'LEATHER' && (
-                      <>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Leather:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.leatherType} {prod.attributes.data.hideOrigin} ({prod.attributes.data.tanningMethod})
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Hardware & Certification:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.hardwareFinish} • LWG {prod.attributes.data.lwgCertification}
-                          </span>
-                        </div>
-                      </>
-                    )}
-
-                    {prod.sector === 'JUTE' && prod.attributes.sector === 'JUTE' && (
-                      <>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Weave & GSM:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.construction} • {prod.attributes.data.weightGsm} GSM
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Lamination:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.lamination}
-                          </span>
-                        </div>
-                      </>
-                    )}
-
-                    {prod.sector === 'TEXTILE' && prod.attributes.sector === 'TEXTILE' && (
-                      <>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Fabric & TC:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.composition} • {prod.attributes.data.threadCount} TC
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Weave & Finish:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.weaveType} • {prod.attributes.data.finishType}
-                          </span>
-                        </div>
-                      </>
-                    )}
-
-                    {prod.sector === 'CERAMICS' && prod.attributes.sector === 'CERAMICS' && (
-                      <>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Body & Glaze:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.clayBody} • {prod.attributes.data.glazeType}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Firing & Food Safety:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.firingTempCelsius}°C • {prod.attributes.data.foodContactSafety.split(' ')[0]}
-                          </span>
-                        </div>
-                      </>
-                    )}
-
-                    {prod.sector === 'POTTERY' && prod.attributes.sector === 'POTTERY' && (
-                      <>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Clay & Firing:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.clayType} • {prod.attributes.data.firingTempCelsius}°C
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#6B7269]">Finish & Cooling:</span>
-                          <span className="font-medium text-[#1A1A1A]">
-                            {prod.attributes.data.finishStyle} • {prod.attributes.data.evaporativeCoolingRating}
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Multi-Tier Commercial Pricing Matrix */}
-                  <div className="space-y-1.5 pt-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6B7269]">Factory Base:</span>
-                      <span className="font-mono text-[#1A1A1A]">
-                        ৳{prod.costing.factoryCostBdt.toLocaleString()} (${prod.costing.factoryCostUsd})
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6B7269]">ArielMC Locked Margin:</span>
-                      <span className="font-mono text-[#14512C] font-bold">
-                        +{prod.costing.arielSourcingMarginPct}%
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-[#E4F3E9] border border-[#BBE3C7] text-xs">
-                      <span className="text-[#14512C] font-semibold">B2B FOB Chattogram:</span>
-                      <span className="font-mono font-bold text-[#14512C] text-sm">
-                        {formatPrice(prod.costing.b2bFobPriceUsd)}
-                      </span>
-                    </div>
-                    {prod.volumePricing && (
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[#14512C] px-2 py-1 rounded bg-[#F4F6F4] border border-[#DDE3DD]">
-                        <span className="text-[#6B7269]">Tier 1 Buying Target:</span>
-                        <span className="font-bold">
-                          ${prod.volumePricing.tier1.targetBuyUsd} (FOB ${prod.volumePricing.tier1.sellPriceUsd})
+                    {/* Negotiation Savings Pill */}
+                    {savingsUsd > 0 && (
+                      <div className="p-1.5 rounded-lg bg-[#E4F3E9] border border-[#BBE3C7] flex items-center justify-between text-[10px]">
+                        <span className="text-[#14512C] font-semibold flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3 text-[#14512C]" />
+                          Negotiated Savings:
+                        </span>
+                        <span className="font-mono font-bold text-[#14512C]">
+                          Saved +${savingsUsd.toFixed(2)} (৳{savingsBdt.toFixed(0)})
                         </span>
                       </div>
                     )}
-                    <div className="flex items-center justify-between text-[11px] text-[#6B7269] px-1">
-                      <span>D2C Retail (Amazon/Shopify):</span>
-                      <span className="font-mono text-[#8A6D3B] font-bold">
-                        {formatPrice(prod.costing.d2cRetailPriceUsd)}
+                  </div>
+
+                  {/* Export Pricing, Margins & Bangladesh Bank Subsidy */}
+                  <div className="p-3.5 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-[#6B7269] font-medium">Published Export FOB:</span>
+                      <span className="text-lg font-bold font-mono text-[#1F3A2E]">
+                        ${fobUsd.toFixed(2)}
                       </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-[#DDE3DD]">
+                      <div>
+                        <span className="text-[#6B7269] block text-[10px]">Commercial Margin</span>
+                        <span className="font-mono font-bold text-[#1F3A2E]">
+                          {marginPct.toFixed(1)}% (+${(fobUsd * (marginPct / 100)).toFixed(2)})
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[#14512C] block text-[10px] font-semibold">
+                          Govt Cash Incentive
+                        </span>
+                        <span className="font-mono font-bold text-[#14512C]">
+                          +{netIncentivePct}% Net
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* True Enterprise Net Yield Banner */}
+                    <div className="p-2 rounded-lg bg-[#1F3A2E] text-white flex items-center justify-between text-[11px]">
+                      <span className="text-[#C8A96A] font-bold flex items-center gap-1">
+                        <Landmark className="w-3 h-3 text-[#C8A96A]" />
+                        <span>True Enterprise Yield:</span>
+                      </span>
+                      <span className="font-mono font-bold text-[#C8A96A] text-xs">
+                        {totalYieldPct}% Return
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Partner Factory & Sourcing Link Pill */}
+                  <div className="p-2.5 rounded-xl bg-white border border-[#DDE3DD] text-[11px] space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[#1F3A2E] truncate max-w-[180px]">
+                        {prod.partnerFactory?.factoryName || 'Enlisted Partner Factory'}
+                      </span>
+                      <span className="text-[10px] font-mono text-[#8A6D3B] font-bold">
+                        Lead: {prod.partnerFactory?.leadTimeDays || 21}d • MOQ: {prod.partnerFactory?.moq || 300}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] text-[#6B7269] pt-1 border-t border-slate-100">
+                      <span>Sample: <strong>{prod.partnerFactory?.sampleTurnaroundDays || 7}d (Buyer DHL)</strong></span>
+                      {prod.partnerFactory?.contactPhone && (
+                        <a
+                          href={`https://wa.me/${prod.partnerFactory.contactPhone.replace(/[^0-9]/g, '')}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1"
+                        >
+                          <MessageCircle className="w-3 h-3" />
+                          <span>WhatsApp</span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                {/* Card Action */}
-                <div className="p-3 border-t border-[#DDE3DD] bg-[#F8FAF8] flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    {prod.targetMarkets.map((m) => (
-                      <span
-                        key={m}
-                        className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white text-[#1F3A2E] border border-[#DDE3DD] font-semibold"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
+                {/* Card Action Footer */}
+                <div className="p-3 border-t border-[#DDE3DD] bg-[#FAF9F5] flex items-center justify-between gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setCostingProduct(prod)}
+                    className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#1F3A2E] text-[11px] font-bold text-[#1F3A2E] transition cursor-pointer shadow-2xs"
+                    title="Open Export Landed Costing & Bangladesh Bank Incentive Calculator"
+                  >
+                    <Calculator className="w-3.5 h-3.5 text-[#8A6D3B]" />
+                    <span>Costing Engine</span>
+                  </button>
 
-                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#DDE3DD]">
-                    <button
-                      onClick={() => onSelectProduct(prod)}
-                      className="flex items-center gap-1.5 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
-                    >
-                      <span>Tech Specs</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                  <button
+                    type="button"
+                    onClick={() => setVaultProduct(prod)}
+                    className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-[#FAF5EC] border border-[#C8A96A]/60 hover:bg-[#F3EAD8] text-[11px] font-bold text-[#8A6D3B] transition cursor-pointer shadow-2xs"
+                    title="View Signed MoU, Factory Rating Scorecard, and Studio Photo Assets"
+                  >
+                    <FileCheck2 className="w-3.5 h-3.5 text-[#8A6D3B]" />
+                    <span>MoU & Vault</span>
+                  </button>
 
-                    <button
-                      onClick={() =>
-                        setViewingTechPack(
-                          prod.standardTechPack ||
-                            buildStandardFactoryTechPack({
-                              modelName: prod.name,
-                              styleCode: prod.styleCode,
-                              sector: prod.sector,
-                              category: prod.category,
-                              referencePictureUrl: prod.images?.[0],
-                              originHub: prod.partnerFactory?.location,
-                              factoryName: prod.partnerFactory?.factoryName,
-                            })
-                        )
-                      }
-                      className="px-2.5 py-1 rounded-md bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-[11px] font-bold flex items-center gap-1 transition-all shadow-sm"
-                      title="Open Official Standard Factory Tech-Pack (PDF Format)"
-                    >
-                      <FileText className="w-3 h-3" />
-                      <span>Tech-Pack</span>
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onSelectProduct(prod)}
+                    className="p-1.5 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-[#C8A96A] transition cursor-pointer"
+                    title="View Full Product TechPack & Specifications Dossier"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             );
           })}
         </div>
       ) : (
-        /* Detailed Table View */
-        <div className="overflow-x-auto rounded-xl border border-[#DDE3DD] bg-white shadow-sm">
-          <table className="w-full text-left text-xs text-[#1A1A1A]">
-            <thead className="bg-[#1F3A2E] text-white uppercase text-[11px] font-semibold tracking-wider">
-              <tr>
-                <th className="py-3.5 px-4 font-heading">Master SKU & Name</th>
-                <th className="py-3.5 px-4 font-heading">Sector</th>
-                <th className="py-3.5 px-4 font-heading">HS Code</th>
-                <th className="py-3.5 px-4 font-heading">BD Sourcing Factory</th>
-                <th className="py-3.5 px-4 font-heading">Factory Cost</th>
-                <th className="py-3.5 px-4 font-heading">B2B FOB Ctg</th>
-                <th className="py-3.5 px-4 font-heading">D2C Retail</th>
-                <th className="py-3.5 px-4 font-heading">Status</th>
-                <th className="py-3.5 px-4 font-heading text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#DDE3DD]">
-              {filteredProducts.map((prod) => {
-                const sectorBadge = getSectorBadge(prod.sector);
-                const statusBadge = getSampleStatusBadge(prod.sampleStatus);
+        /* Table View */
+        <div className="rounded-xl border border-[#DDE3DD] bg-white overflow-hidden shadow-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-[#1A1A1A]">
+              <thead className="bg-[#FAF9F5] text-[11px] text-[#6B7269] uppercase font-bold border-b border-[#DDE3DD]">
+                <tr>
+                  <th className="py-3 px-4">SKU / Product</th>
+                  <th className="py-3 px-4">Sector</th>
+                  <th className="py-3 px-4">Factory Purchase</th>
+                  <th className="py-3 px-4">Negotiated Savings</th>
+                  <th className="py-3 px-4">Published FOB</th>
+                  <th className="py-3 px-4">Commercial Margin</th>
+                  <th className="py-3 px-4">Govt Incentive</th>
+                  <th className="py-3 px-4">Total Net Yield</th>
+                  <th className="py-3 px-4">Partner Factory</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#DDE3DD]">
+                {filteredProducts.map((prod) => {
+                  const costing = prod.costing || {};
+                  const purchaseUsd = costing.factoryCostUsd || 0;
+                  const savingsUsd = costing.negotiatedSavingsUsd || 0;
+                  const fobUsd = costing.b2bFobPriceUsd || 0;
+                  const marginPct = costing.arielSourcingMarginPct || 35.0;
+                  const netIncentivePct = costing.netIncentivePct ?? 9.5;
+                  const totalYieldPct = costing.totalEnterpriseMarginPct || Number((marginPct + netIncentivePct).toFixed(1));
 
-                return (
-                  <tr key={prod.id} className="hover:bg-[#F7FAF8] transition-colors">
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-[#1F3A2E] text-xs">{prod.name}</div>
-                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                        <span className="font-mono text-[#1F3A2E] font-semibold text-[11px] bg-[#F4F6F4] px-1.5 py-0.5 rounded border border-[#DDE3DD]">{prod.sku}</span>
-                        {prod.roadmapCode && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FAF5EC] text-[#8A6D3B] border border-[#C8A96A] font-bold">
-                            Ref #{prod.prodtId} • {prod.roadmapCode}
-                          </span>
-                        )}
-                        {prod.styleCode && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#E8F0FA] text-[#17456F] border border-[#C5D7ED] font-semibold">
-                            Style {prod.styleCode}
-                          </span>
-                        )}
-                        {prod.eanBarcode && (
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0] flex items-center gap-1 font-semibold">
-                            <Barcode className="w-2.5 h-2.5 text-[#7A5508]" />
-                            {prod.eanBarcode}
-                          </span>
-                        )}
-                      </div>
-                      {prod.packagingMode && (
-                        <div className="text-[10px] text-[#6B7269] mt-1">
-                          📦 {prod.packagingMode}
+                  return (
+                    <tr key={prod.id} className="hover:bg-[#F8FAF8] transition">
+                      <td className="py-3 px-4">
+                        <div className="font-mono font-bold text-[#1F3A2E]">{prod.sku}</div>
+                        <div className="font-semibold text-[#1A1A1A] truncate max-w-[200px]">{prod.name}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="font-semibold text-slate-700">{prod.sector}</span>
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
+                        ${purchaseUsd.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-4 font-mono text-[#14512C] font-semibold">
+                        {savingsUsd > 0 ? `+$${savingsUsd.toFixed(2)}` : '-'}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
+                        ${fobUsd.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
+                        {marginPct.toFixed(1)}%
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#14512C]">
+                        +{netIncentivePct}% Net
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#14512C]">
+                        {totalYieldPct}%
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="font-semibold text-[#1F3A2E] truncate max-w-[150px]">
+                          {prod.partnerFactory?.factoryName || 'Factory'}
                         </div>
-                      )}
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded-full border text-[11px] font-semibold ${sectorBadge.color}`}>
-                        {sectorBadge.label}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 font-mono text-[#6B7269]">{prod.hsCode}</td>
-                    <td className="py-3 px-4">
-                      <div className="text-[#1F3A2E] font-medium">{prod.partnerFactory.factoryName}</div>
-                      <div className="text-[10px] text-[#6B7269]">{prod.partnerFactory.location}</div>
-                    </td>
-                    <td className="py-3 px-4 font-mono">
-                      ৳{prod.costing.factoryCostBdt} (${prod.costing.factoryCostUsd})
-                    </td>
-                    <td className="py-3 px-4 font-mono font-bold text-[#14512C]">
-                      {formatPrice(prod.costing.b2bFobPriceUsd)}
-                    </td>
-                    <td className="py-3 px-4 font-mono font-semibold text-[#8A6D3B]">
-                      {formatPrice(prod.costing.d2cRetailPriceUsd)}
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${statusBadge.color}`}>
-                        {statusBadge.label}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() =>
-                            setViewingTechPack(
-                              prod.standardTechPack ||
-                                buildStandardFactoryTechPack({
-                                  modelName: prod.name,
-                                  styleCode: prod.styleCode,
-                                  sector: prod.sector,
-                                  category: prod.category,
-                                  referencePictureUrl: prod.images?.[0],
-                                  originHub: prod.partnerFactory?.location,
-                                  factoryName: prod.partnerFactory?.factoryName,
-                                })
-                            )
-                          }
-                          className="px-2 py-1 rounded bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] border border-[#C8A96A] text-xs font-semibold shadow-sm transition-all flex items-center gap-1"
-                          title="Open Official Standard Factory Tech-Pack (PDF Format)"
-                        >
-                          <FileText className="w-3 h-3" />
-                          <span>Tech-Pack</span>
-                        </button>
-                        <button
-                          onClick={() => onSelectProduct(prod)}
-                          className="px-2.5 py-1 rounded bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-semibold shadow-sm transition-all"
-                        >
-                          Inspect
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                        <div className="text-[10px] text-[#6B7269]">
+                          Sample: {prod.partnerFactory?.sampleTurnaroundDays || 7}d (Buyer DHL)
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setCostingProduct(prod)}
+                            className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-[#1F3A2E] text-xs transition cursor-pointer"
+                            title="Open Costing Engine"
+                          >
+                            <Calculator className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setVaultProduct(prod)}
+                            className="p-1 rounded bg-[#FAF5EC] hover:bg-[#F3EAD8] text-[#8A6D3B] text-xs transition cursor-pointer"
+                            title="View MoU & Rating Vault"
+                          >
+                            <FileCheck2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onSelectProduct(prod)}
+                            className="p-1 rounded bg-[#1F3A2E] hover:bg-[#162B22] text-[#C8A96A] text-xs transition cursor-pointer"
+                            title="View TechPack"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
-      {/* Official Factory Tech-Pack Viewer & Printable Modal */}
-      <StandardFactoryTechPackModal
-        isOpen={!!viewingTechPack}
-        onClose={() => setViewingTechPack(null)}
-        techPack={viewingTechPack}
+      {/* Interactive Modals */}
+      <ExportLandedCostingModal
+        product={costingProduct}
+        isOpen={!!costingProduct}
+        onClose={() => setCostingProduct(null)}
+        onSaveCosting={(updated) => {
+          onUpdateProduct?.(updated);
+        }}
+        bdtRate={bdtRate}
       />
 
-      {/* Official 5-Division Product Road Map Directory Modal */}
-      <ProductRoadmapModal
-        isOpen={isRoadmapModalOpen}
-        onClose={() => setIsRoadmapModalOpen(false)}
-        activeCurrency={activeCurrency}
-        onSelectRoadmapItem={() => {
-          setIsRoadmapModalOpen(false);
-          onOpenAddModal();
-        }}
+      <SourcingVaultModal
+        product={vaultProduct}
+        isOpen={!!vaultProduct}
+        onClose={() => setVaultProduct(null)}
       />
+
+      {isRoadmapModalOpen && (
+        <ProductRoadmapModal
+          isOpen={isRoadmapModalOpen}
+          onClose={() => setIsRoadmapModalOpen(false)}
+        />
+      )}
+
+      {viewingTechPack && (
+        <StandardFactoryTechPackModal
+          isOpen={!!viewingTechPack}
+          techPack={viewingTechPack}
+          onClose={() => setViewingTechPack(null)}
+        />
+      )}
     </div>
   );
 };

@@ -136,52 +136,60 @@ export interface CorporateCommunication {
 export type ProductSector = 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS' | 'POTTERY';
 
 export interface LeatherAttributes {
-  leatherType: 'Full-Grain' | 'Top-Grain' | 'Split' | 'Nubuck' | 'Suede';
-  tanningMethod: 'Vegetable Tanned' | 'Chrome Tanned' | 'Semi-Chrome' | 'Chrome-Free';
-  hideOrigin: 'Cowhide' | 'Buffalo' | 'Goat' | 'Sheep';
-  thicknessMm: string;
-  hardwareFinish: 'Antique Brass' | 'Gunmetal' | 'Brushed Nickel' | 'Matte Black';
-  edgeFinish: 'Italian Edge Painted' | 'Burnished' | 'Turned Edge';
-  reachCompliant: boolean;
-  lwgCertification: 'Gold' | 'Silver' | 'Bronze' | 'Audited';
+  leatherType: string;
+  tanningMethod: string;
+  hideOrigin: string;
+  thicknessMm?: string;
+  hardwareFinish?: string;
+  edgeFinish?: string;
+  reachCompliant?: boolean;
+  lwgCertification?: string;
+  threadSpec?: string;
+  [key: string]: any;
 }
 
 export interface JuteAttributes {
-  construction: 'Hessian' | 'Sacking' | 'CBC (Carpet Backing)' | 'Twill' | 'Geo-Jute';
-  yarnCount: string;
+  fiberGrade?: string;
+  construction: string;
+  yarnCount?: string;
   weightGsm: number;
-  lamination: 'Biodegradable PLA' | 'Food-Grade PP' | 'Unlaminated Natural' | 'Waxed';
-  bleachStatus: 'Natural Golden' | 'Semi-Bleached' | 'Full Bleached' | 'Vat Dyed';
-  biodegradabilityRate: string;
-  fumigationStandard: string;
+  lamination: string;
+  bleachStatus?: string;
+  dyeType?: string;
+  biodegradabilityRate?: string;
+  fumigationStandard?: string;
+  ecoCertifications?: string[];
 }
 
 export interface TextileAttributes {
-  composition: '100% Combed Cotton' | 'Organic Cotton (GOTS)' | 'Linen-Cotton Blend' | 'Mulberry Silk Blend';
-  threadCount: number;
-  gsm: number;
-  weaveType: 'Sateen' | 'Percale' | 'Waffle' | 'Herringbone' | 'Jacquard';
-  dyeStandard: 'OEKO-TEX Standard 100 Class 1' | 'Azo-Free Reactive Dye' | 'Natural Botanical';
-  shrinkageLimit: string;
-  finishType: 'Bio-Polished' | 'Silicon Soft' | 'Stonewashed';
+  composition: string;
+  threadCount?: number;
+  gsm?: number;
+  weaveType?: string;
+  dyeStandard?: string;
+  shrinkageLimit?: string;
+  finishType?: string;
 }
 
 export interface CeramicAttributes {
-  clayBody: 'High-Fired Stoneware' | 'Fine Porcelain' | 'Terracotta' | 'Earthenware';
-  glazeType: 'Reactive Mineral Glaze' | 'Satin Matte' | 'Glossy Crystalline' | 'Unglazed Terra';
+  clayBody: string;
+  glazeType: string;
   firingTempCelsius: number;
-  waterAbsorption: string;
-  foodContactSafety: 'FDA 21 CFR 175.300 Compliant' | 'EU Directive 84/500/EEC' | 'California Prop 65';
-  thermalShockResistance: string;
+  waterAbsorption?: string;
+  foodContactSafety: string;
+  thermalShockResistance?: string;
+  dishwasherSafe?: boolean;
+  microwaveSafe?: boolean;
 }
 
 export interface PotteryAttributes {
-  clayType: 'Indigenous Earthen Clay' | 'Red Terracotta' | 'Black Earthen Clay' | 'Porous Terracotta';
+  clayType: string;
   firingTempCelsius: number;
   evaporativeCoolingRating?: string;
-  finishStyle: 'Raw Natural Terra' | 'Smoked / Carbon Fired' | 'Hand-Burnished' | 'Waxed Breathable';
-  frostResistance: 'Indoor & Sheltered' | 'Frost Resistant to -10°C';
-  foodSafeUse: 'Lead & Cadmium Free (Traditional Cooking Grade)' | 'Decorative & Planters Only';
+  finishStyle: string;
+  frostResistance?: string;
+  foodSafeUse?: string;
+  ecoCertifications?: string[];
 }
 
 export type SectorAttributes = 
@@ -213,12 +221,46 @@ export interface ProductItem {
   costing: {
     factoryCostBdt: number;
     factoryCostUsd: number;
+    initialFactoryAskingCostBdt?: number;
+    initialFactoryAskingCostUsd?: number;
+    negotiatedSavingsUsd?: number;
+    negotiatedSavingsBdt?: number;
+    exportPackagingUsd?: number;
+    inlandFreightPortUsd?: number;
+    qualityInspectionReserveUsd?: number;
+    complianceOverheadReserveUsd?: number;
+    totalLandedCostUsd?: number;
     arielSourcingMarginPct: number;
     b2bFobPriceUsd: number;
     b2bCifPriceGbp?: number;
     b2bCifPriceEur?: number;
     b2bDdpPriceUsd?: number;
     d2cRetailPriceUsd: number;
+    incentiveCategory?: string;
+    incentiveRatePct?: number;
+    sourceTaxRatePct?: number;
+    netIncentivePct?: number;
+    netIncentiveUsd?: number;
+    totalEnterpriseMarginPct?: number;
+  };
+  volumePricingSlabs?: {
+    slabName: string;
+    moqRange: string;
+    fobPriceUsd: number;
+    marginPct: number;
+  }[];
+  sourcingVault?: {
+    signedMouUrl?: string;
+    signedMouName?: string;
+    signedMouDate?: string;
+    hasIncentiveWaiverClause?: boolean;
+    factoryRatingGrade?: "A" | "B" | "C";
+    factoryRatingScore?: number;
+    factoryAuditReportUrl?: string;
+    factoryAuditReportName?: string;
+    studioPhotoZipUrl?: string;
+    studioPhotoZipName?: string;
+    highResPhotoCount?: number;
   };
   volumePricing?: {
     tier1: { qty: string; sellPriceUsd: number; targetBuyUsd: number };
@@ -229,10 +271,17 @@ export interface ProductItem {
   attributes: SectorAttributes;
   complianceCertificates: string[];
   partnerFactory: {
+    factoryId?: string;
+    factoryCode?: string;
     factoryName: string;
+    contactPerson?: string;
+    contactPhone?: string;
+    contactEmail?: string;
     location: string;
     leadTimeDays: number;
     moq: number;
+    sampleTurnaroundDays?: number;
+    sampleCostPolicy?: "FOC_BUYER_COURIER" | "DEV_FEE_DEDUCTIBLE" | "TOOLING_BUYER";
     rating: number;
   };
   sampleStatus: 'PROTO_REQUESTED' | 'DEVELOPMENT_PASSED' | 'BUYER_APPROVED' | 'IN_BULK_PRODUCTION';
