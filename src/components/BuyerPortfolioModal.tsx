@@ -258,21 +258,10 @@ export const BuyerPortfolioModal: React.FC<BuyerPortfolioModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-6xl max-h-[94vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col font-sans">
-        {/* Top-Right Absolute Close Button (Standard Window Position) */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-          title="Close Window (X)"
-          aria-label="Close Window"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
         {/* ==================================================================== */}
         {/* TOP HEADER: BRAND PROFILE & CORE STATS                               */}
         {/* ==================================================================== */}
-        <div className="p-5 pr-16 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white">
+        <div className="p-5 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
@@ -312,7 +301,7 @@ export const BuyerPortfolioModal: React.FC<BuyerPortfolioModalProps> = ({
               </p>
             </div>
 
-            {/* Quick KPI Cards in Header */}
+            {/* Quick KPI Cards + Top-Right Close Button in Header */}
             <div className="flex items-center gap-2 flex-wrap">
               <div className="p-2.5 rounded-xl bg-white/10 border border-white/15 text-center min-w-[110px]">
                 <span className="text-[10px] uppercase tracking-wider text-emerald-200 block">Lifetime GMV</span>
@@ -343,6 +332,17 @@ export const BuyerPortfolioModal: React.FC<BuyerPortfolioModalProps> = ({
                 </span>
                 <span className="text-[9px] text-slate-300 block">Ariel Sourced</span>
               </div>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-1"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>

@@ -310,9 +310,12 @@ export const AuthWelcomeModal: React.FC<AuthWelcomeModalProps> = ({
         <div className="relative px-6 py-6 border-b border-[#2C5240] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-center">
           {onClose && !forceLock && (
             <button
+              type="button"
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white rounded-lg hover:bg-black/20 transition-colors"
+              style={{ position: 'absolute', top: '1rem', right: '1rem' }}
+              className="absolute top-4 right-4 p-2 text-white/80 hover:text-white rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
               title="Close"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>

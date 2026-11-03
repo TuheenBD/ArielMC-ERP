@@ -57,10 +57,22 @@ html, body {
    Universal onMouseOver (Glass Effect) for every button on the platform.
    ========================================================================== */
 
+button:not(.absolute):not([class*="absolute"]),
+.btn:not(.absolute):not([class*="absolute"]),
+[role="button"]:not(.absolute):not([class*="absolute"]) {
+  position: relative;
+}
+
+button.absolute,
+button[class*="absolute"],
+.btn.absolute,
+[role="button"].absolute {
+  position: absolute !important;
+}
+
 button,
 .btn,
 [role="button"] {
-  position: relative;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow, background-color, border-color;
   -webkit-tap-highlight-color: transparent;

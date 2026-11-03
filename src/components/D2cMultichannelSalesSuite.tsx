@@ -1349,19 +1349,8 @@ export const D2cMultichannelSalesSuite: React.FC<D2cMultichannelSalesSuiteProps>
       {isSalesPointModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
           <div className="relative w-full max-w-xl max-h-[92vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col font-sans">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setIsSalesPointModalOpen(false)}
-              className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
             {/* Header */}
-            <div className="p-5 pr-16 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white">
+            <div className="p-5 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-white/10 text-[#C8A96A] border border-white/20">
                   <Store className="w-5 h-5" />
@@ -1375,6 +1364,17 @@ export const D2cMultichannelSalesSuite: React.FC<D2cMultichannelSalesSuiteProps>
                   </p>
                 </div>
               </div>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsSalesPointModalOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-2"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Form Body */}
@@ -1585,29 +1585,31 @@ export const D2cMultichannelSalesSuite: React.FC<D2cMultichannelSalesSuiteProps>
       {isDeleteModalOpen && salesPointToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
           <div className="relative w-full max-w-md bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden p-6 text-[#1A1A1A] font-sans">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setIsDeleteModalOpen(false)}
-              className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold font-heading text-slate-900">
+                    Delete Sales Point?
+                  </h3>
+                  <span className="text-xs text-slate-500">
+                    {salesPointToDelete.name}
+                  </span>
+                </div>
+              </div>
 
-            <div className="flex items-center gap-3 mb-3 pr-8">
-              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold font-heading text-slate-900">
-                  Delete Sales Point?
-                </h3>
-                <span className="text-xs text-slate-500">
-                  {salesPointToDelete.name}
-                </span>
-              </div>
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             <p className="text-xs text-slate-600 mb-5 leading-relaxed">
@@ -1641,19 +1643,8 @@ export const D2cMultichannelSalesSuite: React.FC<D2cMultichannelSalesSuiteProps>
       {isCreateOrderModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
           <div className="relative w-full max-w-xl max-h-[92vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col font-sans">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setIsCreateOrderModalOpen(false)}
-              className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
             {/* Header */}
-            <div className="p-5 pr-16 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white">
+            <div className="p-5 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-white/10 text-[#C8A96A] border border-white/20">
                   <ShoppingCart className="w-5 h-5" />
@@ -1667,6 +1658,17 @@ export const D2cMultichannelSalesSuite: React.FC<D2cMultichannelSalesSuiteProps>
                   </p>
                 </div>
               </div>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsCreateOrderModalOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-2"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Form Body */}
@@ -1912,36 +1914,38 @@ export const D2cMultichannelSalesSuite: React.FC<D2cMultichannelSalesSuiteProps>
       {selectedOrderDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
           <div className="relative w-full max-w-2xl max-h-[92vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col font-sans">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setSelectedOrderDetail(null)}
-              className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
             {/* Header */}
-            <div className="p-5 pr-16 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white">
-              <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="font-mono text-xs px-2.5 py-0.5 rounded-md bg-[#C8A96A] text-[#12231B] font-bold">
-                  {selectedOrderDetail.orderNumber}
-                </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/20 text-emerald-100">
-                  {selectedOrderDetail.platform.replace('_', ' ')}
-                </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/80 text-emerald-300">
-                  {selectedOrderDetail.orderStatus}
-                </span>
+            <div className="p-5 border-b-[3px] border-[#C8A96A] bg-gradient-to-r from-[#162B22] via-[#1F3A2E] to-[#162B22] text-white flex items-start justify-between">
+              <div>
+                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span className="font-mono text-xs px-2.5 py-0.5 rounded-md bg-[#C8A96A] text-[#12231B] font-bold">
+                    {selectedOrderDetail.orderNumber}
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/20 text-emerald-100">
+                    {selectedOrderDetail.platform.replace('_', ' ')}
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/80 text-emerald-300">
+                    {selectedOrderDetail.orderStatus}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold font-heading text-white">
+                  B2C Order Details &amp; Settlement Breakdown
+                </h3>
+                <p className="text-xs text-emerald-100/80">
+                  Channel: {selectedOrderDetail.salesPointName} • Logged {selectedOrderDetail.orderDate}
+                </p>
               </div>
-              <h3 className="text-xl font-bold font-heading text-white">
-                B2C Order Details &amp; Settlement Breakdown
-              </h3>
-              <p className="text-xs text-emerald-100/80">
-                Channel: {selectedOrderDetail.salesPointName} • Logged {selectedOrderDetail.orderDate}
-              </p>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setSelectedOrderDetail(null)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-2"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Body */}

@@ -123,19 +123,8 @@ Ariel Marketing & Communications Limited`);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-6xl max-h-[94vh] flex flex-col bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden text-[#1A1A1A]">
-        {/* Top-Right Absolute Close Button (Standard Window Position) */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-3.5 right-4 z-20 p-2 rounded-xl bg-black/30 hover:bg-black/60 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
-          title="Close Window (X)"
-          aria-label="Close Window"
-        >
-          <X className="w-5 h-5" />
-        </button>
-        
         {/* Top Control Bar */}
-        <div className="flex flex-wrap items-center justify-between px-5 pr-16 py-3.5 bg-gradient-to-r from-[#1F3A2E] to-[#12231B] border-b border-[#C8A96A]/30 shrink-0 gap-3 text-white">
+        <div className="flex flex-wrap items-center justify-between px-5 py-3.5 bg-gradient-to-r from-[#1F3A2E] to-[#12231B] border-b border-[#C8A96A]/30 shrink-0 gap-3 text-white">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-[#C8A96A]/20 text-[#C8A96A] border border-[#C8A96A]/30">
               <FileText className="w-5 h-5" />
@@ -189,6 +178,17 @@ Ariel Marketing & Communications Limited`);
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / Save PDF</span>
+            </button>
+
+            {/* Standard Window Top-Right Close Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-1"
+              title="Close Window (X)"
+              aria-label="Close Window"
+            >
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>

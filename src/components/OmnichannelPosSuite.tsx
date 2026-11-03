@@ -1090,18 +1090,7 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-lg rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-6 shadow-2xl space-y-4">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setIsCheckoutOpen(false)}
-              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            
-            <div className="flex items-center justify-between pb-3 pr-14 border-b border-white/10">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-[#C8A96A]/20 text-[#C8A96A]">
                   <CreditCard className="w-5 h-5" />
@@ -1115,6 +1104,17 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsCheckoutOpen(false)}
+                className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Total Balance Due Card */}
@@ -1262,18 +1262,7 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
       {viewingReceipt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-md rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-5 shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setViewingReceipt(null)}
-              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center justify-between pb-3 pr-14 border-b border-white/10 shrink-0 no-print">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10 shrink-0 no-print">
               <div className="flex items-center gap-2">
                 <Receipt className="w-5 h-5 text-[#C8A96A]" />
                 <h3 className="font-heading font-bold text-sm text-white">
@@ -1296,6 +1285,17 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
                 >
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Share (Verify / Ack)</span>
+                </button>
+
+                {/* Standard Window Top-Right Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setViewingReceipt(null)}
+                  className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-1"
+                  title="Close Window (X)"
+                  aria-label="Close Window"
+                >
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -1440,24 +1440,24 @@ export const OmnichannelPosSuite: React.FC<OmnichannelPosSuiteProps> = ({
       {isCloseDrawerModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-lg rounded-2xl bg-[#12231B] border border-[#2C5240] text-white p-6 shadow-2xl space-y-4">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setIsCloseDrawerModalOpen(false)}
-              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            
-            <div className="flex items-center justify-between pb-3 pr-14 border-b border-white/10">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <Banknote className="w-5 h-5 text-[#C8A96A]" />
                 <h3 className="font-heading font-bold text-base text-white">
                   Cash Drawer &amp; Shift Reconciliation
                 </h3>
               </div>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsCloseDrawerModalOpen(false)}
+                className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Shift Metrics Grid */}

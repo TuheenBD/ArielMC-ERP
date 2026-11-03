@@ -428,19 +428,8 @@ export const VendorEnlistmentModal: React.FC<VendorEnlistmentModalProps> = ({
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md animate-fadeIn">
         <div className="relative bg-[#12231B] border-2 border-[#2C5240] rounded-2xl shadow-2xl w-full max-w-5xl h-[94vh] flex flex-col overflow-hidden text-white">
-          {/* Top-Right Absolute Close Button (Standard Window Position) */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
-            title="Close Window (X)"
-            aria-label="Close Window"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          
           {/* Header Bar */}
-          <div className="px-6 pr-16 py-4 bg-[#162B22] border-b-2 border-[#C8A96A] flex items-center justify-between shrink-0">
+          <div className="px-6 py-4 bg-[#162B22] border-b-2 border-[#C8A96A] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-[#C8A96A]/20 border border-[#C8A96A]/40 text-[#C8A96A]">
                 <Factory className="w-6 h-6" />
@@ -463,7 +452,7 @@ export const VendorEnlistmentModal: React.FC<VendorEnlistmentModalProps> = ({
               <button
                 type="button"
                 onClick={() => setIsPreviewPdfOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-[#C8A96A]/40 text-xs font-bold text-[#C8A96A] transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-[#C8A96A]/40 text-xs font-bold text-[#C8A96A] transition-all cursor-pointer"
                 title="Preview printable 2-page B2B Vendor Profile Form PDF"
               >
                 <Printer className="w-4 h-4" />
@@ -478,6 +467,17 @@ export const VendorEnlistmentModal: React.FC<VendorEnlistmentModalProps> = ({
               >
                 <Share2 className="w-4 h-4 text-emerald-100" />
                 <span>Share (Verify / Ack)</span>
+              </button>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-1"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
               </button>
             </div>
           </div>

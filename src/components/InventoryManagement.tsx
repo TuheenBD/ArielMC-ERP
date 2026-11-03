@@ -1291,25 +1291,31 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
       {inspectItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
           <div className="bg-white rounded-2xl shadow-2xl border border-[#DDE3DD] max-w-xl w-full p-6 text-[#1A1A1A] relative">
-            <button
-              onClick={() => setInspectItem(null)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-[#E8F0EA] text-[#1F3A2E] border border-[#BEDDA0]">
+                  <ShieldCheck className="w-6 h-6 text-[#1E6B3A]" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
+                    GS1 / REACH PROVENANCE
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-[#1F3A2E] mt-1">
+                    Batch &amp; Raw Material Traceability
+                  </h3>
+                </div>
+              </div>
 
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-[#E8F0EA] text-[#1F3A2E] border border-[#BEDDA0]">
-                <ShieldCheck className="w-6 h-6 text-[#1E6B3A]" />
-              </div>
-              <div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
-                  GS1 / REACH PROVENANCE
-                </span>
-                <h3 className="font-heading font-bold text-base text-[#1F3A2E] mt-1">
-                  Batch &amp; Raw Material Traceability
-                </h3>
-              </div>
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setInspectItem(null)}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             <div className="mt-4 p-3 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD] text-xs space-y-1">
@@ -1403,25 +1409,31 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
       {editingAllocationItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
           <div className="bg-white rounded-2xl shadow-2xl border border-[#DDE3DD] max-w-lg w-full p-6 text-[#1A1A1A] relative">
-            <button
-              onClick={() => setEditingAllocationItem(null)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0]">
+                  <SlidersHorizontal className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
+                    STOCK RE-BALANCING
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-[#1F3A2E] mt-1">
+                    Adjust Channel Allocations
+                  </h3>
+                </div>
+              </div>
 
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-[#FEF6E4] text-[#7A5508] border border-[#FBE3B0]">
-                <SlidersHorizontal className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
-                  STOCK RE-BALANCING
-                </span>
-                <h3 className="font-heading font-bold text-base text-[#1F3A2E] mt-1">
-                  Adjust Channel Allocations
-                </h3>
-              </div>
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setEditingAllocationItem(null)}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             <div className="mt-4 p-3 rounded-lg bg-[#F8F6F2] border border-[#DDE3DD] text-xs">
@@ -1549,25 +1561,31 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
       {isTransferModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
           <div className="bg-white rounded-2xl shadow-2xl border border-[#DDE3DD] max-w-xl w-full p-6 text-[#1A1A1A] relative max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setIsTransferModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]">
+                  <Ship className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
+                    INTER-WAREHOUSE CORRIDOR
+                  </span>
+                  <h3 className="font-heading font-bold text-base text-[#1F3A2E] mt-1">
+                    Issue Inbound Stock Transfer Order
+                  </h3>
+                </div>
+              </div>
 
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]">
-                <Ship className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
-                  INTER-WAREHOUSE CORRIDOR
-                </span>
-                <h3 className="font-heading font-bold text-base text-[#1F3A2E] mt-1">
-                  Issue Inbound Stock Transfer Order
-                </h3>
-              </div>
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsTransferModalOpen(false)}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             <form onSubmit={handleCreateTransfer} className="mt-4 space-y-3.5 text-xs">

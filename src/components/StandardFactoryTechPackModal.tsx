@@ -186,19 +186,8 @@ Issued by: ArielMC Technical Sourcing Team (tuheen@arielmc.com / +8801819273458)
   return createPortal(
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200 print:p-0 print:bg-white print:static print:z-auto">
       <div className="relative w-full max-w-5xl max-h-[94vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col z-[100000] print:border-none print:shadow-none print:max-h-none print:w-full print:rounded-none">
-        {/* Top-Right Absolute Close Button (Standard Window Position) */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2 rounded-xl bg-black/40 hover:bg-black/70 text-white/90 hover:text-white border border-white/20 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95 print:hidden"
-          title="Close Window (X)"
-          aria-label="Close Window"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
         {/* Top Control Bar (Hidden on print) */}
-        <div className="px-6 pr-16 py-4 bg-[#1F3A2E] text-white flex items-center justify-between border-b-[3px] border-[#C8A96A] print:hidden">
+        <div className="px-6 py-4 bg-[#1F3A2E] text-white flex items-center justify-between border-b-[3px] border-[#C8A96A] print:hidden">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-white/10 text-[#C8A96A] border border-white/20 flex items-center justify-center font-bold text-sm shadow-inner">
               <FileText className="w-5 h-5" />
@@ -257,7 +246,7 @@ Issued by: ArielMC Technical Sourcing Team (tuheen@arielmc.com / +8801819273458)
 
             <button
               onClick={handlePrint}
-              className="px-3 py-2 rounded-lg bg-[#C8A96A] hover:bg-[#D8BA7B] text-[#12231B] text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-2 rounded-lg bg-[#C8A96A] hover:bg-[#D8BA7B] text-[#12231B] text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
               title="Print to PDF / Factory Hardcopy"
             >
               <Printer className="w-4 h-4" />
@@ -272,6 +261,17 @@ Issued by: ArielMC Technical Sourcing Team (tuheen@arielmc.com / +8801819273458)
             >
               <Share2 className="w-4 h-4 text-emerald-200" />
               <span>Share (Verify / Ack)</span>
+            </button>
+
+            {/* Standard Window Top-Right Close Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95 ml-1"
+              title="Close Tech-Pack Window"
+              aria-label="Close Tech-Pack Window"
+            >
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>

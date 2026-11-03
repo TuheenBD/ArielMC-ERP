@@ -2497,19 +2497,8 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden text-[#1A1A1A]">
-            {/* Top-Right Absolute Close Button (Standard Window Position) */}
-            <button
-              type="button"
-              onClick={() => setIsCreateModalOpen(false)}
-              className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-black/30 hover:bg-black/60 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
-              title="Close Window (X)"
-              aria-label="Close Window"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 pr-16 py-4 bg-gradient-to-r from-[#1F3A2E] to-[#12231B] text-white border-b border-[#C8A96A]/30">
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#1F3A2E] to-[#12231B] text-white border-b border-[#C8A96A]/30">
               <div className="flex items-center gap-3">
                 <span className="px-2.5 py-1 text-[10px] font-mono font-bold uppercase rounded bg-[#C8A96A] text-[#1F3A2E]">
                   SO Generation
@@ -2518,6 +2507,17 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
                   Launch New B2B Sales Order (SO)
                 </h3>
               </div>
+
+              {/* Standard Window Top-Right Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsCreateModalOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 transition-all shadow-sm cursor-pointer hover:scale-105 active:scale-95"
+                title="Close Window (X)"
+                aria-label="Close Window"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Modal Form */}
