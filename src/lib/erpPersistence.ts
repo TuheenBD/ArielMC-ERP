@@ -6,7 +6,8 @@ import {
   CrmLead,
   InventoryItem,
   WarehouseLocation,
-  StockTransferOrder
+  StockTransferOrder,
+  CommercialProformaInvoice
 } from '@/types/erp';
 import { getSupabaseClient, isSupabaseConfigured } from './supabaseClient';
 import { INITIAL_PRODUCTS } from '@/data/initialData';
@@ -35,6 +36,7 @@ import { FactorySupplierPortfolio } from '@/types/factoryPortfolio';
 import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
 import { D2cSalesPoint, D2cSaleOrder } from '@/types/d2cSales';
 import { INITIAL_D2C_SALES_POINTS, INITIAL_D2C_SALE_ORDERS } from '@/data/initialD2cSalesData';
+import { INITIAL_PROFORMA_INVOICES } from '@/data/initialProformaInvoices';
 
 const LOCAL_STORAGE_KEYS = {
   PRODUCTS: 'arielmc_erp_products_v1',
@@ -55,6 +57,7 @@ const LOCAL_STORAGE_KEYS = {
   FACTORY_PORTFOLIOS: 'arielmc_erp_factory_portfolios_v1',
   D2C_SALES_POINTS: 'arielmc_erp_d2c_sales_points_v1',
   D2C_SALE_ORDERS: 'arielmc_erp_d2c_sale_orders_v1',
+  PROFORMA_INVOICES: 'arielmc_erp_proforma_invoices_v1',
 };
 
 // ==============================================================================
@@ -1764,5 +1767,32 @@ export const persistD2cSaleOrders = async (orders: D2cSaleOrder[]): Promise<void
     }
   }
 };
+
+// ==============================================================================
+// 18. DEPARTMENT 3: COMMERCIAL PROFORMA INVOICES (PI) PERSISTENCE
+// ==============================================================================
+
+export const fetchProformaInvoices = async (): Promise<CommercialProformaInvoice[]> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.PROFORMA_INVOICES);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Failed to parse cached proforma invoices:', e);
+    }
+  }
+  return INITIAL_PROFORMA_INVOICES;
+};
+
+export const persistProformaInvoices = async (invoices: CommercialProformaInvoice[]): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.PROFORMA_INVOICES, JSON.stringify(invoices));
+    } catch (e) {
+      console.warn('Failed to cache proforma invoices:', e);
+    }
+  }
+};
+
 
 

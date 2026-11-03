@@ -865,6 +865,7 @@ export interface BuyerSalesOrder {
   id: string;
   soNumber: string; // SO-2026-UK-001
   buyerCompany: string; // Linked to CRM
+  buyerBrandCode?: string;
   buyerContact: string;
   targetMarket: 'UK' | 'EU' | 'US' | 'AU';
   operatingEntity: EntityCode;
@@ -894,6 +895,94 @@ export interface BuyerSalesOrder {
   timeAndAction: TimeAndActionMilestone[];
   inspections: AqlInspectionReport[];
   fulfillmentRouting?: OrderFulfillmentRouting;
+}
+
+// -------------------------------------------------------------
+// Department 3: Commercial Sales Quotations & Proforma Invoices (PI)
+// -------------------------------------------------------------
+
+export interface ProformaInvoiceLineItem {
+  id: string;
+  productId?: string;
+  sku: string;
+  styleName: string;
+  description?: string;
+  hsCode: string;
+  sector: ProductSector;
+  quantity: number;
+  unit: string; // 'pcs', 'sets', 'pairs'
+  unitPrice: number; // in quoted currency
+  totalPrice: number; // quantity * unitPrice
+  factoryAskingCostBdt?: number;
+}
+
+export interface CommercialProformaInvoice {
+  id: string;
+  piNumber: string; // e.g. PI-2026-AMC-HAR-01
+  soNumberRef?: string;
+  buyerCompany: string;
+  buyerBrandCode?: string;
+  buyerContactPerson: string;
+  buyerEmail?: string;
+  buyerAddress?: string;
+  buyerVatEoriNumber?: string;
+  targetMarket: 'UK' | 'US' | 'EU' | 'AU' | 'BD';
+  operatingEntity: EntityCode;
+  
+  // Multi-Currency & Live Rates
+  currency: 'USD' | 'EUR' | 'GBP' | 'AUD' | 'BDT';
+  exchangeRateToUsd: number; // rate snapshot at issuance
+  
+  // Date & Validity
+  issueDate: string; // YYYY-MM-DD
+  validUntil: string; // YYYY-MM-DD (typically 30-45 days)
+  estimatedShipmentDate: string; // YYYY-MM-DD
+  productionLeadTimeWeeks: number; // e.g. 6-8 weeks
+
+  // Logistics & Trade Ports
+  incoterm: 'FOB' | 'FCA' | 'CIF' | 'CFR' | 'EXW';
+  portOfLoading: string; // 'Chittagong Sea Port, Bangladesh (BDCGP)' or 'Hazrat Shahjalal Int Airport, Dhaka (DAC)'
+  portOfDischarge: string; // e.g. 'Felixstowe, UK' or 'Long Beach, USA'
+
+  // Line Items
+  items: ProformaInvoiceLineItem[];
+  subtotalAmount: number;
+
+  // Sample Fee Deduction / Credit (SOP-B2B-SMP-2026-V1)
+  sampleAdjustmentApplied: boolean;
+  sampleAdjustmentFeeUsd?: number;
+  sampleAdjustmentFeeQuoteCurrency?: number;
+  sampleAdjustmentReference?: string; // e.g. 'SDO-2026-SMP-HAR-01'
+  sampleAdjustmentNotes?: string; // '100% credited against qualifying Bulk PO meeting MOQ'
+  
+  // Additions (Freight/Insurance if CIF/CFR)
+  freightInsuranceCharges?: number;
+  
+  // Net Totals
+  netPayableAmount: number;
+  netPayableAmountUsd: number;
+  totalQuantity: number;
+
+  // Payment Terms & Conditions
+  paymentTerms: string; // '50% Advance Wire Deposit, 50% Against Clean B/L Copy' or '100% Irrevocable At-Sight L/C'
+  specialTerms: string[];
+  
+  // Authorized Beneficiary Banking (AD Branch Bangladesh)
+  beneficiaryBank: {
+    bankName: string;
+    branchName: string;
+    swiftCode: string;
+    routingNumber: string;
+    adBranchCode: string;
+    accountName: string;
+    accountNumber: string;
+    bankAddress: string;
+  };
+
+  // Status & Governance
+  status: 'DRAFT' | 'ISSUED' | 'UNDER_REVIEW' | 'ACCEPTED_CONFIRMED' | 'LC_PENDING' | 'CONVERTED_TO_SO' | 'CANCELLED';
+  convertedSoId?: string;
+  internalNotes?: string;
 }
 
 // -------------------------------------------------------------

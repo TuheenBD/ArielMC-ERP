@@ -16,6 +16,11 @@ import { BuyerPortfolio } from '@/types/buyerPortfolio';
 import { INITIAL_BUYER_PORTFOLIOS } from '@/data/initialBuyerPortfolios';
 import { fetchBuyerPortfolios, persistBuyerPortfolios } from '@/lib/erpPersistence';
 import { BuyerPortfolioModal } from './BuyerPortfolioModal';
+import { CommercialProformaInvoice } from '@/types/erp';
+import { INITIAL_PROFORMA_INVOICES } from '@/data/initialProformaInvoices';
+import { fetchProformaInvoices, persistProformaInvoices } from '@/lib/erpPersistence';
+import { ProformaInvoiceModal } from './ProformaInvoiceModal';
+import { CreateProformaInvoiceModal } from './CreateProformaInvoiceModal';
 import { ThemeProfile, ActiveTab } from '@/components/Sidebar';
 import { ArielMC } from '@/lib/brand';
 import { DocumentType } from '@/components/OfficialDocumentCenter';
@@ -293,6 +298,120 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
       return next;
     });
     setSelectedBuyerPortfolio(updated);
+  };
+
+  // Department 3: Proforma Invoices (PI) State & Handlers
+  const [proformaInvoices, setProformaInvoices] = useState<CommercialProformaInvoice[]>(INITIAL_PROFORMA_INVOICES);
+  const [viewingPI, setViewingPI] = useState<CommercialProformaInvoice | null>(null);
+  const [isCreatePIModalOpen, setIsCreatePIModalOpen] = useState(false);
+  const [piCurrencyFilter, setPiCurrencyFilter] = useState<'ALL' | 'USD' | 'GBP' | 'EUR' | 'AUD' | 'BDT'>('ALL');
+  const [piStatusFilter, setPiStatusFilter] = useState<string>('ALL');
+  const [piSearchQuery, setPiSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetchProformaInvoices().then((persisted) => {
+      if (persisted && persisted.length > 0) {
+        setProformaInvoices(persisted);
+      }
+    });
+  }, []);
+
+  const handleSavePI = (newPI: CommercialProformaInvoice) => {
+    setProformaInvoices((prev) => {
+      const next = [newPI, ...prev];
+      persistProformaInvoices(next);
+      return next;
+    });
+    setViewingPI(newPI);
+  };
+
+  const handleUpdatePIStatus = (piId: string, newStatus: CommercialProformaInvoice['status']) => {
+    setProformaInvoices((prev) => {
+      const next = prev.map((pi) => (pi.id === piId ? { ...pi, status: newStatus } : pi));
+      persistProformaInvoices(next);
+      return next;
+    });
+    if (viewingPI && viewingPI.id === piId) {
+      setViewingPI((prev) => prev ? { ...prev, status: newStatus } : null);
+    }
+  };
+
+  const handleConvertToSalesOrder = (pi: CommercialProformaInvoice) => {
+    const newSoNumber = pi.soNumberRef || `SO-2026-${pi.targetMarket}-${Math.floor(1000 + Math.random() * 9000)}`;
+    handleUpdatePIStatus(pi.id, 'CONVERTED_TO_SO');
+
+    const totalBuyerCur = pi.netPayableAmount;
+    const totalUsd = pi.netPayableAmountUsd;
+    const factoryTotalBdt = pi.items.reduce((acc, item) => acc + (item.factoryAskingCostBdt || 850) * item.quantity, 0);
+    const factoryCostUsd = factoryTotalBdt / bdtRate;
+    const freight = totalUsd * 0.04;
+    const compliance = totalUsd * 0.02;
+    const netMargin = totalUsd - factoryCostUsd - freight - compliance;
+    const marginPct = totalUsd > 0 ? (netMargin / totalUsd) * 100 : 25;
+
+    const newOrder: BuyerSalesOrder = {
+      id: `order-so-${Date.now()}`,
+      soNumber: newSoNumber,
+      buyerCompany: pi.buyerCompany,
+      buyerBrandCode: pi.buyerBrandCode,
+      buyerContact: pi.buyerContactPerson,
+      targetMarket: pi.targetMarket as any,
+      operatingEntity: pi.operatingEntity,
+      currency: pi.currency as any,
+      incoterm: pi.incoterm as any,
+      status: 'CONFIRMED',
+      orderDate: new Date().toISOString().split('T')[0],
+      targetExFactoryDate: pi.estimatedShipmentDate,
+      targetPortCutOffDate: '2026-12-20',
+      targetDeliveryDate: '2027-01-20',
+      paymentTerms: pi.paymentTerms,
+      masterLcNumber: `LC-${pi.targetMarket}-${Math.floor(100000 + Math.random() * 900000)}`,
+      totalQuantity: pi.totalQuantity,
+      totalAmountBuyerCurrency: totalBuyerCur,
+      totalAmountUsd: totalUsd,
+      items: pi.items.map((item, idx) => ({
+        id: `item-${Date.now()}-${idx}`,
+        productId: item.productId || `prod-gen-${idx}`,
+        sku: item.sku,
+        styleName: item.styleName,
+        sector: item.sector,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        totalPrice: item.totalPrice,
+        factoryUnitCost: item.factoryAskingCostBdt || 850,
+        factoryTotalCost: (item.factoryAskingCostBdt || 850) * item.quantity,
+      })),
+      linkedPo: {
+        id: `po-${Date.now()}`,
+        poNumber: `PO-2026-FAC-${Math.floor(100 + Math.random() * 900)}`,
+        factoryId: 'fac_jut_01',
+        factoryName: 'Beni Boonon Artisan Guild',
+        currency: 'BDT',
+        status: 'IN_LINE_SEWING',
+        issueDate: new Date().toISOString().split('T')[0],
+        targetExFactoryDate: pi.estimatedShipmentDate,
+        totalQuantity: pi.totalQuantity,
+        totalCostBdt: factoryTotalBdt,
+        totalCostUsd: factoryCostUsd,
+        paymentTerms: 'Back-to-Back Letter of Credit (90 Days)',
+        items: [],
+      },
+      marginProtection: {
+        buyerRevenueUsd: totalUsd,
+        factoryCostUsd,
+        freightAllowanceUsd: freight,
+        complianceBufferUsd: compliance,
+        netMarginUsd: netMargin,
+        marginPercentage: marginPct,
+        status: marginPct >= 20 ? 'LOCKED_HEALTHY' : 'MARGIN_WARNING',
+      },
+      timeAndAction: [],
+      inspections: [],
+    };
+
+    onAddOrder?.(newOrder);
+    setViewingPI(null);
+    setActiveSubTab('ORDERS');
   };
 
   const getPortfolioForBuyer = (companyName: string, market: string = 'UK'): BuyerPortfolio => {
@@ -915,7 +1034,7 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
           {[
             { id: 'OVERVIEW' as SalesSubTab, label: 'Sales Command Overview', icon: TrendingUp },
             { id: 'ORDERS' as SalesSubTab, label: `Sales Orders (${orders.length})`, icon: Repeat },
-            { id: 'QUOTATIONS_PI' as SalesSubTab, label: `Proformas & Quotes (${INITIAL_QUOTATIONS_PI.length})`, icon: FileText, favKey: 'QUOTATIONS_PI' },
+            { id: 'QUOTATIONS_PI' as SalesSubTab, label: `Proformas & Quotes (${proformaInvoices.length})`, icon: FileText, favKey: 'QUOTATIONS_PI' },
             { id: 'BUYERS' as SalesSubTab, label: `Strategic Accounts (${buyerAccounts.length})`, icon: Building2, favKey: 'STRATEGIC_ACCOUNTS' },
             { id: 'PIPELINE' as SalesSubTab, label: `Funnel & Deals (${crmLeads.length})`, icon: Users2 },
             { id: 'TARGETS' as SalesSubTab, label: 'Station Targets', icon: Award },
@@ -1513,121 +1632,420 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
       {/* ------------------------------------------------------------- */}
       {/* SUB-TAB 3: PROFORMA INVOICES & COMMERCIAL QUOTATIONS          */}
       {/* ------------------------------------------------------------- */}
-      {activeSubTab === 'QUOTATIONS_PI' && (
-        <div className="space-y-4">
-          <div className="rounded-2xl bg-white border border-[#DDE3DD] shadow-sm p-6 space-y-4">
-            <div className="flex items-center justify-between flex-wrap gap-3">
-              <div>
-                <h3 className="text-base font-bold text-[#1F3A2E] flex items-center gap-2 font-heading">
+      {activeSubTab === 'QUOTATIONS_PI' && (() => {
+        const filteredPIs = proformaInvoices.filter((pi) => {
+          if (piCurrencyFilter !== 'ALL' && pi.currency !== piCurrencyFilter) return false;
+          if (piStatusFilter !== 'ALL' && pi.status !== piStatusFilter) return false;
+          if (piSearchQuery.trim()) {
+            const q = piSearchQuery.toLowerCase();
+            const matchesNumber = pi.piNumber.toLowerCase().includes(q);
+            const matchesBuyer = pi.buyerCompany.toLowerCase().includes(q);
+            const matchesRef = pi.soNumberRef?.toLowerCase().includes(q) || false;
+            const matchesItems = pi.items.some(
+              (item) => item.styleName.toLowerCase().includes(q) || item.sku.toLowerCase().includes(q)
+            );
+            if (!matchesNumber && !matchesBuyer && !matchesRef && !matchesItems) return false;
+          }
+          return true;
+        });
+
+        const totalPipelineUsd = proformaInvoices.reduce((sum, pi) => sum + pi.netPayableAmountUsd, 0);
+        const totalSampleCreditsUsd = proformaInvoices.reduce(
+          (sum, pi) => sum + (pi.sampleAdjustmentApplied ? (pi.sampleAdjustmentFeeUsd || 0) : 0),
+          0
+        );
+        const confirmedCount = proformaInvoices.filter((pi) => pi.status === 'ACCEPTED_CONFIRMED' || pi.status === 'CONVERTED_TO_SO').length;
+        const reviewPendingCount = proformaInvoices.filter((pi) => pi.status === 'UNDER_REVIEW' || pi.status === 'ISSUED' || pi.status === 'DRAFT').length;
+
+        return (
+          <div className="space-y-4 animate-in fade-in duration-200">
+            {/* Header Banner */}
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-[#162B22] to-[#1F3A2E] text-white border border-[#C8A96A]/40 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#C8A96A] text-[#1F3A2E]">
+                    DEPARTMENT 3: COMMERCIAL SALES &amp; QUOTATIONS
+                  </span>
+                  <span className="text-xs text-emerald-200">
+                    {proformaInvoices.length} Official Export Proformas Registered
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-white font-heading flex items-center gap-2">
                   <FileText className="w-5 h-5 text-[#C8A96A]" />
-                  <span>Official Commercial Quotations &amp; Proforma Invoices (PI)</span>
+                  <span>The 1-Click Multi-Currency Proforma Invoice (PI) Engine</span>
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Export banking documents issued under Bangladesh Bank Foreign Exchange Guidelines with L/C opening clauses.
+                <p className="text-xs text-[#DDE3DD] max-w-3xl leading-relaxed">
+                  Export banking documents issued strictly under Bangladesh Bank Foreign Exchange Guidelines. Automatically calculates 
+                  multi-currency equivalents ($ USD, € EUR, £ GBP, A$ AUD, ৳ BDT) and enforces <strong className="text-white font-semibold">SOP-B2B-SMP-2026-V1</strong> upfront sample fee bulk order deductions.
                 </p>
               </div>
 
-              <button
-                onClick={() => onOpenDocumentCenter?.('PROFORMA_INVOICE')}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold transition-colors shadow-xs"
-              >
-                <Plus className="w-3.5 h-3.5 text-[#C8A96A]" />
-                <span>+ Issue New Proforma Invoice</span>
-              </button>
+              <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+                <button
+                  onClick={() => setIsCreatePIModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#C8A96A] hover:bg-[#B39355] text-[#1F3A2E] text-xs font-bold transition-all shadow-md active:scale-95"
+                >
+                  <Plus className="w-4 h-4 text-[#1F3A2E]" />
+                  <span>+ Issue New Proforma Invoice</span>
+                </button>
+              </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-[#F8FAF8] border-b border-[#DDE3DD] text-[#1F3A2E] font-bold uppercase text-[10px] tracking-wider">
-                  <tr>
-                    <th className="py-3 px-4">PI Document Number</th>
-                    <th className="py-3 px-4">Buyer Entity</th>
-                    <th className="py-3 px-4">Product Line</th>
-                    <th className="py-3 px-4">Quantity</th>
-                    <th className="py-3 px-4">Quotation Value</th>
-                    <th className="py-3 px-4">Payment Terms &amp; L/C</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#DDE3DD]">
-                  {INITIAL_QUOTATIONS_PI.map((pi) => (
-                    <tr key={pi.id} className="hover:bg-[#F8FAF8]/80 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
-                        {pi.piNumber}
-                        <span className="block text-[10px] font-normal text-slate-400">
-                          Issued: {pi.issueDate} • Valid: {pi.validUntil}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="font-bold text-[#1A1A1A] block">{pi.buyerCompany}</span>
-                        <span className="text-[10px] text-slate-500">{pi.buyerContact}</span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="font-medium text-slate-800 block">{pi.styleName}</span>
-                        <span className="text-[10px] text-slate-400">Incoterm: {pi.incoterm}</span>
-                      </td>
-                      <td className="py-3 px-4 font-mono font-semibold">
-                        {pi.quantity.toLocaleString()} pcs
-                      </td>
-                      <td className="py-3 px-4 font-mono font-bold text-[#1F3A2E]">
-                        {pi.currency} {pi.totalValue.toLocaleString()}
-                        {isBdStation ? (
-                          <>
-                            <span className="block text-[10px] text-emerald-800 font-semibold">
-                              ({formatBdt(toBdt(pi.totalValue, pi.currency))} BDT)
-                            </span>
-                            <span className="block text-[9px] text-slate-400">
-                              ${pi.totalValueUsd.toLocaleString()} USD
-                            </span>
-                          </>
-                        ) : (
-                          <span className="block text-[10px] text-slate-400">
-                            (${pi.totalValueUsd.toLocaleString()} USD)
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3 px-4 text-slate-600">
-                        {pi.paymentTerms}
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          pi.status === 'ACCEPTED_CONFIRMED'
-                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                            : pi.status === 'LC_PENDING'
-                            ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                            : 'bg-blue-50 text-blue-800 border border-blue-200'
-                        }`}>
-                          {pi.status.replace(/_/g, ' ')}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => onOpenDocumentCenter?.('PROFORMA_INVOICE')}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#F8FAF8] hover:bg-white text-[#1F3A2E] border border-[#DDE3DD] font-semibold text-[11px] transition-colors"
-                          >
-                            <Eye className="w-3 h-3 text-[#C8A96A]" />
-                            <span>Preview</span>
-                          </button>
+            {/* Top KPI Strip (4 Cards) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Card 1: Total Active Pipeline */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-xs">
+                <div className="flex items-center justify-between text-slate-500 mb-1">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider">Quoted Export Pipeline</span>
+                  <DollarSign className="w-4 h-4 text-emerald-600" />
+                </div>
+                <div className="text-xl font-bold font-mono text-[#1F3A2E]">
+                  ${totalPipelineUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })} <span className="text-xs font-normal text-slate-400">USD</span>
+                </div>
+                <div className="text-[11px] font-semibold text-emerald-800 mt-0.5">
+                  {formatBdt(toBdt(totalPipelineUsd), true)} BDT across {proformaInvoices.length} PIs
+                </div>
+              </div>
 
-                          <button
-                            onClick={() => handleCopyLink(pi.piNumber)}
-                            className="p-1 rounded-lg bg-[#F8FAF8] hover:bg-white text-slate-600 border border-[#DDE3DD]"
-                            title="Copy share link"
-                          >
-                            {copiedLink === pi.piNumber ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+              {/* Card 2: Sample Credits Applied (SOP-B2B-SMP-2026-V1) */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-xs">
+                <div className="flex items-center justify-between text-slate-500 mb-1">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider">Sample Fee Bulk Credits</span>
+                  <Sparkles className="w-4 h-4 text-[#C8A96A]" />
+                </div>
+                <div className="text-xl font-bold font-mono text-emerald-700">
+                  -${totalSampleCreditsUsd.toLocaleString()} <span className="text-xs font-normal text-slate-400">USD</span>
+                </div>
+                <div className="text-[10px] font-medium text-slate-500 mt-0.5 flex items-center gap-1">
+                  <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-bold font-mono text-[9px]">SOP-SMP-V1</span>
+                  <span>100% credited against bulk POs</span>
+                </div>
+              </div>
+
+              {/* Card 3: Accepted / Ready for Production */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-xs">
+                <div className="flex items-center justify-between text-slate-500 mb-1">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider">Accepted / In Production</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                </div>
+                <div className="text-xl font-bold font-mono text-[#1F3A2E]">
+                  {confirmedCount} <span className="text-xs font-normal text-slate-400">Orders</span>
+                </div>
+                <div className="text-[11px] text-slate-500 mt-0.5">
+                  50% Advance Wire / Clean B/L Copy
+                </div>
+              </div>
+
+              {/* Card 4: Under Review / Pending Sign-off */}
+              <div className="p-4 rounded-xl bg-white border border-[#DDE3DD] shadow-xs">
+                <div className="flex items-center justify-between text-slate-500 mb-1">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider">Under Negotiation</span>
+                  <Clock className="w-4 h-4 text-amber-600" />
+                </div>
+                <div className="text-xl font-bold font-mono text-amber-700">
+                  {reviewPendingCount} <span className="text-xs font-normal text-slate-400">Quotations</span>
+                </div>
+                <div className="text-[11px] text-slate-500 mt-0.5">
+                  Commercial terms &amp; line review
+                </div>
+              </div>
+            </div>
+
+            {/* Filter & Search Toolbar */}
+            <div className="p-4 rounded-2xl bg-white border border-[#DDE3DD] shadow-xs space-y-3">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                {/* Search */}
+                <div className="relative flex-1 max-w-md">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={piSearchQuery}
+                    onChange={(e) => setPiSearchQuery(e.target.value)}
+                    placeholder="Search by PI #, buyer, style, or SKU..."
+                    className="w-full pl-9 pr-8 py-2 rounded-xl border border-[#DDE3DD] bg-[#F8FAF8] text-xs font-medium text-slate-800 focus:outline-none focus:border-[#C8A96A] focus:bg-white transition-all"
+                  />
+                  {piSearchQuery && (
+                    <button
+                      onClick={() => setPiSearchQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Status Quick Filter */}
+                <div className="flex items-center gap-1 overflow-x-auto">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Status:</span>
+                  {[
+                    { id: 'ALL', label: 'All' },
+                    { id: 'ACCEPTED_CONFIRMED', label: 'Accepted' },
+                    { id: 'UNDER_REVIEW', label: 'Under Review' },
+                    { id: 'CONVERTED_TO_SO', label: 'Converted to SO' },
+                    { id: 'DRAFT', label: 'Draft' },
+                  ].map((st) => (
+                    <button
+                      key={st.id}
+                      onClick={() => setPiStatusFilter(st.id)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors ${
+                        piStatusFilter === st.id
+                          ? 'bg-[#1F3A2E] text-white shadow-xs'
+                          : 'bg-[#F4F6F4] text-slate-600 hover:bg-[#E8ECE8]'
+                      }`}
+                    >
+                      {st.label}
+                    </button>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
+
+              {/* Currency Segment Filter */}
+              <div className="pt-2 border-t border-[#DDE3DD]/60 flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-1.5 overflow-x-auto">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Quoted Currency:</span>
+                  {[
+                    { code: 'ALL', label: 'All Currencies' },
+                    { code: 'USD', label: 'USD ($)', flag: '🇺🇸' },
+                    { code: 'GBP', label: 'GBP (£)', flag: '🇬🇧' },
+                    { code: 'EUR', label: 'EUR (€)', flag: '🇪🇺' },
+                    { code: 'AUD', label: 'AUD (A$)', flag: '🇦🇺' },
+                    { code: 'BDT', label: 'BDT (৳)', flag: '🇧🇩' },
+                  ].map((c) => (
+                    <button
+                      key={c.code}
+                      onClick={() => setPiCurrencyFilter(c.code as any)}
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors ${
+                        piCurrencyFilter === c.code
+                          ? 'bg-[#C8A96A] text-[#1F3A2E] font-bold shadow-xs'
+                          : 'bg-[#F4F6F4] text-slate-600 hover:bg-[#E8ECE8]'
+                      }`}
+                    >
+                      {c.flag && <span>{c.flag}</span>}
+                      <span>{c.label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="text-[11px] text-slate-400 font-mono">
+                  Showing {filteredPIs.length} of {proformaInvoices.length} invoices
+                </div>
+              </div>
+            </div>
+
+            {/* Main Interactive Table */}
+            <div className="rounded-2xl bg-white border border-[#DDE3DD] shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#F8FAF8] border-b border-[#DDE3DD] text-[#1F3A2E] font-bold uppercase text-[10px] tracking-wider">
+                    <tr>
+                      <th className="py-3 px-4">Proforma Invoice</th>
+                      <th className="py-3 px-4">Buyer Account &amp; Station</th>
+                      <th className="py-3 px-4">Export Line Items</th>
+                      <th className="py-3 px-4">Total Value</th>
+                      <th className="py-3 px-4">Sample Credit</th>
+                      <th className="py-3 px-4">Export Terms</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#DDE3DD]">
+                    {filteredPIs.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-12 text-center text-slate-400">
+                          <FileText className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                          <p className="font-semibold text-slate-600">No Proforma Invoices match your filters</p>
+                          <p className="text-[11px] text-slate-400 mt-1">Try resetting the currency filter or search terms</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredPIs.map((pi) => {
+                        const marketFlag =
+                          pi.targetMarket === 'UK'
+                            ? '🇬🇧'
+                            : pi.targetMarket === 'US'
+                            ? '🇺🇸'
+                            : pi.targetMarket === 'EU'
+                            ? '🇪🇺'
+                            : pi.targetMarket === 'AU'
+                            ? '🇦🇺'
+                            : '🇧🇩';
+
+                        const totalPcs = pi.items.reduce((s, it) => s + it.quantity, 0);
+
+                        return (
+                          <tr key={pi.id} className="hover:bg-[#F8FAF8]/80 transition-colors group">
+                            {/* PI Number & Dates */}
+                            <td className="py-3 px-4 font-mono">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-bold text-[#1F3A2E] hover:text-[#C8A96A] cursor-pointer" onClick={() => setViewingPI(pi)}>
+                                  {pi.piNumber}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-slate-400 mt-0.5">
+                                Issued: {pi.issueDate} • Valid: {pi.validUntil}
+                              </div>
+                              {pi.soNumberRef && (
+                                <div className="text-[9px] font-mono text-purple-700 font-semibold mt-0.5">
+                                  Ref: {pi.soNumberRef}
+                                </div>
+                              )}
+                            </td>
+
+                            {/* Buyer & Market */}
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-1.5 font-bold text-[#1A1A1A]">
+                                <span>{marketFlag}</span>
+                                <span>{pi.buyerCompany}</span>
+                              </div>
+                              <div className="text-[10px] text-slate-500 truncate max-w-[180px]">
+                                {pi.buyerContactPerson}
+                              </div>
+                              <div className="text-[9px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                <Ship className="w-2.5 h-2.5 text-slate-400" />
+                                <span>{pi.incoterm} • {pi.portOfDischarge}</span>
+                              </div>
+                            </td>
+
+                            {/* Line Items */}
+                            <td className="py-3 px-4">
+                              <div className="font-semibold text-slate-800">
+                                {pi.items.length} Style{pi.items.length > 1 ? 's' : ''} ({totalPcs.toLocaleString()} pcs)
+                              </div>
+                              <div className="text-[10px] text-slate-500 truncate max-w-[200px]" title={pi.items.map(i => i.styleName).join(', ')}>
+                                {pi.items[0]?.styleName}
+                                {pi.items.length > 1 && ` + ${pi.items.length - 1} more`}
+                              </div>
+                              <div className="text-[9px] font-mono text-slate-400">
+                                HS: {pi.items[0]?.hsCode || '5705.00.00'}
+                              </div>
+                            </td>
+
+                            {/* Total Value */}
+                            <td className="py-3 px-4 font-mono">
+                              <div className="font-bold text-[#1F3A2E] text-sm">
+                                {pi.currency} {pi.netPayableAmount.toLocaleString()}
+                              </div>
+                              <div className="text-[10px] text-emerald-800 font-semibold">
+                                {formatBdt(toBdt(pi.netPayableAmountUsd), true)} BDT
+                              </div>
+                              <div className="text-[9px] text-slate-400">
+                                (${pi.netPayableAmountUsd.toLocaleString()} USD)
+                              </div>
+                            </td>
+
+                            {/* Sample Credit */}
+                            <td className="py-3 px-4">
+                              {pi.sampleAdjustmentApplied ? (
+                                <div>
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold font-mono">
+                                    <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
+                                    <span>-{pi.currency === 'GBP' ? '£' : pi.currency === 'EUR' ? '€' : pi.currency === 'AUD' ? 'A$' : '$'}{pi.sampleAdjustmentFeeQuoteCurrency || pi.sampleAdjustmentFeeUsd}</span>
+                                  </span>
+                                  <div className="text-[9px] font-mono text-slate-400 mt-0.5 truncate max-w-[120px]">
+                                    {pi.sampleAdjustmentReference || 'SOP-SMP-V1'}
+                                  </div>
+                                </div>
+                              ) : (
+                                <span className="text-[10px] text-slate-400 italic">None</span>
+                              )}
+                            </td>
+
+                            {/* Export Terms */}
+                            <td className="py-3 px-4">
+                              <div className="text-[11px] font-medium text-slate-700 max-w-[160px] line-clamp-2">
+                                {pi.paymentTerms}
+                              </div>
+                              <div className="text-[9px] font-mono text-slate-400 mt-0.5">
+                                AD: {pi.beneficiaryBank?.adBranchCode || '0902'} (EBL)
+                              </div>
+                            </td>
+
+                            {/* Status */}
+                            <td className="py-3 px-4">
+                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${
+                                pi.status === 'ACCEPTED_CONFIRMED'
+                                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                  : pi.status === 'CONVERTED_TO_SO'
+                                  ? 'bg-purple-50 text-purple-800 border border-purple-200'
+                                  : pi.status === 'UNDER_REVIEW'
+                                  ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                                  : 'bg-slate-100 text-slate-700 border border-slate-200'
+                              }`}>
+                                {pi.status === 'ACCEPTED_CONFIRMED' && <Check className="w-3 h-3 text-emerald-600" />}
+                                {pi.status === 'CONVERTED_TO_SO' && <Repeat className="w-3 h-3 text-purple-600" />}
+                                <span>{pi.status.replace(/_/g, ' ')}</span>
+                              </span>
+                            </td>
+
+                            {/* Actions */}
+                            <td className="py-3 px-4 text-right">
+                              <div className="flex items-center justify-end gap-1.5">
+                                {/* Preview PI Button */}
+                                <button
+                                  onClick={() => setViewingPI(pi)}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#F8FAF8] hover:bg-[#1F3A2E] hover:text-white text-[#1F3A2E] border border-[#DDE3DD] font-semibold text-[11px] transition-all shadow-xs"
+                                  title="View Official Proforma Invoice Document"
+                                >
+                                  <Eye className="w-3 h-3 text-[#C8A96A]" />
+                                  <span>View PI</span>
+                                </button>
+
+                                {/* Convert to SO Button */}
+                                {pi.status !== 'CONVERTED_TO_SO' ? (
+                                  <button
+                                    onClick={() => handleConvertToSalesOrder(pi)}
+                                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 border border-emerald-200 font-semibold text-[11px] transition-all shadow-xs"
+                                    title="Convert this PI into an active Bulk Sales Order (SO)"
+                                  >
+                                    <Repeat className="w-3 h-3 text-emerald-600 hover:text-white" />
+                                    <span>To SO</span>
+                                  </button>
+                                ) : (
+                                  <span className="text-[10px] font-mono text-purple-700 font-bold px-2 py-1 bg-purple-50 rounded border border-purple-200">
+                                    SO Active
+                                  </span>
+                                )}
+
+                                {/* Share Link / WhatsApp */}
+                                <button
+                                  onClick={() => handleCopyLink(pi.piNumber)}
+                                  className="p-1.5 rounded-lg bg-[#F8FAF8] hover:bg-white text-slate-600 border border-[#DDE3DD] transition-colors"
+                                  title="Copy PI reference for WhatsApp / email"
+                                >
+                                  {copiedLink === pi.piNumber ? (
+                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                  ) : (
+                                    <Share2 className="w-3.5 h-3.5" />
+                                  )}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Official Banking & Compliance Footer Card */}
+            <div className="p-4 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-slate-600">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-[#1F3A2E]" />
+                <span>
+                  <strong>Authorized AD Remittance Bank:</strong> Eastern Bank PLC, Principal Branch, Dhaka • AD Code: <strong>0902</strong> • SWIFT: <strong>EBLDBDDH</strong>
+                </span>
+              </div>
+              <div className="flex items-center gap-2 font-mono text-[11px] text-slate-500">
+                <span>Routing: 090261842</span>
+                <span>•</span>
+                <span>Inward Export Remittance Account: 1011060000000</span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ------------------------------------------------------------- */}
       {/* SUB-TAB 4: STRATEGIC BUYER ACCOUNTS & LIVING PORTFOLIO       */}
@@ -2302,6 +2720,35 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
           onNavigateTab={onNavigateTab}
         />
       )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* MODAL: OFFICIAL COMMERCIAL PROFORMA INVOICE (PI) PREVIEW       */}
+      {/* ------------------------------------------------------------- */}
+      <ProformaInvoiceModal
+        isOpen={!!viewingPI}
+        onClose={() => setViewingPI(null)}
+        proformaInvoice={viewingPI}
+        onConvertToSalesOrder={handleConvertToSalesOrder}
+        onUpdateStatus={handleUpdatePIStatus}
+        bdtRate={bdtRate}
+        gbpRate={gbpRate}
+        eurRate={eurRate}
+        audRate={audRate}
+      />
+
+      {/* ------------------------------------------------------------- */}
+      {/* MODAL: ISSUE NEW COMMERCIAL PROFORMA INVOICE                   */}
+      {/* ------------------------------------------------------------- */}
+      <CreateProformaInvoiceModal
+        isOpen={isCreatePIModalOpen}
+        onClose={() => setIsCreatePIModalOpen(false)}
+        products={products}
+        onCreatePI={handleSavePI}
+        bdtRate={bdtRate}
+        gbpRate={gbpRate}
+        eurRate={eurRate}
+        audRate={audRate}
+      />
 
     </div>
   );
