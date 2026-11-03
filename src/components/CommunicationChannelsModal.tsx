@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Phone,
   MessageSquare,
@@ -39,9 +40,14 @@ export const CommunicationChannelsModal: React.FC<CommunicationChannelsModalProp
   isOpen,
   onClose,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
@@ -86,9 +92,14 @@ Tel: +880 2410 811 91`;
     }, 2500);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[92vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="relative w-full max-w-2xl max-h-[90vh] bg-white border border-[#DDE3DD] rounded-2xl shadow-2xl overflow-hidden flex flex-col z-[100000]">
         {/* Modal Header */}
         <div className="p-5 bg-[#1F3A2E] border-b-[3px] border-[#C8A96A] text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -730,6 +741,7 @@ Tel: +880 2410 811 91`;
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
