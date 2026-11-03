@@ -449,8 +449,8 @@ export const SampleManagement: React.FC<SampleManagementProps> = ({
         </div>
       </div>
 
-      {/* 5-Stage Lifecycle Filter Buttons */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+      {/* 5-Stage Lifecycle Filter Buttons (2-Line Responsive Layout - No Horizontal Scroll) */}
+      <div className="flex flex-wrap items-center gap-2 pb-1 text-xs">
         <span className="text-[11px] font-semibold text-[#1F3A2E] mr-1 flex items-center gap-1 font-montserrat">
           <Layers className="w-3.5 h-3.5 text-[#C8A96A]" /> Stage Filter:
         </span>
@@ -2922,7 +2922,7 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
   const [targetDate, setTargetDate] = useState('2026-11-15');
   const [costUsd, setCostUsd] = useState(150);
   const [courierProvider, setCourierProvider] = useState<CourierProvider>('DHL Express');
-  const [referencePictureUrl, setReferencePictureUrl] = useState('/images/techpacks/blm-ref-photo.png');
+  const [referencePictureUrl, setReferencePictureUrl] = useState('/images/products/bangla_eco/bloom/bloom-front.jpg');
   const [originHub, setOriginHub] = useState('Dhaka / Narayanganj / Savar');
   const [targetDeviceOrFit, setTargetDeviceOrFit] = useState('Up to 15.6" Laptop / 16" MacBook Pro');
 
@@ -2936,7 +2936,7 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
       setDimensions('16"W x 12"H x 6"D (40.6 x 30.5 x 15.2 cm)');
       setColorway('Natural Beige / Navy / Crimson');
     } else if (newSector === 'LEATHER') {
-      setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
+      setReferencePictureUrl('/images/products/bangla_eco/bloom/bloom-front.jpg');
       setOriginHub('Dhaka / Narayanganj / Savar Tannery Cluster');
       setTargetDeviceOrFit('Up to 15.6" Laptop / 16" MacBook Pro');
       setPrimaryMaterial('12-14 oz Heavyweight Cotton Denim & 1.4-1.6 mm Full-Grain Cowhide');
@@ -2950,14 +2950,14 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
       setDimensions('230 cm x 220 cm (Duvet) + 50x75 cm (Pillow)');
       setColorway('Crisp Optical White / Slate Grey');
     } else if (newSector === 'CERAMICS') {
-      setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
+      setReferencePictureUrl('/images/products/ceramics/plate-table-setting.jpg');
       setOriginHub('Mirpur / Gazipur Ceramic Ware Cluster');
       setTargetDeviceOrFit('Commercial Tableware / Vitrified Stoneware');
       setPrimaryMaterial('High-grade vitrified stoneware body (1280°C firing)');
       setDimensions('Dia: 27.0 cm x H: 2.6 cm (Coupe)');
       setColorway('Reactive Matte Mineral Glaze / Slate');
     } else {
-      setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
+      setReferencePictureUrl('/images/products/pottery/planter-exterior.jpg');
       setOriginHub('Dhamrai / Savar Traditional Pottery Cluster');
       setTargetDeviceOrFit('Thermodynamic Evaporative Cooling / Earthen Accents');
       setPrimaryMaterial('100% Non-Toxic Indigenous Earthen Clay / Terracotta');
@@ -2978,7 +2978,7 @@ const CreateSdoModal: React.FC<CreateSdoModalProps> = ({
       modelName: styleName || 'Custom Client Design',
       styleCode: styleCode || `AM-${sector.substring(0, 3)}-${Math.floor(100 + Math.random() * 900)}`,
       sector,
-      referencePictureUrl: referencePictureUrl || (sector === 'JUTE' ? '/images/techpacks/jct-ref-photo.png' : '/images/techpacks/blm-ref-photo.png'),
+      referencePictureUrl: referencePictureUrl || (sector === 'JUTE' ? '/images/techpacks/jct-ref-photo.png' : '/images/products/bangla_eco/bloom/bloom-front.jpg'),
       targetDeviceOrFit,
       originHub: originHub || 'Dhaka / Narayanganj / Savar Export Cluster',
       factoryName: selectedFactory?.name,

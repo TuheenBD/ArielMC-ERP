@@ -1124,8 +1124,8 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
               </button>
             </div>
 
-            {/* Document Type Selector Bar */}
-            <div className="flex items-center px-6 py-2.5 bg-[#F4F6F4] border-b border-[#DDE3DD] gap-2 text-xs overflow-x-auto no-print">
+            {/* Document Type Selector Bar (Clean 2-Line Layout - No Horizontal Scroll) */}
+            <div className="flex flex-wrap items-center px-6 py-2 bg-[#F4F6F4] border-b border-[#DDE3DD] gap-2 text-xs no-print">
               <button
                 onClick={() => setDocumentPreviewType('INVOICE')}
                 className={`px-3.5 py-1.5 rounded-lg transition-colors font-bold ${

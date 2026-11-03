@@ -37,23 +37,94 @@ import {
   Globe,
   Award,
   FlaskConical,
+  Edit,
+  Trash2,
+  CheckSquare,
+  Square,
+  Check,
 } from 'lucide-react';
 import { ArielMC } from '@/lib/brand';
 import { VendorEnlistmentModal } from './VendorEnlistmentModal';
 import { OfficialVendorProfilePdfModal } from './OfficialVendorProfilePdfModal';
 import { FactoryRatingModelModal } from './FactoryRatingModelModal';
 import { QualityChemicalComplianceTracker } from './QualityChemicalComplianceTracker';
+import { EditSupplierModal } from './EditSupplierModal';
 
 interface FactoryManagementProps {
   factories?: SupplierFactory[];
   onAddFactory: (newFactory: SupplierFactory) => void;
+  onUpdateFactory?: (updated: SupplierFactory) => void;
+  onDeleteFactory?: (factoryId: string) => void;
 }
 
 export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   factories: propFactories,
   onAddFactory,
+  onUpdateFactory,
+  onDeleteFactory,
 }) => {
-  const factories = (propFactories && propFactories.length > 0) ? propFactories : INITIAL_FACTORIES;
+  const initialList = (propFactories && propFactories.length > 0) ? propFactories : INITIAL_FACTORIES;
+  const [localFactories, setLocalFactories] = useState<SupplierFactory[]>(initialList);
+
+  useEffect(() => {
+    if (propFactories && propFactories.length > 0) {
+      setLocalFactories(propFactories);
+    }
+  }, [propFactories]);
+
+  const [selectedFactoryIds, setSelectedFactoryIds] = useState<string[]>([]);
+  const [editingFactory, setEditingFactory] = useState<SupplierFactory | null>(null);
+
+  const toggleSelectFactory = (id: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedFactoryIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    const filteredIds = filteredFactories.map((f) => f.id);
+    const allSelected = filteredIds.length > 0 && filteredIds.every((id) => selectedFactoryIds.includes(id));
+    if (allSelected) {
+      setSelectedFactoryIds((prev) => prev.filter((id) => !filteredIds.includes(id)));
+    } else {
+      setSelectedFactoryIds((prev) => Array.from(new Set([...prev, ...filteredIds])));
+    }
+  };
+
+  const handleDeleteFactory = (facId: string, facName: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete supplier "${facName}"? This will remove this profile from the ERP.`)) {
+      setLocalFactories((prev) => prev.filter((f) => f.id !== facId));
+      setSelectedFactoryIds((prev) => prev.filter((id) => id !== facId));
+      if (selectedFactory?.id === facId) setSelectedFactory(null);
+      if (selectedPortfolioFactory?.id === facId) setSelectedPortfolioFactory(null);
+      onDeleteFactory?.(facId);
+    }
+  };
+
+  const handleBatchDelete = () => {
+    if (selectedFactoryIds.length === 0) return;
+    if (window.confirm(`Are you sure you want to delete ${selectedFactoryIds.length} selected supplier(s)?`)) {
+      const idsToDelete = new Set(selectedFactoryIds);
+      setLocalFactories((prev) => prev.filter((f) => !idsToDelete.has(f.id)));
+      selectedFactoryIds.forEach((id) => onDeleteFactory?.(id));
+      setSelectedFactoryIds([]);
+      if (selectedFactory && idsToDelete.has(selectedFactory.id)) setSelectedFactory(null);
+      if (selectedPortfolioFactory && idsToDelete.has(selectedPortfolioFactory.id)) setSelectedPortfolioFactory(null);
+    }
+  };
+
+  const handleSaveEditedFactory = (updated: SupplierFactory) => {
+    setLocalFactories((prev) => prev.map((f) => (f.id === updated.id ? updated : f)));
+    onUpdateFactory?.(updated);
+    if (selectedFactory?.id === updated.id) {
+      setSelectedFactory(updated);
+    }
+    setEditingFactory(null);
+  };
+
+  const factories = localFactories;
   const [selectedSector, setSelectedSector] = useState<ProductSector | 'ALL'>('ALL');
   const [selectedCluster, setSelectedCluster] = useState<string>('ALL');
   const [selectedVendorType, setSelectedVendorType] = useState<VendorClassification | 'ALL'>('ALL');
@@ -476,8 +547,8 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         </div>
       </div>
 
-      {/* View Switcher: Facilities vs Quality & Chemical Compliance */}
-      <div className="flex items-center gap-2 border-b border-[#DDE3DD] pb-2 text-xs font-['Montserrat'] overflow-x-auto">
+      {/* View Switcher: Facilities vs Quality & Chemical Compliance (Clean Wrap - No Horizontal Scroll) */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#DDE3DD] pb-2 text-xs font-['Montserrat']">
         <button
           onClick={() => setFactoryViewMode('FACILITIES')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer shrink-0 ${
@@ -710,6 +781,50 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         </div>
       </div>
 
+      {/* Selection & Batch Action Toolbar (Select / Edit / Delete) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] text-xs">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={toggleSelectAll}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#DDE3DD] bg-white hover:bg-slate-50 font-semibold text-[#1F3A2E] cursor-pointer shadow-2xs"
+          >
+            {selectedFactoryIds.length > 0 && filteredFactories.length > 0 && filteredFactories.every(f => selectedFactoryIds.includes(f.id)) ? (
+              <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+            ) : (
+              <Square className="w-4 h-4 text-slate-400" />
+            )}
+            <span>Select All ({filteredFactories.length})</span>
+          </button>
+
+          {selectedFactoryIds.length > 0 && (
+            <span className="px-2.5 py-0.5 rounded-full bg-[#1F3A2E] text-white font-mono font-bold text-[11px]">
+              {selectedFactoryIds.length} Selected
+            </span>
+          )}
+        </div>
+
+        {selectedFactoryIds.length > 0 && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleBatchDelete}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition shadow-xs cursor-pointer"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Selected ({selectedFactoryIds.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedFactoryIds([])}
+              className="px-2.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 text-xs cursor-pointer"
+            >
+              Deselect All
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Supplier & Factory Directory: Table View */}
       {viewFormat === 'TABLE' ? (
         <div className="rounded-2xl bg-white border border-[#DDE3DD] shadow-sm overflow-hidden text-[#1A1A1A]">
@@ -717,6 +832,15 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
             <table className="w-full text-left text-xs">
               <thead className="bg-[#F8FAF8] border-b border-[#DDE3DD] text-[11px] font-bold text-[#1F3A2E] font-heading uppercase tracking-wider">
                 <tr>
+                  <th className="py-3 px-3 w-10 text-center">
+                    <button type="button" onClick={toggleSelectAll} className="cursor-pointer text-[#1F3A2E]">
+                      {selectedFactoryIds.length > 0 && filteredFactories.length > 0 && filteredFactories.every(f => selectedFactoryIds.includes(f.id)) ? (
+                        <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+                      ) : (
+                        <Square className="w-4 h-4 text-slate-400" />
+                      )}
+                    </button>
+                  </th>
                   <th className="py-3 px-4">Supplier / Factory</th>
                   <th className="py-3 px-4">Entity Type</th>
                   <th className="py-3 px-4">Sectors &amp; Cluster</th>
@@ -731,7 +855,16 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                 {filteredFactories.map((fac) => {
                   const vType: VendorClassification = fac.vendorType || (fac.code?.includes('SUP') ? 'SUPPLIER' : 'FULL_FLEDGED_FACTORY');
                   return (
-                    <tr key={fac.id} className="hover:bg-[#F9FAF9] transition-colors">
+                    <tr key={fac.id} className={`hover:bg-[#F9FAF9] transition-colors ${selectedFactoryIds.includes(fac.id) ? 'bg-[#F0F5F2]' : ''}`}>
+                      <td className="py-3 px-3 text-center">
+                        <button type="button" onClick={(e) => toggleSelectFactory(fac.id, e)} className="cursor-pointer text-[#1F3A2E]">
+                          {selectedFactoryIds.includes(fac.id) ? (
+                            <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+                          ) : (
+                            <Square className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                          )}
+                        </button>
+                      </td>
                       <td className="py-3 px-4">
                         <div className="font-bold text-[#1F3A2E] text-xs font-heading">{fac.name}</div>
                         <div className="flex items-center gap-1.5 mt-0.5">
@@ -803,8 +936,24 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                           </button>
                           <button
                             type="button"
+                            onClick={() => setEditingFactory(fac)}
+                            className="p-1.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs transition cursor-pointer border border-amber-300"
+                            title="Edit Supplier Profile"
+                          >
+                            <Edit className="w-3.5 h-3.5 text-amber-700" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => handleDeleteFactory(fac.id, fac.name, e)}
+                            className="p-1.5 rounded bg-red-50 hover:bg-red-100 text-red-700 text-xs transition cursor-pointer border border-red-200"
+                            title="Delete Supplier Profile"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
                             onClick={() => setViewingPdfFactory(fac)}
-                            className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition cursor-pointer"
+                            className="p-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition cursor-pointer"
                             title="View Official Vendor Profile PDF"
                           >
                             <Printer className="w-3.5 h-3.5" />
@@ -831,9 +980,21 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
               className="group rounded-xl bg-white border border-[#DDE3DD] hover:border-[#C8A96A] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md text-[#1A1A1A]"
             >
               <div className="p-5 space-y-3.5">
-                {/* Header: Code, Entity Type & Tier */}
+                {/* Header: Select Checkbox, Code, Entity Type & Tier */}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={(e) => toggleSelectFactory(fac.id, e)}
+                      className="cursor-pointer text-[#1F3A2E]"
+                      title="Select Supplier"
+                    >
+                      {selectedFactoryIds.includes(fac.id) ? (
+                        <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+                      ) : (
+                        <Square className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                      )}
+                    </button>
                     <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#FAF5EC] text-[#8A6D3B] font-semibold border border-[#C8A96A]/40">
                       {fac.code}
                     </span>
@@ -1054,10 +1215,10 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                   Lead: <strong className="text-[#1A1A1A]">{fac.leadTimeDays}d</strong> • MOQ: <strong className="text-[#1A1A1A]">{fac.minimumOrderQuantity}</strong>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     onClick={() => setSelectedPortfolioFactory(getPortfolioForFactory(fac))}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold transition-colors shadow-sm"
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold transition-colors shadow-sm"
                     title="View living Factory & Supplier Portfolio (5 Pillars)"
                   >
                     <Layers className="w-3.5 h-3.5 text-[#C8A96A]" />
@@ -1065,17 +1226,25 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                   </button>
 
                   <button
-                    onClick={() => setViewingPdfFactory(fac)}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#1F3A2E] text-xs font-semibold text-[#1F3A2E] hover:bg-[#F4F6F4] transition-colors"
-                    title="Export Official 2-Page B2B Vendor Profile Form (PDF)"
+                    onClick={() => setEditingFactory(fac)}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-colors cursor-pointer"
+                    title="Edit Supplier Profile"
                   >
-                    <FileText className="w-3.5 h-3.5 text-[#8A6D3B]" />
-                    <span>B2B Profile PDF</span>
+                    <Edit className="w-3.5 h-3.5 text-amber-700" />
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    onClick={(e) => handleDeleteFactory(fac.id, fac.name, e)}
+                    className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs transition-colors cursor-pointer"
+                    title="Delete Supplier Profile"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
 
                   <button
                     onClick={() => setSelectedFactory(fac)}
-                    className="flex items-center gap-1 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors"
+                    className="flex items-center gap-1 text-xs font-bold text-[#1F3A2E] hover:text-[#8A6D3B] transition-colors ml-1"
                   >
                     <span>Inspect</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1381,6 +1550,24 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
                 </button>
 
                 <button
+                  onClick={() => setEditingFactory(selectedFactory)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-colors cursor-pointer"
+                  title="Edit Supplier Profile"
+                >
+                  <Edit className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Edit Profile</span>
+                </button>
+
+                <button
+                  onClick={(e) => handleDeleteFactory(selectedFactory.id, selectedFactory.name, e)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold transition-colors cursor-pointer"
+                  title="Delete Supplier Profile"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete Supplier</span>
+                </button>
+
+                <button
                   onClick={() => setSelectedFactory(null)}
                   className="px-4 py-2 rounded-lg bg-[#E8EFE8] hover:bg-[#DDE3DD] text-[#1F3A2E] text-xs font-semibold transition-colors"
                 >
@@ -1419,6 +1606,14 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
           setRatingModelFactory(null);
         }}
         factory={ratingModelFactory}
+      />
+
+      {/* Modal: Edit Supplier Profile */}
+      <EditSupplierModal
+        isOpen={!!editingFactory}
+        factory={editingFactory}
+        onClose={() => setEditingFactory(null)}
+        onSave={handleSaveEditedFactory}
       />
 
       {/* Modal: Living Factory & Supplier Portfolio Dossier (5 Pillars) */}

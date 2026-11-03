@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Users2,
   Search,
@@ -19,10 +19,15 @@ import {
   UserCheck,
   ExternalLink,
   ShieldCheck,
-  X
+  X,
+  Edit2,
+  Trash2,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 import { EnterpriseContact, ContactCategory } from '@/types/utilities';
 import { INITIAL_ENTERPRISE_CONTACTS } from '@/data/initialUtilitiesData';
+import { fetchEnterpriseContacts, persistEnterpriseContacts } from '@/lib/erpPersistence';
 
 export const ContactsDirectoryUtility: React.FC = () => {
   const [contacts, setContacts] = useState<EnterpriseContact[]>(INITIAL_ENTERPRISE_CONTACTS);
@@ -30,6 +35,19 @@ export const ContactsDirectoryUtility: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingContact, setEditingContact] = useState<EnterpriseContact | null>(null);
+
+  // Selection state
+  const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
+
+  // Load persisted contacts on mount
+  useEffect(() => {
+    fetchEnterpriseContacts().then((loaded) => {
+      if (loaded && loaded.length > 0) {
+        setContacts(loaded);
+      }
+    });
+  }, []);
 
   // New Contact Form State
   const [newContact, setNewContact] = useState<Partial<EnterpriseContact>>({
@@ -71,7 +89,9 @@ export const ContactsDirectoryUtility: React.FC = () => {
       notes: newContact.notes || '',
       leadTimeOrCapacity: newContact.leadTimeOrCapacity || '',
     };
-    setContacts(prev => [created, ...prev]);
+    const next = [created, ...contacts];
+    setContacts(next);
+    persistEnterpriseContacts(next);
     setIsAddModalOpen(false);
     setNewContact({
       name: '',
@@ -87,6 +107,49 @@ export const ContactsDirectoryUtility: React.FC = () => {
       notes: '',
       leadTimeOrCapacity: '',
     });
+  };
+
+  const handleSaveEditedContact = () => {
+    if (!editingContact || !editingContact.name || !editingContact.company) return;
+    const next = contacts.map(c => c.id === editingContact.id ? editingContact : c);
+    setContacts(next);
+    persistEnterpriseContacts(next);
+    setEditingContact(null);
+  };
+
+  const handleDeleteContact = (id: string, name: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (window.confirm(`Are you sure you want to permanently delete contact "${name}"?`)) {
+      const next = contacts.filter(c => c.id !== id);
+      setContacts(next);
+      persistEnterpriseContacts(next);
+      setSelectedContactIds(prev => prev.filter(cId => cId !== id));
+    }
+  };
+
+  const handleBatchDeleteContacts = () => {
+    if (selectedContactIds.length === 0) return;
+    if (window.confirm(`Are you sure you want to permanently delete the ${selectedContactIds.length} selected contacts?`)) {
+      const next = contacts.filter(c => !selectedContactIds.includes(c.id));
+      setContacts(next);
+      persistEnterpriseContacts(next);
+      setSelectedContactIds([]);
+    }
+  };
+
+  const toggleSelectContact = (id: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedContactIds(prev =>
+      prev.includes(id) ? prev.filter(cId => cId !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAllContacts = () => {
+    if (selectedContactIds.length === filteredContacts.length && filteredContacts.length > 0) {
+      setSelectedContactIds([]);
+    } else {
+      setSelectedContactIds(filteredContacts.map(c => c.id));
+    }
   };
 
   const handleExportCsv = () => {
@@ -137,6 +200,8 @@ export const ContactsDirectoryUtility: React.FC = () => {
         return 'bg-purple-950/80 text-purple-300 border-purple-500/40';
     }
   };
+
+  const isAllSelected = filteredContacts.length > 0 && selectedContactIds.length === filteredContacts.length;
 
   return (
     <div className="space-y-6 text-slate-900 animate-in fade-in duration-200">
@@ -218,98 +283,176 @@ export const ContactsDirectoryUtility: React.FC = () => {
         </div>
       </div>
 
+      {/* Multi-Select & Batch Actions Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 bg-[#F0F5F2] border border-[#DDE3DD] rounded-xl text-xs font-medium">
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-[#1F3A2E] font-bold">
+            <input
+              type="checkbox"
+              checked={isAllSelected}
+              onChange={toggleSelectAllContacts}
+              className="w-4 h-4 rounded text-[#1F3A2E] border-slate-300 focus:ring-[#1F3A2E] cursor-pointer"
+            />
+            <span>Select All ({filteredContacts.length})</span>
+          </label>
+
+          {selectedContactIds.length > 0 && (
+            <span className="px-2.5 py-0.5 rounded-full bg-[#1F3A2E] text-white font-mono text-[11px] font-bold">
+              {selectedContactIds.length} Selected
+            </span>
+          )}
+        </div>
+
+        {selectedContactIds.length > 0 && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleBatchDeleteContacts}
+              className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Selected ({selectedContactIds.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedContactIds([])}
+              className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs transition cursor-pointer"
+            >
+              Deselect All
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Contacts Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredContacts.map(contact => (
-          <div
-            key={contact.id}
-            className="rounded-xl bg-[#0f1f18] border border-[#254d37] p-5 space-y-4 hover:border-[#3d7a59] transition-all shadow-lg flex flex-col justify-between"
-          >
-            <div className="space-y-3">
-              {/* Category & Station Header */}
-              <div className="flex items-center justify-between gap-2">
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase tracking-wider ${getCategoryBadgeStyle(contact.category)}`}>
-                  {contact.category}
+        {filteredContacts.map(contact => {
+          const isSelected = selectedContactIds.includes(contact.id);
+          return (
+            <div
+              key={contact.id}
+              className={`rounded-xl border p-5 space-y-4 transition-all shadow-lg flex flex-col justify-between ${
+                isSelected
+                  ? 'bg-[#14281f] border-[#C8A96A] ring-2 ring-[#C8A96A]/40'
+                  : 'bg-[#0f1f18] border-[#254d37] hover:border-[#3d7a59]'
+              }`}
+            >
+              <div className="space-y-3">
+                {/* Checkbox, Category & Station Header */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleSelectContact(contact.id)}
+                      className="w-4 h-4 rounded text-[#C8A96A] border-emerald-600 focus:ring-[#C8A96A] cursor-pointer"
+                      title="Select Contact"
+                    />
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase tracking-wider ${getCategoryBadgeStyle(contact.category)}`}>
+                      {contact.category}
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#C8A96A]" />
+                    {contact.station}
+                  </span>
+                </div>
+
+                {/* Name & Company */}
+                <div>
+                  <h4 className="text-base font-bold text-white">{contact.name}</h4>
+                  <div className="text-xs font-semibold text-[#C8A96A]">{contact.role}</div>
+                  <div className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                    <Building2 className="w-3.5 h-3.5" />
+                    {contact.company}
+                  </div>
+                </div>
+
+                {/* Direct Communications Links */}
+                <div className="space-y-1.5 text-xs text-slate-300 pt-1">
+                  {contact.email && (
+                    <a
+                      href={`mailto:${contact.email}`}
+                      className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors truncate font-mono text-[11px]"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="truncate">{contact.email}</span>
+                    </a>
+                  )}
+                  {contact.phone && (
+                    <a
+                      href={`tel:${contact.phone}`}
+                      className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors font-mono text-[11px]"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span>{contact.phone}</span>
+                    </a>
+                  )}
+                  {contact.whatsapp && (
+                    <a
+                      href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-mono text-[11px]"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>WhatsApp: {contact.whatsapp}</span>
+                    </a>
+                  )}
+                </div>
+
+                {/* Notes / Specialization */}
+                {contact.notes && (
+                  <div className="p-2.5 rounded-lg bg-[#14281f] border border-[#254d37] text-[11px] text-slate-300 line-clamp-2">
+                    {contact.notes}
+                  </div>
+                )}
+
+                {contact.leadTimeOrCapacity && (
+                  <div className="text-[10px] text-cyan-300 font-mono">
+                    ⚡ {contact.leadTimeOrCapacity}
+                  </div>
+                )}
+              </div>
+
+              {/* Card Footer Actions: Copy, Edit, Delete */}
+              <div className="pt-3 border-t border-[#234534] flex items-center justify-between text-xs">
+                <span className="text-[10px] text-slate-500 font-mono">
+                  {contact.taxOrVatId || 'Verified Record'}
                 </span>
-                <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#C8A96A]" />
-                  {contact.station}
-                </span>
-              </div>
 
-              {/* Name & Company */}
-              <div>
-                <h4 className="text-base font-bold text-white">{contact.name}</h4>
-                <div className="text-xs font-semibold text-[#C8A96A]">{contact.role}</div>
-                <div className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                  <Building2 className="w-3.5 h-3.5" />
-                  {contact.company}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleCopyDetails(contact)}
+                    className="p-1.5 rounded bg-[#183225] hover:bg-[#204231] text-[11px] font-mono text-[#C8A96A] border border-[#2e5d45] flex items-center gap-1 transition-colors cursor-pointer"
+                    title="Copy Contact Details"
+                  >
+                    {copiedId === contact.id ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setEditingContact({ ...contact })}
+                    className="p-1.5 rounded bg-amber-950/70 hover:bg-amber-900/80 text-amber-300 border border-amber-600/50 text-xs transition cursor-pointer"
+                    title="Edit Contact"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={(e) => handleDeleteContact(contact.id, contact.name, e)}
+                    className="p-1.5 rounded bg-red-950/70 hover:bg-red-900/80 text-red-300 border border-red-600/50 text-xs transition cursor-pointer"
+                    title="Delete Contact"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-
-              {/* Direct Communications Links */}
-              <div className="space-y-1.5 text-xs text-slate-300 pt-1">
-                {contact.email && (
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors truncate font-mono text-[11px]"
-                  >
-                    <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span className="truncate">{contact.email}</span>
-                  </a>
-                )}
-                {contact.phone && (
-                  <a
-                    href={`tel:${contact.phone}`}
-                    className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors font-mono text-[11px]"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span>{contact.phone}</span>
-                  </a>
-                )}
-                {contact.whatsapp && (
-                  <a
-                    href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, '')}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-mono text-[11px]"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>WhatsApp: {contact.whatsapp}</span>
-                  </a>
-                )}
-              </div>
-
-              {/* Notes / Specialization */}
-              {contact.notes && (
-                <div className="p-2.5 rounded-lg bg-[#14281f] border border-[#254d37] text-[11px] text-slate-300 line-clamp-2">
-                  {contact.notes}
-                </div>
-              )}
-
-              {contact.leadTimeOrCapacity && (
-                <div className="text-[10px] text-cyan-300 font-mono">
-                  ⚡ {contact.leadTimeOrCapacity}
-                </div>
-              )}
             </div>
-
-            {/* Card Footer Actions */}
-            <div className="pt-3 border-t border-[#234534] flex items-center justify-between text-xs">
-              <span className="text-[10px] text-slate-500 font-mono">
-                {contact.taxOrVatId || 'Verified Record'}
-              </span>
-
-              <button
-                onClick={() => handleCopyDetails(contact)}
-                className="px-2.5 py-1 rounded bg-[#183225] hover:bg-[#204231] text-[11px] font-mono text-[#C8A96A] border border-[#2e5d45] flex items-center gap-1 transition-colors"
-              >
-                {copiedId === contact.id ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                {copiedId === contact.id ? 'Copied' : 'Copy'}
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Add Contact Modal */}
@@ -323,7 +466,7 @@ export const ContactsDirectoryUtility: React.FC = () => {
               </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
+                className="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -440,16 +583,154 @@ export const ContactsDirectoryUtility: React.FC = () => {
             <div className="pt-3 border-t border-[#234534] flex items-center justify-end gap-2">
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs font-mono text-slate-400 hover:text-white"
+                className="px-4 py-2 rounded-xl text-xs font-mono text-slate-400 hover:text-white cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateContact}
                 disabled={!newContact.name || !newContact.company}
-                className="px-5 py-2 rounded-xl bg-[#C8A96A] text-slate-950 font-bold text-xs hover:bg-[#d4b97d] transition-colors disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-[#C8A96A] text-slate-950 font-bold text-xs hover:bg-[#d4b97d] transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Save Contact
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Contact Modal */}
+      {editingContact && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg rounded-2xl bg-[#0f1f18] border-2 border-amber-500/70 shadow-2xl p-6 space-y-4 text-slate-100 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-[#234534] pb-3">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Edit2 className="w-4 h-4 text-amber-400" />
+                Edit Enterprise Contact: {editingContact.name}
+              </h3>
+              <button
+                onClick={() => setEditingContact(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs max-h-[70vh] overflow-y-auto pr-1">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Contact Name *:</label>
+                  <input
+                    type="text"
+                    value={editingContact.name}
+                    onChange={e => setEditingContact({ ...editingContact, name: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Category *:</label>
+                  <select
+                    value={editingContact.category}
+                    onChange={e => setEditingContact({ ...editingContact, category: e.target.value as any })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  >
+                    <option value="BUYER">Buyer / Retailer</option>
+                    <option value="SUPPLIER">Raw Material Supplier</option>
+                    <option value="FACTORY">Partner Factory</option>
+                    <option value="EMPLOYEE">Internal Staff</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Company / Mill *:</label>
+                  <input
+                    type="text"
+                    value={editingContact.company}
+                    onChange={e => setEditingContact({ ...editingContact, company: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Role / Designation:</label>
+                  <input
+                    type="text"
+                    value={editingContact.role}
+                    onChange={e => setEditingContact({ ...editingContact, role: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Email Address:</label>
+                  <input
+                    type="email"
+                    value={editingContact.email}
+                    onChange={e => setEditingContact({ ...editingContact, email: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Phone Number:</label>
+                  <input
+                    type="tel"
+                    value={editingContact.phone}
+                    onChange={e => setEditingContact({ ...editingContact, phone: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">WhatsApp Direct:</label>
+                  <input
+                    type="tel"
+                    value={editingContact.whatsapp || ''}
+                    onChange={e => setEditingContact({ ...editingContact, whatsapp: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 font-medium mb-1">Station / Location:</label>
+                  <input
+                    type="text"
+                    value={editingContact.station}
+                    onChange={e => setEditingContact({ ...editingContact, station: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">Operational Notes / Terms:</label>
+                <textarea
+                  rows={2}
+                  value={editingContact.notes || ''}
+                  onChange={e => setEditingContact({ ...editingContact, notes: e.target.value })}
+                  className="w-full px-3 py-2 rounded-lg bg-[#183326] border border-[#2e5d45] text-white focus:outline-none focus:border-[#C8A96A]"
+                />
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-[#234534] flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setEditingContact(null)}
+                className="px-4 py-2 rounded-xl text-xs font-mono text-slate-400 hover:text-white cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveEditedContact}
+                disabled={!editingContact.name || !editingContact.company}
+                className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors disabled:opacity-50 cursor-pointer shadow-md"
+              >
+                Save Changes
               </button>
             </div>
           </div>

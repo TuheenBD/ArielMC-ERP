@@ -453,7 +453,7 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
     <div className="space-y-6">
       {/* Top Global Reports Breadcrumb Navigation */}
       <div className="bg-white border border-[#DDE3DD] rounded-xl px-4 py-2.5 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar font-medium">
+        <div className="flex flex-wrap items-center gap-2 font-medium">
           <button
             onClick={() => setCurrentView('DIRECTORY')}
             className={`px-3 py-1.5 rounded-lg transition-colors font-semibold ${
@@ -546,8 +546,8 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                 </p>
               </div>
 
-              {/* Category Filter Pills (All, Tasks, CRM, Projects, Finance) */}
-              <div className="flex items-center gap-1.5 p-1 bg-[#F4F6F4] border border-[#DDE3DD] rounded-xl text-xs font-semibold overflow-x-auto">
+              {/* Category Filter Pills (All, Tasks, CRM, Projects, Finance - Clean Wrap) */}
+              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#F4F6F4] border border-[#DDE3DD] rounded-xl text-xs font-semibold">
                 {(['ALL', 'TASKS', 'CRM', 'PROJECTS', 'FINANCE'] as ReportCategory[]).map((cat) => {
                   const label =
                     cat === 'ALL'

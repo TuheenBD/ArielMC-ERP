@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FactorySupplierPortfolio,
   FactoryComplianceAudit,
@@ -10,6 +10,7 @@ import {
   SupplierPotentialProduct,
   SupplierLocationProfile,
 } from '@/types/factoryPortfolio';
+import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
 import {
   Factory,
   ShieldCheck,
@@ -71,6 +72,35 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
   const [activeTab, setActiveTab] = useState<FactoryTab>('ACTIVE_PRODUCTS');
   const [currentPortfolio, setCurrentPortfolio] = useState<FactorySupplierPortfolio>(portfolio);
   const [saveSuccessNotice, setSaveSuccessNotice] = useState(false);
+
+  useEffect(() => {
+    const master = INITIAL_FACTORY_PORTFOLIOS.find(
+      (m) => m.id === portfolio.id || m.factoryCode === portfolio.factoryCode || m.factoryName?.toLowerCase() === portfolio.factoryName?.toLowerCase()
+    );
+    const enriched: FactorySupplierPortfolio = {
+      ...portfolio,
+      activeProducts: (portfolio.activeProducts && portfolio.activeProducts.length > 0)
+        ? portfolio.activeProducts
+        : (master?.activeProducts || []),
+      potentialProducts: (portfolio.potentialProducts && portfolio.potentialProducts.length > 0)
+        ? portfolio.potentialProducts
+        : (master?.potentialProducts || []),
+      capacityAndMachinery: portfolio.capacityAndMachinery || master?.capacityAndMachinery,
+      complianceAudits: (portfolio.complianceAudits && portfolio.complianceAudits.length > 0)
+        ? portfolio.complianceAudits
+        : (master?.complianceAudits || []),
+      subSupplierNetwork: (portfolio.subSupplierNetwork && portfolio.subSupplierNetwork.length > 0)
+        ? portfolio.subSupplierNetwork
+        : (master?.subSupplierNetwork || []),
+      financialAndBanking: portfolio.financialAndBanking || master?.financialAndBanking,
+      qualityScorecard: portfolio.qualityScorecard || master?.qualityScorecard,
+      locationProfile: portfolio.locationProfile || master?.locationProfile,
+      keyManagementContacts: (portfolio.keyManagementContacts && portfolio.keyManagementContacts.length > 0)
+        ? portfolio.keyManagementContacts
+        : (master?.keyManagementContacts || []),
+    };
+    setCurrentPortfolio(enriched);
+  }, [portfolio]);
 
   // Active products & potential products with fallbacks
   const activeProducts = currentPortfolio.activeProducts || [];
@@ -429,8 +459,8 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
           </div>
         )}
 
-        {/* Comprehensive Tab Bar (9 Core Pillars) */}
-        <div className="flex items-center gap-1 border-b border-[#DDE3DD] bg-[#FAF9F5] px-4 pt-2 overflow-x-auto text-xs shrink-0 select-none">
+        {/* Comprehensive Tab Bar (9 Core Pillars - Clean 2-Line Layout, No Horizontal Scroll) */}
+        <div className="flex flex-wrap items-center gap-1.5 border-b border-[#DDE3DD] bg-[#FAF9F5] px-4 py-2 text-xs shrink-0 select-none">
           <button
             onClick={() => setActiveTab('ACTIVE_PRODUCTS')}
             className={`flex items-center gap-1.5 px-3.5 py-2.5 font-bold font-heading border-b-2 transition-all cursor-pointer whitespace-nowrap ${

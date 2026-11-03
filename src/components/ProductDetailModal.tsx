@@ -117,11 +117,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Modal Tab Bar */}
-        <div className="flex items-center px-6 border-b border-[#DDE3DD] bg-[#F8FAF8] gap-4 text-xs font-medium overflow-x-auto">
+        {/* Modal Tab Bar (2-Line Responsive Layout - No Horizontal Scroll) */}
+        <div className="flex flex-wrap items-center px-6 py-1.5 border-b border-[#DDE3DD] bg-[#F8FAF8] gap-x-5 gap-y-1 text-xs font-medium">
           <button
             onClick={() => setActiveTab('SPECS')}
-            className={`py-3 border-b-2 transition-colors shrink-0 font-montserrat ${
+            className={`py-2 border-b-2 transition-colors font-montserrat ${
               activeTab === 'SPECS'
                 ? 'border-[#1F3A2E] text-[#1F3A2E] font-bold'
                 : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -131,7 +131,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('TECHPACK')}
-            className={`py-3 border-b-2 transition-colors shrink-0 flex items-center gap-1.5 font-montserrat ${
+            className={`py-2 border-b-2 transition-colors flex items-center gap-1.5 font-montserrat ${
               activeTab === 'TECHPACK'
                 ? 'border-[#1F3A2E] text-[#1F3A2E] font-bold'
                 : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -142,7 +142,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('PACKAGING')}
-            className={`py-3 border-b-2 transition-colors shrink-0 flex items-center gap-1.5 font-montserrat ${
+            className={`py-2 border-b-2 transition-colors flex items-center gap-1.5 font-montserrat ${
               activeTab === 'PACKAGING'
                 ? 'border-[#C8A96A] text-[#1F3A2E] font-bold'
                 : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -153,7 +153,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('COSTING')}
-            className={`py-3 border-b-2 transition-colors shrink-0 font-montserrat ${
+            className={`py-2 border-b-2 transition-colors font-montserrat ${
               activeTab === 'COSTING'
                 ? 'border-[#1F3A2E] text-[#1F3A2E] font-bold'
                 : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -163,7 +163,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('FACTORY')}
-            className={`py-3 border-b-2 transition-colors shrink-0 font-montserrat ${
+            className={`py-2 border-b-2 transition-colors font-montserrat ${
               activeTab === 'FACTORY'
                 ? 'border-[#1F3A2E] text-[#1F3A2E] font-bold'
                 : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'
@@ -173,7 +173,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('COMPLIANCE')}
-            className={`py-3 border-b-2 transition-colors shrink-0 font-montserrat ${
+            className={`py-2 border-b-2 transition-colors font-montserrat ${
               activeTab === 'COMPLIANCE'
                 ? 'border-[#1F3A2E] text-[#1F3A2E] font-bold'
                 : 'border-transparent text-[#6B7269] hover:text-[#1A1A1A]'

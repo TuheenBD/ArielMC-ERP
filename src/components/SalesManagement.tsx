@@ -16,6 +16,7 @@ import { BuyerPortfolio } from '@/types/buyerPortfolio';
 import { INITIAL_BUYER_PORTFOLIOS } from '@/data/initialBuyerPortfolios';
 import { fetchBuyerPortfolios, persistBuyerPortfolios } from '@/lib/erpPersistence';
 import { BuyerPortfolioModal } from './BuyerPortfolioModal';
+import { EditBuyerModal, BuyerEditData } from './EditBuyerModal';
 import { CommercialProformaInvoice } from '@/types/erp';
 import { INITIAL_PROFORMA_INVOICES } from '@/data/initialProformaInvoices';
 import { fetchProformaInvoices, persistProformaInvoices } from '@/lib/erpPersistence';
@@ -57,6 +58,10 @@ import {
   BadgePercent,
   Briefcase,
   FileCheck,
+  Edit,
+  Trash2,
+  CheckSquare,
+  Square,
   Factory,
   Ship,
   PhoneCall,
@@ -554,6 +559,11 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
     return `৳${val.toLocaleString('en-IN')}`;
   };
 
+  // Buyer Profile CRUD State (Select / Edit / Delete)
+  const [selectedBuyerCompanies, setSelectedBuyerCompanies] = useState<string[]>([]);
+  const [editingBuyer, setEditingBuyer] = useState<BuyerEditData | null>(null);
+  const [deletedBuyerCompanies, setDeletedBuyerCompanies] = useState<string[]>([]);
+
   // New Order Form State
   const [newBuyerCompany, setNewBuyerCompany] = useState('');
   const [newTargetMarket, setNewTargetMarket] = useState<'UK' | 'US' | 'EU' | 'AU'>('UK');
@@ -672,6 +682,83 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
 
     return Array.from(map.values());
   }, [orders, crmLeads]);
+
+  const visibleBuyerAccounts = useMemo(() => {
+    return buyerAccounts.filter((ba) => !deletedBuyerCompanies.includes(ba.company.toLowerCase()));
+  }, [buyerAccounts, deletedBuyerCompanies]);
+
+  const toggleSelectBuyer = (company: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedBuyerCompanies((prev) =>
+      prev.includes(company) ? prev.filter((c) => c !== company) : [...prev, company]
+    );
+  };
+
+  const toggleSelectAllBuyers = () => {
+    const visibleCompanies = visibleBuyerAccounts.map((b) => b.company);
+    const allSelected = visibleCompanies.length > 0 && visibleCompanies.every((c) => selectedBuyerCompanies.includes(c));
+    if (allSelected) {
+      setSelectedBuyerCompanies((prev) => prev.filter((c) => !visibleCompanies.includes(c)));
+    } else {
+      setSelectedBuyerCompanies((prev) => Array.from(new Set([...prev, ...visibleCompanies])));
+    }
+  };
+
+  const handleDeleteBuyer = (company: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete buyer profile "${company}"? This will remove the account from the strategic buyer list.`)) {
+      setDeletedBuyerCompanies((prev) => [...prev, company.toLowerCase()]);
+      setSelectedBuyerCompanies((prev) => prev.filter((c) => c !== company));
+      if (selectedBuyerPortfolio?.buyerCompany.toLowerCase() === company.toLowerCase()) {
+        setSelectedBuyerPortfolio(null);
+      }
+    }
+  };
+
+  const handleBatchDeleteBuyers = () => {
+    if (selectedBuyerCompanies.length === 0) return;
+    if (window.confirm(`Are you sure you want to delete ${selectedBuyerCompanies.length} selected buyer profile(s)?`)) {
+      setDeletedBuyerCompanies((prev) => [...prev, ...selectedBuyerCompanies.map((c) => c.toLowerCase())]);
+      setSelectedBuyerCompanies([]);
+      setSelectedBuyerPortfolio(null);
+    }
+  };
+
+  const handleSaveEditedBuyer = (updated: BuyerEditData) => {
+    setBuyerPortfolios((prev) =>
+      prev.map((p) => {
+        if (p.buyerCompany.toLowerCase() === updated.company.toLowerCase()) {
+          return {
+            ...p,
+            buyerCompany: updated.company,
+            targetMarket: updated.market as any,
+            crmStatus: updated.crmStatus as any,
+            commercialPaymentTerms: updated.commercialPaymentTerms,
+            courierImportAccount: updated.courierImportAccount
+              ? {
+                  carrier: (p.courierImportAccount?.carrier || 'DHL Express') as 'DHL Express' | 'FedEx' | 'UPS',
+                  accountNumber: updated.courierImportAccount,
+                }
+              : p.courierImportAccount,
+            businessPortfolio: {
+              ...p.businessPortfolio,
+              keyDecisionMakers: [
+                {
+                  name: updated.contact.split('(')[0].trim() || 'Procurement Director',
+                  designation: updated.contact.includes('(') ? updated.contact.split('(')[1].replace(')', '').trim() : 'Category Lead',
+                  email: updated.email || 'buyer@enterprise.com',
+                  phone: updated.phone || '+44 20 7946 0912',
+                  decisionScope: p.businessPortfolio?.keyDecisionMakers?.[0]?.decisionScope || 'Procurement & Vendor Sourcing Authority',
+                },
+              ],
+            },
+          };
+        }
+        return p;
+      })
+    );
+    setEditingBuyer(null);
+  };
 
   // Station targets & achievements
   const stationTargets = [
@@ -2116,8 +2203,52 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
             </div>
           </div>
 
+          {/* Buyer Selection & Batch Action Toolbar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[#F8FAF8] border border-[#DDE3DD] text-xs">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={toggleSelectAllBuyers}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#DDE3DD] bg-white hover:bg-slate-50 font-semibold text-[#1F3A2E] cursor-pointer shadow-2xs"
+              >
+                {selectedBuyerCompanies.length > 0 && visibleBuyerAccounts.length > 0 && visibleBuyerAccounts.every(b => selectedBuyerCompanies.includes(b.company)) ? (
+                  <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+                ) : (
+                  <Square className="w-4 h-4 text-slate-400" />
+                )}
+                <span>Select All ({visibleBuyerAccounts.length})</span>
+              </button>
+
+              {selectedBuyerCompanies.length > 0 && (
+                <span className="px-2.5 py-0.5 rounded-full bg-[#1F3A2E] text-white font-mono font-bold text-[11px]">
+                  {selectedBuyerCompanies.length} Selected
+                </span>
+              )}
+            </div>
+
+            {selectedBuyerCompanies.length > 0 && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleBatchDeleteBuyers}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition shadow-xs cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete Selected ({selectedBuyerCompanies.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedBuyerCompanies([])}
+                  className="px-2.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 text-xs cursor-pointer"
+                >
+                  Deselect All
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {buyerAccounts.map((ba, idx) => {
+            {visibleBuyerAccounts.map((ba, idx) => {
               const matchingPortfolio = buyerPortfolios.find(
                 (p) =>
                   p.buyerCompany.toLowerCase() === ba.company.toLowerCase() ||
@@ -2142,7 +2273,19 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleSelectBuyer(ba.company, e)}
+                            className="cursor-pointer text-[#1F3A2E]"
+                            title="Select Buyer"
+                          >
+                            {selectedBuyerCompanies.includes(ba.company) ? (
+                              <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+                            ) : (
+                              <Square className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                            )}
+                          </button>
                           <span className="text-base">{marketFlag}</span>
                           <h4
                             onClick={() => setSelectedBuyerPortfolio(getPortfolioForBuyer(ba.company, ba.market))}
@@ -2271,14 +2414,44 @@ export const SalesManagement: React.FC<SalesManagementProps> = ({
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-between gap-2">
+                  <div className="pt-3 border-t border-[#DDE3DD] flex items-center justify-between gap-1.5">
                     <button
                       onClick={() => setSelectedBuyerPortfolio(getPortfolioForBuyer(ba.company, ba.market))}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#162B22] text-white text-xs font-bold transition-all shadow-sm"
                       title="Open living Buyer Portfolio Dossier (5 Pillars)"
                     >
                       <Briefcase className="w-3.5 h-3.5 text-[#C8A96A]" />
-                      <span>Buyer Portfolio</span>
+                      <span>Portfolio</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        const port = getPortfolioForBuyer(ba.company, ba.market);
+                        const pm = port?.businessPortfolio?.keyDecisionMakers?.[0];
+                        setEditingBuyer({
+                          company: ba.company,
+                          market: ba.market,
+                          contact: pm ? `${pm.name} (${pm.designation || 'Procurement'})` : ba.contact,
+                          phone: pm?.phone,
+                          email: pm?.email,
+                          crmStatus: port?.crmStatus,
+                          commercialPaymentTerms: port?.commercialPaymentTerms,
+                          courierImportAccount: port?.courierImportAccount ? `${port.courierImportAccount.carrier} - ${port.courierImportAccount.accountNumber}` : undefined,
+                          creditRating: ba.creditRating,
+                        });
+                      }}
+                      className="p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold transition-colors cursor-pointer"
+                      title="Edit Buyer Profile"
+                    >
+                      <Edit className="w-3.5 h-3.5 text-amber-700" />
+                    </button>
+
+                    <button
+                      onClick={(e) => handleDeleteBuyer(ba.company, e)}
+                      className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold transition-colors cursor-pointer"
+                      title="Delete Buyer Profile"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
 
                     <button

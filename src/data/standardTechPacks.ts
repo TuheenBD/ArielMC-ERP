@@ -1756,11 +1756,26 @@ export function buildStandardFactoryTechPack(input: BuildTechPackInput): Standar
   } else if (modelLower.includes('iris') || styleLower.includes('irs')) {
     pictures.push('/images/products/bangla_eco/iris/1.jpg');
   } else if (modelLower.includes('bloom') || styleLower.includes('blm')) {
+    pictures.push('/images/products/bangla_eco/bloom/bloom-front.jpg');
     pictures.push('/images/techpacks/blm-ref-photo.png');
   } else if (modelLower.includes('knox') || styleLower.includes('knx')) {
     pictures.push('/images/products/bangla_eco/knox/1.jpg');
   } else if (modelLower.includes('loko') || styleLower.includes('lok')) {
     pictures.push('/images/products/bangla_eco/loko/1.jpg');
+  } else if (modelLower.includes('duffle') || modelLower.includes('weekender') || styleLower.includes('srw')) {
+    pictures.push('/images/products/leather/LD-TRV-10.jpg');
+  } else if (modelLower.includes('bifold') || modelLower.includes('cardholder') || (sector === 'LEATHER' && modelLower.includes('wallet'))) {
+    pictures.push('/images/products/leather/LD-EDC-2.jpg');
+  } else if (modelLower.includes('folio') || styleLower.includes('tnw')) {
+    pictures.push('/images/products/leather/LD-TNW-7.jpg');
+  } else if (modelLower.includes('shopper') || modelLower.includes('beach') || (sector === 'JUTE' && modelLower.includes('tote'))) {
+    pictures.push('/images/techpacks/jct-ref-photo.png');
+  } else if (modelLower.includes('doormat') || modelLower.includes('mat') || modelLower.includes('mld')) {
+    pictures.push('/images/products/jute/rugs/crimson-bloom-rug.jpg');
+  } else if (sector === 'CERAMICS' || modelLower.includes('porcelain') || modelLower.includes('espresso')) {
+    pictures.push('/images/products/ceramics/plate-table-setting.jpg');
+  } else if (sector === 'POTTERY' || modelLower.includes('terracotta') || modelLower.includes('planter')) {
+    pictures.push('/images/products/pottery/planter-exterior.jpg');
   } else if (modelLower.includes('jct') || styleLower.includes('jct') || (sector === 'JUTE' && modelLower.includes('commuter'))) {
     pictures.push('/images/techpacks/jct-ref-photo.png');
   } else {

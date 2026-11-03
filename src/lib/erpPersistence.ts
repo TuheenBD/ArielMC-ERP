@@ -37,6 +37,8 @@ import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
 import { D2cSalesPoint, D2cSaleOrder } from '@/types/d2cSales';
 import { INITIAL_D2C_SALES_POINTS, INITIAL_D2C_SALE_ORDERS } from '@/data/initialD2cSalesData';
 import { INITIAL_PROFORMA_INVOICES } from '@/data/initialProformaInvoices';
+import { EnterpriseContact } from '@/types/utilities';
+import { INITIAL_ENTERPRISE_CONTACTS } from '@/data/initialUtilitiesData';
 
 const LOCAL_STORAGE_KEYS = {
   PRODUCTS: 'arielmc_erp_products_v1',
@@ -58,6 +60,7 @@ const LOCAL_STORAGE_KEYS = {
   D2C_SALES_POINTS: 'arielmc_erp_d2c_sales_points_v1',
   D2C_SALE_ORDERS: 'arielmc_erp_d2c_sale_orders_v1',
   PROFORMA_INVOICES: 'arielmc_erp_proforma_invoices_v1',
+  ENTERPRISE_CONTACTS: 'arielmc_erp_enterprise_contacts_v1',
 };
 
 // ==============================================================================
@@ -1702,7 +1705,25 @@ export const fetchFactoryPortfolios = async (): Promise<FactorySupplierPortfolio
   if (typeof window !== 'undefined') {
     try {
       const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.FACTORY_PORTFOLIOS);
-      if (cached) return JSON.parse(cached);
+      if (cached) {
+        const parsed: FactorySupplierPortfolio[] = JSON.parse(cached);
+        // Ensure master styles and published products (e.g. Bangla Eco, Beni Boonon) are hydrated if empty
+        const merged = [...INITIAL_FACTORY_PORTFOLIOS];
+        parsed.forEach((p) => {
+          const idx = merged.findIndex((m) => m.id === p.id || m.factoryCode === p.factoryCode || m.factoryName?.toLowerCase() === p.factoryName?.toLowerCase());
+          if (idx >= 0) {
+            merged[idx] = {
+              ...merged[idx],
+              ...p,
+              activeProducts: (p.activeProducts && p.activeProducts.length > 0) ? p.activeProducts : merged[idx].activeProducts,
+              potentialProducts: (p.potentialProducts && p.potentialProducts.length > 0) ? p.potentialProducts : merged[idx].potentialProducts,
+            };
+          } else {
+            merged.push(p);
+          }
+        });
+        return merged;
+      }
     } catch (e) {
       console.warn('Failed to parse cached factory portfolios:', e);
     }
@@ -1790,6 +1811,32 @@ export const persistProformaInvoices = async (invoices: CommercialProformaInvoic
       localStorage.setItem(LOCAL_STORAGE_KEYS.PROFORMA_INVOICES, JSON.stringify(invoices));
     } catch (e) {
       console.warn('Failed to cache proforma invoices:', e);
+    }
+  }
+};
+
+// ==============================================================================
+// 19. ENTERPRISE MASTER CONTACTS DIRECTORY PERSISTENCE
+// ==============================================================================
+
+export const fetchEnterpriseContacts = async (): Promise<EnterpriseContact[]> => {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTERPRISE_CONTACTS);
+      if (cached) return JSON.parse(cached);
+    } catch (e) {
+      console.warn('Failed to parse cached enterprise contacts:', e);
+    }
+  }
+  return INITIAL_ENTERPRISE_CONTACTS;
+};
+
+export const persistEnterpriseContacts = async (contacts: EnterpriseContact[]): Promise<void> => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.ENTERPRISE_CONTACTS, JSON.stringify(contacts));
+    } catch (e) {
+      console.warn('Failed to cache enterprise contacts:', e);
     }
   }
 };

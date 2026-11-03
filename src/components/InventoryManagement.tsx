@@ -461,8 +461,8 @@ export const InventoryManagement: React.FC<InventoryManagementProps> = ({
           </div>
         </div>
 
-        {/* Sub-Navigation Tabs */}
-        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-white/15 overflow-x-auto text-xs font-semibold">
+        {/* Sub-Navigation Tabs (Clean Wrap - No Horizontal Scroll) */}
+        <div className="flex flex-wrap items-center gap-2 mt-6 pt-4 border-t border-white/15 text-xs font-semibold">
           <button
             onClick={() => setActiveSubTab('LEDGER')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg transition-all ${

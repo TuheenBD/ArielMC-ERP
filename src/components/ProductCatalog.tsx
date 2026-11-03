@@ -161,8 +161,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
       {/* Sourcing Lifecycle Tabs & View Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-[#DDE3DD]">
-        {/* Status Lifecycle */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {/* Status Lifecycle (2-Line Responsive Layout - No Horizontal Scroll) */}
+        <div className="flex flex-wrap items-center gap-2 pb-1">
           <button
             type="button"
             onClick={() => setSelectedStatusTab('ALL')}
@@ -240,8 +240,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         </div>
       </div>
 
-      {/* Sector Filter Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+      {/* Sector Filter Bar (Wrap cleanly on 2 lines - No Horizontal Scroll) */}
+      <div className="flex flex-wrap items-center gap-2 pb-1">
         <button
           type="button"
           onClick={() => setSelectedSector('ALL')}

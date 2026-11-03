@@ -484,6 +484,15 @@ export default function Home() {
     persistFactory(newFactory).catch(console.error);
   };
 
+  const handleUpdateFactory = (updated: SupplierFactory) => {
+    setFactories((prev) => prev.map((f) => (f.id === updated.id ? updated : f)));
+    persistFactory(updated).catch(console.error);
+  };
+
+  const handleDeleteFactory = (factoryId: string) => {
+    setFactories((prev) => prev.filter((f) => f.id !== factoryId));
+  };
+
   const handleAddSample = (newSample: SampleDevelopmentOrder) => {
     setSamples((prev) => [newSample, ...prev]);
     persistSample(newSample).catch(console.error);
@@ -825,6 +834,8 @@ export default function Home() {
             <FactoryManagement
               factories={factories}
               onAddFactory={handleAddFactory}
+              onUpdateFactory={handleUpdateFactory}
+              onDeleteFactory={handleDeleteFactory}
             />
           )}
 

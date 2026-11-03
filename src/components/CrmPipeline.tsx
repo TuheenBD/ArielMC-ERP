@@ -1421,7 +1421,7 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
 
       {/* CRM Main Sub-Navigation Bar */}
       <div className="bg-white border border-[#DDE3DD] rounded-xl px-4 py-2.5 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar font-medium">
+        <div className="flex flex-wrap items-center gap-1.5 font-medium">
           <button
             onClick={() => setActiveTab('DASHBOARD')}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-colors font-semibold ${
