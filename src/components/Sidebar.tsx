@@ -164,6 +164,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: '13 Verified Hubs',
           phase: 'Direct Hub',
         },
+        {
+          id: 'PRODUCTS' as ActiveTab,
+          label: 'Sector Product Master',
+          icon: Package,
+          badge: '5 Sectors',
+          phase: 'Costing & FOB',
+        },
       ],
     },
     {
@@ -202,13 +209,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           badge: 'Live Desks',
           phase: 'Direct Hub',
         },
-        {
-          id: 'PRODUCTS' as ActiveTab,
-          label: 'Sector Product Master',
-          icon: Package,
-          badge: '4 Sectors',
-          phase: 'Foundation',
-        },
+
       ],
     },
     {
