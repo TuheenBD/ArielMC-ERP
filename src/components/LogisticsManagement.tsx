@@ -57,7 +57,15 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY' | 'CONTAINER_PLANNER' | 'DISPATCH_MANIFEST'>('CONSIGNMENTS');
   const [selectedHub, setSelectedHub] = useState<HubLocation>('WH-UK');
-  const [activeConsignment, setActiveConsignment] = useState<LogisticsConsignment>(consignments[0]);
+  const [activeConsignment, setActiveConsignment] = useState<LogisticsConsignment | null>(
+    consignments && consignments.length > 0 ? consignments[0] : null
+  );
+
+  React.useEffect(() => {
+    if (!activeConsignment && consignments && consignments.length > 0) {
+      setActiveConsignment(consignments[0]);
+    }
+  }, [consignments, activeConsignment]);
   const [documentPreviewType, setDocumentPreviewType] = useState<'INVOICE' | 'PACKING_LIST' | 'FORM_EXP' | 'EDI_MANIFEST'>('INVOICE');
   const [showDocModal, setShowDocModal] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -297,7 +305,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
           {/* Consignments Selector Card */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {consignments.map((cng) => {
-              const isSelected = activeConsignment.id === cng.id;
+              const isSelected = activeConsignment?.id === cng.id;
               const statusBadge = getShipmentStatusBadge(cng.status);
               const StatusIcon = statusBadge.icon;
 
@@ -370,7 +378,8 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
           </div>
 
           {/* Detailed Inspector for Selected Consignment */}
-          <div className="p-6 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-6">
+          {activeConsignment ? (
+            <div className="p-6 rounded-2xl bg-white border border-[#DDE3DD] shadow-sm space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#DDE3DD]">
               <div>
                 <div className="flex items-center gap-2">
@@ -586,6 +595,11 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
               </div>
             </div>
           </div>
+          ) : (
+            <div className="p-8 rounded-2xl bg-white border border-[#DDE3DD] text-center text-xs text-slate-400">
+              Select an active consignment above to inspect cargo manifest and customs tracking details.
+            </div>
+          )}
         </div>
       )}
 
@@ -1143,7 +1157,15 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
 
             {/* Document Body (Clean Ivory Paper Theme for Printing) */}
             <div className="printable-content p-8 overflow-y-auto flex-1 bg-white text-[#1F3A2E] font-['Open_Sans']">
-              {documentPreviewType === 'INVOICE' && (
+              {!activeConsignment ? (
+                <div className="py-16 text-center text-slate-400">
+                  <FileText className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+                  <p className="font-bold text-slate-700 text-sm">No Active Consignment Selected</p>
+                  <p className="text-xs text-slate-400 mt-1">Please select an ocean consignment in the Consignments tab to inspect statutory export documents.</p>
+                </div>
+              ) : (
+                <>
+                  {documentPreviewType === 'INVOICE' && (
                 <div className="space-y-6 max-w-3xl mx-auto">
                   {/* Official Letterhead Header */}
                   <div className="border-b-2 border-[#C8A96A] pb-4 flex items-start justify-between">
@@ -1366,6 +1388,8 @@ ${activeConsignment.items
   .join('\n')}`}
                   </pre>
                 </div>
+              )}
+                </>
               )}
             </div>
 

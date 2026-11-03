@@ -141,6 +141,11 @@ export default function Home() {
       setActiveTab('SALES');
       setSalesInitialSubTab('BUYERS');
       setSalesActiveSubTab('BUYERS');
+    } else if (tab === 'SALES') {
+      setActiveTab('SALES');
+      setSalesInitialSubTab('OVERVIEW');
+      setSalesActiveSubTab('OVERVIEW');
+      setSalesInitialBuyerCompany(undefined);
     } else {
       setActiveTab(tab);
     }
@@ -840,9 +845,14 @@ export default function Home() {
               onAddOrder={handleAddOrder}
               onOpenDocumentCenter={handleOpenDocCenter}
               theme={theme}
-              initialSubTab={activeTab === 'BUYERS' || salesActiveSubTab === 'BUYERS' ? 'BUYERS' : salesInitialSubTab}
+              initialSubTab={activeTab === 'BUYERS' ? 'BUYERS' : salesInitialSubTab}
               initialBuyerCompany={salesInitialBuyerCompany}
-              onSubTabChange={(subTab) => setSalesActiveSubTab(subTab)}
+              onSubTabChange={(subTab) => {
+                setSalesActiveSubTab(subTab);
+                if (salesInitialSubTab && salesInitialSubTab !== subTab) {
+                  setSalesInitialSubTab(undefined);
+                }
+              }}
               favoritePages={favoritePages}
               onToggleFavorite={handleToggleFavorite}
             />
