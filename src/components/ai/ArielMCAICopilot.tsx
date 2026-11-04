@@ -365,9 +365,12 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
           setIsTyping(false);
           return;
         }
+      } else {
+        const errText = await response.text().catch(() => '');
+        console.warn('[ArielMC AI Chat] Live API notice, engaging smart fallback:', errText);
       }
-    } catch {
-      // Fall through to smart conversational fallback
+    } catch (err: any) {
+      console.warn('[ArielMC AI Chat] Network notice, engaging smart fallback:', err?.message || err);
     }
 
     // 2. Fallback to our natural conversational partner engine

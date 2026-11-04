@@ -87,23 +87,49 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Build conversation history for Gemini API
-    const contents: { role: string; parts: { text: string }[] }[] = [];
-
     // Inject system instructions as the very first context or developer instruction
     const systemPromptWithContext = `${ARIELMC_SYSTEM_INSTRUCTION}\n\n### Current ERP Session Context:\n- Station: ${clientContext?.station || 'ArielMC BD (Dhaka Station)'}\n- Active Currency: ${clientContext?.currency || 'USD ($)'}\n- Active Products Count: ${clientContext?.productsCount || 62}\n- Date/Time: ${new Date().toISOString()}`;
 
-    // Convert messages array
+    // Build sanitized conversation history for Gemini API
+    const rawList: { role: 'user' | 'model'; text: string }[] = [];
+
     if (Array.isArray(messages) && messages.length > 0) {
       messages.forEach((m: { sender?: string; role?: string; text?: string; content?: string }) => {
-        const text = m.text || m.content || '';
+        const text = (m.text || m.content || '').trim();
         if (!text) return;
-        const role = (m.sender === 'user' || m.role === 'user') ? 'user' : 'model';
-        contents.push({
-          role,
-          parts: [{ text }]
-        });
+        const role: 'user' | 'model' = (m.sender === 'user' || m.role === 'user') ? 'user' : 'model';
+        rawList.push({ role, text });
       });
+    }
+
+    // 1. Gemini strictly requires: First message MUST be role 'user' (drop leading welcome message)
+    while (rawList.length > 0 && rawList[0].role === 'model') {
+      rawList.shift();
+    }
+
+    // 2. Roles must strictly alternate: merge consecutive messages with the same role
+    const contents: { role: string; parts: { text: string }[] }[] = [];
+    rawList.forEach((item) => {
+      if (contents.length > 0 && contents[contents.length - 1].role === item.role) {
+        contents[contents.length - 1].parts[0].text += `\n\n${item.text}`;
+      } else {
+        contents.push({
+          role: item.role,
+          parts: [{ text: item.text }]
+        });
+      }
+    });
+
+    // 3. The last message in contents must be role 'user'
+    while (contents.length > 0 && contents[contents.length - 1].role === 'model') {
+      contents.pop();
+    }
+
+    if (contents.length === 0) {
+      return NextResponse.json(
+        { success: false, error: 'NO_USER_MESSAGE', message: 'No valid user query provided.' },
+        { status: 400 }
+      );
     }
 
     // Try Gemini 2.0 Flash first, fallback to Gemini 1.5 Flash
@@ -143,9 +169,11 @@ export async function POST(req: NextRequest) {
           }
         } else {
           const errData = await response.json().catch(() => ({}));
+          console.error(`[Gemini API ${model} Error]`, errData);
           lastError = errData;
         }
       } catch (err: any) {
+        console.error(`[Gemini API ${model} Fetch Exception]`, err?.message || err);
         lastError = err?.message || err;
       }
     }
@@ -177,3 +205,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
