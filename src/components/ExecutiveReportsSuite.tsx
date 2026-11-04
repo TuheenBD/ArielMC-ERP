@@ -62,7 +62,7 @@ interface VendorPayable {
 const INITIAL_VENDOR_PAYABLES: VendorPayable[] = [
   {
     id: 'vp-01',
-    name: 'Apex Leather Crafts Ltd',
+    name: 'Bangla Eco',
     type: 'Partner Factory',
     tag: 'Partner',
     openingDebitUsd: 40000.0,
@@ -389,11 +389,11 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
   };
 
   const [newLiability, setNewLiability] = useState({
-    vendorName: 'Apex Leather Crafts Ltd',
+    vendorName: 'Bangla Eco',
     type: 'Partner Factory' as const,
     amountUsd: 10600,
     paymentTerms: 'Net 30 Days',
-    invoiceNumber: 'INV-APEX-2026-881',
+    invoiceNumber: 'INV-BE-2026-881',
     dueDate: '2026-11-30',
     description: 'Leather Batch Sourcing & Production Balance',
     station: activeEntity.code,
@@ -2021,7 +2021,10 @@ export const ExecutiveReportsSuite: React.FC<ExecutiveReportsSuiteProps> = ({
                   onChange={(e) => setNewLiability({ ...newLiability, vendorName: e.target.value })}
                   className="w-full p-2.5 rounded-lg bg-[#0A140F] border border-[#2C5240] text-white focus:border-[#C8A96A] focus:outline-none"
                 >
-                  <option value="Apex Leather Crafts Ltd">Apex Leather Crafts Ltd (Savar)</option>
+                  <option value="Bangla Eco">Bangla Eco (Savar & Hazaribagh)</option>
+                  <option value="Monno Ceramic Industries Ltd">Monno Ceramic Industries Ltd (Dhamrai)</option>
+                  <option value="Rodela Craft">Rodela Craft (Mirpur)</option>
+                  <option value="Beni Boonon Handcrafted Home Decor Ltd">Beni Boonon (Dhaka)</option>
                   <option value="Veritas Processing Group">Veritas Processing Group (Gazipur)</option>
                   <option value="Bengal Natural Jute Mills Ltd">Bengal Natural Jute Mills Ltd (Narsingdi)</option>
                   <option value="Savar Tannery Environmental Lab">Savar Tannery Environmental Lab</option>

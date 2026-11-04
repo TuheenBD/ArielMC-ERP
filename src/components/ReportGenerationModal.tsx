@@ -395,7 +395,7 @@ export const ReportGenerationModal: React.FC<ReportGenerationModalProps> = ({
   // Vendor Payables Mock / Local Dataset
   const samplePayables = useMemo(() => [
     {
-      vendor: 'Apex Leather Crafts Ltd',
+      vendor: 'Bangla Eco',
       station: 'ARIEL_BD',
       category: 'Partner Factory',
       terms: 'Net 30 Days',
@@ -580,7 +580,7 @@ export const ReportGenerationModal: React.FC<ReportGenerationModalProps> = ({
 
   // 1b. Sample Operations Tasks Dataset (for TASK_SUMMARY / TASKS_OPERATIONS)
   const sampleOperationsTasks = useMemo(() => [
-    { code: 'TSK-OPS-001', task: 'Artisan Full-Grain Leather Weekender Bag Sampling & Cutting', factory: 'Apex Footwear Ltd', dept: 'Leathercraft', dueDate: '2026-10-25', status: 'IN_PROGRESS', leadDays: '14 Days', merchant: 'Tariqul Islam' },
+    { code: 'TSK-OPS-001', task: 'Artisan Full-Grain Leather Weekender Bag Sampling & Cutting', factory: 'Bangla Eco', dept: 'Leathercraft', dueDate: '2026-10-25', status: 'IN_PROGRESS', leadDays: '14 Days', merchant: 'Tariqul Islam' },
     { code: 'TSK-OPS-002', task: 'Natural Jute Grocery Market Tote Batch Weaving & Stitching', factory: 'Bengal Natural Jute Mills Ltd', dept: 'Jute Fiber', dueDate: '2026-10-28', status: 'IN_PROGRESS', leadDays: '12 Days', merchant: 'Rafiq Ahmed' },
     { code: 'TSK-OPS-003', task: 'Handloom Indigo Dyed Textile Yardage Spin & Color Fastness', factory: 'Sonargaon Artisan Handloom', dept: 'Heritage Textiles', dueDate: '2026-11-04', status: 'IN_PROGRESS', leadDays: '18 Days', merchant: 'Molly Clarkson' },
     { code: 'TSK-OPS-004', task: 'Hand-thrown Terracotta Planters & Vases Kiln Low-Firing', factory: 'Dhamrai Heritage Pottery Cluster', dept: 'Pottery Cluster', dueDate: '2026-11-08', status: 'IN_PROGRESS', leadDays: '21 Days', merchant: 'Rafiqul Islam' },
@@ -592,7 +592,7 @@ export const ReportGenerationModal: React.FC<ReportGenerationModalProps> = ({
 
   // 2. Active Lines (14 Lines Active matching card subtitle)
   const inProgressLines = useMemo(() => [
-    { code: 'LINE-01', name: 'Apex Leathercraft Unit 2 - Line #4 Sewing', facility: 'Apex Footwear Ltd', factory: 'Apex Footwear Ltd', sector: 'LEATHER', merchant: 'Tariqul Islam', lead: 'Tariqul Islam', elapsedHours: 32.5, estHours: 48, priority: 'CRITICAL', progressPct: 68, targetDate: '2026-10-25', status: '65% Stitching Done' },
+    { code: 'LINE-01', name: 'Bangla Eco Leathercraft Unit - Line #4 Sewing', facility: 'Bangla Eco', factory: 'Bangla Eco', sector: 'LEATHER', merchant: 'Tariqul Islam', lead: 'Tariqul Islam', elapsedHours: 32.5, estHours: 48, priority: 'CRITICAL', progressPct: 68, targetDate: '2026-10-25', status: '65% Stitching Done' },
     { code: 'LINE-02', name: 'Bengal Natural Jute - Weaving Shed #2', facility: 'Bengal Natural Jute Mills Ltd', factory: 'Bengal Natural Jute Mills Ltd', sector: 'JUTE', merchant: 'Rafiq Ahmed', lead: 'Rafiq Ahmed', elapsedHours: 24.0, estHours: 40, priority: 'HIGH', progressPct: 60, targetDate: '2026-10-28', status: 'Warp Yarn Fed' },
     { code: 'LINE-03', name: 'Sonargaon Handloom Cluster - Loom Line #1', facility: 'Sonargaon Artisan Handloom', factory: 'Sonargaon Artisan Handloom', sector: 'TEXTILES', merchant: 'Molly Clarkson', lead: 'Molly Clarkson', elapsedHours: 18.5, estHours: 30, priority: 'HIGH', progressPct: 62, targetDate: '2026-11-04', status: 'Natural Indigo Dip' },
     { code: 'LINE-04', name: 'Dhamrai Pottery Studio - Kiln #3 Firing', facility: 'Dhamrai Heritage Pottery Cluster', factory: 'Dhamrai Heritage Pottery Cluster', sector: 'POTTERY', merchant: 'Rafiqul Islam', lead: 'Rafiqul Islam', elapsedHours: 14.0, estHours: 20, priority: 'MEDIUM', progressPct: 70, targetDate: '2026-11-08', status: 'Low-Fire Terracotta' },
@@ -697,7 +697,7 @@ export const ReportGenerationModal: React.FC<ReportGenerationModalProps> = ({
 
   // 9. Upcoming Expenses & Factory Commitments (30/60 Days)
   const upcomingExpensesData = useMemo(() => [
-    { id: 'EXP-FAC-01', ref: 'EXP-FAC-01', vendor: 'Apex Footwear Ltd - Unit 2 Leathercraft', poNumber: 'PO-2026-FAC-001', category: 'Finished Goods PO Balance', horizon: 'Due in 25 Days', dueDate: '2026-11-12', amountUsd: 57500, terms: 'B2B Letter of Credit (90 Days)', bank: 'Eastern Bank PLC', station: 'ARIEL_BD', status: 'PENDING_APPROVAL' },
+    { id: 'EXP-FAC-01', ref: 'EXP-FAC-01', vendor: 'Bangla Eco - Savar & Hazaribagh', poNumber: 'PO-2026-FAC-001', category: 'Finished Goods PO Balance', horizon: 'Due in 25 Days', dueDate: '2026-11-12', amountUsd: 57500, terms: 'B2B Letter of Credit (90 Days)', bank: 'Eastern Bank PLC', station: 'ARIEL_BD', status: 'PENDING_APPROVAL' },
     { id: 'EXP-FAC-02', ref: 'EXP-FAC-02', vendor: 'Bengal Natural Jute Mills Ltd', poNumber: 'PO-2026-FAC-002', category: 'Raw Jute Fabric & Sewing PO', horizon: 'Due in 30 Days', dueDate: '2026-11-18', amountUsd: 42500, terms: 'Confirmed B2B L/C', bank: 'Sonali Bank Ltd', station: 'ARIEL_BD', status: 'SCHEDULED' },
     { id: 'EXP-FAC-03', ref: 'EXP-FAC-03', vendor: 'Sonargaon Artisan Handloom', poNumber: 'PO-2026-FAC-003', category: 'Indigo Dyed Textile Yardage', horizon: 'Due in 15 Days', dueDate: '2026-11-02', amountUsd: 22000, terms: '30% Milestone Advance', bank: 'Eastern Bank PLC', station: 'ARIEL_BD', status: 'CURRENT' },
     { id: 'EXP-FAC-04', ref: 'EXP-FAC-04', vendor: 'Dhamrai Heritage Pottery Artisan Cluster', poNumber: 'PO-2026-FAC-004', category: 'Terracotta Planters & Kiln Batch', horizon: 'Due in 28 Days', dueDate: '2026-11-15', amountUsd: 12500, terms: 'Factory Net 15 Days', bank: 'Eastern Bank PLC', station: 'ARIEL_BD', status: 'SCHEDULED' },

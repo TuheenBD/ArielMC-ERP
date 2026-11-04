@@ -255,10 +255,10 @@ export const VendorEnlistmentModal: React.FC<VendorEnlistmentModalProps> = ({
           : `FAC-BD-${Math.floor(10 + Math.random() * 90)}`);
     const defaultCompanyName =
       vendorType === 'SUPPLIER'
-        ? 'Apex Artisan Global Sourcing Ltd'
+        ? 'Bangla Eco Global Sourcing'
         : vendorType === 'FULL_FLEDGED_FACTORY'
-          ? 'Apex Artisan Integrated Tannery & Leatherworks Ltd'
-          : 'Apex Artisan Leatherworks Ltd';
+          ? 'Monno Ceramic Industries Ltd'
+          : 'Rodela Craft Artisan Guild';
     const compiledProfile: VendorB2bProfile = {
       vendorType,
       registeredCompanyName: companyName || defaultCompanyName,
@@ -645,10 +645,10 @@ export const VendorEnlistmentModal: React.FC<VendorEnlistmentModalProps> = ({
                       onChange={(e) => setCompanyName(e.target.value)}
                       placeholder={
                         vendorType === 'SUPPLIER'
-                          ? 'e.g. Apex Artisan Global Sourcing Ltd'
+                          ? 'e.g. Bangla Eco Global Sourcing'
                           : vendorType === 'FULL_FLEDGED_FACTORY'
-                            ? 'e.g. Apex Artisan Integrated Tannery & Leatherworks Ltd'
-                            : 'e.g. Apex Artisan Leatherworks Ltd'
+                            ? 'e.g. Monno Ceramic Industries Ltd'
+                            : 'e.g. Rodela Craft Artisan Guild'
                       }
                       className="w-full bg-[#0D1913] border border-[#2C5240] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#C8A96A]"
                     />

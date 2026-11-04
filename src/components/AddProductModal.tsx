@@ -126,8 +126,8 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
       setStyleCode('BLM-1612');
       setCategory('Denim-Leather Hybrid');
       setReferencePictureUrl('/images/techpacks/blm-ref-photo.png');
-      setFactoryName('Apex Artisan Leatherworks Ltd');
-      setFactoryLocation('Hemayetpur, Savar, Dhaka');
+      setFactoryName('Bangla Eco');
+      setFactoryLocation('Hazaribagh & Savar, Dhaka');
       setFactoryCostBdt(2400);
     } else if (newSec === 'JUTE') {
       setHsCode('6305.10.00');

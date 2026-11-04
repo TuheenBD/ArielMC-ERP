@@ -1680,7 +1680,7 @@ export const OfficialDocumentCenter: React.FC<OfficialDocumentCenterProps> = ({
                         <div>
                           <strong className="text-gray-600">Contracted Factory:</strong>{' '}
                           <strong className="text-[#1F3A2E]">
-                            {activeOrder.linkedPo?.factoryName || 'Apex Footwear Ltd - Leathercraft Division'}
+                            {activeOrder.linkedPo?.factoryName || 'Bangla Eco - Leathercraft & Bag Division'}
                           </strong>
                         </div>
                         <div>

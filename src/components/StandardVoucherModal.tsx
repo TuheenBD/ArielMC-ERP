@@ -758,7 +758,7 @@ export const StandardVoucherModal: React.FC<StandardVoucherModalProps> = ({
                       required
                       value={partyName}
                       onChange={(e) => setPartyName(e.target.value)}
-                      placeholder={voucherType === 'CASH_PURCHASE' ? 'e.g. Apex Tannery Ltd / Sonali Jute Mills' : 'e.g. Harrods London / Selfridges & Co'}
+                      placeholder={voucherType === 'CASH_PURCHASE' ? 'e.g. Bangla Eco / Rodela Craft' : 'e.g. Harrods London / Selfridges & Co'}
                       className="w-full p-2 rounded-lg bg-[#0A140F] border border-[#2C5240] text-white text-xs font-semibold focus:border-[#C8A96A] outline-none"
                     />
                   </div>
@@ -930,7 +930,7 @@ export const StandardVoucherModal: React.FC<StandardVoucherModalProps> = ({
                       type="text"
                       value={memoShopInput}
                       onChange={(e) => setMemoShopInput(e.target.value)}
-                      placeholder="e.g. Apex Tannery / Sonali Jute"
+                      placeholder="e.g. Bangla Eco / Rodela Craft"
                       className="w-full p-2 rounded-lg bg-[#0A140F] border border-[#2C5240] text-white text-xs"
                     />
                   </div>

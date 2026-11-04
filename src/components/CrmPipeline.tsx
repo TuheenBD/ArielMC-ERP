@@ -632,13 +632,13 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
     if (interest.includes('leather')) {
       sector = 'LEATHER';
       factoryId = 'fac_lth_01';
-      factoryName = 'Apex Artisan Leatherworks Ltd';
+      factoryName = 'Bangla Eco';
       styleName = `${lead.company} Premium Leather Specimen`;
       styleCode = `SDO-LTH-${Date.now().toString(36).toUpperCase().slice(-4)}`;
     } else if (interest.includes('ceramic') || interest.includes('pottery') || interest.includes('porcelain')) {
       sector = 'CERAMICS';
       factoryId = 'fac_cer_01';
-      factoryName = 'Shinepukur Monno Fine Porcelain Ltd';
+      factoryName = 'Monno Ceramic Industries Ltd';
       styleName = `${lead.company} Fine Tableware Specimen`;
       styleCode = `SDO-CER-${Date.now().toString(36).toUpperCase().slice(-4)}`;
     } else if (interest.includes('textile') || interest.includes('garment') || interest.includes('linen') || interest.includes('denim')) {
@@ -757,15 +757,15 @@ export const CrmPipeline: React.FC<CrmPipelineProps> = ({
     if (interest.includes('leather')) {
       sector = 'LEATHER';
       factoryId = 'fac_lth_01';
-      factoryName = 'Apex Artisan Leatherworks Ltd';
+      factoryName = 'Bangla Eco';
     } else if (interest.includes('ceramic') || interest.includes('pottery') || interest.includes('porcelain')) {
       sector = 'CERAMICS';
       factoryId = 'fac_cer_01';
-      factoryName = 'Shinepukur Monno Fine Porcelain Ltd';
+      factoryName = 'Monno Ceramic Industries Ltd';
     } else if (interest.includes('textile') || interest.includes('garment') || interest.includes('linen') || interest.includes('denim')) {
       sector = 'TEXTILE';
-      factoryId = 'fac_tex_01';
-      factoryName = 'Pioneer Denim & RMG Complex Ltd';
+      factoryId = 'fac_jut_04';
+      factoryName = 'Jute Luxury Fashion';
     }
 
     const today = new Date().toISOString().slice(0, 10);

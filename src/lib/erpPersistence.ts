@@ -41,8 +41,8 @@ import { EnterpriseContact } from '@/types/utilities';
 import { INITIAL_ENTERPRISE_CONTACTS } from '@/data/initialUtilitiesData';
 
 const LOCAL_STORAGE_KEYS = {
-  PRODUCTS: 'arielmc_erp_products_v1',
-  FACTORIES: 'arielmc_erp_factories_v1',
+  PRODUCTS: 'arielmc_erp_products_v2',
+  FACTORIES: 'arielmc_erp_factories_v2',
   SAMPLES: 'arielmc_erp_samples_v1',
   ORDERS: 'arielmc_erp_orders_v1',
   LEADS: 'arielmc_erp_leads_v1',
@@ -56,7 +56,7 @@ const LOCAL_STORAGE_KEYS = {
   POS_SHIFTS: 'arielmc_erp_pos_shifts_v1',
   POS_TRANSACTIONS: 'arielmc_erp_pos_transactions_v1',
   BUYER_PORTFOLIOS: 'arielmc_erp_buyer_portfolios_v1',
-  FACTORY_PORTFOLIOS: 'arielmc_erp_factory_portfolios_v1',
+  FACTORY_PORTFOLIOS: 'arielmc_erp_factory_portfolios_v2',
   D2C_SALES_POINTS: 'arielmc_erp_d2c_sales_points_v1',
   D2C_SALE_ORDERS: 'arielmc_erp_d2c_sale_orders_v1',
   PROFORMA_INVOICES: 'arielmc_erp_proforma_invoices_v1',
