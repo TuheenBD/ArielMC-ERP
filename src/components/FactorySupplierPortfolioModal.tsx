@@ -11,6 +11,7 @@ import {
   SupplierLocationProfile,
 } from '@/types/factoryPortfolio';
 import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
+import { INITIAL_PRODUCTS } from '@/data/initialData';
 import {
   Factory,
   ShieldCheck,
@@ -41,6 +42,8 @@ import {
   Globe,
   ChevronRight,
   AlertTriangle,
+  CheckSquare,
+  Square,
 } from 'lucide-react';
 
 interface FactorySupplierPortfolioModalProps {
@@ -115,6 +118,10 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
   const avgMarginPct = activeProducts.length > 0
     ? (activeProducts.reduce((sum, p) => sum + p.marginPct, 0) / activeProducts.length).toFixed(1)
     : '0.0';
+
+  // Multi-select & editing SKU states
+  const [selectedSkuIds, setSelectedSkuIds] = useState<string[]>([]);
+  const [editingSku, setEditingSku] = useState<SupplierActiveProduct | null>(null);
 
   // State for adding new Active Sourced SKU
   const [newActiveSku, setNewActiveSku] = useState<Partial<SupplierActiveProduct>>({
@@ -241,6 +248,115 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
       pipelineUnits: 0,
       specifications: '',
     });
+  };
+
+  const toggleSelectSku = (id: string) => {
+    setSelectedSkuIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAllSkus = () => {
+    if (selectedSkuIds.length === activeProducts.length && activeProducts.length > 0) {
+      setSelectedSkuIds([]);
+    } else {
+      setSelectedSkuIds(activeProducts.map((p) => p.id));
+    }
+  };
+
+  const handleDeleteSku = (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to remove SKU "${name}" from this supplier portfolio?`)) {
+      const nextActive = (currentPortfolio.activeProducts || []).filter((p) => p.id !== id);
+      const updated: FactorySupplierPortfolio = {
+        ...currentPortfolio,
+        activeProducts: nextActive,
+        lastUpdated: new Date().toISOString().split('T')[0],
+      };
+      setCurrentPortfolio(updated);
+      setSelectedSkuIds((prev) => prev.filter((i) => i !== id));
+      onSavePortfolio(updated);
+      setSaveSuccessNotice(true);
+      setTimeout(() => setSaveSuccessNotice(false), 3000);
+    }
+  };
+
+  const handleBatchDeleteSkus = () => {
+    if (selectedSkuIds.length === 0) return;
+    if (window.confirm(`Are you sure you want to delete ${selectedSkuIds.length} selected SKU(s) from this supplier portfolio?`)) {
+      const toDelete = new Set(selectedSkuIds);
+      const nextActive = (currentPortfolio.activeProducts || []).filter((p) => !toDelete.has(p.id));
+      const updated: FactorySupplierPortfolio = {
+        ...currentPortfolio,
+        activeProducts: nextActive,
+        lastUpdated: new Date().toISOString().split('T')[0],
+      };
+      setCurrentPortfolio(updated);
+      setSelectedSkuIds([]);
+      onSavePortfolio(updated);
+      setSaveSuccessNotice(true);
+      setTimeout(() => setSaveSuccessNotice(false), 3000);
+    }
+  };
+
+  const handleSaveEditedSku = (updatedSku: SupplierActiveProduct) => {
+    const nextActive = (currentPortfolio.activeProducts || []).map((p) =>
+      p.id === updatedSku.id ? updatedSku : p
+    );
+    const updated: FactorySupplierPortfolio = {
+      ...currentPortfolio,
+      activeProducts: nextActive,
+      lastUpdated: new Date().toISOString().split('T')[0],
+    };
+    setCurrentPortfolio(updated);
+    onSavePortfolio(updated);
+    setEditingSku(null);
+    setSaveSuccessNotice(true);
+    setTimeout(() => setSaveSuccessNotice(false), 3000);
+  };
+
+  const handleSelectCatalogProduct = (skuCode: string) => {
+    if (!skuCode) return;
+    const prod = INITIAL_PRODUCTS.find((p) => p.sku === skuCode);
+    if (!prod) return;
+    const purchaseBdt = prod.costing.factoryCostBdt || Math.round((prod.costing.factoryCostUsd || 0) * bdtRate);
+    const purchaseUsd = prod.costing.factoryCostUsd || (purchaseBdt / bdtRate);
+    const publishUsd = prod.costing.b2bFobPriceUsd || (purchaseUsd * 1.45);
+    const marginUsd = publishUsd - purchaseUsd;
+    const marginPct = publishUsd > 0 ? (marginUsd / publishUsd) * 100 : 35;
+    setNewActiveSku({
+      ...newActiveSku,
+      sku: prod.sku,
+      productName: prod.name,
+      category: prod.category || currentPortfolio.sectors[0] || 'Jute',
+      divisionTitle: prod.sector === 'LEATHER' ? '01 The Leather Compendium' : prod.sector === 'JUTE' ? '02 The Golden Fiber Edit' : '05 Fine Ceramics',
+      imageUrl: prod.images && prod.images.length > 0 ? prod.images[0] : '',
+      specifications: prod.description || `${prod.dimensions || ''} - Export grade`,
+      factoryPurchasePriceBdt: purchaseBdt,
+      factoryPurchasePriceUsd: Number(purchaseUsd.toFixed(2)),
+      publishedExportFobUsd: Number(publishUsd.toFixed(2)),
+      marginUsd: Number(marginUsd.toFixed(2)),
+      marginPct: Number(marginPct.toFixed(1)),
+      totalUnitsProduced: 600,
+      pipelineUnits: 300,
+      activePoNumber: `PO-AMC-2026-${Math.floor(40 + Math.random() * 50)}`,
+      pipelineStatus: 'IN_CUTTING',
+      targetDispatchDate: '2026-12-15',
+    });
+  };
+
+  const handleDeletePotentialProduct = (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to remove potential item "${name}"?`)) {
+      const nextPot = (currentPortfolio.potentialProducts || []).filter((p) => p.id !== id);
+      const updated: FactorySupplierPortfolio = {
+        ...currentPortfolio,
+        potentialProducts: nextPot,
+        lastUpdated: new Date().toISOString().split('T')[0],
+      };
+      setCurrentPortfolio(updated);
+      onSavePortfolio(updated);
+      setSaveSuccessNotice(true);
+      setTimeout(() => setSaveSuccessNotice(false), 3000);
+    }
   };
 
   // Handle Add Factory Catalog Potential Item
@@ -640,6 +756,45 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
                 </div>
               </div>
 
+              {/* Multi-Select & Batch Action Toolbar */}
+              {activeProducts.length > 0 && (
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={toggleSelectAllSkus}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 font-semibold text-slate-700 cursor-pointer shadow-2xs transition"
+                    >
+                      {selectedSkuIds.length === activeProducts.length && activeProducts.length > 0 ? (
+                        <>
+                          <CheckSquare className="w-4 h-4 text-[#1F3A2E]" />
+                          <span>Deselect All</span>
+                        </>
+                      ) : (
+                        <>
+                          <Square className="w-4 h-4 text-slate-400" />
+                          <span>Select All</span>
+                        </>
+                      )}
+                    </button>
+                    <span className="text-slate-600 font-medium">
+                      <strong className="text-[#1F3A2E] font-mono">{selectedSkuIds.length}</strong> of {activeProducts.length} selected
+                    </span>
+                  </div>
+
+                  {selectedSkuIds.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleBatchDeleteSkus}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold cursor-pointer transition shadow-xs animate-in fade-in"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Selected ({selectedSkuIds.length})</span>
+                    </button>
+                  )}
+                </div>
+              )}
+
               {/* Active Products List */}
               {activeProducts.length === 0 ? (
                 <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 space-y-2">
@@ -654,10 +809,24 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
                   {activeProducts.map((prod) => (
                     <div
                       key={prod.id}
-                      className="rounded-2xl border border-[#DDE3DD] hover:border-[#C8A96A] bg-white p-5 shadow-xs hover:shadow-md transition-all space-y-4"
+                      className={`rounded-2xl border ${selectedSkuIds.includes(prod.id) ? 'border-[#C8A96A] bg-amber-50/20 ring-1 ring-[#C8A96A]' : 'border-[#DDE3DD] hover:border-[#C8A96A] bg-white'} p-5 shadow-xs hover:shadow-md transition-all space-y-4`}
                     >
                       <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                        <div className="flex items-start gap-4 min-w-0">
+                        <div className="flex items-start gap-3 min-w-0">
+                          {/* Checkbox for Select */}
+                          <button
+                            type="button"
+                            onClick={() => toggleSelectSku(prod.id)}
+                            className="mt-1 p-1 rounded hover:bg-slate-100 text-slate-500 hover:text-[#1F3A2E] cursor-pointer shrink-0"
+                            title={selectedSkuIds.includes(prod.id) ? "Deselect SKU" : "Select SKU"}
+                          >
+                            {selectedSkuIds.includes(prod.id) ? (
+                              <CheckSquare className="w-5 h-5 text-[#1F3A2E]" />
+                            ) : (
+                              <Square className="w-5 h-5 text-slate-400" />
+                            )}
+                          </button>
+
                           {/* Thumbnail */}
                           <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 relative flex items-center justify-center">
                             {prod.imageUrl ? (
@@ -695,29 +864,54 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
                           </div>
                         </div>
 
-                        {/* Current Production Pipeline Pill */}
-                        {prod.pipelineUnits && prod.pipelineUnits > 0 ? (
-                          <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 shrink-0 min-w-[220px]">
-                            <div className="flex items-center justify-between text-xs">
-                              <span className="font-mono font-bold text-blue-900">{prod.activePoNumber}</span>
-                              <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-blue-600 text-white font-bold">
-                                {prod.pipelineStatus?.replace(/_/g, ' ')}
-                              </span>
+                        {/* Pipeline Status Pill + Action Buttons */}
+                        <div className="flex flex-col sm:flex-row lg:flex-col items-end gap-2 shrink-0">
+                          {/* Current Production Pipeline Pill */}
+                          {prod.pipelineUnits && prod.pipelineUnits > 0 ? (
+                            <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 shrink-0 min-w-[220px]">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="font-mono font-bold text-blue-900">{prod.activePoNumber}</span>
+                                <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-blue-600 text-white font-bold">
+                                  {prod.pipelineStatus?.replace(/_/g, ' ')}
+                                </span>
+                              </div>
+                              <div className="flex items-baseline justify-between mt-1.5">
+                                <span className="text-xs text-blue-800 font-semibold">
+                                  {prod.pipelineUnits.toLocaleString()} pcs in production
+                                </span>
+                                <span className="text-[10px] text-blue-600 font-mono">
+                                  Due: {prod.targetDispatchDate}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex items-baseline justify-between mt-1.5">
-                              <span className="text-xs text-blue-800 font-semibold">
-                                {prod.pipelineUnits.toLocaleString()} pcs in production
-                              </span>
-                              <span className="text-[10px] text-blue-600 font-mono">
-                                Due: {prod.targetDispatchDate}
-                              </span>
+                          ) : (
+                            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs shrink-0">
+                              <span>No active PO in line &bull; Ready for reorder</span>
                             </div>
+                          )}
+
+                          {/* Actions: Edit & Delete SKU */}
+                          <div className="flex items-center gap-1.5 pt-1">
+                            <button
+                              type="button"
+                              onClick={() => setEditingSku(prod)}
+                              className="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
+                              title="Edit SKU Details, Purchase Price & FOB Price"
+                            >
+                              <Edit3 className="w-3.5 h-3.5 text-amber-700" />
+                              <span>Edit SKU</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteSku(prod.id, prod.productName)}
+                              className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition shadow-2xs"
+                              title="Delete SKU from Supplier Portfolio"
+                            >
+                              <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                              <span>Delete</span>
+                            </button>
                           </div>
-                        ) : (
-                          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs shrink-0">
-                            <span>No active PO in line &bull; Ready for reorder</span>
-                          </div>
-                        )}
+                        </div>
                       </div>
 
                       {/* Commercial Pricing & Business History Grid */}
@@ -767,11 +961,30 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
 
               {/* Form: Link / Add New Active Product */}
               <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#DDE3DD] space-y-4">
-                <div className="flex items-center gap-2">
-                  <Plus className="w-4 h-4 text-[#C8A96A]" />
-                  <h4 className="font-bold text-[#1F3A2E] text-sm font-heading">
-                    Link / Register Active Sourced SKU to this Supplier
-                  </h4>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-[#C8A96A]" />
+                    <h4 className="font-bold text-[#1F3A2E] text-sm font-heading">
+                      Link / Register Active Sourced SKU to this Supplier
+                    </h4>
+                  </div>
+
+                  {/* Quick Select from Product Catalog */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-500 font-medium">Quick Auto-Fill:</span>
+                    <select
+                      onChange={(e) => handleSelectCatalogProduct(e.target.value)}
+                      defaultValue=""
+                      className="px-2.5 py-1 text-xs bg-white border border-[#C8A96A]/60 rounded-lg text-[#1F3A2E] font-medium focus:outline-none cursor-pointer"
+                    >
+                      <option value="" disabled>Pick Product from Master Catalog...</option>
+                      {INITIAL_PRODUCTS.map((prod) => (
+                        <option key={prod.sku} value={prod.sku}>
+                          {prod.sku} — {prod.name.slice(0, 36)}...
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 <form onSubmit={handleAddActiveSku} className="space-y-3">
@@ -935,15 +1148,25 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
                               {item.category}
                             </span>
                           </div>
-                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
-                            item.sampleStatus === 'COUNTER_SAMPLE_APPROVED'
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                              : item.sampleStatus === 'OFF_SHELF_AVAILABLE'
-                              ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                              : 'bg-amber-100 text-amber-800 border border-amber-300'
-                          }`}>
-                            {item.sampleStatus.replace(/_/g, ' ')}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
+                              item.sampleStatus === 'COUNTER_SAMPLE_APPROVED'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : item.sampleStatus === 'OFF_SHELF_AVAILABLE'
+                                ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                                : 'bg-amber-100 text-amber-800 border border-amber-300'
+                            }`}>
+                              {item.sampleStatus.replace(/_/g, ' ')}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePotentialProduct(item.id, item.name)}
+                              className="p-1 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 cursor-pointer transition"
+                              title="Delete Item"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </div>
 
                         <h4 className="text-base font-bold font-heading text-[#1F3A2E]">
@@ -1653,6 +1876,224 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
             </div>
           )}
         </div>
+
+        {/* Modal: Edit Sourced SKU In-Place */}
+        {editingSku && (
+          <div className="fixed inset-0 z-70 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full border border-[#DDE3DD] overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="p-4 bg-[#1F3A2E] text-white flex items-center justify-between border-b-2 border-[#C8A96A]">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-white/10 text-[#C8A96A]">
+                    <Edit3 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold font-['Montserrat']">Edit Sourced SKU Details</h3>
+                    <p className="text-xs text-white/70">Modify pricing, production volume, or pipeline status</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEditingSku(null)}
+                  className="p-1 rounded-lg hover:bg-white/10 text-white/80 hover:text-white cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!editingSku) return;
+                  const purchaseUsd = Number(editingSku.factoryPurchasePriceUsd) || (Number(editingSku.factoryPurchasePriceBdt) / (bdtRate || 120));
+                  const fobUsd = Number(editingSku.publishedExportFobUsd) || 0;
+                  const marginUsd = fobUsd - purchaseUsd;
+                  const marginPct = fobUsd > 0 ? (marginUsd / fobUsd) * 100 : 0;
+                  const units = Number(editingSku.totalUnitsProduced) || 0;
+                  const spendBdt = Number(editingSku.totalSpendBdt) || (units * (Number(editingSku.factoryPurchasePriceBdt) || purchaseUsd * (bdtRate || 120)));
+                  const spendUsd = spendBdt / (bdtRate || 120);
+                  handleSaveEditedSku({
+                    ...editingSku,
+                    factoryPurchasePriceUsd: Number(purchaseUsd.toFixed(2)),
+                    factoryPurchasePriceBdt: Number(editingSku.factoryPurchasePriceBdt) || Math.round(purchaseUsd * (bdtRate || 120)),
+                    publishedExportFobUsd: Number(fobUsd.toFixed(2)),
+                    marginUsd: Number(marginUsd.toFixed(2)),
+                    marginPct: Number(marginPct.toFixed(1)),
+                    totalUnitsProduced: units,
+                    totalSpendBdt: Math.round(spendBdt),
+                    totalSpendUsd: Math.round(spendUsd),
+                  });
+                }}
+                className="p-6 space-y-4 max-h-[80vh] overflow-y-auto text-xs"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">SKU Code *</label>
+                    <input
+                      type="text"
+                      value={editingSku.sku}
+                      onChange={(e) => setEditingSku({ ...editingSku, sku: e.target.value })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono font-bold"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Product Name *</label>
+                    <input
+                      type="text"
+                      value={editingSku.productName}
+                      onChange={(e) => setEditingSku({ ...editingSku, productName: e.target.value })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-medium"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3 bg-[#F8FAF8] rounded-xl border border-[#DDE3DD]">
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Factory Purchase (BDT)</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={editingSku.factoryPurchasePriceBdt}
+                      onChange={(e) => {
+                        const bdt = Number(e.target.value);
+                        setEditingSku({
+                          ...editingSku,
+                          factoryPurchasePriceBdt: bdt,
+                          factoryPurchasePriceUsd: Number((bdt / (bdtRate || 120)).toFixed(2)),
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono font-bold"
+                    />
+                  </div>
+                  <div className="p-3 bg-[#F8FAF8] rounded-xl border border-[#DDE3DD]">
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Factory Purchase (USD)</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={editingSku.factoryPurchasePriceUsd}
+                      onChange={(e) => {
+                        const usd = Number(e.target.value);
+                        setEditingSku({
+                          ...editingSku,
+                          factoryPurchasePriceUsd: usd,
+                          factoryPurchasePriceBdt: Math.round(usd * (bdtRate || 120)),
+                        });
+                      }}
+                      className="w-full px-3 py-1.5 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono font-bold"
+                    />
+                  </div>
+                  <div className="p-3 bg-[#FAF5EC] rounded-xl border border-[#C8A96A]/50">
+                    <label className="text-[10px] font-bold text-[#8A6D3B] block mb-1 uppercase">Published Export FOB (USD) *</label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={editingSku.publishedExportFobUsd}
+                      onChange={(e) => setEditingSku({ ...editingSku, publishedExportFobUsd: Number(e.target.value) })}
+                      className="w-full px-3 py-1.5 text-xs bg-white border border-[#C8A96A] rounded-lg font-mono font-bold text-[#8A6D3B]"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Active PO Number</label>
+                    <input
+                      type="text"
+                      value={editingSku.activePoNumber || ''}
+                      onChange={(e) => setEditingSku({ ...editingSku, activePoNumber: e.target.value })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono"
+                      placeholder="e.g. PO-AMC-2026-042"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Pipeline Units</label>
+                    <input
+                      type="number"
+                      value={editingSku.pipelineUnits || 0}
+                      onChange={(e) => setEditingSku({ ...editingSku, pipelineUnits: Number(e.target.value) })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Pipeline Status</label>
+                    <select
+                      value={editingSku.pipelineStatus || 'IN_CUTTING'}
+                      onChange={(e) => setEditingSku({ ...editingSku, pipelineStatus: e.target.value as any })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-medium"
+                    >
+                      <option value="IN_CUTTING">IN CUTTING</option>
+                      <option value="IN_BRAIDING">IN BRAIDING</option>
+                      <option value="IN_STENCIL_PAINTING">IN STENCIL PAINTING</option>
+                      <option value="IN_PACKING">IN PACKING</option>
+                      <option value="READY_FOR_INSPECTION">READY FOR INSPECTION</option>
+                      <option value="COMPLETED">COMPLETED</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Target Dispatch Date</label>
+                    <input
+                      type="date"
+                      value={editingSku.targetDispatchDate || ''}
+                      onChange={(e) => setEditingSku({ ...editingSku, targetDispatchDate: e.target.value })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Lifetime Units Produced</label>
+                    <input
+                      type="number"
+                      value={editingSku.totalUnitsProduced || 0}
+                      onChange={(e) => setEditingSku({ ...editingSku, totalUnitsProduced: Number(e.target.value) })}
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Product Image URL</label>
+                  <input
+                    type="text"
+                    value={editingSku.imageUrl || ''}
+                    onChange={(e) => setEditingSku({ ...editingSku, imageUrl: e.target.value })}
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg font-mono"
+                    placeholder="/images/products/..."
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-slate-700 block mb-1 uppercase">Specifications</label>
+                  <textarea
+                    rows={2}
+                    value={editingSku.specifications || ''}
+                    onChange={(e) => setEditingSku({ ...editingSku, specifications: e.target.value })}
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#DDE3DD] rounded-lg"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-4 border-t border-[#DDE3DD]">
+                  <button
+                    type="button"
+                    onClick={() => setEditingSku(null)}
+                    className="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl bg-[#1F3A2E] hover:bg-[#2C5240] text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

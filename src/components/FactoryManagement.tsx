@@ -2,9 +2,10 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { SupplierFactory, ProductSector, VendorEnlistmentDocument, VendorClassification } from '@/types/erp';
-import { FactorySupplierPortfolio } from '@/types/factoryPortfolio';
+import { FactorySupplierPortfolio, SupplierActiveProduct } from '@/types/factoryPortfolio';
 import { INITIAL_FACTORY_PORTFOLIOS } from '@/data/initialFactoryPortfolios';
 import { INITIAL_FACTORIES } from '@/data/initialFactories';
+import { INITIAL_PRODUCTS } from '@/data/initialData';
 import { fetchFactoryPortfolios, persistFactoryPortfolios } from '@/lib/erpPersistence';
 import { FactorySupplierPortfolioModal } from './FactorySupplierPortfolioModal';
 import {
@@ -187,10 +188,69 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     const found = factoryPortfolios.find(
       (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName?.toLowerCase() === fac.name?.toLowerCase()
     );
+
+    // Auto-relational product discovery from Catalog Products
+    const dynamicallyMatchedSkus: SupplierActiveProduct[] = INITIAL_PRODUCTS.filter((prod) => {
+      const pFac = prod.partnerFactory;
+      if (!pFac) return false;
+      if (pFac.factoryId && (pFac.factoryId === fac.id || pFac.factoryId === fac.code)) return true;
+      if (pFac.factoryCode && pFac.factoryCode === fac.code) return true;
+      if (pFac.factoryName && fac.name) {
+        const fn1 = pFac.factoryName.toLowerCase();
+        const fn2 = fac.name.toLowerCase();
+        if (fn1 === fn2) return true;
+        const words1 = fn1.split(/[\s,.-]+/).filter((w) => w.length > 3);
+        const words2 = fn2.split(/[\s,.-]+/).filter((w) => w.length > 3);
+        if (words1.some((w) => fn2.includes(w)) || words2.some((w) => fn1.includes(w))) return true;
+      }
+      return false;
+    }).map((p, idx) => {
+      const purchaseBdt = p.costing.factoryCostBdt || Math.round((p.costing.factoryCostUsd || 0) * 120);
+      const purchaseUsd = p.costing.factoryCostUsd || (purchaseBdt / 120);
+      const fobUsd = p.costing.b2bFobPriceUsd || (purchaseUsd * 1.45);
+      const marginUsd = fobUsd - purchaseUsd;
+      const marginPct = fobUsd > 0 ? (marginUsd / fobUsd) * 100 : 35;
+      return {
+        id: `act-dyn-${p.id || p.sku}`,
+        sku: p.sku,
+        productName: p.name,
+        category: p.category || (p.sector === 'LEATHER' ? 'Everyday Carry & SLGs' : 'Jute Home Decor'),
+        divisionTitle: p.sector === 'LEATHER' ? '01 The Leather Compendium' : p.sector === 'JUTE' ? '02 The Golden Fiber Edit' : '05 Fine Ceramics',
+        imageUrl: p.images && p.images.length > 0 ? p.images[0] : '/images/products/jute/rugs/mandala-jute-rug-natural.jpg',
+        specifications: p.description || `${p.dimensions || ''} - Export grade`,
+        factoryPurchasePriceBdt: purchaseBdt,
+        factoryPurchasePriceUsd: purchaseUsd,
+        publishedExportFobUsd: fobUsd,
+        marginUsd: Number(marginUsd.toFixed(2)),
+        marginPct: Number(marginPct.toFixed(1)),
+        totalUnitsProduced: (idx + 1) * 850,
+        totalSpendBdt: (idx + 1) * 850 * purchaseBdt,
+        totalSpendUsd: Number(((idx + 1) * 850 * purchaseUsd).toFixed(0)),
+        firstBatchDate: '2026-02-15',
+        lastBatchDate: '2026-10-30',
+        activePoNumber: `PO-AMC-2026-${String(40 + idx).padStart(3, '0')}`,
+        pipelineUnits: 300,
+        pipelineStatus: 'IN_CUTTING',
+        targetDispatchDate: '2026-11-28',
+      };
+    });
+
     if (found) {
-      const activeProducts = (found.activeProducts && found.activeProducts.length > 0)
+      let activeProducts = (found.activeProducts && found.activeProducts.length > 0)
         ? found.activeProducts
-        : (initialMatch?.activeProducts || []);
+        : (initialMatch?.activeProducts && initialMatch.activeProducts.length > 0)
+          ? initialMatch.activeProducts
+          : dynamicallyMatchedSkus;
+
+      // Merge dynamic SKUs if not already in activeProducts
+      if (dynamicallyMatchedSkus.length > 0) {
+        const existingSkus = new Set(activeProducts.map((p) => p.sku));
+        const missingSkus = dynamicallyMatchedSkus.filter((p) => !existingSkus.has(p.sku));
+        if (missingSkus.length > 0) {
+          activeProducts = [...activeProducts, ...missingSkus];
+        }
+      }
+
       const potentialProducts = (found.potentialProducts && found.potentialProducts.length > 0)
         ? found.potentialProducts
         : (initialMatch?.potentialProducts || []);
@@ -208,7 +268,20 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     }
 
     if (initialMatch) {
-      return initialMatch;
+      let activeProducts = (initialMatch.activeProducts && initialMatch.activeProducts.length > 0)
+        ? initialMatch.activeProducts
+        : dynamicallyMatchedSkus;
+      if (dynamicallyMatchedSkus.length > 0) {
+        const existingSkus = new Set(activeProducts.map((p) => p.sku));
+        const missingSkus = dynamicallyMatchedSkus.filter((p) => !existingSkus.has(p.sku));
+        if (missingSkus.length > 0) {
+          activeProducts = [...activeProducts, ...missingSkus];
+        }
+      }
+      return {
+        ...initialMatch,
+        activeProducts,
+      };
     }
 
     return {
@@ -222,7 +295,7 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
       establishedYear: 2010,
       tier: fac.tier,
       lastUpdated: new Date().toISOString().split('T')[0],
-      activeProducts: [],
+      activeProducts: dynamicallyMatchedSkus,
       potentialProducts: [],
       locationProfile: {
         factoryPlantAddress: fac.factoryAddress,

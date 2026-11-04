@@ -34,12 +34,15 @@ import {
   Layers,
   Search,
   Filter,
-  Share2
+  Share2,
+  Landmark,
 } from 'lucide-react';
 import { ShareDocumentModal } from '@/components/ShareDocumentModal';
 import { OfficialDocument } from '@/types/documentPortal';
 import { ContainerLoadCbmPlanner } from '@/components/ContainerLoadCbmPlanner';
 import { DailyDispatchManifestSection } from '@/components/DailyDispatchManifestSection';
+import { SplitPaymentsEscrowEngine } from '@/components/SplitPaymentsEscrowEngine';
+import { BangladeshBankCashIncentiveEngine } from '@/components/BangladeshBankCashIncentiveEngine';
 
 interface LogisticsManagementProps {
   consignments: LogisticsConsignment[];
@@ -55,7 +58,7 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
   securityIncidents,
   onAddConsignment,
 }) => {
-  const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY' | 'CONTAINER_PLANNER' | 'DISPATCH_MANIFEST'>('CONSIGNMENTS');
+  const [activeTab, setActiveTab] = useState<'HUBS' | 'CONSIGNMENTS' | 'HYBRID_FBA' | 'DOCS' | 'SECURITY' | 'CONTAINER_PLANNER' | 'DISPATCH_MANIFEST' | 'SPLIT_PAYMENTS' | 'CASH_INCENTIVE'>('CONSIGNMENTS');
   const [selectedHub, setSelectedHub] = useState<HubLocation>('WH-UK');
   const [activeConsignment, setActiveConsignment] = useState<LogisticsConsignment | null>(
     consignments && consignments.length > 0 ? consignments[0] : null
@@ -248,7 +251,42 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
           </button>
         </div>
 
-        {/* Line 2: Channels, Compliance & Statutory Security (3 Buttons) */}
+        {/* Line 2: Department 6 - Milestone Split Payments & Bangladesh Bank Cash Incentive (2 Golden Directorate Buttons) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab('SPLIT_PAYMENTS')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'SPLIT_PAYMENTS'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-2 ring-[#C8A96A]'
+                : 'bg-[#FAF5EC] border border-[#C8A96A]/60 text-[#8A6D3B] hover:bg-[#f5ecda]'
+            }`}
+          >
+            <CreditCard className={`w-4 h-4 shrink-0 ${activeTab === 'SPLIT_PAYMENTS' ? 'text-[#C8A96A]' : 'text-[#8A6D3B]'}`} />
+            <span className="truncate font-bold">Split Payments (30% Adv / 50% Clean B/L / 20% NOC)</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-[#1F3A2E] text-[#C8A96A] font-mono text-[9px] font-bold">
+              Escrow
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('CASH_INCENTIVE')}
+            className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold transition-all text-center ${
+              activeTab === 'CASH_INCENTIVE'
+                ? 'bg-[#1F3A2E] text-white shadow-sm ring-2 ring-[#C8A96A]'
+                : 'bg-[#FAF5EC] border border-[#C8A96A]/60 text-[#8A6D3B] hover:bg-[#f5ecda]'
+            }`}
+          >
+            <Landmark className={`w-4 h-4 shrink-0 ${activeTab === 'CASH_INCENTIVE' ? 'text-[#C8A96A]' : 'text-[#8A6D3B]'}`} />
+            <span className="truncate font-bold">Bangladesh Bank Cash Incentive (10% / 7% Claims)</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-[#C8A96A] text-[#1F3A2E] font-mono text-[9px] font-bold">
+              FE 02/2024
+            </span>
+          </button>
+        </div>
+
+        {/* Line 3: Channels, Compliance & Statutory Security (3 Buttons) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <button
             type="button"
@@ -290,6 +328,16 @@ export const LogisticsManagement: React.FC<LogisticsManagementProps> = ({
           </button>
         </div>
       </div>
+
+      {/* DEPARTMENT 6 TAB: SPLIT PAYMENTS ESCROW GATE (30% / 50% / 20%) */}
+      {activeTab === 'SPLIT_PAYMENTS' && (
+        <SplitPaymentsEscrowEngine />
+      )}
+
+      {/* DEPARTMENT 6 TAB: BANGLADESH BANK CASH INCENTIVE (10% / 7%) */}
+      {activeTab === 'CASH_INCENTIVE' && (
+        <BangladeshBankCashIncentiveEngine />
+      )}
 
       {/* TAB 0: CONTAINER LOAD & CBM PLANNER */}
       {activeTab === 'CONTAINER_PLANNER' && (

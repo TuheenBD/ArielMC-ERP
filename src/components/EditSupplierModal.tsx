@@ -421,3 +421,4 @@ export const EditSupplierModal: React.FC<EditSupplierModalProps> = ({
     </div>
   );
 };
+
