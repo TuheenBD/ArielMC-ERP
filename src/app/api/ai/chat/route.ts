@@ -136,51 +136,105 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Try Google Gemini models in sequence
-    const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-pro'];
+    // 1. Discover supported models dynamically for this key via ModelService.ListModels
+    let candidateModels: string[] = [];
+
+    try {
+      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+      if (listRes.ok) {
+        const listData = await listRes.json();
+        if (Array.isArray(listData?.models)) {
+          const supported = listData.models
+            .filter((m: any) => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+            .map((m: any) => (m.name || '').replace(/^models\//, ''))
+            .filter(Boolean);
+
+          if (supported.length > 0) {
+            // Sort priority: 2.0-flash > 1.5-flash > 1.5-pro > others
+            supported.sort((a: string, b: string) => {
+              const getScore = (name: string) => {
+                if (name.includes('2.0-flash')) return 100;
+                if (name.includes('1.5-flash') && !name.includes('8b')) return 80;
+                if (name.includes('1.5-flash')) return 70;
+                if (name.includes('1.5-pro')) return 60;
+                if (name.includes('flash')) return 50;
+                if (name.includes('gemini')) return 40;
+                return 10;
+              };
+              return getScore(b) - getScore(a);
+            });
+            candidateModels = supported;
+            console.log(`[ArielMC AI Chat] Dynamically discovered ${supported.length} models for key. Top choice: ${supported[0]}`);
+          }
+        }
+      } else {
+        const err = await listRes.text().catch(() => '');
+        console.warn(`[ArielMC AI Chat] ListModels returned HTTP ${listRes.status}:`, err);
+      }
+    } catch (e: any) {
+      console.warn('[ArielMC AI Chat] ListModels fetch exception:', e?.message);
+    }
+
+    if (candidateModels.length === 0) {
+      candidateModels = [
+        'gemini-2.0-flash',
+        'gemini-2.0-flash-exp',
+        'gemini-1.5-flash',
+        'gemini-1.5-flash-latest',
+        'gemini-1.5-flash-001',
+        'gemini-1.5-flash-002',
+        'gemini-1.5-pro',
+        'gemini-1.5-pro-latest'
+      ];
+    }
+
     let lastError: any = null;
     let replyText = '';
 
-    for (const model of models) {
-      try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-        
-        const payload = {
-          systemInstruction: {
-            parts: [{ text: systemPromptWithContext }]
-          },
-          contents,
-          generationConfig: {
-            temperature: 0.7,
-            topP: 0.95,
-            topK: 40,
-            maxOutputTokens: 2048,
-          }
-        };
+    // Iterate through candidates (both v1beta and v1)
+    for (const model of candidateModels.slice(0, 5)) {
+      for (const apiVersion of ['v1beta', 'v1']) {
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models/${model}:generateContent?key=${apiKey}`;
+          
+          const payload = {
+            systemInstruction: {
+              parts: [{ text: systemPromptWithContext }]
+            },
+            contents,
+            generationConfig: {
+              temperature: 0.7,
+              topP: 0.95,
+              topK: 40,
+              maxOutputTokens: 2048,
+            }
+          };
 
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (candidateText) {
-            replyText = candidateText;
-            console.log(`[ArielMC AI Chat] Successfully generated response via ${model}`);
-            break;
+          if (response.ok) {
+            const data = await response.json();
+            const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (candidateText) {
+              replyText = candidateText;
+              console.log(`[ArielMC AI Chat] Successfully generated response via ${model} (${apiVersion})`);
+              break;
+            }
+          } else {
+            const errData = await response.json().catch(() => ({}));
+            lastError = errData;
+            console.warn(`[Gemini API ${model} ${apiVersion} Error ${response.status}]`, errData?.error?.message || response.statusText);
           }
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          console.error(`[Gemini API ${model} Error HTTP ${response.status}]`, JSON.stringify(errData));
-          lastError = errData;
+        } catch (err: any) {
+          lastError = err?.message || err;
+          console.warn(`[Gemini API ${model} ${apiVersion} Exception]`, err?.message || err);
         }
-      } catch (err: any) {
-        console.error(`[Gemini API ${model} Fetch Exception]`, err?.message || err);
-        lastError = err?.message || err;
       }
+      if (replyText) break;
     }
 
     if (!replyText) {
