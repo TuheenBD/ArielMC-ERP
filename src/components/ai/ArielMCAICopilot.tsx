@@ -6,6 +6,8 @@ import {
   Sparkles,
   Send,
   X,
+  Minus,
+  ChevronUp,
   Maximize2,
   Minimize2,
   Trash2,
@@ -96,6 +98,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   };
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -398,7 +401,9 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       {isOpen && (
         <div
           className={`fixed bottom-6 right-6 z-50 flex flex-col rounded-3xl border shadow-2xl overflow-hidden transition-all duration-300 bg-white ${
-            isExpanded
+            isMinimized
+              ? 'w-[320px] sm:w-[400px] h-auto shadow-xl'
+              : isExpanded
               ? 'w-[calc(100vw-3rem)] max-w-4xl h-[calc(100vh-5rem)]'
               : 'w-[94vw] sm:w-[480px] h-[660px] max-h-[88vh]'
           } ${
@@ -407,7 +412,12 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
         >
           {/* Header Bar */}
           <div
-            className={`px-5 py-4 flex items-center justify-between text-white border-b ${
+            onClick={() => {
+              if (isMinimized) setIsMinimized(false);
+            }}
+            className={`px-5 py-4 flex items-center justify-between text-white border-b select-none ${
+              isMinimized ? 'cursor-pointer hover:brightness-105' : ''
+            } ${
               isRoyal
                 ? 'bg-[#0F172A] border-[#1E293B]'
                 : isHydrangea
@@ -452,31 +462,62 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
 
             {/* Action Buttons in Header */}
             <div className="flex items-center gap-1">
+              {!isMinimized && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowSettings(!showSettings);
+                    }}
+                    className={`p-2 rounded-xl transition-colors ${
+                      showSettings ? 'bg-[#C8A96A] text-[#1F3A2E]' : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    }`}
+                    title="AI Settings & Gemini API Key"
+                  >
+                    <SlidersHorizontal className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClearHistory();
+                    }}
+                    className="p-2 rounded-xl text-gray-300 hover:text-rose-300 hover:bg-white/10 transition-colors"
+                    title="Clear Chat History"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsExpanded(!isExpanded);
+                    }}
+                    className="p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                    title={isExpanded ? 'Restore Size' : 'Expand View'}
+                  >
+                    {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  </button>
+                </>
+              )}
+
+              {/* Minimize to dock button (close left of X / close button) */}
               <button
-                onClick={() => setShowSettings(!showSettings)}
-                className={`p-2 rounded-xl transition-colors ${
-                  showSettings ? 'bg-[#C8A96A] text-[#1F3A2E]' : 'text-gray-300 hover:text-white hover:bg-white/10'
-                }`}
-                title="AI Settings & Gemini API Key"
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-              </button>
-              <button
-                onClick={handleClearHistory}
-                className="p-2 rounded-xl text-gray-300 hover:text-rose-300 hover:bg-white/10 transition-colors"
-                title="Clear Chat History"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMinimized(!isMinimized);
+                }}
                 className="p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                title={isExpanded ? 'Restore Size' : 'Expand View'}
+                title={isMinimized ? 'Restore Assistant' : 'Minimize Assistant'}
               >
-                {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                {isMinimized ? <ChevronUp className="w-4 h-4" /> : <Minus className="w-4 h-4" />}
               </button>
+
+              {/* Close Button */}
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMinimized(false);
+                  setIsOpen(false);
+                }}
                 className="p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
                 title="Close Assistant"
               >
@@ -484,6 +525,9 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
               </button>
             </div>
           </div>
+
+          {!isMinimized && (
+            <>
 
           {/* Settings Drawer / Popover for Gemini Key */}
           {showSettings && (
@@ -761,6 +805,8 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
               </span>
             </div>
           </div>
+          </>
+          )}
         </div>
       )}
     </>
