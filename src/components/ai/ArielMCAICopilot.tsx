@@ -4,33 +4,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import {
   Sparkles,
-  Bot,
   Send,
   X,
   Maximize2,
   Minimize2,
   Trash2,
-  HelpCircle,
   FileText,
-  Building2,
   Package,
   Factory,
   FlaskConical,
-  Repeat,
-  Landmark,
-  ShieldCheck,
-  Database,
   BookOpen,
-  ArrowRight,
-  ExternalLink,
-  ChevronRight,
-  CheckCircle2,
-  Clock,
-  Search,
-  MessageSquare,
-  Boxes,
   LayoutDashboard,
-  Megaphone
+  Megaphone,
+  Key,
+  Copy,
+  Check,
+  ChevronRight,
+  ExternalLink,
+  RefreshCw,
+  SlidersHorizontal
 } from 'lucide-react';
 import {
   CompanyEntity,
@@ -68,6 +60,7 @@ interface ChatMessage {
   sender: 'user' | 'arielmc';
   text: string;
   timestamp: string;
+  provider?: 'gemini' | 'smart-fallback';
   quickActions?: {
     label: string;
     action: () => void;
@@ -105,49 +98,49 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const [apiKey, setApiKey] = useState<string>('');
+  const [apiKeyInput, setApiKeyInput] = useState<string>('');
+  const [apiKeySavedNotice, setApiKeySavedNotice] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const initialWelcomeText = `Welcome to **ArielMC** ERP. I am your autonomous AI operations assistant, named **ArielMC**.\n\nI have complete real-time visibility across our **5 Operating Stations** (**ArielMC BD**, **ArielMC UK**, **ArielMC US**, **ArielMC EU**, and **ArielMC AU**).\n\nHow may I assist you today? You can ask me about:\n- **Master Product SKUs & Costing Margins** (Leather, Jute, Textiles, Ceramics, Pottery)\n- **Bangladesh Factory Audits & Compliance** (LWG Gold, BSCI, SEDEX, OEKO-TEX)\n- **R&D & SDO Sample Tracking** (Lab Dips, Protos, Golden Seal Approval)\n- **Order Management & Back-to-Back POs** (M&S, Harrods, Ralph Lauren)\n- **Bonded Warehousing, Mushak 6.3 & Bangladesh Customs**\n- **Multi-Station Finance & FX Hedging**\n- **Profile Control, 2SA & User Security**\n- **ArielMC ERP User Guide (PDF)**`;
+  // Load API key from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('arielmc_gemini_api_key') || '';
+      setApiKey(stored);
+      setApiKeyInput(stored);
+    }
+  }, []);
+
+  const handleSaveApiKey = () => {
+    const trimmed = apiKeyInput.trim();
+    setApiKey(trimmed);
+    if (typeof window !== 'undefined') {
+      if (trimmed) {
+        localStorage.setItem('arielmc_gemini_api_key', trimmed);
+      } else {
+        localStorage.removeItem('arielmc_gemini_api_key');
+      }
+    }
+    setApiKeySavedNotice(true);
+    setTimeout(() => {
+      setApiKeySavedNotice(false);
+      setShowSettings(false);
+    }, 1500);
+  };
+
+  const initialWelcomeText = `Hello Partner! I am your **ArielMC AI Partner**.\n\nI have complete real-time visibility across our **62 Master SKUs**, partner factories, costing sheets, and cash incentive net yields across all 5 operating stations (**ArielMC BD**, **ArielMC UK**, **ArielMC US**, **ArielMC EU**, and **ArielMC AU**).\n\nWhat can we solve or analyze together today, Syed?`;
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const saved = localStorage.getItem('arielmc_ai_copilot_history_v1');
+        const saved = localStorage.getItem('arielmc_ai_copilot_history_v2');
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed.map((m: any) => {
-              const isWelcome = m.id === 'welcome-msg' || (typeof m.id === 'string' && m.id.startsWith('welcome-'));
-              return {
-                id: m.id || `msg-${Date.now()}`,
-                sender: m.sender || 'arielmc',
-                text: m.text || '',
-                timestamp: m.timestamp || 'Just now',
-                quickActions: isWelcome
-                  ? [
-                      {
-                        label: 'Highest Margin SKUs',
-                        action: () => handleSendPrompt('Show the highest margin products in our catalog')
-                      },
-                      {
-                        label: 'LWG Gold Factories',
-                        action: () => handleSendPrompt('Which factories have LWG Gold & BSCI Grade A compliance?')
-                      },
-                      {
-                        label: 'Mushak 6.3 Guide',
-                        action: () => handleSendPrompt('How do I generate an official Mushak 6.3 VAT invoice in ArielMC ERP?')
-                      },
-                      {
-                        label: 'Open User Guide',
-                        action: () => {
-                          if (onOpenUserGuide) onOpenUserGuide();
-                        },
-                        icon: BookOpen
-                      }
-                    ]
-                  : undefined
-              };
-            });
+            return parsed;
           }
         }
       } catch {
@@ -160,27 +153,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
         sender: 'arielmc',
         text: initialWelcomeText,
         timestamp: 'Just now',
-        quickActions: [
-          {
-            label: 'Highest Margin SKUs',
-            action: () => handleSendPrompt('Show the highest margin products in our catalog')
-          },
-          {
-            label: 'LWG Gold Factories',
-            action: () => handleSendPrompt('Which factories have LWG Gold & BSCI Grade A compliance?')
-          },
-          {
-            label: 'Mushak 6.3 Guide',
-            action: () => handleSendPrompt('How do I generate an official Mushak 6.3 VAT invoice in ArielMC ERP?')
-          },
-          {
-            label: 'Open User Guide',
-            action: () => {
-              if (onOpenUserGuide) onOpenUserGuide();
-            },
-            icon: BookOpen
-          }
-        ]
+        provider: 'smart-fallback'
       }
     ];
   });
@@ -191,9 +164,10 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
         id: m.id,
         sender: m.sender,
         text: m.text,
-        timestamp: m.timestamp
+        timestamp: m.timestamp,
+        provider: m.provider
       }));
-      localStorage.setItem('arielmc_ai_copilot_history_v1', JSON.stringify(safeToStore));
+      localStorage.setItem('arielmc_ai_copilot_history_v2', JSON.stringify(safeToStore));
     } catch {
       // ignore
     }
@@ -211,79 +185,95 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       sender: 'arielmc',
       text: initialWelcomeText,
       timestamp: 'Just now',
-      quickActions: [
-        {
-          label: 'Highest Margin SKUs',
-          action: () => handleSendPrompt('Show the highest margin products in our catalog')
-        },
-        {
-          label: 'LWG Gold Factories',
-          action: () => handleSendPrompt('Which factories have LWG Gold & BSCI Grade A compliance?')
-        },
-        {
-          label: 'Mushak 6.3 Guide',
-          action: () => handleSendPrompt('How do I generate an official Mushak 6.3 VAT invoice in ArielMC ERP?')
-        },
-        {
-          label: 'Open User Guide',
-          action: () => {
-            if (onOpenUserGuide) onOpenUserGuide();
-          },
-          icon: BookOpen
-        }
-      ]
+      provider: 'smart-fallback'
     };
     setMessages([fresh]);
     try {
-      localStorage.removeItem('arielmc_ai_copilot_history_v1');
+      localStorage.removeItem('arielmc_ai_copilot_history_v2');
     } catch {
       // ignore
     }
   };
 
-  const generateAnswer = (userQuery: string): { text: string; actions?: { label: string; action: () => void; icon?: any }[] } => {
-    const q = userQuery.toLowerCase();
+  const handleCopyText = (id: string, text: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    }
+  };
 
-    // 1. User Guide / Documentation
-    if (q.includes('user guide') || q.includes('manual') || q.includes('handbook') || q.includes('documentation') || q.includes('pdf guide')) {
+  // High-intelligence conversational fallback when Gemini API key is missing or offline
+  const generateConversationalFallback = (userQuery: string): { text: string; actions?: { label: string; action: () => void; icon?: any }[] } => {
+    const q = userQuery.toLowerCase().trim();
+
+    // 1. Margin & Costing Analysis
+    if (q.includes('margin') || q.includes('cost') || q.includes('fob') || q.includes('pricing') || q.includes('profit')) {
+      const sorted = [...products].sort((a, b) => (b.costing?.arielSourcingMarginPct || 0) - (a.costing?.arielSourcingMarginPct || 0));
+      const top3 = sorted.slice(0, 3);
+      
+      let res = `Partner, here is a clear breakdown of our commercial margins across the **${products.length} synchronized SKUs**:\n\n`;
+      top3.forEach((p, idx) => {
+        const cost = p.costing?.factoryCostUsd || 0;
+        const fob = p.costing?.b2bFobPriceUsd || 0;
+        const margin = p.costing?.arielSourcingMarginPct || 0;
+        const netYield = p.costing?.netIncentivePct || (p.sector === 'JUTE' ? 9.5 : 6.65);
+        res += `• **${p.name}** (\`${p.sku}\`):\n  Factory Cost: **$${cost.toFixed(2)}** &rarr; Published FOB: **$${fob.toFixed(2)}** | Commercial Margin: **${margin}%** | Govt Cash Incentive: **+${netYield}%**\n\n`;
+      });
+      res += `In ArielMC, our standard margin policy targets **18% to 38%** commercial margin, reinforced by Bangladesh Bank cash incentives (up to **9.5% net yield** on diversified Jute and **6.65%** on Leather & Pottery). Would you like to review specific slabs or adjust a buyer quote?`;
+
       return {
-        text: `### **ArielMC** ERP User Guide & Operational Manual\n\nThe official **ArielMC ERP User Guide** is available for direct interactive reading and 1-click PDF download.\n\n**Manual Chapters Included:**\n1. **Executive Multi-Station Architecture** (BD, UK, US, EU, AU)\n2. **Phase 1: Sector Product Master & Costing Engine**\n3. **Phase 2: Bangladesh Factory Compliance Auditing**\n4. **Phase 3: R&D, Tech Packs & SDO Sampling Protocol**\n5. **Phase 4: Two-Way Order Management System (OMS)**\n6. **Phase 5: Global CRM Pipeline & Buyer Intelligence**\n7. **Phase 6: Logistics, Bonded Warehousing & BD Customs**\n8. **Phase 7: Bonded Inventory & Raw Material Allocation**\n9. **Phase 8: Multi-Currency Global Finance & Mushak 6.3 Tax Engine**\n10. **Phase 9: Security, User Profiles, 2SA & RBAC**\n11. **Phase 10: PostgreSQL Persistence & Cloud Sync**\n\nClick the button below to open the comprehensive user guide.`,
+        text: res,
         actions: [
           {
-            label: 'Open ArielMC ERP User Guide',
-            action: () => { if (onOpenUserGuide) onOpenUserGuide(); },
-            icon: BookOpen
-          },
-          {
-            label: 'Export Official Documents',
-            action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
-            icon: FileText
+            label: 'Open Product Master',
+            action: () => { if (onNavigateTab) onNavigateTab('PRODUCTS'); },
+            icon: Package
           }
         ]
       };
     }
 
-    // 1b. Executive Dashboard
-    if (q.includes('dashboard') || q.includes('overview') || q.includes('home') || q.includes('kpi')) {
+    // 2. Factory Audits & Compliance
+    if (q.includes('factory') || q.includes('audit') || q.includes('compliance') || q.includes('lwg') || q.includes('bsci') || q.includes('sedex')) {
+      const lwgFactories = factories.filter(f => f.complianceAudits?.some(a => a.standardName?.toLowerCase().includes('lwg') || a.auditBody?.toLowerCase().includes('lwg')));
+      const bsciFactories = factories.filter(f => f.complianceAudits?.some(a => a.standardName?.toLowerCase().includes('bsci') || a.standardName?.toLowerCase().includes('sedex')));
+      
+      let res = `Partner, we partner exclusively with verified, audited facilities across Savar, Gazipur, Dhamrai, and Narsingdi:\n\n`;
+      if (lwgFactories.length > 0) {
+        res += `**LWG-Audited Tanneries (Leather Compendium):**\n`;
+        lwgFactories.forEach(f => {
+          res += `• **${f.name}** (${f.cluster}) — Tier 1, LWG Gold/Silver certified, Capacity: ${(f.capacity?.monthlyCapacityUnits || 15000).toLocaleString()} units/mo.\n`;
+        });
+        res += `\n`;
+      }
+      res += `**Social & Environmental Compliance (BSCI / Sedex SMETA 4-Pillar):**\n`;
+      const displayFactories = bsciFactories.length > 0 ? bsciFactories.slice(0, 3) : factories.slice(0, 3);
+      displayFactories.forEach(f => {
+        const certs = f.complianceAudits?.map(a => a.standardName).filter(Boolean).slice(0, 3).join(', ') || 'Sedex, BSCI';
+        res += `• **${f.name}** (${f.cluster}) — Audits: ${certs}, AQL Pass Rate: **${f.scorecard?.aqlPassRatePct || 98}%**.\n`;
+      });
+      res += `\nEvery consignment is covered by our 5-stage quality audit protocol before vessel loading.`;
+
       return {
-        text: `### **ArielMC** Executive Command Center & Dashboard\n\nThe **Executive Dashboard** aggregates real-time metrics across all 5 operating sovereign stations:\n- **Operating Stations**: 5 Entities (BD, UK, US, EU, AU)\n- **Master Product SKUs**: Leather, Jute, Textiles, Ceramics, Pottery\n- **Partner Factories**: 8 Audited Facilities (Savar, Gazipur, Narsingdi, Dhamrai)\n- **Global B2B Leads**: 254 Buyer Accounts (UK, EU, USA, AU)\n\nClick the button below to launch the Executive Dashboard.`,
+        text: res,
         actions: [
           {
-            label: 'Open Executive Dashboard',
-            action: () => { if (onNavigateTab) onNavigateTab('DASHBOARD'); },
-            icon: LayoutDashboard
+            label: 'View Factory Directory',
+            action: () => { if (onNavigateTab) onNavigateTab('FACTORIES'); },
+            icon: Factory
           }
         ]
       };
     }
 
-    // 1c. Brand & Marketing Hub
-    if (q.includes('brand') || q.includes('marketing') || q.includes('campaign') || q.includes('lookbook') || q.includes('collateral') || q.includes('trade show') || q.includes('letterhead') || q.includes('stationery') || q.includes('expo') || q.includes('roi')) {
+    // 3. LDC 2029 Policy Question
+    if (q.includes('ldc') || q.includes('tariff') || q.includes('2029') || q.includes('policy') || q.includes('trade')) {
       return {
-        text: `### **ArielMC** Brand & Marketing Hub\n\nOur **Brand & Marketing Section** powers strategic B2B buyer outreach across all 5 operating sovereign stations:\n- **B2B ROI & TCO Engine**: Dynamic 60/40 deal desk model ($255k net savings, 700% ROI, 25% CFO haircut)\n- **12-Mo Strategy & Playbooks**: Appendix A (90-day sprints), Appendix B (21-day ABM), Appendix C (7 Klaviyo flows)\n- **B2B Campaigns**: 5 Multi-market initiatives across UK, EU, US, AU & BD ($2.85M pipeline attributed)\n- **Sector Lookbooks**: 6 Master digital lookbooks & line-sheets across Fine Ceramics, Leather Goods, Golden Jute, Home Textiles & Terracotta\n- **Stationery Studio**: A4 calibrated letterhead generator with standard 38mm logo & official 4-pillar corporate footer\n- **Global Expos**: Ambiente Frankfurt, Spring Fair Birmingham, NY NOW & Reed Gift Fairs Melbourne\n\nClick the button below to open the Brand & Marketing Hub.`,
+        text: `The UN General Assembly's extension of Bangladesh's LDC graduation to **November 24, 2029** is a major win for us, Syed.\n\nHere is how we leverage it:\n1. **Zero Tariff Shock**: We can guarantee 0% duty-free quota-free access to our UK (DCTS) and EU (EBA) buyers until late 2029.\n2. **Margin Protection**: Defers an average 12.5% MFN duty across 38 destination countries.\n3. **Diversification Mandate**: International buyers are actively looking to diversify beyond 84%+ RMG dependence. Our **Golden Jute, Master Leather, Fine Ceramics, and Terracotta** lines are perfectly positioned right now.\n\nOur full whitepaper is published on our corporate website and blog if you'd like to share it with buyers!`,
         actions: [
           {
-            label: 'Open Brand & Marketing Hub',
+            label: 'Open Brand & Marketing',
             action: () => { if (onNavigateTab) onNavigateTab('MARKETING'); },
             icon: Megaphone
           }
@@ -291,53 +281,13 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       };
     }
 
-    // 2. Products / Margins / Costing
-    if (q.includes('margin') || q.includes('product') || q.includes('sku') || q.includes('costing') || q.includes('leather') || q.includes('jute') || q.includes('ceramic') || q.includes('textile')) {
-      const sorted = [...products].sort((a, b) => (b.costing?.arielSourcingMarginPct || 0) - (a.costing?.arielSourcingMarginPct || 0));
-      const top3 = sorted.slice(0, 3);
-      
-      let summaryText = `### **ArielMC** Master Product & Costing Analysis\n\nWe currently manage **${products.length} registered SKUs** across 4 sectors (Leather Goods, Jute Crafts, Apparel Textiles, Tableware Ceramics).\n\n**Top High-Margin Master SKUs:**\n`;
-      top3.forEach((p, idx) => {
-        summaryText += `${idx + 1}. **${p.name}** (\`${p.sku}\`)\n   - Sector: **${p.sector}** | HS Code: \`${p.hsCode}\`\n   - Factory Cost: **$${(p.costing?.factoryCostUsd || 0).toFixed(2)}** | **ArielMC** Sourcing Margin: **${p.costing?.arielSourcingMarginPct || 0}%**\n   - FOB Target: **$${(p.costing?.b2bFobPriceUsd || 0).toFixed(2)}** | MOQ: **${p.partnerFactory?.moq || 200} pcs**\n`;
-      });
-      summaryText += `\n**Margin Strategy**: In **ArielMC**, all export margins are locked between 18% and 35%, ensuring competitive pricing for buyers while maintaining target profitability across our global stations.`;
-
+    // 4. Sample Policy (SOP-B2B-SMP-2026-V1)
+    if (q.includes('sample') || q.includes('sdo') || q.includes('courier') || q.includes('proto')) {
       return {
-        text: summaryText,
+        text: `Under our official **SOP-B2B-SMP-2026-V1 Sample Policy**:\n\n• **Standard Dispatch**: Counter-samples dispatch within **5 to 9 business days** via DHL Express.\n• **Commercial Credit**: Sample development and courier charges are **100% credited back** on the buyer's first commercial bulk production purchase order.\n• **Active SDOs**: We currently have **${samples.length} active samples** in development across protos, lab dips, and golden seal approvals.\n\nWould you like me to track a specific SDO or generate a sample invoice?`,
         actions: [
           {
-            label: 'View Sector Product Master',
-            action: () => { if (onNavigateTab) onNavigateTab('PRODUCTS'); },
-            icon: Package
-          },
-          {
-            label: 'Export Commercial Invoice',
-            action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
-            icon: FileText
-          }
-        ]
-      };
-    }
-
-    // 3. Factory / Compliance / Auditing
-    if (q.includes('factory') || q.includes('compliance') || q.includes('audit') || q.includes('lwg') || q.includes('bsci') || q.includes('sedex') || q.includes('oeko')) {
-      const topFactories = [...factories].slice(0, 4);
-      let fText = `### **ArielMC** Bangladesh Factory Network & Compliance Auditing\n\n**ArielMC** partners exclusively with vetted, fully audited manufacturing facilities across Savar, Gazipur, Dhamrai, and Narsingdi.\n\n**Top Compliant Partner Facilities:**\n`;
-      topFactories.forEach((f) => {
-        fText += `- **${f.name}** (${f.cluster})\n  - Sectors: **${f.sectors?.join(', ')}** | Tier: **${f.tier?.replace(/_/g, ' ') || 'Tier 1'}**\n  - Scorecard Rating: **${f.scorecard?.ratingScore || 4.8}/5.0** | Pass Rate: **${f.scorecard?.aqlPassRatePct || 98}%**\n  - Monthly Capacity: **${(f.capacity?.monthlyCapacityUnits || 15000).toLocaleString()} units/mo** | Contact: **${f.contactPerson}**\n`;
-      });
-      fText += `\nAll **ArielMC** partner factories undergo strict biannual fire safety, environmental wastewater (ETP), and social labor compliance audits before allocation.`;
-
-      return {
-        text: fText,
-        actions: [
-          {
-            label: 'Open BD Factory Compliance',
-            action: () => { if (onNavigateTab) onNavigateTab('FACTORIES'); },
-            icon: Factory
-          },
-          {
-            label: 'Track Active SDOs',
+            label: 'Track Active Samples',
             action: () => { if (onNavigateTab) onNavigateTab('RND'); },
             icon: FlaskConical
           }
@@ -345,160 +295,32 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       };
     }
 
-    // 4. Samples / SDO / R&D
-    if (q.includes('sample') || q.includes('sdo') || q.includes('r&d') || q.includes('rnd') || q.includes('proto') || q.includes('golden seal') || q.includes('tech pack')) {
-      let sText = `### **ArielMC** R&D, Tech Packs & SDO Sampling Protocol\n\nThere are **${samples.length} active Sample Development Orders (SDOs)** currently tracked across 5 developmental stages.\n\n**Current Live SDOs:**\n`;
-      samples.slice(0, 4).forEach((s) => {
-        const awb = s.courier?.awbNumber ? `\`${s.courier.awbNumber}\` (${s.courier.courier})` : 'In Factory Fabrication';
-        sText += `- **${s.sdoNumber}** — ${s.styleName}\n  - Buyer: **${s.buyerCompany}** (${s.targetMarket})\n  - Current Stage: **${s.stage}** | Status: **${s.status.toUpperCase()}**\n  - Courier Tracking: ${awb}\n`;
-      });
-      sText += `\n**Golden Seal Protocol**: Bulk commercial production cannot commence until the buyer physically signs off on the Stage 5 Golden Seal counter-sample.`;
-
+    // 5. User Guide or Document Export
+    if (q.includes('guide') || q.includes('manual') || q.includes('document') || q.includes('invoice') || q.includes('pdf')) {
       return {
-        text: sText,
+        text: `Syed, all official export documentation and the ERP Master Manual are accessible in 1 click:\n\n• **ArielMC ERP Master Manual (PDF)**: Complete guide to all 10 ERP phases.\n• **Commercial Documentation**: Proforma Invoices, Commercial Invoices, Packing Lists, Mushak 6.3 VAT tax invoices, and Factory MoUs.\n\nWhich document would you like to open?`,
         actions: [
           {
-            label: 'Open SDO Sampling Board',
-            action: () => { if (onNavigateTab) onNavigateTab('RND'); },
-            icon: FlaskConical
-          },
-          {
-            label: 'Two-Way Order Management',
-            action: () => { if (onNavigateTab) onNavigateTab('ORDERS'); },
-            icon: Repeat
-          }
-        ]
-      };
-    }
-
-    // 5. Orders / Sales / Buyers
-    if (q.includes('order') || q.includes('buyer') || q.includes('sales') || q.includes('po') || q.includes('purchase order') || q.includes('harrods') || q.includes('marks & spencer')) {
-      const totalOrderVal = orders.reduce((sum, o) => sum + (o.totalAmountUsd || 0), 0);
-      let oText = `### **ArielMC** Two-Way Order Management System (OMS)\n\nWe currently manage **${orders.length} confirmed buyer sales orders** totaling **$${totalOrderVal.toLocaleString()} USD**.\n\n**Active Purchase & Sales Orders:**\n`;
-      orders.slice(0, 4).forEach((o) => {
-        const itemName = o.items?.[0]?.styleName || 'Master SKU';
-        const factoryName = o.linkedPo?.factoryName || 'Direct BD Facility';
-        oText += `- **${o.soNumber}** — ${o.buyerCompany}\n  - SKU: **${itemName}** | Quantity: **${(o.totalQuantity || 0).toLocaleString()} pcs**\n  - Order Value: **$${(o.totalAmountUsd || 0).toLocaleString()} USD** | Factory: **${factoryName}**\n  - Shipment Deadline: **${o.targetDeliveryDate}** | Status: **${o.status.toUpperCase()}**\n`;
-      });
-      oText += `\n**Two-Way PO Architecture**: When an order is confirmed, **ArielMC** automatically locks the buyer export price and generates a back-to-back Bangladesh Factory Purchase Order (PO) with locked raw material commitments.`;
-
-      return {
-        text: oText,
-        actions: [
-          {
-            label: 'Open Order Management',
-            action: () => { if (onNavigateTab) onNavigateTab('ORDERS'); },
-            icon: Repeat
-          },
-          {
-            label: 'Generate Official PO / Invoice',
-            action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
-            icon: FileText
-          }
-        ]
-      };
-    }
-
-    // 6. Logistics / Bonded / Customs / Mushak
-    if (q.includes('mushak') || q.includes('customs') || q.includes('bonded') || q.includes('vat') || q.includes('tax') || q.includes('logistics') || q.includes('chattogram') || q.includes('port')) {
-      return {
-        text: `### **ArielMC** Bangladesh Customs & Mushak 6.3 VAT Architecture\n\n**Mushak 6.3 Statutory Standard**:\nUnder the Bangladesh National Board of Revenue (NBR) Value Added Tax and Supplementary Duty Act 2012, **ArielMC BD** (BIN: \`001928374-0101\`) generates zero-rated (0% VAT) Mushak 6.3 tax invoices for deemed exports, and standard 15% VAT invoices for domestic supply.\n\n**Bonded Warehouse Protocol**:\n- **Bond License**: \`NBR-BOND-2024-C882\` (Chattogram Customs Bond Commissionerate)\n- **Bonded Depot A-4 (Chattogram Port)**: Raw materials (Italian veg-tan hides, eco-dyes) enter duty-free under raw material utilization declarations.\n- **Bill of Lading & Shipping Guarantee**: Handled directly through **ArielMC** logistics station with real-time consignment clearance tracking.\n\nYou can generate official Mushak 6.3 and Commercial Invoices with 1-click in the Document Engine.`,
-        actions: [
-          {
-            label: 'Open Official Document Center',
-            action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
-            icon: FileText
-          },
-          {
-            label: 'View Logistics & Consignments',
-            action: () => { if (onNavigateTab) onNavigateTab('LOGISTICS'); },
-            icon: Boxes
-          }
-        ]
-      };
-    }
-
-    // 7. Security / Profile / 2SA / Password
-    if (q.includes('security') || q.includes('profile') || q.includes('2sa') || q.includes('password') || q.includes('totp') || q.includes('auth') || q.includes('user') || q.includes('login')) {
-      return {
-        text: `### **ArielMC** Enterprise Security, 2SA & User Administration\n\n**ArielMC** enforces rigorous enterprise security standards:\n- **Two-Step Authentication (2SA)**: Configurable via TOTP Authenticator apps (Google Authenticator, Microsoft Authenticator) or encrypted WhatsApp OTP to \`+8801819273458\`.\n- **Role-Based Access Control (RBAC)**: Distinct permissions for **Managing Director**, **VP of Global Sourcing**, **Chief Compliance Auditor**, and **Merchandiser**.\n- **Session Integrity**: Real-time IP address tracking, session token encryption, and comprehensive audit trails.\n\nYou can manage users, update your credentials, or toggle 2SA security in the **Profile Control Center**.`,
-        actions: [
-          {
-            label: 'Open Profile & 2SA Control',
-            action: () => { if (onOpenProfileControl) onOpenProfileControl(); },
-            icon: ShieldCheck
-          },
-          {
-            label: 'Read Security Guide in Manual',
+            label: 'Open User Guide',
             action: () => { if (onOpenUserGuide) onOpenUserGuide(); },
             icon: BookOpen
-          }
-        ]
-      };
-    }
-
-    // 8. Database / Supabase / Persistence
-    if (q.includes('database') || q.includes('supabase') || q.includes('persistence') || q.includes('sync') || q.includes('postgres') || q.includes('storage')) {
-      return {
-        text: `### **ArielMC** Database Persistence & Cloud Storage (PostgreSQL / Supabase)\n\n**ArielMC** ERP operates on a resilient **Offline-First & Cloud-Synced** architecture:\n- **Local Fallback**: Instant client-side state caching via \`localStorage\` for uninterrupted offline operations.\n- **Cloud PostgreSQL (Supabase)**: Connects to live relational tables (\`ariel_products\`, \`ariel_factories\`, \`ariel_samples\`, \`ariel_orders\`, \`ariel_leads\`, \`ariel_consignments\`).\n- **Sync Heartbeat**: Automated health check confirms active database read/write connectivity.\n\nYou can review database credentials and trigger manual syncs in the Database Settings dialog.`,
-        actions: [
-          {
-            label: 'Open Database Settings',
-            action: () => { if (onOpenDatabaseSettings) onOpenDatabaseSettings(); },
-            icon: Database
           },
           {
-            label: 'Check Multi-Station Finance',
-            action: () => { if (onNavigateTab) onNavigateTab('FINANCE'); },
-            icon: Landmark
+            label: 'Export Document Center',
+            action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
+            icon: FileText
           }
         ]
       };
     }
 
-    // 9. Finance / FX / Multi-Currency / Multi-Station
-    if (q.includes('finance') || q.includes('currency') || q.includes('fx') || q.includes('exchange') || q.includes('station') || q.includes('entity') || q.includes('bdt') || q.includes('usd') || q.includes('gbp')) {
-      return {
-        text: `### **ArielMC** Multi-Station Finance & FX Engine\n\n**ArielMC** currently operates across 5 international stations:\n1. **ArielMC BD** (Dhaka, Bangladesh) — Base Currency: **BDT (৳)** | Tax: NBR BIN \`001928374-0101\`\n2. **ArielMC UK** (London, UK) — Base Currency: **GBP (£)** | Tax: HMRC VAT \`GB-982-1049-22\`\n3. **ArielMC US** (New York, USA) — Base Currency: **USD ($)** | Tax: EIN \`13-8472910\`\n4. **ArielMC EU** (Frankfurt, Germany) — Base Currency: **EUR (€)** | Tax: DE \`DE-304918274\`\n5. **ArielMC AU** (Sydney, Australia) — Base Currency: **AUD (A$)** | Tax: ABN \`51-829-104-921\`\n\n**Real-Time FX Hedging**: Export contracts are settled at fixed forward hedge rates, insulating station margins against currency volatility. Station transfer pricing complies with OECD arms-length principles.`,
-        actions: [
-          {
-            label: 'Open Multi-Station Finance',
-            action: () => { if (onNavigateTab) onNavigateTab('FINANCE'); },
-            icon: Landmark
-          },
-          {
-            label: 'View Entity Stations Overview',
-            action: () => { if (onNavigateTab) onNavigateTab('STATIONS'); },
-            icon: Building2
-          }
-        ]
-      };
-    }
-
-    // 10. Default / Fallback Response
+    // 6. Natural General Conversation / Strategy / Drafting
     return {
-      text: `### **ArielMC** AI Operational Assistant\n\nI understand your inquiry regarding **"${userQuery}"**.\n\nIn **ArielMC** ERP, all operations are interconnected across our product master, factory compliance network, R&D sampling, two-way order pipeline, bonded warehousing, and multi-currency finance stations.\n\n**Recommended Quick Navigations:**\n- Search and review **Sector Product SKUs & Costings**\n- Check **Bangladesh Factory Audits & Compliance**\n- Track **R&D Tech Packs & SDO Samples**\n- Export **Official Invoices & Mushak 6.3 PDFs**\n- Consult the comprehensive **ArielMC ERP User Guide (PDF)**`,
-      actions: [
-        {
-          label: 'View Products',
-          action: () => { if (onNavigateTab) onNavigateTab('PRODUCTS'); },
-          icon: Package
-        },
-        {
-          label: 'Factory Compliance',
-          action: () => { if (onNavigateTab) onNavigateTab('FACTORIES'); },
-          icon: Factory
-        },
-        {
-          label: 'ArielMC ERP User Guide (PDF)',
-          action: () => { if (onOpenUserGuide) onOpenUserGuide(); },
-          icon: BookOpen
-        }
-      ]
+      text: `Understood, Partner. I'm right here with you. We currently have **${products.length} synchronized SKUs** active in our Product Master across our 5 national sectors, with all costing sheets and factory MoUs aligned.\n\nTell me what you're working on — whether you want to calculate a custom landed cost, review factory lead times, draft an email to a retail buyer, or analyze our cash incentives. I'm ready to solve it with you!`
     };
   };
 
-  const handleSendPrompt = (promptText?: string) => {
+  const handleSendPrompt = async (promptText?: string) => {
     const textToSend = promptText || inputText;
     if (!textToSend.trim()) return;
 
@@ -513,43 +335,76 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
     if (!promptText) setInputText('');
     setIsTyping(true);
 
+    try {
+      // 1. Attempt live Gemini API call
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, userMessage],
+          userApiKey: apiKey || undefined,
+          clientContext: {
+            station: activeEntity?.legalName || activeEntity?.code || 'ArielMC BD',
+            currency: activeCurrency?.code || 'USD',
+            productsCount: products.length
+          }
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.reply) {
+          const agentReply: ChatMessage = {
+            id: `arielmc-${Date.now()}`,
+            sender: 'arielmc',
+            text: data.reply,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            provider: 'gemini'
+          };
+          setMessages((prev) => [...prev, agentReply]);
+          setIsTyping(false);
+          return;
+        }
+      }
+    } catch {
+      // Fall through to smart conversational fallback
+    }
+
+    // 2. Fallback to our natural conversational partner engine
     setTimeout(() => {
-      const { text, actions } = generateAnswer(userMessage.text);
+      const { text, actions } = generateConversationalFallback(userMessage.text);
       const agentReply: ChatMessage = {
         id: `arielmc-${Date.now()}`,
         sender: 'arielmc',
         text,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        provider: 'smart-fallback',
         quickActions: actions
       };
       setMessages((prev) => [...prev, agentReply]);
       setIsTyping(false);
-    }, 450);
+    }, 400);
   };
 
   const isRoyal = theme === 'royal-blue';
   const isHydrangea = theme === 'hydrangea';
-
-  const themeAccentBg = isRoyal ? 'bg-[#4169E1]' : isHydrangea ? 'bg-[#AD56C4]' : 'bg-[#1F3A2E]';
-  const themeAccentBorder = isRoyal ? 'border-[#4169E1]' : isHydrangea ? 'border-[#AD56C4]' : 'border-[#C8A96A]';
-  const themeAccentRing = isRoyal ? 'ring-[#4169E1]' : isHydrangea ? 'ring-[#AD56C4]' : 'ring-[#C8A96A]';
 
   return (
     <>
       {/* AI Chat Drawer & Modal */}
       {isOpen && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex flex-col rounded-2xl border shadow-2xl overflow-hidden transition-all duration-300 bg-white ${
+          className={`fixed bottom-6 right-6 z-50 flex flex-col rounded-3xl border shadow-2xl overflow-hidden transition-all duration-300 bg-white ${
             isExpanded
               ? 'w-[calc(100vw-3rem)] max-w-4xl h-[calc(100vh-5rem)]'
-              : 'w-[92vw] sm:w-[460px] h-[640px] max-h-[85vh]'
+              : 'w-[94vw] sm:w-[480px] h-[660px] max-h-[88vh]'
           } ${
             isRoyal ? 'border-[#4169E1]' : isHydrangea ? 'border-[#AD56C4]' : 'border-[#C8A96A]'
           }`}
         >
           {/* Header Bar */}
           <div
-            className={`px-4 py-3.5 flex items-center justify-between text-white border-b ${
+            className={`px-5 py-4 flex items-center justify-between text-white border-b ${
               isRoyal
                 ? 'bg-[#0F172A] border-[#1E293B]'
                 : isHydrangea
@@ -559,10 +414,10 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
           >
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-md border border-[#C8A96A]">
+                <div className="w-10 h-10 rounded-2xl bg-white p-1 flex items-center justify-center shadow-md border border-[#C8A96A]">
                   <Image
                     src="/images/ArielMC_Emblem_Square.png"
-                    alt="ArielMC AI Copilot"
+                    alt="ArielMC AI Partner"
                     width={32}
                     height={32}
                     className="w-full h-full object-contain"
@@ -573,14 +428,21 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-heading font-bold text-base tracking-wide text-white">
-                    ArielMC <span className="text-[#C8A96A]">AI Copilot</span>
+                    ArielMC <span className="text-[#C8A96A]">AI Partner</span>
                   </span>
-                  <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[9px] font-bold border border-emerald-500/30">
-                    24/7 ONLINE
-                  </span>
+                  {apiKey ? (
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[9px] font-bold border border-emerald-500/30 flex items-center gap-1">
+                      <Sparkles className="w-2.5 h-2.5" />
+                      <span>GEMINI LIVE</span>
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[9px] font-bold border border-amber-500/30 flex items-center gap-1">
+                      <span>SMART PARTNER</span>
+                    </span>
+                  )}
                 </div>
-                <p className="text-[11px] text-[#C8A96A] font-sans">
-                  Autonomous Sourcing, SDO &amp; Compliance Assistant
+                <p className="text-[11px] text-gray-300 font-sans">
+                  Autonomous Sourcing, Costing &amp; Strategy Co-Pilot
                 </p>
               </div>
             </div>
@@ -588,22 +450,31 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             {/* Action Buttons in Header */}
             <div className="flex items-center gap-1">
               <button
+                onClick={() => setShowSettings(!showSettings)}
+                className={`p-2 rounded-xl transition-colors ${
+                  showSettings ? 'bg-[#C8A96A] text-[#1F3A2E]' : 'text-gray-300 hover:text-white hover:bg-white/10'
+                }`}
+                title="AI Settings & Gemini API Key"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+              </button>
+              <button
                 onClick={handleClearHistory}
-                className="p-1.5 rounded-lg text-gray-300 hover:text-rose-300 hover:bg-white/10 transition-colors"
+                className="p-2 rounded-xl text-gray-300 hover:text-rose-300 hover:bg-white/10 transition-colors"
                 title="Clear Chat History"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="p-1.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
                 title={isExpanded ? 'Restore Size' : 'Expand View'}
               >
                 {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
                 title="Close Assistant"
               >
                 <X className="w-5 h-5" />
@@ -611,60 +482,96 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             </div>
           </div>
 
-          {/* Quick Shortcuts Bar */}
-          <div className="px-3 py-2 bg-[#F8FAF9] border-b border-gray-200 flex items-center gap-1.5 overflow-x-auto text-[11px] shrink-0 no-scrollbar">
+          {/* Settings Drawer / Popover for Gemini Key */}
+          {showSettings && (
+            <div className="px-4 py-3 bg-[#F8FAF9] border-b border-gray-200 text-xs">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-[#1F3A2E] flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-[#C8A96A]" />
+                  <span>Google Gemini API Key</span>
+                </span>
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] text-[#C8A96A] hover:underline flex items-center gap-1"
+                >
+                  <span>Get Free Key</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+              <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">
+                Connect your Gemini API key to enable live, unconstrained natural intelligence across your ERP.
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="password"
+                  value={apiKeyInput}
+                  onChange={(e) => setApiKeyInput(e.target.value)}
+                  placeholder="Paste AIzaSy... key here"
+                  className="flex-1 px-3 py-1.5 rounded-xl border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A]"
+                />
+                <button
+                  onClick={handleSaveApiKey}
+                  className="px-3 py-1.5 rounded-xl bg-[#1F3A2E] text-white hover:bg-[#C8A96A] hover:text-[#1F3A2E] font-bold text-xs transition-colors"
+                >
+                  {apiKeySavedNotice ? 'Saved!' : 'Save'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Conversational Prompt Pills */}
+          <div className="px-4 py-2.5 bg-[#FAF9F6] border-b border-gray-200 flex items-center gap-2 overflow-x-auto text-[11px] shrink-0 no-scrollbar">
             <button
-              onClick={() => handleSendPrompt('Show the highest margin products in our catalog')}
-              className="px-2.5 py-1 rounded-full bg-white border border-gray-300 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
+              onClick={() => handleSendPrompt('Analyze our highest margin products across Jute, Leather, and Ceramics')}
+              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
             >
-              📊 High Margin SKUs
+              📊 Highest Margins
             </button>
             <button
-              onClick={() => handleSendPrompt('Which factories have LWG Gold & BSCI Grade A compliance?')}
-              className="px-2.5 py-1 rounded-full bg-white border border-gray-300 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
+              onClick={() => handleSendPrompt('Which partner factories have LWG Gold & Sedex SMETA 4-Pillar audits?')}
+              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
             >
               🏭 Factory Audits
             </button>
             <button
-              onClick={() => handleSendPrompt('How do I generate an official Mushak 6.3 VAT invoice in ArielMC ERP?')}
-              className="px-2.5 py-1 rounded-full bg-white border border-gray-300 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
+              onClick={() => handleSendPrompt('How does the UN LDC extension to 2029 benefit our export strategy?')}
+              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
             >
-              📜 Mushak 6.3 VAT
+              🌍 LDC 2029 Strategy
             </button>
             <button
-              onClick={() => {
-                if (onOpenUserGuide) onOpenUserGuide();
-              }}
-              className="px-2.5 py-1 rounded-full bg-[#C8A96A]/15 border border-[#C8A96A]/40 text-[#1F3A2E] hover:bg-[#C8A96A] hover:text-white font-bold whitespace-nowrap transition-colors shadow-2xs flex items-center gap-1"
+              onClick={() => handleSendPrompt('Explain our B2B sample credit policy under SOP-B2B-SMP-2026-V1')}
+              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
             >
-              <BookOpen className="w-3 h-3 text-[#C8A96A]" />
-              <span>User Guide (PDF)</span>
+              📦 Sample SOP
             </button>
           </div>
 
           {/* Chat Messages Body */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50 text-xs">
+          <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 bg-slate-50/40 text-xs">
             {messages.map((msg) => {
               const isUser = msg.sender === 'user';
               return (
                 <div
                   key={msg.id}
-                  className={`flex gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
+                  className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   {!isUser && (
-                    <div className="w-7 h-7 rounded-lg bg-white p-0.5 border border-[#C8A96A] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                    <div className="w-8 h-8 rounded-xl bg-white p-1 border border-[#C8A96A] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                       <Image
                         src="/images/ArielMC_Emblem_Square.png"
                         alt="ArielMC AI"
-                        width={22}
-                        height={22}
+                        width={24}
+                        height={24}
                         className="w-full h-full object-contain"
                       />
                     </div>
                   )}
 
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3.5 space-y-2.5 shadow-xs ${
+                    className={`max-w-[85%] rounded-2xl p-4 shadow-xs relative group ${
                       isUser
                         ? isRoyal
                           ? 'bg-[#4169E1] text-white rounded-br-xs'
@@ -672,18 +579,41 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                         : 'bg-white text-gray-800 border border-gray-200 rounded-bl-xs'
                     }`}
                   >
-                    {/* Message Body with Markdown-like Rendering */}
-                    <div className="whitespace-pre-wrap leading-relaxed text-[12px] space-y-1">
+                    {/* Copy Button */}
+                    <button
+                      onClick={() => handleCopyText(msg.id, msg.text)}
+                      className={`absolute top-2.5 right-2.5 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity ${
+                        isUser ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100'
+                      }`}
+                      title="Copy response"
+                    >
+                      {copiedId === msg.id ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+
+                    {/* Message Body with clean natural formatting */}
+                    <div className="whitespace-pre-wrap leading-relaxed text-[13px] space-y-2">
                       {msg.text.split('\n\n').map((paragraph, pIdx) => {
                         // Check for headers
                         if (paragraph.startsWith('### ')) {
                           return (
-                            <div key={pIdx} className="font-heading font-bold text-[13px] text-[#1F3A2E] border-b border-gray-100 pb-1 pt-1">
+                            <div key={pIdx} className="font-heading font-bold text-[14px] text-[#1F3A2E] border-b border-gray-100 pb-1 pt-1">
                               {paragraph.replace('### ', '')}
                             </div>
                           );
                         }
-                        // Format bold text
+                        if (paragraph.startsWith('**') && paragraph.endsWith('**') && !paragraph.slice(2, -2).includes('**')) {
+                          return (
+                            <div key={pIdx} className="font-heading font-bold text-[13px] text-[#1F3A2E]">
+                              {paragraph.slice(2, -2)}
+                            </div>
+                          );
+                        }
+
+                        // Format bold and code text
                         const formatted = paragraph.split(/(\*\*.*?\*\*|\`.*?\`)/g).map((chunk, cIdx) => {
                           if (chunk.startsWith('**') && chunk.endsWith('**')) {
                             return (
@@ -708,16 +638,16 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                         });
 
                         return (
-                          <div key={pIdx} className="leading-snug">
+                          <div key={pIdx} className="leading-relaxed">
                             {formatted}
                           </div>
                         );
                       })}
                     </div>
 
-                    {/* Quick Action Buttons Attached to Response */}
+                    {/* Quick Action Navigation Buttons */}
                     {msg.quickActions && msg.quickActions.length > 0 && (
-                      <div className="pt-2 border-t border-gray-100 flex flex-wrap gap-1.5">
+                      <div className="pt-3 mt-3 border-t border-gray-100 flex flex-wrap gap-2">
                         {msg.quickActions.map((qa, qIdx) => {
                           const isComponent = Boolean(
                             qa.icon &&
@@ -735,7 +665,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                                   handleSendPrompt(qa.label);
                                 }
                               }}
-                              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all shadow-xs ${
+                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs ${
                                 isRoyal
                                   ? 'bg-[#4169E1]/10 text-[#4169E1] hover:bg-[#4169E1] hover:text-white border border-[#4169E1]/30'
                                   : 'bg-[#1F3A2E]/10 text-[#1F3A2E] hover:bg-[#1F3A2E] hover:text-white border border-[#1F3A2E]/30'
@@ -749,39 +679,49 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                       </div>
                     )}
 
+                    {/* Timestamp & Provider Badge */}
                     <div
-                      className={`text-[9px] text-right font-mono ${
-                        isUser ? 'text-white/70' : 'text-gray-400'
+                      className={`text-[10px] mt-2 flex items-center justify-between ${
+                        isUser ? 'text-white/60' : 'text-gray-400'
                       }`}
                     >
-                      {msg.timestamp}
+                      <span>{msg.timestamp}</span>
+                      {!isUser && msg.provider === 'gemini' && (
+                        <span className="text-[9px] font-mono text-emerald-600 flex items-center gap-0.5">
+                          <Sparkles className="w-2.5 h-2.5" />
+                          <span>Gemini Live</span>
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
               );
             })}
 
+            {/* Typing Indicator */}
             {isTyping && (
-              <div className="flex gap-2.5 justify-start">
-                <div className="w-7 h-7 rounded-lg bg-[#1F3A2E] text-[#C8A96A] flex items-center justify-center shrink-0 mt-0.5 shadow-xs font-bold text-[10px]">
-                  AMC
+              <div className="flex gap-3 justify-start items-center">
+                <div className="w-8 h-8 rounded-xl bg-white p-1 border border-[#C8A96A] flex items-center justify-center shrink-0 shadow-xs">
+                  <Image
+                    src="/images/ArielMC_Emblem_Square.png"
+                    alt="ArielMC AI"
+                    width={24}
+                    height={24}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-xs p-3 shadow-xs flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#C8A96A] animate-bounce" />
-                  <span className="w-2 h-2 rounded-full bg-[#1F3A2E] animate-bounce [animation-delay:0.2s]" />
-                  <span className="w-2 h-2 rounded-full bg-[#C8A96A] animate-bounce [animation-delay:0.4s]" />
-                  <span className="text-[10px] text-gray-500 font-mono ml-1.5">
-                    **ArielMC** AI is thinking...
-                  </span>
+                <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-xs px-4 py-3 flex items-center gap-1.5 shadow-xs">
+                  <span className="w-2 h-2 rounded-full bg-[#C8A96A] animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-[#C8A96A] animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-[#C8A96A] animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             )}
-
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Footer */}
-          <div className="p-3 bg-white border-t border-gray-200">
+          {/* Input & Sending Bar */}
+          <div className="p-3.5 bg-white border-t border-gray-200 shrink-0">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -790,29 +730,32 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
               className="flex items-center gap-2"
             >
               <input
-                id="arielmc-ai-input"
                 type="text"
-                placeholder="Ask ArielMC AI about products, factories, SDOs, orders, VAT..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="flex-1 px-3.5 py-2.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8A96A] focus:bg-white text-gray-900 placeholder-gray-400"
+                placeholder="Ask your partner about pricing, factories, buyer replies, LDC 2029..."
+                className="flex-1 px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 text-xs focus:outline-none focus:ring-2 focus:ring-[#C8A96A] focus:bg-white transition-all shadow-inner"
               />
               <button
                 type="submit"
-                disabled={!inputText.trim() || isTyping}
-                className={`p-2.5 rounded-xl text-white font-bold shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
-                  isRoyal
-                    ? 'bg-[#4169E1] hover:bg-blue-700 shadow-[#4169E1]/20'
-                    : 'bg-[#1F3A2E] hover:bg-[#172D24] shadow-[#1F3A2E]/20'
+                disabled={!inputText.trim()}
+                className={`p-3 rounded-2xl transition-all shadow-sm ${
+                  inputText.trim()
+                    ? 'bg-[#1F3A2E] text-[#C8A96A] hover:bg-[#C8A96A] hover:text-[#1F3A2E] cursor-pointer'
+                    : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                 }`}
-                title="Send Inquiry"
+                title="Send message to AI Partner"
               >
                 <Send className="w-4 h-4" />
               </button>
             </form>
-            <div className="mt-1.5 flex items-center justify-between text-[10px] text-gray-400 font-mono">
-              <span>Station: <strong>{activeEntity.code.replace('ARIEL_', 'ArielMC ')}</strong> ({activeEntity.baseCurrency})</span>
-              <span>Encrypted AI • Autonomous Operations</span>
+            <div className="mt-2 flex items-center justify-between text-[10px] text-gray-400 px-1 font-mono">
+              <span>Station: {activeEntity?.legalName || activeEntity?.code || 'ArielMC BD (BDT)'}</span>
+              <span className="flex items-center gap-1">
+                <span>Encrypted Executive Partner</span>
+                <span>•</span>
+                <span>62 Master SKUs</span>
+              </span>
             </div>
           </div>
         </div>
