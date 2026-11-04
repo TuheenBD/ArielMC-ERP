@@ -1020,8 +1020,8 @@ export const Header: React.FC<HeaderProps> = ({
             id="header-user-profile-btn"
             type="button"
             onClick={onOpenProfileControl || onOpenAuthModal}
-            className={`h-10 flex items-center gap-2.5 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 shrink-0 whitespace-nowrap select-none ${profileBtnBg}`}
-            title="ArielMC Profile Control & 2SA Center (Click to manage profile, password, and users)"
+            className={`h-10 flex items-center gap-2.5 px-3 rounded-lg border transition-all cursor-pointer hover:bg-white/10 hover:border-[#C8A96A]/60 shrink-0 whitespace-nowrap select-none hover:transform-none! hover:translate-y-0! [&::after]:hidden! ${profileBtnBg}`}
+            title={`${currentUser?.name || 'Syed Akramul Hassan'} • ${currentUser?.designation || 'Managing Director & Founder'} (Super Admin) — ArielMC Executive Profile (Click to manage profile & security)`}
           >
             <div 
               className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shadow-xs shrink-0 overflow-hidden"

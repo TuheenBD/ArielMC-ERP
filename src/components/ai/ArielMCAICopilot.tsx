@@ -134,8 +134,6 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
     }, 1500);
   };
 
-  const initialWelcomeText = `Hello Partner! I am your **ArielMC AI Partner**.\n\nI have complete real-time visibility across our **62 Master SKUs**, partner factories, costing sheets, and cash incentive net yields across all 5 operating stations (**ArielMC BD**, **ArielMC UK**, **ArielMC US**, **ArielMC EU**, and **ArielMC AU**).\n\nWhat can we solve or analyze together today, Syed?`;
-
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -143,22 +141,16 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
+            // Strip any legacy auto-welcome model bubbles so chat stays pure user-driven
+            const cleaned = parsed.filter((m: ChatMessage) => !m.id?.startsWith('welcome-') && m.id !== 'welcome-msg');
+            return cleaned;
           }
         }
       } catch {
         // ignore
       }
     }
-    return [
-      {
-        id: 'welcome-msg',
-        sender: 'arielmc',
-        text: initialWelcomeText,
-        timestamp: 'Just now',
-        provider: 'smart-fallback'
-      }
-    ];
+    return [];
   });
 
   useEffect(() => {
@@ -183,14 +175,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   }, [messages, isOpen, isTyping]);
 
   const handleClearHistory = () => {
-    const fresh: ChatMessage = {
-      id: `welcome-${Date.now()}`,
-      sender: 'arielmc',
-      text: initialWelcomeText,
-      timestamp: 'Just now',
-      provider: 'smart-fallback'
-    };
-    setMessages([fresh]);
+    setMessages([]);
     try {
       localStorage.removeItem('arielmc_ai_copilot_history_v2');
     } catch {
@@ -568,37 +553,26 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             </div>
           )}
 
-          {/* Quick Conversational Prompt Pills */}
-          <div className="px-4 py-2.5 bg-[#FAF9F6] border-b border-gray-200 flex items-center gap-2 overflow-x-auto text-[11px] shrink-0 no-scrollbar">
-            <button
-              onClick={() => handleSendPrompt('Analyze our highest margin products across Jute, Leather, and Ceramics')}
-              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
-            >
-              📊 Highest Margins
-            </button>
-            <button
-              onClick={() => handleSendPrompt('Which partner factories have LWG Gold & Sedex SMETA 4-Pillar audits?')}
-              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
-            >
-              🏭 Factory Audits
-            </button>
-            <button
-              onClick={() => handleSendPrompt('How does the UN LDC extension to 2029 benefit our export strategy?')}
-              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
-            >
-              🌍 LDC 2029 Strategy
-            </button>
-            <button
-              onClick={() => handleSendPrompt('Explain our B2B sample credit policy under SOP-B2B-SMP-2026-V1')}
-              className="px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 hover:border-[#C8A96A] hover:text-[#1F3A2E] font-medium whitespace-nowrap transition-colors shadow-2xs"
-            >
-              📦 Sample SOP
-            </button>
-          </div>
-
           {/* Chat Messages Body */}
-          <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 bg-slate-50/40 text-xs">
-            {messages.map((msg) => {
+          <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 bg-slate-50/40 text-xs flex flex-col">
+            {messages.length === 0 ? (
+              <div className="my-auto flex flex-col items-center justify-center text-center p-6 select-none">
+                <div className="w-14 h-14 rounded-2xl bg-[#1F3A2E] p-2.5 flex items-center justify-center mb-3 shadow-md border border-[#C8A96A]/40">
+                  <Image
+                    src="/images/ArielMC_Emblem_Square.png"
+                    alt="ArielMC AI"
+                    width={36}
+                    height={36}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="font-heading font-bold text-sm text-[#1F3A2E] mb-1">ArielMC AI Partner</h3>
+                <p className="text-[12px] text-gray-500 max-w-xs leading-relaxed">
+                  Autonomous Sourcing, Costing & Executive Operations Partner. Ask anything about products, factory audits, LDC 2029 strategy, or buyer quotes.
+                </p>
+              </div>
+            ) : (
+              messages.map((msg) => {
               const isUser = msg.sender === 'user';
               return (
                 <div
@@ -743,7 +717,7 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                   </div>
                 </div>
               );
-            })}
+            }))}
 
             {/* Typing Indicator */}
             {isTyping && (
