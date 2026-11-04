@@ -196,12 +196,15 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
       if (pFac.factoryId && (pFac.factoryId === fac.id || pFac.factoryId === fac.code)) return true;
       if (pFac.factoryCode && pFac.factoryCode === fac.code) return true;
       if (pFac.factoryName && fac.name) {
-        const fn1 = pFac.factoryName.toLowerCase();
-        const fn2 = fac.name.toLowerCase();
+        const fn1 = pFac.factoryName.toLowerCase().trim();
+        const fn2 = fac.name.toLowerCase().trim();
         if (fn1 === fn2) return true;
-        const words1 = fn1.split(/[\s,.-]+/).filter((w) => w.length > 3);
-        const words2 = fn2.split(/[\s,.-]+/).filter((w) => w.length > 3);
-        if (words1.some((w) => fn2.includes(w)) || words2.some((w) => fn1.includes(w))) return true;
+        const stopWords = new Set(['craft', 'crafts', 'ltd', 'limited', 'handicrafts', 'handicraft', 'handcrafted', 'industries', 'mill', 'mills', 'co-operative', 'bd', 'bangladesh', 'artisan', 'artisans', 'studio', 'goods', 'fabrics']);
+        const words1 = fn1.split(/[\s,.-]+/).filter((w) => w.length > 3 && !stopWords.has(w));
+        const words2 = fn2.split(/[\s,.-]+/).filter((w) => w.length > 3 && !stopWords.has(w));
+        if (words1.length > 0 && words2.length > 0) {
+          if (words1.some((w) => words2.includes(w))) return true;
+        }
       }
       return false;
     }).map((p, idx) => {

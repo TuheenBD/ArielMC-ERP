@@ -101,9 +101,9 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     },
     sampleStatus: "BUYER_APPROVED",
     images: [
+      "/images/products/jute/doormats/jute-doormat-english-rose.jpg",
       "/images/products/jute/JD-MLD-26-HPD.jpg",
-      "/images/products/jute/JD-MLD-26-HPD-angle.jpg",
-      "/images/products/jute/JD-MLD-26-HPD-detail.jpg",
+      "/images/products/jute/doormats/jute-doormat-indigo-berry.jpg",
     ],
     createdDate: "2026-11-01",
   },
@@ -200,8 +200,9 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     },
     sampleStatus: "BUYER_APPROVED",
     images: [
+      "/images/products/jute/trivets/jute-trivet-set-7pcs-holly.jpg",
       "/images/products/jute/JD-MLD-27-TRS.jpg",
-      "/images/products/jute/JD-MLD-27-TRS-basket.jpg",
+      "/images/products/jute/trivets/jute-trivet-mandala-alpana.jpg",
     ],
     createdDate: "2026-11-02",
   },

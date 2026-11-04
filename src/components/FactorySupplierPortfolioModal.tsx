@@ -65,6 +65,45 @@ type FactoryTab =
   | 'SCORECARD'
   | 'UPDATE_DATA';
 
+const SkuThumbnail: React.FC<{
+  imageUrl?: string;
+  productName: string;
+  sku: string;
+  category?: string;
+}> = ({ imageUrl, productName, sku, category }) => {
+  const [hasError, setHasError] = useState(false);
+
+  const getFallbackImage = () => {
+    const cat = (category || '').toLowerCase();
+    if (cat.includes('leather')) return '/images/products/leather/LD-EDC-1.jpg';
+    if (cat.includes('ceramic')) return '/images/products/ceramics/CT-CKS-62.jpg';
+    if (cat.includes('pottery') || cat.includes('terracotta')) return '/images/products/pottery/POT-BWL-007.jpg';
+    return '/images/products/jute/rugs/mandala-rug.jpg';
+  };
+
+  const effectiveSrc = !hasError && imageUrl ? imageUrl : getFallbackImage();
+
+  return (
+    <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 relative flex items-center justify-center shadow-xs">
+      <img
+        src={effectiveSrc}
+        alt={productName || sku}
+        className="w-full h-full object-cover"
+        onError={(e) => {
+          if (!hasError) {
+            setHasError(true);
+          } else {
+            e.currentTarget.style.display = 'none';
+          }
+        }}
+      />
+      <span className="absolute bottom-0 inset-x-0 bg-black/60 text-[9px] font-mono text-white text-center py-0.5 truncate px-1">
+        {sku}
+      </span>
+    </div>
+  );
+};
+
 export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioModalProps> = ({
   portfolio,
   onClose,
@@ -828,20 +867,12 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
                           </button>
 
                           {/* Thumbnail */}
-                          <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 relative flex items-center justify-center">
-                            {prod.imageUrl ? (
-                              <img
-                                src={prod.imageUrl}
-                                alt={prod.productName}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <ShoppingBag className="w-8 h-8 text-slate-400" />
-                            )}
-                            <span className="absolute bottom-0 inset-x-0 bg-black/60 text-[9px] font-mono text-white text-center py-0.5 truncate px-1">
-                              {prod.sku}
-                            </span>
-                          </div>
+                          <SkuThumbnail
+                            imageUrl={prod.imageUrl}
+                            productName={prod.productName}
+                            sku={prod.sku}
+                            category={prod.category}
+                          />
 
                           {/* Info */}
                           <div className="space-y-1 min-w-0">
