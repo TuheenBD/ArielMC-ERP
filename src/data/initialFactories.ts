@@ -435,7 +435,6 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
     },
     associatedSkus: [
       'JD-EDC-16',
-      'JD-EDC-17',
       'JD-MLD-22',
       'JD-MLD-23',
     ],
@@ -771,7 +770,6 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
       accountNumber: '1501206918274001',
     },
     associatedSkus: [
-      'CT-DWC-53',
       'CT-CAT-73',
       'CT-BOT-54',
       'CT-MUG-60',
