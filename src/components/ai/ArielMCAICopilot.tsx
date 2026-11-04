@@ -24,7 +24,10 @@ import {
   ChevronRight,
   ExternalLink,
   RefreshCw,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Eye,
+  EyeOff,
+  AlertCircle
 } from 'lucide-react';
 import {
   CompanyEntity,
@@ -103,6 +106,9 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isTestingKey, setIsTestingKey] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [apiKey, setApiKey] = useState<string>('');
   const [apiKeyInput, setApiKeyInput] = useState<string>('');
   const [apiKeySavedNotice, setApiKeySavedNotice] = useState(false);
@@ -112,8 +118,8 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('arielmc_gemini_api_key') || '';
-      setApiKey(stored);
-      setApiKeyInput(stored);
+      setApiKey(stored.trim());
+      setApiKeyInput(stored.trim());
     }
   }, []);
 
@@ -128,10 +134,46 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       }
     }
     setApiKeySavedNotice(true);
+    setTestResult(null);
     setTimeout(() => {
       setApiKeySavedNotice(false);
       setShowSettings(false);
-    }, 1500);
+    }, 1200);
+  };
+
+  const handleTestApiKey = async () => {
+    const candidate = (apiKeyInput || apiKey).trim();
+    if (!candidate) {
+      setTestResult({ success: false, message: 'Please enter a Gemini API key first.' });
+      return;
+    }
+    setIsTestingKey(true);
+    setTestResult(null);
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ sender: 'user', text: 'Ping test' }],
+          userApiKey: candidate,
+          clientContext: { station: 'Test Ping', currency: 'USD', productsCount: 62 }
+        })
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success) {
+        setTestResult({ success: true, message: 'Connected to Google Gemini Live!' });
+        setApiKey(candidate);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('arielmc_gemini_api_key', candidate);
+        }
+      } else {
+        setTestResult({ success: false, message: data?.message || 'Connection test failed. Please check key.' });
+      }
+    } catch (e: any) {
+      setTestResult({ success: false, message: e?.message || 'Network error reaching API endpoint.' });
+    } finally {
+      setIsTestingKey(false);
+    }
   };
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
@@ -192,21 +234,111 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
   };
 
   // High-intelligence conversational fallback when Gemini API key is missing or offline
-  const generateConversationalFallback = (userQuery: string): { text: string; actions?: { label: string; action: () => void; icon?: any }[] } => {
+  const generateConversationalFallback = (userQuery: string, notice?: string): { text: string; actions?: { label: string; action: () => void; icon?: any }[] } => {
     const q = userQuery.toLowerCase().trim();
 
-    // 1. Margin & Costing Analysis
+    // 0. Specific SKU / Product & Pricing Inquiry Engine (Knox Wallet, Mandala Rug, etc.)
+    const matchedProduct = products.find((p) => {
+      const pName = p.name.toLowerCase();
+      const pSku = p.sku.toLowerCase();
+      if (q.includes('knox') && (pName.includes('knox') || pSku.includes('knx'))) return true;
+      if (q.includes('crazy horse') && pName.includes('crazy horse')) return true;
+      if (q.includes('loko') && (pName.includes('loko') || pSku.includes('lok'))) return true;
+      if (q.includes('mandala') && pName.includes('mandala')) return true;
+      if (q.includes('crimson bloom') && pName.includes('crimson')) return true;
+      if (q.includes('stoneware') && pName.includes('stoneware')) return true;
+      if (q.includes('wine carrier') && pName.includes('wine')) return true;
+      if (q.includes('fluted') && pName.includes('fluted')) return true;
+      if (pSku && q.includes(pSku)) return true;
+      return false;
+    });
+
+    if (matchedProduct) {
+      const p = matchedProduct;
+      const factoryCost = p.costing?.factoryCostUsd || 5.53;
+      const landedCost = p.costing?.totalLandedCostUsd || 6.43;
+      const baseFob = p.costing?.b2bFobPriceUsd || 8.50;
+      const incentivePct = p.costing?.netIncentivePct || (p.sector === 'JUTE' ? 9.5 : 6.65);
+
+      // Extract target margin if user asked e.g. "32% margin" or "32%"
+      const marginMatch = q.match(/(\d+(?:\.\d+)?)\s*%/);
+      const targetMargin = marginMatch ? parseFloat(marginMatch[1]) : (p.costing?.arielSourcingMarginPct || 32);
+
+      // Extract quantity e.g. "2,500 units" or "2500"
+      const qtyMatch = q.match(/\b(\d{1,3}(?:,\d{3})+|\d+)\s*(?:units|pcs|pieces|quantity)?/i);
+      let qty = 2500;
+      if (qtyMatch) {
+        const rawQty = parseInt(qtyMatch[1].replace(/,/g, ''), 10);
+        if (rawQty > 50) qty = rawQty;
+      }
+
+      // Exact Formula: FOB = Factory Cost / (1 - Target Margin %)
+      const targetMarginDecimal = targetMargin / 100;
+      const requiredFobOnFactoryCost = factoryCost / (1 - targetMarginDecimal);
+      const recommendedFob = Math.max(requiredFobOnFactoryCost, baseFob * 0.96);
+
+      const totalOrderValue = qty * recommendedFob;
+      const totalFactoryCost = qty * factoryCost;
+      const grossCommercialProfit = totalOrderValue - totalFactoryCost;
+      const actualCommercialMargin = ((recommendedFob - factoryCost) / recommendedFob) * 100;
+      const cashIncentiveYieldUsd = totalOrderValue * (incentivePct / 100);
+      const totalEnterpriseYield = grossCommercialProfit + cashIncentiveYieldUsd;
+      const effectiveYieldPct = actualCommercialMargin + incentivePct;
+
+      let res = notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '';
+      res += `Partner, here is the exact pricing calculation and margin analysis for the **${p.name}** (\`${p.sku}\`):\n\n`;
+      res += `### 1. Master Costing Baseline:\n`;
+      res += `• **Factory Purchase Cost**: **$${factoryCost.toFixed(2)}** (BDT ${p.costing?.factoryCostBdt || 688})\n`;
+      res += `• **Export Packaging & Reserves**: **$${((p.costing?.exportPackagingUsd || 0.35) + (p.costing?.inlandFreightPortUsd || 0.25) + 0.30).toFixed(2)}**\n`;
+      res += `• **Total Landed Export Cost**: **$${landedCost.toFixed(2)}**\n`;
+      res += `• **Published Standard FOB**: **$${baseFob.toFixed(2)}** (at ${p.costing?.arielSourcingMarginPct || 24.4}% margin)\n\n`;
+
+      res += `### 2. Recommended FOB Quote for ${qty.toLocaleString()} Units:\n`;
+      res += `To achieve **at least a ${targetMargin}% margin**, your minimum required FOB is **$${requiredFobOnFactoryCost.toFixed(2)}**.\n`;
+      res += `**Recommended Executive Quote: $${recommendedFob.toFixed(2)} FOB Chittagong** per unit (or between **$${requiredFobOnFactoryCost.toFixed(2)}** and **$${baseFob.toFixed(2)}** for volume negotiation).\n\n`;
+
+      res += `### 3. Financial Yield on ${qty.toLocaleString()} Units Order:\n`;
+      res += `• **Total Purchase Order Value**: **$${totalOrderValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}**\n`;
+      res += `• **Factory Production Outlay**: **$${totalFactoryCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}**\n`;
+      res += `• **Gross Commercial Profit**: **$${grossCommercialProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}** (**${actualCommercialMargin.toFixed(1)}% margin**)\n`;
+      res += `• **Bangladesh Bank Cash Incentive (+${incentivePct}% net)**: **+$${cashIncentiveYieldUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}**\n`;
+      res += `• **Total Enterprise Net Yield**: **$${totalEnterpriseYield.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}** (**${effectiveYieldPct.toFixed(1)}%** blended return)\n\n`;
+
+      if (q.includes('german') || q.includes('eu') || q.includes('europe')) {
+        res += `### 4. Strategic Advantage for German / EU Buyer:\n`;
+        res += `Under the UN LDC extension to **November 24, 2029**, Bangladesh retains **0% tariff (duty-free quota-free)** access to the European Union (EBA scheme). German retail buyers pay zero import customs duty on our leather goods, giving you an immediate 8%–14% pricing edge over non-LDC suppliers!`;
+      }
+
+      return {
+        text: res,
+        actions: [
+          {
+            label: 'Open Product Master',
+            action: () => { if (onNavigateTab) onNavigateTab('PRODUCTS'); },
+            icon: Package
+          },
+          {
+            label: 'Export Official Document',
+            action: () => { if (onOpenDocumentCenter) onOpenDocumentCenter(); },
+            icon: FileText
+          }
+        ]
+      };
+    }
+
+    // 1. Margin & Costing Analysis (General Portfolio)
     if (q.includes('margin') || q.includes('cost') || q.includes('fob') || q.includes('pricing') || q.includes('profit')) {
       const sorted = [...products].sort((a, b) => (b.costing?.arielSourcingMarginPct || 0) - (a.costing?.arielSourcingMarginPct || 0));
       const top3 = sorted.slice(0, 3);
       
-      let res = `Partner, here is a clear breakdown of our commercial margins across the **${products.length} synchronized SKUs**:\n\n`;
-      top3.forEach((p, idx) => {
+      let res = notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '';
+      res += `Partner, here is a clear breakdown of our commercial margins across the **${products.length} synchronized SKUs**:\n\n`;
+      top3.forEach((p) => {
         const cost = p.costing?.factoryCostUsd || 0;
         const fob = p.costing?.b2bFobPriceUsd || 0;
         const margin = p.costing?.arielSourcingMarginPct || 0;
         const netYield = p.costing?.netIncentivePct || (p.sector === 'JUTE' ? 9.5 : 6.65);
-        res += `• **${p.name}** (\`${p.sku}\`):\n  Factory Cost: **$${cost.toFixed(2)}** &rarr; Published FOB: **$${fob.toFixed(2)}** | Commercial Margin: **${margin}%** | Govt Cash Incentive: **+${netYield}%**\n\n`;
+        res += `• **${p.name}** (\`${p.sku}\`):\n  Factory Cost: **$${cost.toFixed(2)}** → Published FOB: **$${fob.toFixed(2)}** | Commercial Margin: **${margin}%** | Govt Cash Incentive: **+${netYield}%**\n\n`;
       });
       res += `In ArielMC, our standard margin policy targets **18% to 38%** commercial margin, reinforced by Bangladesh Bank cash incentives (up to **9.5% net yield** on diversified Jute and **6.65%** on Leather & Pottery). Would you like to review specific slabs or adjust a buyer quote?`;
 
@@ -227,7 +359,8 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
       const lwgFactories = factories.filter(f => f.complianceAudits?.some(a => a.standardName?.toLowerCase().includes('lwg') || a.auditBody?.toLowerCase().includes('lwg')));
       const bsciFactories = factories.filter(f => f.complianceAudits?.some(a => a.standardName?.toLowerCase().includes('bsci') || a.standardName?.toLowerCase().includes('sedex')));
       
-      let res = `Partner, we partner exclusively with verified, audited facilities across Savar, Gazipur, Dhamrai, and Narsingdi:\n\n`;
+      let res = notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '';
+      res += `Partner, we partner exclusively with verified, audited facilities across Savar, Gazipur, Dhamrai, and Narsingdi:\n\n`;
       if (lwgFactories.length > 0) {
         res += `**LWG-Audited Tanneries (Leather Compendium):**\n`;
         lwgFactories.forEach(f => {
@@ -257,8 +390,10 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
 
     // 3. LDC 2029 Policy Question
     if (q.includes('ldc') || q.includes('tariff') || q.includes('2029') || q.includes('policy') || q.includes('trade')) {
+      const res = (notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '') +
+        `The UN General Assembly's extension of Bangladesh's LDC graduation to **November 24, 2029** is a major win for us, Syed.\n\nHere is how we leverage it:\n1. **Zero Tariff Shock**: We can guarantee 0% duty-free quota-free access to our UK (DCTS) and EU (EBA) buyers until late 2029.\n2. **Margin Protection**: Defers an average 12.5% MFN duty across 38 destination countries.\n3. **Diversification Mandate**: International buyers are actively looking to diversify beyond 84%+ RMG dependence. Our **Golden Jute, Master Leather, Fine Ceramics, and Terracotta** lines are perfectly positioned right now.\n\nOur full whitepaper is published on our corporate website and blog if you'd like to share it with buyers!`;
       return {
-        text: `The UN General Assembly's extension of Bangladesh's LDC graduation to **November 24, 2029** is a major win for us, Syed.\n\nHere is how we leverage it:\n1. **Zero Tariff Shock**: We can guarantee 0% duty-free quota-free access to our UK (DCTS) and EU (EBA) buyers until late 2029.\n2. **Margin Protection**: Defers an average 12.5% MFN duty across 38 destination countries.\n3. **Diversification Mandate**: International buyers are actively looking to diversify beyond 84%+ RMG dependence. Our **Golden Jute, Master Leather, Fine Ceramics, and Terracotta** lines are perfectly positioned right now.\n\nOur full whitepaper is published on our corporate website and blog if you'd like to share it with buyers!`,
+        text: res,
         actions: [
           {
             label: 'Open Brand & Marketing',
@@ -271,8 +406,10 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
 
     // 4. Sample Policy (SOP-B2B-SMP-2026-V1)
     if (q.includes('sample') || q.includes('sdo') || q.includes('courier') || q.includes('proto')) {
+      const res = (notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '') +
+        `Under our official **SOP-B2B-SMP-2026-V1 Sample Policy**:\n\n• **Standard Dispatch**: Counter-samples dispatch within **5 to 9 business days** via DHL Express.\n• **Commercial Credit**: Sample development and courier charges are **100% credited back** on the buyer's first commercial bulk production purchase order.\n• **Active SDOs**: We currently have **${samples.length} active samples** in development across protos, lab dips, and golden seal approvals.\n\nWould you like me to track a specific SDO or generate a sample invoice?`;
       return {
-        text: `Under our official **SOP-B2B-SMP-2026-V1 Sample Policy**:\n\n• **Standard Dispatch**: Counter-samples dispatch within **5 to 9 business days** via DHL Express.\n• **Commercial Credit**: Sample development and courier charges are **100% credited back** on the buyer's first commercial bulk production purchase order.\n• **Active SDOs**: We currently have **${samples.length} active samples** in development across protos, lab dips, and golden seal approvals.\n\nWould you like me to track a specific SDO or generate a sample invoice?`,
+        text: res,
         actions: [
           {
             label: 'Track Active Samples',
@@ -285,8 +422,10 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
 
     // 5. User Guide or Document Export
     if (q.includes('guide') || q.includes('manual') || q.includes('document') || q.includes('invoice') || q.includes('pdf')) {
+      const res = (notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '') +
+        `Syed, all official export documentation and the ERP Master Manual are accessible in 1 click:\n\n• **ArielMC ERP Master Manual (PDF)**: Complete guide to all 10 ERP phases.\n• **Commercial Documentation**: Proforma Invoices, Commercial Invoices, Packing Lists, Mushak 6.3 VAT tax invoices, and Factory MoUs.\n\nWhich document would you like to open?`;
       return {
-        text: `Syed, all official export documentation and the ERP Master Manual are accessible in 1 click:\n\n• **ArielMC ERP Master Manual (PDF)**: Complete guide to all 10 ERP phases.\n• **Commercial Documentation**: Proforma Invoices, Commercial Invoices, Packing Lists, Mushak 6.3 VAT tax invoices, and Factory MoUs.\n\nWhich document would you like to open?`,
+        text: res,
         actions: [
           {
             label: 'Open User Guide',
@@ -303,8 +442,10 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
     }
 
     // 6. Natural General Conversation / Strategy / Drafting
+    const res = (notice ? `> ⚡ **ArielMC Offline Executive Engine**\n> *${notice}*\n\n` : '') +
+      `Understood, Partner. I'm right here with you. We currently have **${products.length} synchronized SKUs** active in our Product Master across our 5 national sectors, with all costing sheets and factory MoUs aligned.\n\nTell me what you're working on — whether you want to calculate a custom landed cost, review factory lead times, draft an email to a retail buyer, or analyze our cash incentives. I'm ready to solve it with you!`;
     return {
-      text: `Understood, Partner. I'm right here with you. We currently have **${products.length} synchronized SKUs** active in our Product Master across our 5 national sectors, with all costing sheets and factory MoUs aligned.\n\nTell me what you're working on — whether you want to calculate a custom landed cost, review factory lead times, draft an email to a retail buyer, or analyze our cash incentives. I'm ready to solve it with you!`
+      text: res
     };
   };
 
@@ -323,14 +464,17 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
     if (!promptText) setInputText('');
     setIsTyping(true);
 
+    let lastApiNotice = '';
+
     try {
       // 1. Attempt live Gemini API call
+      const activeKey = (apiKey || apiKeyInput || '').trim();
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          userApiKey: apiKey || undefined,
+          userApiKey: activeKey || undefined,
           clientContext: {
             station: activeEntity?.legalName || activeEntity?.code || 'ArielMC BD',
             currency: activeCurrency?.code || 'USD',
@@ -354,16 +498,18 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
           return;
         }
       } else {
-        const errText = await response.text().catch(() => '');
-        console.warn('[ArielMC AI Chat] Live API notice, engaging smart fallback:', errText);
+        const errData = await response.json().catch(() => null);
+        lastApiNotice = errData?.message || 'Gemini API not responding';
+        console.warn('[ArielMC AI Chat] Live API notice, engaging smart fallback:', lastApiNotice);
       }
     } catch (err: any) {
-      console.warn('[ArielMC AI Chat] Network notice, engaging smart fallback:', err?.message || err);
+      lastApiNotice = err?.message || 'Network disconnected';
+      console.warn('[ArielMC AI Chat] Network notice, engaging smart fallback:', lastApiNotice);
     }
 
     // 2. Fallback to our natural conversational partner engine
     setTimeout(() => {
-      const { text, actions } = generateConversationalFallback(userMessage.text);
+      const { text, actions } = generateConversationalFallback(userMessage.text, lastApiNotice);
       const agentReply: ChatMessage = {
         id: `arielmc-${Date.now()}`,
         sender: 'arielmc',
@@ -536,20 +682,65 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                 Connect your Gemini API key to enable live, unconstrained natural intelligence across your ERP.
               </p>
               <div className="flex items-center gap-2">
-                <input
-                  type="password"
-                  value={apiKeyInput}
-                  onChange={(e) => setApiKeyInput(e.target.value)}
-                  placeholder="Paste AIzaSy... key here"
-                  className="flex-1 px-3 py-1.5 rounded-xl border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A]"
-                />
+                <div className="relative flex-1">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={apiKeyInput}
+                    onChange={(e) => {
+                      setApiKeyInput(e.target.value);
+                      setTestResult(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleSaveApiKey();
+                      }
+                    }}
+                    placeholder="Paste AIzaSy... key here"
+                    className="w-full pl-3 pr-8 py-1.5 rounded-xl border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-[#C8A96A] font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5"
+                    title={showPassword ? 'Hide Key' : 'Show Key'}
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
                 <button
+                  type="button"
+                  onClick={handleTestApiKey}
+                  disabled={isTestingKey || !apiKeyInput.trim()}
+                  className="px-2.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-[11px] transition-colors shrink-0 disabled:opacity-50"
+                  title="Test Gemini API connectivity"
+                >
+                  {isTestingKey ? 'Testing...' : 'Test Key'}
+                </button>
+                <button
+                  type="button"
                   onClick={handleSaveApiKey}
-                  className="px-3 py-1.5 rounded-xl bg-[#1F3A2E] text-white hover:bg-[#C8A96A] hover:text-[#1F3A2E] font-bold text-xs transition-colors"
+                  className="px-3 py-1.5 rounded-xl bg-[#1F3A2E] text-white hover:bg-[#C8A96A] hover:text-[#1F3A2E] font-bold text-xs transition-colors shrink-0"
                 >
                   {apiKeySavedNotice ? 'Saved!' : 'Save'}
                 </button>
               </div>
+              {testResult && (
+                <div
+                  className={`mt-2 p-2 rounded-xl text-[11px] flex items-center gap-1.5 ${
+                    testResult.success
+                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      : 'bg-red-50 text-red-800 border border-red-200'
+                  }`}
+                >
+                  {testResult.success ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                  )}
+                  <span>{testResult.message}</span>
+                </div>
+              )}
             </div>
           )}
 

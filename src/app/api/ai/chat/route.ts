@@ -71,17 +71,21 @@ export async function POST(req: NextRequest) {
     const { messages, userApiKey, clientContext } = body;
 
     const apiKey =
-      userApiKey ||
+      (userApiKey ||
       process.env.GEMINI_API_KEY ||
       process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
-      process.env.GOOGLE_API_KEY;
+      process.env.GOOGLE_API_KEY || '')
+      .trim();
+
+    console.log(`[ArielMC AI Chat] Incoming POST from station: ${clientContext?.station || 'ArielMC BD'}, messages count: ${messages?.length}, key provided: ${Boolean(apiKey)}`);
 
     if (!apiKey) {
+      console.warn('[ArielMC AI Chat] Rejected: No API key provided.');
       return NextResponse.json(
         {
           success: false,
           error: 'NO_API_KEY',
-          message: 'No Gemini API key found on server or client.'
+          message: 'No Google Gemini API key configured. Please enter your API key in Settings (⚙️).'
         },
         { status: 400 }
       );
@@ -132,8 +136,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Try Gemini 2.0 Flash first, fallback to Gemini 1.5 Flash
-    const models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+    // Try Google Gemini models in sequence
+    const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-pro'];
     let lastError: any = null;
     let replyText = '';
 
@@ -165,11 +169,12 @@ export async function POST(req: NextRequest) {
           const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
           if (candidateText) {
             replyText = candidateText;
+            console.log(`[ArielMC AI Chat] Successfully generated response via ${model}`);
             break;
           }
         } else {
           const errData = await response.json().catch(() => ({}));
-          console.error(`[Gemini API ${model} Error]`, errData);
+          console.error(`[Gemini API ${model} Error HTTP ${response.status}]`, JSON.stringify(errData));
           lastError = errData;
         }
       } catch (err: any) {
@@ -179,10 +184,12 @@ export async function POST(req: NextRequest) {
     }
 
     if (!replyText) {
+      const errMsg = lastError?.error?.message || (typeof lastError === 'string' ? lastError : 'Google Gemini API request failed. Please verify API key.');
       return NextResponse.json(
         {
           success: false,
           error: 'GEMINI_CALL_FAILED',
+          message: errMsg,
           details: lastError
         },
         { status: 502 }
