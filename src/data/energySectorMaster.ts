@@ -194,3 +194,24 @@ export const GREEN_REFINANCING_FRAMEWORK = {
   gracePeriodMonths: 6,
   eligibleSectors: ['RMG', 'Textiles', 'Leather Goods', 'Jute Mills', 'Ceramics', 'Commercial Buildings'],
 };
+
+export const ENERGY_OFFICIAL_COLLATERALS = [
+  {
+    code: 'DOC-BD-SOLAR-BOARDROOM-DOSSIER',
+    title: 'Ariel Energy Boardroom Solar EPC Dossier (Submittable C-Suite Brief)',
+    pdfUrl: '/documents/Ariel_Energy_Boardroom_Solar_EPC_Dossier.pdf',
+    docxUrl: '/documents/Ariel_Energy_Boardroom_Solar_EPC_Dossier.docx',
+    pages: 14,
+    status: 'ACTIVE_APPROVED',
+  },
+  {
+    code: 'DOC-BD-SOLAR-BOARDROOM-SLIDES',
+    title: 'Ariel Energy Boardroom Slide Deck (12 Slides, 16:9 Widescreen)',
+    pdfUrl: '/documents/Ariel_Energy_Boardroom_Presentation_Deck.pdf',
+    pptxUrl: '/documents/Ariel_Energy_Boardroom_Presentation_Deck.pptx',
+    slides: 12,
+    status: 'ACTIVE_APPROVED',
+  },
+];
+
+
