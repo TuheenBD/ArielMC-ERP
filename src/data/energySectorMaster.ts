@@ -10,6 +10,12 @@ export const ARIEL_ENERGY_BRAND_IDENTITY = {
   legalEntity: 'Ariel Renewable Energy Limited',
   brandName: 'ArielMC',
   officialTagline: 'Sovereign Green Infrastructure & Industrial Decarbonization',
+  parentAffiliation: 'A Member of the ArielMC Enterprise Eco-System',
+  prestigeLockup: [
+    'Ariel Renewable Energy Limited',
+    'Sovereign Green Infrastructure & Industrial Decarbonization',
+    'A Member of the ArielMC Enterprise Eco-System',
+  ],
   sector: 'Energy',
   product: 'Solar',
   primaryDomain: 'energy.arielmc.com',
