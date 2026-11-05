@@ -479,17 +479,17 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Ariel Renewable Energy Portal Link */}
           <a
             id="header-ariel-solar-btn"
-            href="https://solar.arielmc.com"
+            href="https://energy.arielmc.com"
             target="_blank"
             rel="noopener noreferrer"
             className={`${toolBtn} shrink-0 whitespace-nowrap text-emerald-300 border-emerald-600/40 hover:border-emerald-400`}
-            title="Ariel Renewable Energy Limited — Sovereign Green Infrastructure & Decarbonization Portal (solar.arielmc.com)"
+            title="Ariel Renewable Energy Limited — Sovereign Green Infrastructure & Decarbonization Portal (energy.arielmc.com)"
           >
             <div className="relative flex items-center">
               <Sun className="w-3.5 h-3.5 text-amber-400" />
               <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             </div>
-            <span>Ariel Solar</span>
+            <span>Ariel Energy</span>
           </a>
 
           {/* ArielMC AI Copilot Button (Compact & Sleek) */}
