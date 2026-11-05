@@ -18,6 +18,7 @@ import {
   Wrench, 
   X,
   Star,
+  Sun,
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 import { ALL_PAGE_DEFINITIONS } from '@/lib/favoritesManager';
@@ -474,6 +475,22 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Database</span>
             </button>
           )}
+
+          {/* Ariel Renewable Energy Portal Link */}
+          <a
+            id="header-ariel-solar-btn"
+            href="https://solar.arielmc.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${toolBtn} shrink-0 whitespace-nowrap text-emerald-300 border-emerald-600/40 hover:border-emerald-400`}
+            title="Ariel Renewable Energy Limited — Sovereign Green Infrastructure & Decarbonization Portal (solar.arielmc.com)"
+          >
+            <div className="relative flex items-center">
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            </div>
+            <span>Ariel Solar</span>
+          </a>
 
           {/* ArielMC AI Copilot Button (Compact & Sleek) */}
           {onOpenArielAi && (
