@@ -2,8 +2,22 @@
  * ArielMC Enterprise Eco-System — ERP Master Source of Truth
  * Official Entity: Ariel Renewable Energy Limited
  * Sector: Energy | Product: Solar
+ * Official Corporate Tagline: Sovereign Green Infrastructure & Industrial Decarbonization
  * Primary Domain: energy.arielmc.com | Command Hub: energy.arielmc.com/crm
  */
+
+export const ARIEL_ENERGY_BRAND_IDENTITY = {
+  legalEntity: 'Ariel Renewable Energy Limited',
+  brandName: 'ArielMC',
+  officialTagline: 'Sovereign Green Infrastructure & Industrial Decarbonization',
+  sector: 'Energy',
+  product: 'Solar',
+  primaryDomain: 'energy.arielmc.com',
+  commandHub: 'energy.arielmc.com/crm',
+  headquarters: 'Ariel House, Level 7, Plot 14, Road 11, Banani, Dhaka-1213, Bangladesh',
+  sredaAccreditation: 'SREDA Registered Turnkey Solar EPC Partner',
+  incorporationReg: 'C-194820',
+};
 
 export interface SolarPackagePricing {
   packageCode: string;
