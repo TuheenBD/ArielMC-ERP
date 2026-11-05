@@ -212,6 +212,22 @@ export const ENERGY_OFFICIAL_COLLATERALS = [
     slides: 12,
     status: 'ACTIVE_APPROVED',
   },
+  {
+    code: 'DOC-BD-SOLAR-LETTERHEAD',
+    title: 'Ariel Energy Official Corporate Letterhead Template',
+    pdfUrl: '/documents/Ariel_Energy_Official_Corporate_Letterhead.pdf',
+    docxUrl: '/documents/Ariel_Energy_Official_Corporate_Letterhead.docx',
+    pages: 1,
+    status: 'ACTIVE_APPROVED',
+  },
+  {
+    code: 'DOC-BD-SOLAR-QUOTATION-1PAGE',
+    title: 'Ariel Energy 1-Page Turnkey Solar EPC Commercial Quotation Template',
+    pdfUrl: '/documents/Ariel_Energy_1_Page_Solar_EPC_Quotation_Template.pdf',
+    docxUrl: '/documents/Ariel_Energy_1_Page_Solar_EPC_Quotation_Template.docx',
+    pages: 1,
+    status: 'ACTIVE_APPROVED',
+  },
 ];
 
 
