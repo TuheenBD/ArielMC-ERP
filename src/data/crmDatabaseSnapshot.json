@@ -1,6 +1,37 @@
 {
   "leads": [
     {
+      "id": "NRG-WEB-852188",
+      "company": "Ha-Meem Denim Processing Mills",
+      "contact": "Brig Gen (Retd) Nizamul Haque",
+      "phone": "+880 1711-998877",
+      "email": "operations@hameemgroup.com",
+      "stage": "NEW_INQUIRY",
+      "capacityKwp": 987,
+      "roofAreaSqFt": 85000,
+      "monthlyBillBdt": 3500000,
+      "estimatedValueBdt": 50929200,
+      "companyCode": "ARIEL_ENERGY",
+      "source": "energy.arielmc.com Feasibility Generator",
+      "company_id": "ARIEL_ENERGY",
+      "createdAt": "2026-11-05T17:30:52.242Z"
+    },
+    {
+      "id": "NRG-TEST-001",
+      "company": "Beximco Industrial Park",
+      "contact": "Executive Director Engineering",
+      "email": "energy@beximco.net",
+      "phone": "+880 1711-000111",
+      "stage": "NEW_INQUIRY",
+      "capacityKwp": 2500,
+      "roofAreaSqFt": 200000,
+      "monthlyBillBdt": 8500000,
+      "estimatedValueBdt": 118750000,
+      "companyCode": "ARIEL_ENERGY",
+      "company_id": "ARIEL_ENERGY",
+      "createdAt": "2026-11-05T17:23:47.856Z"
+    },
+    {
       "id": "P-0001",
       "company": "Blue Diamond Garden Centres",
       "tier": "Retailer",

@@ -5,7 +5,7 @@ import path from 'path';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const STRICT_COMPANY_CODE = 'ARIELMC';
+const PERMITTED_COMPANIES = ['ARIELMC', 'ARIEL_ENERGY'];
 const SYNC_SECRET = process.env.ARIELMC_SYNC_SECRET || 'arielmc-sovereign-sync-key-2026';
 const DB_FILE_PATH = path.join(process.cwd(), 'src', 'data', 'crmDatabaseSnapshot.json');
 
@@ -18,8 +18,8 @@ function verifyAuth(request: NextRequest): boolean {
 
 /**
  * POST /api/crm/sync
- * Receives real-time lead & deal updates from Master CRM.
- * STRICT ISOLATION GUARD: Drops any record that does not belong to ARIELMC.
+ * Receives real-time lead & deal updates from Master CRM and Ariel Energy portals.
+ * STRICT ISOLATION GUARD: Drops any record that does not belong to ARIELMC or ARIEL_ENERGY.
  */
 export async function POST(request: NextRequest) {
   if (!verifyAuth(request)) {
@@ -33,18 +33,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action, company_id, payload, id } = body;
 
+    const targetCompany = company_id || payload?.companyCode || payload?.company_id || 'ARIELMC';
+
     // Strict entity verification
-    if (company_id && company_id !== STRICT_COMPANY_CODE) {
+    if (!PERMITTED_COMPANIES.includes(targetCompany)) {
       return NextResponse.json(
         {
           success: false,
-          error: `Isolation Rejection: ERP will not accept records for entity '${company_id}'. Only '${STRICT_COMPANY_CODE}' is permitted.`,
+          error: `Isolation Rejection: ERP will not accept records for entity '${targetCompany}'. Permitted entities: ${PERMITTED_COMPANIES.join(', ')}.`,
         },
         { status: 403 }
       );
     }
 
-    if (payload && payload.companyCode && payload.companyCode !== STRICT_COMPANY_CODE) {
+    if (payload && payload.companyCode && !PERMITTED_COMPANIES.includes(payload.companyCode)) {
       return NextResponse.json(
         {
           success: false,
@@ -66,8 +68,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'UPSERT_LEAD' && payload) {
-      payload.companyCode = STRICT_COMPANY_CODE;
-      payload.company_id = STRICT_COMPANY_CODE;
+      payload.companyCode = targetCompany;
+      payload.company_id = targetCompany;
       const existingIdx = db.leads.findIndex((l: any) => l.id === payload.id);
       if (existingIdx >= 0) {
         db.leads[existingIdx] = { ...db.leads[existingIdx], ...payload, updatedAt: new Date().toISOString() };
@@ -79,9 +81,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         action,
-        entity: STRICT_COMPANY_CODE,
+        entity: targetCompany,
         leadId: payload.id,
-        message: 'Lead synchronized from Master CRM to ArielMC ERP',
+        message: `Lead synchronized to ArielMC ERP for entity '${targetCompany}'`,
       });
     }
 
@@ -93,13 +95,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         action,
-        entity: STRICT_COMPANY_CODE,
+        entity: targetCompany,
         deletedId: targetId,
         message: 'Lead deleted from ArielMC ERP via Master CRM sync',
       });
     }
 
-    return NextResponse.json({ success: true, message: 'Sync ping received', entity: STRICT_COMPANY_CODE });
+    return NextResponse.json({ success: true, message: 'Sync ping received', entity: targetCompany });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message || 'ERP sync endpoint error' },

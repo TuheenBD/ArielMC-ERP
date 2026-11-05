@@ -135,6 +135,21 @@ export interface CorporateCommunication {
 
 export type ProductSector = 'LEATHER' | 'JUTE' | 'TEXTILE' | 'CERAMICS' | 'POTTERY';
 
+export interface SolarEnergyAttributes {
+  systemCapacityKwp: number;
+  customerCategory: 'FACTORY' | 'COMMERCIAL' | 'HOUSEHOLD';
+  gridInterconnection: string;
+  pvModuleType: string;
+  inverterTopology: string;
+  mountingStructure: string;
+  netMeteringCompliance: string;
+  greenRefinancingEligible: boolean;
+  guaranteedPerformanceRatio: string;
+  expectedMonthlyYieldKwh: string;
+  amortizedLcoeBdt: number;
+  [key: string]: any;
+}
+
 export interface LeatherAttributes {
   leatherType: string;
   tanningMethod: string;
@@ -197,7 +212,8 @@ export type SectorAttributes =
   | { sector: 'JUTE'; data: JuteAttributes }
   | { sector: 'TEXTILE'; data: TextileAttributes }
   | { sector: 'CERAMICS'; data: CeramicAttributes }
-  | { sector: 'POTTERY'; data: PotteryAttributes };
+  | { sector: 'POTTERY'; data: PotteryAttributes }
+  | { sector: 'ENERGY'; data: SolarEnergyAttributes };
 
 export interface ProductItem {
   id: string;
