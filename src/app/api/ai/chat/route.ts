@@ -259,15 +259,25 @@ export async function POST(req: NextRequest) {
           const supported = listData.models
             .filter((m: any) => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
             .map((m: any) => (m.name || '').replace(/^models\//, ''))
+            .filter((name: string) => 
+              !name.includes('tts') && 
+              !name.includes('audio') && 
+              !name.includes('embedding') && 
+              !name.includes('imagen') && 
+              !name.includes('aqa') && 
+              !name.includes('realtime')
+            )
             .filter(Boolean);
 
           if (supported.length > 0) {
             supported.sort((a: string, b: string) => {
               const getScore = (name: string) => {
-                if (name.includes('2.0-flash')) return 100;
-                if (name.includes('1.5-flash') && !name.includes('8b')) return 80;
-                if (name.includes('1.5-flash')) return 70;
-                if (name.includes('1.5-pro')) return 60;
+                if (name === 'gemini-2.5-flash') return 110;
+                if (name === 'gemini-2.0-flash') return 100;
+                if (name === 'gemini-1.5-flash') return 90;
+                if (name === 'gemini-2.5-pro') return 80;
+                if (name === 'gemini-1.5-pro') return 70;
+                if (name.includes('flash')) return 50;
                 return 10;
               };
               return getScore(b) - getScore(a);
