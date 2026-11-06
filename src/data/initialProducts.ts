@@ -7841,5 +7841,500 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "/images/products/terracotta/TC-VAS-64.jpg"
     ],
     "createdDate": "2026-11-01"
+  },
+  {
+    "id": "prod-cer-75",
+    "sku": "CI-BWL-CB11",
+    "roadmapCode": "CI-BWL-11",
+    "prodtId": 75,
+    "styleCode": "CBW",
+    "eanBarcode": "0538920190075",
+    "name": "Bengal Cobalt Arch Hand-Glazed Stoneware Bowl Suite (11-Piece Hospitality Set)",
+    "sector": "CERAMICS",
+    "category": "03 The Ceramic Index / Dinnerware & Tabletop",
+    "subCategory": "Artisan Hospitality & Tableware Suites",
+    "hsCode": "6911.10.00",
+    "packagingMode": "Molded Pulp Cushion & Master 5-Ply Export Carton",
+    "description": "Hand-thrown oatmeal stoneware bowl set comprising 1 Master Presentation Centerpiece Bowl (9.5-inch) and 10 Individual Table Bowls (5.5-inch), adorned with hand-painted cobalt blue scalloped arches fired at 1,250°C.",
+    "unit": "SET",
+    "dimensions": "320 x 320 x 260 mm",
+    "weightKg": 4.8,
+    "tags": [
+      "Ceramics",
+      "Dinnerware & Tabletop",
+      "Studio Handmade",
+      "Food Contact Safe",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 3486,
+      "factoryCostUsd": 28,
+      "initialFactoryAskingCostBdt": 4108,
+      "initialFactoryAskingCostUsd": 33,
+      "negotiatedSavingsBdt": 622,
+      "negotiatedSavingsUsd": 5,
+      "exportPackagingUsd": 0.65,
+      "inlandFreightPortUsd": 0.35,
+      "qualityInspectionReserveUsd": 0.2,
+      "complianceOverheadReserveUsd": 0.2,
+      "totalLandedCostUsd": 29.4,
+      "arielSourcingMarginPct": 33.2,
+      "b2bFobPriceUsd": 44,
+      "d2cRetailPriceUsd": 145,
+      "incentiveCategory": "LIGHT_ENGINEERING_CERAMIC_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 4.18,
+      "totalEnterpriseMarginPct": 42.7
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 100 - 200 sets)",
+        "moqRange": "100 - 200 sets",
+        "fobPriceUsd": 44,
+        "marginPct": 33.2
+      },
+      {
+        "slabName": "Wholesale Tier 2 (201 - 500 sets)",
+        "moqRange": "201 - 500 sets",
+        "fobPriceUsd": 40.5,
+        "marginPct": 27.4
+      },
+      {
+        "slabName": "FCL Bulk Volume (501+ sets)",
+        "moqRange": "501+ sets",
+        "fobPriceUsd": 37.4,
+        "marginPct": 21.4
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-KCS-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (Kun Creative Studio & ArielMC)",
+      "signedMouDate": "2026-02-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-KCS-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC On-Site Studio Artisan Quality & Wage Audit",
+      "studioPhotoZipUrl": "/assets/studio/CI-BWL-CB11-Studio-HiRes.zip",
+      "studioPhotoZipName": "CI-BWL-CB11-Studio-Pack.zip",
+      "highResPhotoCount": 1
+    },
+    "attributes": {
+      "sector": "CERAMICS",
+      "data": {
+        "clayBody": "High-Vitrification Oatmeal Stoneware Clay",
+        "glazeType": "Hand-Painted Cobalt Underglaze with Clear Food-Safe Gloss",
+        "firingTempCelsius": 1250,
+        "foodContactSafety": "US FDA 21 CFR 175.300 & German LFGB Certified Food Safe",
+        "dishwasherSafe": true,
+        "microwaveSafe": true
+      }
+    },
+    "complianceCertificates": [
+      "LFGB Food Safe Certified",
+      "FDA 21 CFR 175.300",
+      "ISO 6486 Lead & Cadmium Leaching Certified",
+      "Artisan Heritage Certified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_pot_02",
+      "factoryCode": "FAC-KCS-01",
+      "factoryName": "Kun Creative Studio & Artisan Kilns",
+      "contactPerson": "Studio Director",
+      "contactPhone": "+880 1572-371539",
+      "contactEmail": "contact@kuncreativestudio.com",
+      "location": "Sonatangor Rd, Hazaribagh, Dhaka",
+      "leadTimeDays": 25,
+      "moq": 100,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 65,
+      "samplePackingUsd": 15,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.9
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/ceramics/ci-bwl-cb11.jpg"
+    ],
+    "createdDate": "2026-11-06"
+  },
+  {
+    "id": "prod-pot-76",
+    "sku": "EF-JAR-SG01",
+    "roadmapCode": "EF-JAR-01",
+    "prodtId": 76,
+    "styleCode": "JSG",
+    "eanBarcode": "0538920190076",
+    "name": "Bengal Sgraffito Sculptural Stoneware Storage Jars (Trio Edition)",
+    "sector": "POTTERY",
+    "category": "05 Earth & Form / Tabletop & Hospitality",
+    "subCategory": "Studio Ceramic Canisters & Ornamental Storage",
+    "hsCode": "6912.00.00",
+    "packagingMode": "Individual Drop-Tested Gift Box & Master Export Carton",
+    "description": "Hand-thrown sculptural stoneware canisters with hand-carved sgraffito reliefs (Dragonfly & Spiral, Celestial Rings, Moss-Drip Reactive Glaze) topped with organic sculpted finials.",
+    "unit": "PCS",
+    "dimensions": "140 x 140 x 220 mm",
+    "weightKg": 1.2,
+    "tags": [
+      "Pottery",
+      "Tabletop & Hospitality",
+      "Studio Stoneware",
+      "Sgraffito",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 1618,
+      "factoryCostUsd": 13,
+      "initialFactoryAskingCostBdt": 1992,
+      "initialFactoryAskingCostUsd": 16,
+      "negotiatedSavingsBdt": 374,
+      "negotiatedSavingsUsd": 3,
+      "exportPackagingUsd": 0.4,
+      "inlandFreightPortUsd": 0.25,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 13.95,
+      "arielSourcingMarginPct": 33.6,
+      "b2bFobPriceUsd": 21,
+      "d2cRetailPriceUsd": 68,
+      "incentiveCategory": "HANDICRAFTS_AGRO_POTTERY_7",
+      "incentiveRatePct": 7,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 6.65,
+      "netIncentiveUsd": 1.4,
+      "totalEnterpriseMarginPct": 40.25
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 150 - 300 pcs)",
+        "moqRange": "150 - 300 pcs",
+        "fobPriceUsd": 21,
+        "marginPct": 33.6
+      },
+      {
+        "slabName": "Wholesale Tier 2 (301 - 600 pcs)",
+        "moqRange": "301 - 600 pcs",
+        "fobPriceUsd": 19.2,
+        "marginPct": 27.3
+      },
+      {
+        "slabName": "FCL Bulk Volume (601+ pcs)",
+        "moqRange": "601+ pcs",
+        "fobPriceUsd": 17.5,
+        "marginPct": 20.3
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-KCS-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (Kun Creative Studio & ArielMC)",
+      "signedMouDate": "2026-02-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-KCS-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC On-Site Studio Artisan Quality & Wage Audit",
+      "studioPhotoZipUrl": "/assets/studio/EF-JAR-SG01-Studio-HiRes.zip",
+      "studioPhotoZipName": "EF-JAR-SG01-Studio-Pack.zip",
+      "highResPhotoCount": 1
+    },
+    "attributes": {
+      "sector": "POTTERY",
+      "data": {
+        "clayType": "High-Fire Studio Stoneware Clay",
+        "firingTempCelsius": 1250,
+        "finishStyle": "Hand-Carved Relief with Tactile Unglazed Accent Sections",
+        "foodSafeUse": "Food Safe Non-Toxic Mineral Glaze",
+        "ecoCertifications": [
+          "FDA 21 CFR 175.300",
+          "LFGB Compliant",
+          "Artisan Heritage Certified"
+        ]
+      }
+    },
+    "complianceCertificates": [
+      "FDA 21 CFR 175.300 Food Safe Glaze",
+      "LFGB Compliant",
+      "Artisan Heritage Certified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_pot_02",
+      "factoryCode": "FAC-KCS-01",
+      "factoryName": "Kun Creative Studio & Artisan Kilns",
+      "contactPerson": "Studio Director",
+      "contactPhone": "+880 1572-371539",
+      "contactEmail": "contact@kuncreativestudio.com",
+      "location": "Sonatangor Rd, Hazaribagh, Dhaka",
+      "leadTimeDays": 25,
+      "moq": 150,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 45,
+      "samplePackingUsd": 10,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.9
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/pottery/ef-jar-sg01.jpg"
+    ],
+    "createdDate": "2026-11-06"
+  },
+  {
+    "id": "prod-pot-77",
+    "sku": "EF-REL-TT01",
+    "roadmapCode": "EF-REL-01",
+    "prodtId": 77,
+    "styleCode": "RTT",
+    "eanBarcode": "0538920190077",
+    "name": "Sovereign Bengal Architectural Terracotta Relief Panel (Framed Totem Edition)",
+    "sector": "POTTERY",
+    "category": "05 Earth & Form / Architectural Elements",
+    "subCategory": "Wall Reliefs & Sculptural Artifacts",
+    "hsCode": "6913.90.00",
+    "packagingMode": "Corner Guarded Foam Enclosure & Wood-Reinforced Master Crate",
+    "description": "Museum-grade modular 8-tile terracotta wall totem depicting the peacock (mayur), riverine sun, and folk protective eyes, mounted on natural canvas within a handcrafted solid walnut architectural shadow box.",
+    "unit": "PCS",
+    "dimensions": "450 x 50 x 650 mm",
+    "weightKg": 6.5,
+    "tags": [
+      "Terracotta",
+      "Architectural Elements",
+      "Folk Relief",
+      "Wall Art",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 6224,
+      "factoryCostUsd": 50,
+      "initialFactoryAskingCostBdt": 7469,
+      "initialFactoryAskingCostUsd": 60,
+      "negotiatedSavingsBdt": 1245,
+      "negotiatedSavingsUsd": 10,
+      "exportPackagingUsd": 1.5,
+      "inlandFreightPortUsd": 0.8,
+      "qualityInspectionReserveUsd": 0.5,
+      "complianceOverheadReserveUsd": 0.5,
+      "totalLandedCostUsd": 53.3,
+      "arielSourcingMarginPct": 33.4,
+      "b2bFobPriceUsd": 80,
+      "d2cRetailPriceUsd": 260,
+      "incentiveCategory": "HANDICRAFTS_AGRO_POTTERY_7",
+      "incentiveRatePct": 7,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 6.65,
+      "netIncentiveUsd": 5.32,
+      "totalEnterpriseMarginPct": 40.05
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 80,
+        "marginPct": 33.4
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 74,
+        "marginPct": 28
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 68,
+        "marginPct": 21.6
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-KCS-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (Kun Creative Studio & ArielMC)",
+      "signedMouDate": "2026-02-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-KCS-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC On-Site Studio Artisan Quality & Wage Audit",
+      "studioPhotoZipUrl": "/assets/studio/EF-REL-TT01-Studio-HiRes.zip",
+      "studioPhotoZipName": "EF-REL-TT01-Studio-Pack.zip",
+      "highResPhotoCount": 1
+    },
+    "attributes": {
+      "sector": "POTTERY",
+      "data": {
+        "clayType": "Centuries-Old Alluvial Bengal Terracotta River Clay",
+        "firingTempCelsius": 1050,
+        "finishStyle": "Unglazed Natural Terracotta Mounted on Natural Canvas in Walnut Shadow Box Frame",
+        "frostResistance": "Indoor Architectural Wall Display",
+        "ecoCertifications": [
+          "Artisan Heritage Certified",
+          "Fair Trade Production"
+        ]
+      }
+    },
+    "complianceCertificates": [
+      "Artisan Heritage Certified",
+      "BSCIC Registered",
+      "Fair Trade Production"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_pot_02",
+      "factoryCode": "FAC-KCS-01",
+      "factoryName": "Kun Creative Studio & Artisan Kilns",
+      "contactPerson": "Studio Director",
+      "contactPhone": "+880 1572-371539",
+      "contactEmail": "contact@kuncreativestudio.com",
+      "location": "Sonatangor Rd, Hazaribagh, Dhaka",
+      "leadTimeDays": 30,
+      "moq": 50,
+      "sampleTurnaroundDays": 10,
+      "samplePriceUsd": 120,
+      "samplePackingUsd": 25,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.9
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/terracotta/ef-rel-tt01.jpg"
+    ],
+    "createdDate": "2026-11-06"
+  },
+  {
+    "id": "prod-pot-78",
+    "sku": "EF-LNT-LT01",
+    "roadmapCode": "EF-LNT-01",
+    "prodtId": 78,
+    "styleCode": "LLT",
+    "eanBarcode": "0538920190078",
+    "name": "Artisanal Hand-Pierced Terracotta Lattice Hurricane Lantern",
+    "sector": "POTTERY",
+    "category": "05 Earth & Form / Home Living & Décor",
+    "subCategory": "Lanterns & Atmospheric Light Holders",
+    "hsCode": "6913.90.00",
+    "packagingMode": "Molded Pulp Cushion & Master 5-Ply Export Carton",
+    "description": "Wheel-thrown red terracotta lantern with hand-punched teardrop diamond lattice apertures and saucer base, creating ambient geometric shadow projections.",
+    "unit": "PCS",
+    "dimensions": "160 x 160 x 190 mm",
+    "weightKg": 0.95,
+    "tags": [
+      "Terracotta",
+      "Home Living & Décor",
+      "Lattice Lantern",
+      "Candleholder",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 809,
+      "factoryCostUsd": 6.5,
+      "initialFactoryAskingCostBdt": 1058,
+      "initialFactoryAskingCostUsd": 8.5,
+      "negotiatedSavingsBdt": 249,
+      "negotiatedSavingsUsd": 2,
+      "exportPackagingUsd": 0.3,
+      "inlandFreightPortUsd": 0.15,
+      "qualityInspectionReserveUsd": 0.1,
+      "complianceOverheadReserveUsd": 0.1,
+      "totalLandedCostUsd": 7.15,
+      "arielSourcingMarginPct": 35,
+      "b2bFobPriceUsd": 11,
+      "d2cRetailPriceUsd": 36,
+      "incentiveCategory": "HANDICRAFTS_AGRO_POTTERY_7",
+      "incentiveRatePct": 7,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 6.65,
+      "netIncentiveUsd": 0.73,
+      "totalEnterpriseMarginPct": 41.65
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 200 - 400 pcs)",
+        "moqRange": "200 - 400 pcs",
+        "fobPriceUsd": 11,
+        "marginPct": 35
+      },
+      {
+        "slabName": "Wholesale Tier 2 (401 - 800 pcs)",
+        "moqRange": "401 - 800 pcs",
+        "fobPriceUsd": 10,
+        "marginPct": 28.5
+      },
+      {
+        "slabName": "FCL Bulk Volume (801+ pcs)",
+        "moqRange": "801+ pcs",
+        "fobPriceUsd": 9.2,
+        "marginPct": 22.3
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-KCS-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (Kun Creative Studio & ArielMC)",
+      "signedMouDate": "2026-02-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-KCS-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC On-Site Studio Artisan Quality & Wage Audit",
+      "studioPhotoZipUrl": "/assets/studio/EF-LNT-LT01-Studio-HiRes.zip",
+      "studioPhotoZipName": "EF-LNT-LT01-Studio-Pack.zip",
+      "highResPhotoCount": 1
+    },
+    "attributes": {
+      "sector": "POTTERY",
+      "data": {
+        "clayType": "Alluvial Red Bengal Terracotta Clay",
+        "firingTempCelsius": 980,
+        "finishStyle": "Wheel-Thrown with Hand-Pierced Openwork Diamond & Teardrop Lattice",
+        "evaporativeCoolingRating": "Heat-Resistant Clay Matrix"
+      }
+    },
+    "complianceCertificates": [
+      "Artisan Heritage Certified",
+      "Fair Trade Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_pot_02",
+      "factoryCode": "FAC-KCS-01",
+      "factoryName": "Kun Creative Studio & Artisan Kilns",
+      "contactPerson": "Studio Director",
+      "contactPhone": "+880 1572-371539",
+      "contactEmail": "contact@kuncreativestudio.com",
+      "location": "Sonatangor Rd, Hazaribagh, Dhaka",
+      "leadTimeDays": 20,
+      "moq": 200,
+      "sampleTurnaroundDays": 5,
+      "samplePriceUsd": 35,
+      "samplePackingUsd": 8,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.9
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/terracotta/ef-rel-tt01.jpg"
+    ],
+    "createdDate": "2026-11-06"
   }
 ];
