@@ -16,19 +16,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "prodtId": 6,
     "styleCode": "SCB",
     "eanBarcode": "0538920190001",
-    "name": "Structured Satchels, Briefcases & Evening Clutches",
+    "name": "The Hawkers Artisan Denim & Leather Tassel Crossbody Satchel",
     "sector": "LEATHER",
     "category": "01 The Leather Compendium / Structured Carry & Bags",
-    "subCategory": "Handbags & Executive Carry",
+    "subCategory": "Handcrafted Leather & Denim Satchels",
     "hsCode": "4202.11.00",
     "packagingMode": "Standard Export Carton & Poly-Sleeve",
-    "description": "Rigid heritage briefcase and satchel with signature turn-lock mechanism, accordion interior dividing walls, and burnished edge saddle-stitch construction.",
+    "description": "Handcrafted raw indigo denim crossbody satchel with genuine vegetable-tanned tan leather flap, brass O-ring hardware, and handcrafted leather fringe tassel.",
     "unit": "PCS",
-    "dimensions": "290 x 390 x 95 mm",
-    "weightKg": 1.45,
+    "dimensions": "280 x 290 x 85 mm",
+    "weightKg": 0.95,
     "tags": [
       "Leather",
       "Structured Carry & Bags",
+      "The Hawkers",
+      "Denim & Leather",
       "Export Verified",
       "ArielMC Certified"
     ],
@@ -39,98 +41,97 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "AU"
     ],
     "costing": {
-      "factoryCostBdt": 14162,
-      "factoryCostUsd": 113.75,
-      "initialFactoryAskingCostBdt": 16341,
-      "initialFactoryAskingCostUsd": 131.25,
-      "negotiatedSavingsBdt": 2179,
-      "negotiatedSavingsUsd": 17.5,
+      "factoryCostBdt": 2850,
+      "factoryCostUsd": 22.80,
+      "initialFactoryAskingCostBdt": 3200,
+      "initialFactoryAskingCostUsd": 25.60,
+      "negotiatedSavingsBdt": 350,
+      "negotiatedSavingsUsd": 2.80,
       "exportPackagingUsd": 0.35,
       "inlandFreightPortUsd": 0.25,
       "qualityInspectionReserveUsd": 0.15,
       "complianceOverheadReserveUsd": 0.15,
-      "totalLandedCostUsd": 114.65,
-      "arielSourcingMarginPct": 34.5,
-      "b2bFobPriceUsd": 175,
-      "d2cRetailPriceUsd": 612.5,
+      "totalLandedCostUsd": 23.70,
+      "arielSourcingMarginPct": 32.5,
+      "b2bFobPriceUsd": 35.00,
+      "d2cRetailPriceUsd": 122.50,
       "incentiveCategory": "CRUST_LEATHER_10",
       "incentiveRatePct": 10,
       "sourceTaxRatePct": 5,
       "netIncentivePct": 9.5,
-      "netIncentiveUsd": 16.63,
-      "totalEnterpriseMarginPct": 44
+      "netIncentiveUsd": 3.32,
+      "totalEnterpriseMarginPct": 42.0
     },
     "volumePricingSlabs": [
       {
-        "slabName": "Pilot Run (MOQ 25 - 50 pcs)",
-        "moqRange": "25 - 50 pcs",
-        "fobPriceUsd": 175,
-        "marginPct": 34.5
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 35.00,
+        "marginPct": 32.5
       },
       {
-        "slabName": "Wholesale Tier 2 (51 - 100 pcs)",
-        "moqRange": "51 - 100 pcs",
-        "fobPriceUsd": 161,
-        "marginPct": 29.3
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 32.20,
+        "marginPct": 28.0
       },
       {
-        "slabName": "FCL Bulk Volume (101+ pcs)",
-        "moqRange": "101+ pcs",
-        "fobPriceUsd": 148.75,
-        "marginPct": 24.1
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 29.75,
+        "marginPct": 23.5
       }
     ],
     "sourcingVault": {
-      "signedMouUrl": "/docs/mou/MOU-FAC-BE-01-2026.pdf",
-      "signedMouName": "Deed of Sourcing Agreement (Bangla Eco & ArielMC)",
-      "signedMouDate": "2026-01-15",
+      "signedMouUrl": "/docs/mou/MOU-FAC-HWK-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (The Hawkers & ArielMC)",
+      "signedMouDate": "2026-02-10",
       "hasIncentiveWaiverClause": true,
       "factoryRatingGrade": "A",
-      "factoryRatingScore": 94,
-      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-BE-01-2026.pdf",
-      "factoryAuditReportName": "ArielMC On-Site Artisan Quality & Wage Audit",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-HWK-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Guild & Ethical Labor Audit",
       "studioPhotoZipUrl": "/assets/studio/LD-SCB-6-Studio-HiRes.zip",
       "studioPhotoZipName": "LD-SCB-6-Studio-300DPI-Pack.zip",
-      "highResPhotoCount": 3
+      "highResPhotoCount": 1
     },
     "attributes": {
       "sector": "LEATHER",
       "data": {
-        "leatherType": "Full-Grain Bovine Cowhide",
+        "leatherType": "Vegetable-Tanned Bovine Cowhide Trim",
         "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
-        "hideOrigin": "Savar LWG-Certified Tannery Hub, Dhaka",
-        "thicknessMm": "1.2 - 1.4 mm",
-        "hardwareFinish": "Solid Antique Brass / Gunmetal Alloy",
-        "edgeFinish": "Multi-Layer Hand-Burnished Italian Edge Inking",
+        "hideOrigin": "Dhaka LWG Tannery Hub",
+        "thicknessMm": "1.4 - 1.6 mm",
+        "hardwareFinish": "Antique Brass O-Ring & D-Rings",
+        "edgeFinish": "Hand-Burnished Natural Wax Edges",
         "reachCompliant": true,
-        "lwgCertification": "LWG Gold Audited"
+        "lwgCertification": "LWG Audited Supply Chain"
       }
     },
     "complianceCertificates": [
-      "LWG Audited",
-      "Chromium-VI Free"
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Craft Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_lth_01",
-      "factoryCode": "FAC-BE-01",
-      "factoryName": "Bangla Eco",
-      "contactPerson": "Shahrier Nyeem (Director)",
-      "contactPhone": "+880 1533-685796",
-      "contactEmail": "banglaeco.contact@gmail.com",
-      "location": "Hazaribagh & Savar, Dhaka",
+      "factoryId": "fac_lth_04",
+      "factoryCode": "FAC-HWK-01",
+      "factoryName": "The Hawkers Artisan Leather & Fusion Studio",
+      "contactPerson": "Lead Artisan & Guild Coordinator",
+      "contactPhone": "+880 1711-489619",
+      "contactEmail": "thehawkersbd@gmail.com",
+      "location": "Dhaka & Northern Craft Clusters, Bangladesh",
       "leadTimeDays": 28,
-      "moq": 25,
-      "sampleTurnaroundDays": 8,
-      "samplePriceUsd": 65,
-      "samplePackingUsd": 15,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 45,
+      "samplePackingUsd": 12,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.9
+      "rating": 4.85
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
-      "/images/products/leather/LD-CRK-03.jpg",
-      "/images/products/leather/LD-COR-04.jpg",
-      "/images/products/leather/LD-HNB-07.jpg"
+      "/images/products/leather/ld-scb-6.jpg"
     ],
     "createdDate": "2026-11-01"
   },
@@ -8336,5 +8337,517 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "/images/products/terracotta/ef-rel-tt01.jpg"
     ],
     "createdDate": "2026-11-06"
-  }
+  },
+  {
+    "id": "prod-ld-hkr-21",
+    "sku": "LD-HKR-21",
+    "roadmapCode": "LD-HKR-01",
+    "prodtId": 79,
+    "styleCode": "HKR",
+    "eanBarcode": "0538920190079",
+    "name": "The Hawkers Heritage Kantha Embroidered Full-Grain Leather Executive Tote",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Handcrafted Leather Bags",
+    "subCategory": "Embroidered Leather Totes & Executive Carry",
+    "hsCode": "4202.21.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Artisan structured tote handcrafted in premium black full-grain leather featuring a front exterior envelope pocket adorned with vibrant multi-colored Bengal Nakshi Kantha floral embroidery.",
+    "unit": "PCS",
+    "dimensions": "380 x 340 x 120 mm",
+    "weightKg": 1.15,
+    "tags": [
+      "Leather",
+      "Handcrafted Leather Bags",
+      "The Hawkers",
+      "Nakshi Kantha",
+      "Executive Tote",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 3100,
+      "factoryCostUsd": 24.80,
+      "initialFactoryAskingCostBdt": 3500,
+      "initialFactoryAskingCostUsd": 28.00,
+      "negotiatedSavingsBdt": 400,
+      "negotiatedSavingsUsd": 3.20,
+      "exportPackagingUsd": 0.40,
+      "inlandFreightPortUsd": 0.25,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 25.75,
+      "arielSourcingMarginPct": 32.2,
+      "b2bFobPriceUsd": 38.00,
+      "d2cRetailPriceUsd": 133.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 3.61,
+      "totalEnterpriseMarginPct": 41.7
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 38.00,
+        "marginPct": 32.2
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 34.95,
+        "marginPct": 27.8
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 32.30,
+        "marginPct": 23.4
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-HWK-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (The Hawkers & ArielMC)",
+      "signedMouDate": "2026-02-10",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-HWK-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Guild & Ethical Labor Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-HKR-21-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-HKR-21-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 2
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Black Full-Grain Cowhide & Nakshi Embroidery",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Dhaka LWG Tannery Hub",
+        "thicknessMm": "1.3 - 1.5 mm",
+        "hardwareFinish": "Brushed Gunmetal Zippers & Pulls",
+        "edgeFinish": "Hand-Burnished Italian Edge Inking",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_04",
+      "factoryCode": "FAC-HWK-01",
+      "factoryName": "The Hawkers Artisan Leather & Fusion Studio",
+      "contactPerson": "Lead Artisan & Guild Coordinator",
+      "contactPhone": "+880 1711-489619",
+      "contactEmail": "thehawkersbd@gmail.com",
+      "location": "Dhaka & Northern Craft Clusters, Bangladesh",
+      "leadTimeDays": 28,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 50,
+      "samplePackingUsd": 15,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.85
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-hkr-21-1.png",
+      "/images/products/leather/ld-hkr-21-2.png"
+    ],
+    "createdDate": "2026-11-06"
+  },
+  {
+    "id": "prod-ld-hkr-22",
+    "sku": "LD-HKR-22",
+    "roadmapCode": "LD-HKR-02",
+    "prodtId": 80,
+    "styleCode": "HKR",
+    "eanBarcode": "0538920190080",
+    "name": "The Hawkers Botanical Embroidered Forest Corduroy & Leather Shoulder Tote",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Handcrafted Leather Bags",
+    "subCategory": "Corduroy & Leather Fusion Shoulder Totes",
+    "hsCode": "4202.92.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Artisan meadow tote crafted in fine-wale forest green corduroy featuring delicate all-over botanical floral embroidery, vegetable-tanned chestnut leather shoulder straps, and leather slip patch pocket.",
+    "unit": "PCS",
+    "dimensions": "360 x 380 x 100 mm",
+    "weightKg": 0.78,
+    "tags": [
+      "Leather",
+      "Handcrafted Leather Bags",
+      "The Hawkers",
+      "Corduroy",
+      "Botanical Embroidery",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 1950,
+      "factoryCostUsd": 15.60,
+      "initialFactoryAskingCostBdt": 2200,
+      "initialFactoryAskingCostUsd": 17.60,
+      "negotiatedSavingsBdt": 250,
+      "negotiatedSavingsUsd": 2.00,
+      "exportPackagingUsd": 0.35,
+      "inlandFreightPortUsd": 0.25,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 16.50,
+      "arielSourcingMarginPct": 31.25,
+      "b2bFobPriceUsd": 24.00,
+      "d2cRetailPriceUsd": 84.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 2.28,
+      "totalEnterpriseMarginPct": 40.75
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 24.00,
+        "marginPct": 31.25
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 22.10,
+        "marginPct": 26.8
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 20.40,
+        "marginPct": 22.5
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-HWK-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (The Hawkers & ArielMC)",
+      "signedMouDate": "2026-02-10",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-HWK-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Guild & Ethical Labor Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-HKR-22-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-HKR-22-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 4
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Chestnut Cowhide Handles & Patch Pocket",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Dhaka LWG Tannery Hub",
+        "thicknessMm": "1.8 - 2.0 mm (Strap Grade)",
+        "hardwareFinish": "Reinforced Saddle Riveting",
+        "edgeFinish": "Natural Wax Beveled Edges",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_04",
+      "factoryCode": "FAC-HWK-01",
+      "factoryName": "The Hawkers Artisan Leather & Fusion Studio",
+      "contactPerson": "Lead Artisan & Guild Coordinator",
+      "contactPhone": "+880 1711-489619",
+      "contactEmail": "thehawkersbd@gmail.com",
+      "location": "Dhaka & Northern Craft Clusters, Bangladesh",
+      "leadTimeDays": 28,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 35,
+      "samplePackingUsd": 10,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.85
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-hkr-22-1.png",
+      "/images/products/leather/ld-hkr-22-2.png",
+      "/images/products/leather/ld-hkr-22-3.png",
+      "/images/products/leather/ld-hkr-22-4.png"
+    ],
+    "createdDate": "2026-11-06"
+  },
+  {
+    "id": "prod-ld-ash-01",
+    "sku": "LD-ASH-01",
+    "roadmapCode": "LD-ASH-01",
+    "prodtId": 81,
+    "styleCode": "ASH",
+    "eanBarcode": "0538920190081",
+    "name": "Ashatoru Transit Weather-Resistant Technical Crossbody Messenger Bag",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Structured Carry & Bags",
+    "subCategory": "Technical Messenger & Urban Carry",
+    "hsCode": "4202.12.00",
+    "packagingMode": "Standard Export Carton & Poly-Sleeve",
+    "description": "All-black weather-resistant high-density technical canvas messenger bag featuring angled flap front profile, quick-access exterior zipper compartment, padded device sleeve, and heavy-duty adjustable seatbelt webbing shoulder strap.",
+    "unit": "PCS",
+    "dimensions": "340 x 270 x 100 mm",
+    "weightKg": 0.85,
+    "tags": [
+      "Leather",
+      "Structured Carry & Bags",
+      "Ashatoru",
+      "Technical Messenger",
+      "Urban Carry",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 2600,
+      "factoryCostUsd": 20.80,
+      "initialFactoryAskingCostBdt": 2950,
+      "initialFactoryAskingCostUsd": 23.60,
+      "negotiatedSavingsBdt": 350,
+      "negotiatedSavingsUsd": 2.80,
+      "exportPackagingUsd": 0.35,
+      "inlandFreightPortUsd": 0.25,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 21.70,
+      "arielSourcingMarginPct": 32.2,
+      "b2bFobPriceUsd": 32.00,
+      "d2cRetailPriceUsd": 112.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 3.04,
+      "totalEnterpriseMarginPct": 41.7
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 32.00,
+        "marginPct": 32.2
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 29.40,
+        "marginPct": 27.6
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 27.20,
+        "marginPct": 23.1
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-ASH-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (Ashatoru & ArielMC)",
+      "signedMouDate": "2026-02-15",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 96,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-ASH-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Technical Gear & Craft Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-ASH-01-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-ASH-01-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 4
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Technical High-Density Canvas & Bovine Trim",
+        "tanningMethod": "Vegetable-Tanned Accents & Chromium-VI Free",
+        "hideOrigin": "Dhaka LWG Tannery Hub",
+        "thicknessMm": "1.4 mm Leather Accents",
+        "hardwareFinish": "Matte Black Heavy YKK Zippers & D-Rings",
+        "edgeFinish": "High-Frequency Heat-Sealed Seams",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Weatherproof Seal SLA",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_05",
+      "factoryCode": "FAC-ASH-01",
+      "factoryName": "Ashatoru Leather & Carry Goods Studio",
+      "contactPerson": "Lead Designer & Atelier Master",
+      "contactPhone": "+880 1577-296824",
+      "contactEmail": "ashatoru@gmail.com",
+      "location": "Dhaka-1206, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 45,
+      "samplePackingUsd": 12,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.92
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-ash-01-1.jpg",
+      "/images/products/leather/ld-ash-01-2.jpg",
+      "/images/products/leather/ld-ash-01-3.jpg",
+      "/images/products/leather/ld-ash-01-4.jpg"
+    ],
+    "createdDate": "2026-11-06"
+  },
+  {
+    "id": "prod-ld-ash-02",
+    "sku": "LD-ASH-02",
+    "roadmapCode": "LD-ASH-02",
+    "prodtId": 82,
+    "styleCode": "ASH",
+    "eanBarcode": "0538920190082",
+    "name": "Ashatoru Harness Oil Pull-Up Leather & Heavy Canvas Messenger Bag",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Structured Carry & Bags",
+    "subCategory": "Executive Leather & Canvas Satchels",
+    "hsCode": "4202.11.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Heritage messenger combining rich cognac oil pull-up cowhide leather with rugged charcoal canvas. Features twin front utility bellows pockets, solid antique brass roller buckles, reinforced top carry handle, and padded leather shoulder strap.",
+    "unit": "PCS",
+    "dimensions": "390 x 300 x 110 mm",
+    "weightKg": 1.35,
+    "tags": [
+      "Leather",
+      "Structured Carry & Bags",
+      "Ashatoru",
+      "Oil Pull-Up",
+      "Harness Messenger",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 4750,
+      "factoryCostUsd": 38.00,
+      "initialFactoryAskingCostBdt": 5400,
+      "initialFactoryAskingCostUsd": 43.20,
+      "negotiatedSavingsBdt": 650,
+      "negotiatedSavingsUsd": 5.20,
+      "exportPackagingUsd": 0.50,
+      "inlandFreightPortUsd": 0.30,
+      "qualityInspectionReserveUsd": 0.20,
+      "complianceOverheadReserveUsd": 0.20,
+      "totalLandedCostUsd": 39.20,
+      "arielSourcingMarginPct": 32.4,
+      "b2bFobPriceUsd": 58.00,
+      "d2cRetailPriceUsd": 203.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 5.51,
+      "totalEnterpriseMarginPct": 41.9
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 58.00,
+        "marginPct": 32.4
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 53.35,
+        "marginPct": 27.9
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 49.30,
+        "marginPct": 23.5
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-ASH-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (Ashatoru & ArielMC)",
+      "signedMouDate": "2026-02-15",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 96,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-ASH-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Full-Grain Leather & Pull-Up Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-ASH-02-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-ASH-02-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 2
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Full-Grain Cognac Oil Pull-Up Cowhide",
+        "tanningMethod": "Vegetable-Tanned Oil Infused & Chromium-VI Free",
+        "hideOrigin": "Dhaka LWG Tannery Hub",
+        "thicknessMm": "1.6 - 1.8 mm (Heavy Flap Grade)",
+        "hardwareFinish": "Solid Antique Brass Roller Buckles & Swivels",
+        "edgeFinish": "Hand-Burnished Natural Oil Wax Edges",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_05",
+      "factoryCode": "FAC-ASH-01",
+      "factoryName": "Ashatoru Leather & Carry Goods Studio",
+      "contactPerson": "Lead Designer & Atelier Master",
+      "contactPhone": "+880 1577-296824",
+      "contactEmail": "ashatoru@gmail.com",
+      "location": "Dhaka-1206, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 75,
+      "samplePackingUsd": 18,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.92
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-ash-02-1.jpg",
+      "/images/products/leather/ld-ash-02-2.jpg"
+    ],
+    "createdDate": "2026-11-06"
+  },
 ];
