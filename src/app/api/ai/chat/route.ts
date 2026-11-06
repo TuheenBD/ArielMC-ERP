@@ -36,6 +36,11 @@ Your user and partner is Syed Akramul Hassan, the Managing Director & Founder of
    - Key Items: Architectural Fluted Terracotta Planter ($14.00 FOB), Terracotta Wine Cooler, Bengal Clay Hospitality Urns, Botanical Pots.
    - Attributes: Centuries-old Bengal alluvial terracotta clay, breathable root aeration, frost-resistant vitrification.
 
+### Energy Sector Identity:
+- Official Legal Entity: Ariel Renewable Energy Limited
+- Sector: Energy, Product: Solar (Turnkey C&I Rooftop EPC, SREDA Net-Metering)
+- Primary Domain: energy.arielmc.com
+
 ### Commercial & Trade Policies:
 - **Sample Policy (SOP-B2B-SMP-2026-V1)**: Sample fees paid by buyers are **100% credited back** against their first commercial bulk production purchase order.
 - **Bangladesh Bank Cash Incentives**:
@@ -44,15 +49,13 @@ Your user and partner is Syed Akramul Hassan, the Managing Director & Founder of
   - Pottery, Terracotta & Agro-Handicrafts: **6.65% Net Yield**
 - **LDC Graduation Extension to November 24, 2029**:
   - The UN General Assembly formally extended Bangladesh's LDC graduation to late 2029.
-  - Deferring average 12.5% MFN tariffs across 38 destination countries.
-  - EU Everything But Arms (EBA) and UK Developing Countries Trading Scheme (DCTS) provide 100% duty-free quota-free (0% tariff) access through 2029.
-  - Crucial strategic mandate: "A breathing space, not a blank check" — international buyers must use this 3-year runway to diversify away from 84%+ RMG dependence into ArielMC's Jute, Leather, and Ceramic lines.
+  - EU Everything But Arms (EBA) and UK DCTS provide 100% duty-free quota-free (0% tariff) access through 2029.
+  - Strategic mandate: "A breathing space, not a blank check" — international buyers must use this runway to diversify away from 84%+ RMG dependence into ArielMC's Jute, Leather, and Ceramic lines.
 - **Mandatory Ecosystem Implementation Sequence**:
   - **1. ERP** (Master truth for Costing, BOM, FOB, Margins, MoUs)
   - **2. CRM** (Buyer pipeline, inquiries, sample requests)
   - **3. Catalog** (Digital B2B compendium, HS codes, specs, packaging)
   - **4. Website** (Public showcase, department indices, trade briefings)
-  - Followed by cross-platform sync check.
 
 ### Partner Factory Network:
 - Vetted partner clusters in Savar, Gazipur, Dhamrai, Narsingdi, and Narayanganj.
@@ -65,10 +68,102 @@ Your user and partner is Syed Akramul Hassan, the Managing Director & Founder of
 - Keep answers clean, beautifully formatted in conversational markdown, and avoid unnecessary jargon or robotic disclaimers.
 `;
 
+async function queryOllama(
+  systemPrompt: string,
+  rawMessages: Array<{ sender?: string; role?: string; text?: string; content?: string }>,
+  requestedModel?: string
+): Promise<{ success: boolean; reply?: string; model?: string; error?: string }> {
+  try {
+    const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+
+    // 1. Check if Ollama daemon is reachable and query local models
+    const tagsRes = await fetch(`${OLLAMA_HOST}/api/tags`, {
+      signal: AbortSignal.timeout(5000)
+    });
+
+    if (!tagsRes.ok) {
+      return { success: false, error: `Ollama status ${tagsRes.status}` };
+    }
+
+    const tagsData = await tagsRes.json();
+    const installedModels: string[] = Array.isArray(tagsData?.models)
+      ? tagsData.models.map((m: any) => m.name || m.model).filter(Boolean)
+      : [];
+
+    if (installedModels.length === 0) {
+      return { success: false, error: 'Ollama is running, but no local models are installed.' };
+    }
+
+    // 2. Resolve target model: requested > hermes3 > llama3.1 > qwen2.5-coder > deepseek > first available
+    let targetModel = '';
+    if (requestedModel && installedModels.some(m => m.toLowerCase().includes(requestedModel.toLowerCase()))) {
+      targetModel = installedModels.find(m => m.toLowerCase().includes(requestedModel.toLowerCase()))!;
+    } else {
+      const priority = ['hermes3', 'hermes', 'llama3.1', 'qwen2.5-coder', 'deepseek-coder-v2', 'phi4', 'gemma2'];
+      for (const p of priority) {
+        const found = installedModels.find(m => m.toLowerCase().includes(p));
+        if (found) {
+          targetModel = found;
+          break;
+        }
+      }
+      if (!targetModel) targetModel = installedModels[0];
+    }
+
+    console.log(`[ArielMC AI Chat] Routing to local Ollama model: ${targetModel}`);
+
+    // 3. Format message history for Ollama chat API
+    const ollamaMessages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      { role: 'system', content: systemPrompt }
+    ];
+
+    rawMessages.forEach((m) => {
+      const text = (m.text || m.content || '').trim();
+      if (!text) return;
+      const role: 'user' | 'assistant' = (m.sender === 'user' || m.role === 'user') ? 'user' : 'assistant';
+      ollamaMessages.push({ role, content: text });
+    });
+
+    const chatRes = await fetch(`${OLLAMA_HOST}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: targetModel,
+        messages: ollamaMessages,
+        stream: false,
+        options: {
+          temperature: 0.7,
+          num_ctx: 8192,
+        }
+      }),
+      signal: AbortSignal.timeout(90000) // 90 seconds timeout for local inference
+    });
+
+    if (!chatRes.ok) {
+      const errText = await chatRes.text().catch(() => '');
+      return { success: false, error: `Ollama execution error (${chatRes.status}): ${errText}` };
+    }
+
+    const chatData = await chatRes.json();
+    const reply = chatData?.message?.content;
+    if (!reply) {
+      return { success: false, error: 'Empty response received from Ollama model.' };
+    }
+
+    return {
+      success: true,
+      reply: reply.trim(),
+      model: targetModel
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed connecting to local Ollama instance.' };
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages, userApiKey, clientContext } = body;
+    const { messages, userApiKey, clientContext, provider, model: requestedModel } = body;
 
     const apiKey =
       (userApiKey ||
@@ -77,22 +172,40 @@ export async function POST(req: NextRequest) {
       process.env.GOOGLE_API_KEY || '')
       .trim();
 
-    console.log(`[ArielMC AI Chat] Incoming POST from station: ${clientContext?.station || 'ArielMC BD'}, messages count: ${messages?.length}, key provided: ${Boolean(apiKey)}`);
+    console.log(`[ArielMC AI Chat] Incoming request from station: ${clientContext?.station || 'ArielMC BD'}, messages: ${messages?.length}, provider: ${provider || 'auto'}, key provided: ${Boolean(apiKey)}`);
 
+    // Inject system instructions with real-time ERP Session Context
+    const systemPromptWithContext = `${ARIELMC_SYSTEM_INSTRUCTION}\n\n### Current ERP Session Context:\n- Station: ${clientContext?.station || 'ArielMC BD (Dhaka Station)'}\n- Active Currency: ${clientContext?.currency || 'USD ($)'}\n- Active Products Count: ${clientContext?.productsCount || 62}\n- Date/Time: ${new Date().toISOString()}`;
+
+    // STEP 1: Attempt local Ollama execution (Hermes 3 / Llama 3.1) if provider is not explicitly locked to Gemini
+    if (provider !== 'gemini') {
+      const ollamaResult = await queryOllama(systemPromptWithContext, messages || [], requestedModel);
+      if (ollamaResult.success && ollamaResult.reply) {
+        console.log(`[ArielMC AI Chat] Successfully served by local Ollama engine: ${ollamaResult.model}`);
+        return NextResponse.json({
+          success: true,
+          reply: ollamaResult.reply,
+          provider: 'ollama',
+          model: ollamaResult.model,
+          isLocal: true
+        });
+      } else {
+        console.warn(`[ArielMC AI Chat] Local Ollama attempt skipped or failed: ${ollamaResult.error}. Checking Cloud Gemini fallback.`);
+      }
+    }
+
+    // STEP 2: Fallback to Google Gemini Cloud API if API key is present
     if (!apiKey) {
-      console.warn('[ArielMC AI Chat] Rejected: No API key provided.');
+      console.warn('[ArielMC AI Chat] Rejected: Neither local Ollama nor Gemini API key is active.');
       return NextResponse.json(
         {
           success: false,
-          error: 'NO_API_KEY',
-          message: 'No Google Gemini API key configured. Please enter your API key in Settings (⚙️).'
+          error: 'NO_AI_ENGINE',
+          message: 'Local Ollama engine is not currently running and no Google Gemini API key is configured. Please start Ollama locally (`ollama run hermes3`) or enter your API key in Settings (⚙️).'
         },
         { status: 400 }
       );
     }
-
-    // Inject system instructions as the very first context or developer instruction
-    const systemPromptWithContext = `${ARIELMC_SYSTEM_INSTRUCTION}\n\n### Current ERP Session Context:\n- Station: ${clientContext?.station || 'ArielMC BD (Dhaka Station)'}\n- Active Currency: ${clientContext?.currency || 'USD ($)'}\n- Active Products Count: ${clientContext?.productsCount || 62}\n- Date/Time: ${new Date().toISOString()}`;
 
     // Build sanitized conversation history for Gemini API
     const rawList: { role: 'user' | 'model'; text: string }[] = [];
@@ -106,12 +219,12 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 1. Gemini strictly requires: First message MUST be role 'user' (drop leading welcome message)
+    // Drop leading model greeting
     while (rawList.length > 0 && rawList[0].role === 'model') {
       rawList.shift();
     }
 
-    // 2. Roles must strictly alternate: merge consecutive messages with the same role
+    // Roles must strictly alternate
     const contents: { role: string; parts: { text: string }[] }[] = [];
     rawList.forEach((item) => {
       if (contents.length > 0 && contents[contents.length - 1].role === item.role) {
@@ -124,7 +237,6 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    // 3. The last message in contents must be role 'user'
     while (contents.length > 0 && contents[contents.length - 1].role === 'model') {
       contents.pop();
     }
@@ -136,7 +248,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Discover supported models dynamically for this key via ModelService.ListModels
+    // Dynamic model discovery for Gemini
     let candidateModels: string[] = [];
 
     try {
@@ -150,49 +262,36 @@ export async function POST(req: NextRequest) {
             .filter(Boolean);
 
           if (supported.length > 0) {
-            // Sort priority: 2.0-flash > 1.5-flash > 1.5-pro > others
             supported.sort((a: string, b: string) => {
               const getScore = (name: string) => {
                 if (name.includes('2.0-flash')) return 100;
                 if (name.includes('1.5-flash') && !name.includes('8b')) return 80;
                 if (name.includes('1.5-flash')) return 70;
                 if (name.includes('1.5-pro')) return 60;
-                if (name.includes('flash')) return 50;
-                if (name.includes('gemini')) return 40;
                 return 10;
               };
               return getScore(b) - getScore(a);
             });
             candidateModels = supported;
-            console.log(`[ArielMC AI Chat] Dynamically discovered ${supported.length} models for key. Top choice: ${supported[0]}`);
           }
         }
-      } else {
-        const err = await listRes.text().catch(() => '');
-        console.warn(`[ArielMC AI Chat] ListModels returned HTTP ${listRes.status}:`, err);
       }
     } catch (e: any) {
-      console.warn('[ArielMC AI Chat] ListModels fetch exception:', e?.message);
+      console.warn('[ArielMC AI Chat] Gemini ListModels exception:', e?.message);
     }
 
     if (candidateModels.length === 0) {
       candidateModels = [
         'gemini-2.0-flash',
-        'gemini-2.0-flash-exp',
         'gemini-1.5-flash',
-        'gemini-1.5-flash-latest',
-        'gemini-1.5-flash-001',
-        'gemini-1.5-flash-002',
-        'gemini-1.5-pro',
-        'gemini-1.5-pro-latest'
+        'gemini-1.5-pro'
       ];
     }
 
     let lastError: any = null;
     let replyText = '';
 
-    // Iterate through candidates (both v1beta and v1)
-    for (const model of candidateModels.slice(0, 5)) {
+    for (const model of candidateModels.slice(0, 4)) {
       for (const apiVersion of ['v1beta', 'v1']) {
         try {
           const endpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models/${model}:generateContent?key=${apiKey}`;
@@ -221,24 +320,20 @@ export async function POST(req: NextRequest) {
             const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
             if (candidateText) {
               replyText = candidateText;
-              console.log(`[ArielMC AI Chat] Successfully generated response via ${model} (${apiVersion})`);
               break;
             }
           } else {
-            const errData = await response.json().catch(() => ({}));
-            lastError = errData;
-            console.warn(`[Gemini API ${model} ${apiVersion} Error ${response.status}]`, errData?.error?.message || response.statusText);
+            lastError = await response.json().catch(() => ({}));
           }
         } catch (err: any) {
           lastError = err?.message || err;
-          console.warn(`[Gemini API ${model} ${apiVersion} Exception]`, err?.message || err);
         }
       }
       if (replyText) break;
     }
 
     if (!replyText) {
-      const errMsg = lastError?.error?.message || (typeof lastError === 'string' ? lastError : 'Google Gemini API request failed. Please verify API key.');
+      const errMsg = lastError?.error?.message || (typeof lastError === 'string' ? lastError : 'Gemini cloud call failed.');
       return NextResponse.json(
         {
           success: false,
@@ -266,4 +361,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-

@@ -27,7 +27,9 @@ import {
   SlidersHorizontal,
   Eye,
   EyeOff,
-  AlertCircle
+  AlertCircle,
+  Cpu,
+  ShieldCheck
 } from 'lucide-react';
 import {
   CompanyEntity,
@@ -65,7 +67,9 @@ interface ChatMessage {
   sender: 'user' | 'arielmc';
   text: string;
   timestamp: string;
-  provider?: 'gemini' | 'smart-fallback';
+  provider?: 'gemini' | 'ollama' | 'smart-fallback';
+  modelName?: string;
+  isLocal?: boolean;
   quickActions?: {
     label: string;
     action: () => void;
@@ -491,7 +495,9 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
             sender: 'arielmc',
             text: data.reply,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            provider: 'gemini'
+            provider: data.provider === 'ollama' ? 'ollama' : 'gemini',
+            modelName: data.model,
+            isLocal: data.isLocal
           };
           setMessages((prev) => [...prev, agentReply]);
           setIsTyping(false);
@@ -660,27 +666,39 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
           {!isMinimized && (
             <>
 
-          {/* Settings Drawer / Popover for Gemini Key */}
+          {/* Settings Drawer / Popover for AI Engine */}
           {showSettings && (
-            <div className="px-4 py-3 bg-[#F8FAF9] border-b border-gray-200 text-xs">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-[#1F3A2E] flex items-center gap-1.5">
-                  <Key className="w-3.5 h-3.5 text-[#C8A96A]" />
-                  <span>Google Gemini API Key</span>
-                </span>
-                <a
-                  href="https://aistudio.google.com/app/apikey"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] text-[#C8A96A] hover:underline flex items-center gap-1"
-                >
-                  <span>Get Free Key</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+            <div className="px-4 py-3 bg-[#F8FAF9] border-b border-gray-200 text-xs space-y-3">
+              <div className="p-2.5 rounded-xl bg-cyan-50/80 border border-cyan-200/60 text-cyan-900">
+                <div className="flex items-center gap-1.5 font-bold text-xs text-cyan-800">
+                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-600" />
+                  <span>Local Private Engine (Ollama / Hermes 3)</span>
+                </div>
+                <p className="text-[11px] text-cyan-700/90 mt-1 leading-relaxed">
+                  Automatically detected when running at <code className="font-mono bg-cyan-100/60 px-1 py-0.5 rounded text-[10px]">http://localhost:11434</code>. 100% private, zero token costs, no API key required for internal ERP intelligence.
+                </p>
               </div>
-              <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">
-                Connect your Gemini API key to enable live, unconstrained natural intelligence across your ERP.
-              </p>
+
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="font-bold text-[#1F3A2E] flex items-center gap-1.5">
+                    <Key className="w-3.5 h-3.5 text-[#C8A96A]" />
+                    <span>Cloud Fallback (Google Gemini)</span>
+                  </span>
+                  <a
+                    href="https://aistudio.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-[#C8A96A] hover:underline flex items-center gap-1"
+                  >
+                    <span>Get Key</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">
+                  Used as optional cloud fallback when Ollama is offline or for large multi-modal tasks.
+                </p>
+              </div>
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <input
@@ -902,6 +920,12 @@ export const ArielMCAICopilot: React.FC<ArielMCAICopilotProps> = ({
                         <span className="text-[9px] font-mono text-emerald-600 flex items-center gap-0.5">
                           <Sparkles className="w-2.5 h-2.5" />
                           <span>Gemini Live</span>
+                        </span>
+                      )}
+                      {!isUser && msg.provider === 'ollama' && (
+                        <span className="text-[9px] font-mono text-cyan-600 flex items-center gap-1" title="100% Private On-Premise Local Intelligence">
+                          <ShieldCheck className="w-3 h-3 text-cyan-600" />
+                          <span className="font-semibold">{msg.modelName || 'Hermes 3'} (Local Private)</span>
                         </span>
                       )}
                     </div>
