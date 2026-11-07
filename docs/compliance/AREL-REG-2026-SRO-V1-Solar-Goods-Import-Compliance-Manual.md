@@ -131,3 +131,4 @@ The original official gazettes, ministerial SROs, and SREDA checklist files are 
 
 ---
 *Ratified by Ariel Renewable Energy Limited • Directorate of Legal, Regulatory & Customs Compliance.*
+

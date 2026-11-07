@@ -297,6 +297,14 @@ export const REGULATORY_CUTOFF_DEADLINE = {
 
 export const ENERGY_OFFICIAL_COLLATERALS = [
   {
+    code: 'AREL-BNK-2026-FEAS-V1',
+    title: 'Ariel Renewable Energy: Bankable Feasibility Study & Project Proposal Dossier (10-Page Master PDF)',
+    pdfUrl: '/documents/AREL_BNK_2026_FEAS_V1_Bankable_Feasibility_Study_Dossier.pdf',
+    pages: 10,
+    status: 'ACTIVE_APPROVED',
+    category: 'BANKABLE_FEASIBILITY',
+  },
+  {
     code: 'AREL-OPS-2026-OPHR-V1',
     title: 'Ariel Renewable Energy: Daily Operating Hours & Yield Dynamics Manual (Grid-Tied vs Hybrid BESS)',
     pdfUrl: '/documents/AREL_OPS_2026_OPHR_V1_Solar_Operating_Hours_Guide.pdf',
