@@ -297,6 +297,14 @@ export const REGULATORY_CUTOFF_DEADLINE = {
 
 export const ENERGY_OFFICIAL_COLLATERALS = [
   {
+    code: 'AREL-OPS-2026-MSTR-V1',
+    title: 'Ariel Renewable Energy: Master Operations, Sourcing & Logistics Blueprint (6-Page Executive PDF)',
+    pdfUrl: '/documents/AREL_OPS_2026_MSTR_V1_Operations_Sourcing_Logistics_Blueprint.pdf',
+    pages: 6,
+    status: 'ACTIVE_APPROVED',
+    category: 'OPERATIONS_MASTER',
+  },
+  {
     code: 'AREL-EXEC-2026-INT-B1',
     title: 'Government Loans & Zero-Capital Lead Execution Blueprint (Internal Treasury Playbook)',
     pdfUrl: '/documents/AREL_EXEC_2026_INT_B1_Zero_Capital_Blueprint.pdf',
