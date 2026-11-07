@@ -27,6 +27,16 @@ import {
   Award,
   HelpCircle,
   AlertTriangle,
+  Download,
+  Share2,
+  Send,
+  Mail,
+  Copy,
+  Check,
+  MessageSquare,
+  ExternalLink,
+  X,
+  FileText,
 } from 'lucide-react';
 
 interface SolarCalculatorProps {
@@ -60,6 +70,11 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
 
   // Active Tab for Output View
   const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'BOM' | 'OUTPUT' | 'WARRANTY' | 'QUOTATION'>('OVERVIEW');
+
+  // PDF Export & Share States
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
   // -------------------------------------------------------------
   // 2. CORE MATHEMATICAL & ENGINEERING ENGINE
@@ -234,6 +249,91 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
   const handlePrint = () => {
     window.print();
   };
+
+  const handleDownloadReport = async () => {
+    try {
+      setIsDownloadingPdf(true);
+      const apiUrl = isErpEmbedded ? '/api/energy/generate-dossier' : '/api/generate-dossier';
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyName: customerSector === 'FACTORY' ? 'Industrial Export Enterprise' : customerSector === 'COMMERCIAL' ? 'Commercial Plaza Corp' : 'Residential Estate Client',
+          contactName: 'Executive Director',
+          roofType: roofType === 'PEB_METAL' ? 'Industrial Corrugated Metal Shed' : 'Commercial RCC Flat Roof',
+          roofAreaSqFt: Math.round(model.calculatedAreaSqFt),
+          capacityKwp: Math.round(model.installedCapacityKwp),
+          annualGenKwh: Math.round(model.annualGenKwh),
+          annualSavingsBdt: Math.round(model.annualTotalBenefitBdt),
+          totalCommercialTurnkeyBdt: Math.round(model.totalCommercialTurnkeyBdt),
+          utilityProvider,
+          operatingDays,
+        }),
+      });
+
+      if (!res.ok) {
+        window.print();
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Ariel_Renewable_Energy_EPC_Quotation_${Math.round(model.installedCapacityKwp)}kWp.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download error:', err);
+      window.print();
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  };
+
+  const handleCopyShareLink = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
+    }
+  };
+
+  const shareWhatsappUrl = useMemo(() => {
+    const text = `☀️ *Ariel Renewable Energy Limited — Commercial Solar Quotation*\n\n` +
+      `📐 Gross Roof Area: ${model.calculatedAreaSqFt.toLocaleString()} sq ft\n` +
+      `⚡ Capacity: ${model.installedCapacityKwp} kWp DC (${model.inverterAcCapacityKw} kW AC)\n` +
+      `💰 Commercial Turnkey Proposal (25% Margin): ${formatBdt(model.totalCommercialTurnkeyBdt)} (~$${model.totalCommercialTurnkeyUsd.toLocaleString()} USD)\n` +
+      `📉 Projected Annual Yield: ${model.annualGenKwh.toLocaleString()} kWh/yr\n` +
+      `💵 Estimated Annual Savings: ${formatBdt(model.annualTotalBenefitBdt)} / year\n` +
+      `🏦 Concessionary 80% BB Green Loan @ 4.5% (1-Yr Grace Period)\n` +
+      `⏱️ Simple Payback: ${model.simplePaybackYears} Years\n\n` +
+      `Official EPC Partner: Ariel Renewable Energy Limited (SREDA Certified)\n` +
+      `Direct Hotline: +880 1819 273458 | energy@arielmc.com`;
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  }, [model]);
+
+  const shareEmailUrl = useMemo(() => {
+    const subject = `Commercial Solar Turnkey Proposal (${model.installedCapacityKwp} kWp) — Ariel Renewable Energy Limited`;
+    const body = `Dear Executive Board,\n\nPlease find the Commercial Solar EPC Feasibility and Quotation Proposal:\n\n` +
+      `- Recommended System Capacity: ${model.installedCapacityKwp} kWp DC\n` +
+      `- Gross Roof Footprint: ${model.calculatedAreaSqFt.toLocaleString()} sq ft\n` +
+      `- Technology: Tier-1 N-Type TOPCon 620W Bifacial + Multi-MPPT Inverters\n` +
+      `- Annual Power Generation: ${model.annualGenKwh.toLocaleString()} kWh/year\n` +
+      `- Annual Energy Cost Savings: ${formatBdt(model.annualTotalBenefitBdt)} / year\n` +
+      `- Total Turnkey Commercial Quotation (25% Locked Margin): ${formatBdt(model.totalCommercialTurnkeyBdt)}\n` +
+      `- Concessionary Bangladesh Bank Green Loan (80%): ${formatBdt(model.greenLoanDebtBdt)} @ 4.5% interest (1-year grace period)\n` +
+      `- Client Equity Required (20%): ${formatBdt(model.clientEquityBdt)}\n` +
+      `- Simple Payback Period: ${model.simplePaybackYears} Years\n\n` +
+      `Official Proposal Reference: AREL-QT-${Math.round(model.installedCapacityKwp)}KWP-2026\n\n` +
+      `Ariel Renewable Energy Limited\n` +
+      `Sovereign Green Infrastructure & Industrial Decarbonization\n` +
+      `A Member of the ArielMC Enterprise Eco-System\n` +
+      `Banani, Dhaka | Gazipur Central Hub | https://energy.arielmc.com`;
+    return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }, [model]);
 
   return (
     <section id="solar-engineering-calculator" className="py-12 sm:py-20 relative bg-white border-y border-emerald-100">
@@ -511,6 +611,42 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
                   <span className="text-[10px] text-emerald-300 block">Simple Payback</span>
                   <span className="font-bold text-amber-300">{model.simplePaybackYears} Years</span>
                 </div>
+              </div>
+
+              {/* Action Ribbon: Download Report & Send/Share PDF */}
+              <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3 border-t border-emerald-700/80">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDownloadReport}
+                    disabled={isDownloadingPdf}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-extrabold shadow-md transition-all cursor-pointer active:scale-95 disabled:opacity-75"
+                    title="Download complete 4-page executive engineering dossier & quotation PDF"
+                  >
+                    <Download className={`w-4 h-4 text-slate-950 ${isDownloadingPdf ? 'animate-bounce' : ''}`} />
+                    <span>{isDownloadingPdf ? 'Generating PDF...' : 'Download Report'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsShareModalOpen(true)}
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#C9A86A] hover:bg-[#d8b97d] text-slate-950 text-xs font-extrabold shadow-md transition-all cursor-pointer active:scale-95"
+                    title="Share proposal via WhatsApp, Email, or shareable link"
+                  >
+                    <Share2 className="w-4 h-4 text-slate-950" />
+                    <span>Send / Share PDF</span>
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors"
+                  title="Print proposal or save via browser PDF engine"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Print / Browser PDF</span>
+                </button>
               </div>
             </div>
 
@@ -856,14 +992,38 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
                       <h3 className="font-bold text-slate-900 text-sm">Official Commercial Quotation Proposal</h3>
                       <p className="text-[11px] text-slate-500">Ref: AREL-QT-{Math.round(model.installedCapacityKwp)}KWP-2026</p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handlePrint}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-colors"
-                    >
-                      <Printer className="w-3.5 h-3.5" />
-                      <span>Print / Export PDF</span>
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleDownloadReport}
+                        disabled={isDownloadingPdf}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer active:scale-95 disabled:opacity-75"
+                        title="Download official 4-page turnkey EPC quotation PDF"
+                      >
+                        <Download className={`w-3.5 h-3.5 ${isDownloadingPdf ? 'animate-bounce' : ''}`} />
+                        <span>{isDownloadingPdf ? 'Generating...' : 'Download Report'}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setIsShareModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold shadow-xs transition-colors cursor-pointer active:scale-95"
+                        title="Share via WhatsApp, Email, or Link"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>Send / Share PDF</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handlePrint}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-300 transition-colors"
+                        title="Browser print or native PDF save"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Print</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Commercial Figures Breakdown */}
@@ -937,6 +1097,188 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
         </div>
 
       </div>
+
+      {/* ============================================================== */}
+      {/* SEND / SHARE PDF MODAL                                         */}
+      {/* ============================================================== */}
+      {isShareModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setIsShareModalOpen(false)}
+        >
+          <div
+            className="max-w-xl w-full bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="bg-[#0A1A2F] text-white p-5 flex items-start justify-between border-b border-slate-800">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-[#C9A86A] text-[10px] font-mono font-bold uppercase tracking-wider">
+                  <ShieldCheck className="w-3 h-3 text-[#C9A86A]" />
+                  <span>Ariel Renewable Energy Limited</span>
+                </div>
+                <h3 className="text-lg font-extrabold text-white">
+                  Send / Share Solar Proposal &amp; PDF Dossier
+                </h3>
+                <p className="text-xs text-slate-300">
+                  Ref: AREL-QT-{Math.round(model.installedCapacityKwp)}KWP-2026 • 25.0% Commercial Margin Model
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsShareModalOpen(false)}
+                className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 space-y-4 text-slate-800">
+              {/* Executive Snapshot Card */}
+              <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-semibold">System Capacity</span>
+                  <div className="text-base font-extrabold text-slate-900 font-mono mt-0.5">
+                    {model.installedCapacityKwp} kWp
+                  </div>
+                  <span className="text-[10px] text-slate-500">({model.inverterAcCapacityKw} kW AC)</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-semibold">Turnkey Investment</span>
+                  <div className="text-base font-extrabold text-emerald-700 font-mono mt-0.5">
+                    {formatBdt(model.totalCommercialTurnkeyBdt)}
+                  </div>
+                  <span className="text-[10px] text-emerald-600 font-bold">25% Margin Locked</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-semibold">Annual Savings</span>
+                  <div className="text-base font-extrabold text-amber-700 font-mono mt-0.5">
+                    {formatBdt(model.annualTotalBenefitBdt)}
+                  </div>
+                  <span className="text-[10px] text-slate-500">{model.simplePaybackYears} Yr Payback</span>
+                </div>
+              </div>
+
+              {/* Share Channels */}
+              <div className="space-y-2.5">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                  Select Dispatch / Sharing Channel:
+                </span>
+
+                {/* 1. WhatsApp Button */}
+                <a
+                  href={shareWhatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full p-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-between shadow-sm transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/30 flex items-center justify-center">
+                      <MessageSquare className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-bold">Send via WhatsApp</div>
+                      <div className="text-[11px] text-emerald-100 font-normal">
+                        Instant executive dispatch with complete kWp &amp; financial summary
+                      </div>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-emerald-200 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+
+                {/* 2. Email Button */}
+                <a
+                  href={shareEmailUrl}
+                  className="w-full p-3 rounded-xl bg-[#0A1A2F] hover:bg-[#122844] text-white font-bold text-xs flex items-center justify-between shadow-sm transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-[#C9A86A]" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-bold">Email Proposal Memo</div>
+                      <div className="text-[11px] text-slate-300 font-normal">
+                        Pre-formatted for Executive Board, CFO &amp; Green Bank Officers
+                      </div>
+                    </div>
+                  </div>
+                  <Send className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+
+                {/* 3. Direct PDF Download */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsShareModalOpen(false);
+                    handleDownloadReport();
+                  }}
+                  disabled={isDownloadingPdf}
+                  className="w-full p-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center justify-between shadow-sm transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-400/50 flex items-center justify-center">
+                      <Download className={`w-4 h-4 text-slate-950 ${isDownloadingPdf ? 'animate-bounce' : ''}`} />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-sm font-bold">Download Official 4-Page PDF</div>
+                      <div className="text-[11px] text-slate-900 font-normal">
+                        Full engineering drawings, BoQ, cashflows &amp; bankable loan schedule
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono uppercase bg-slate-950 text-amber-300 px-2 py-1 rounded">
+                    PDF (A4)
+                  </span>
+                </button>
+              </div>
+
+              {/* Copy Direct URL Link */}
+              <div className="pt-2 border-t border-slate-200">
+                <label className="text-[11px] font-bold text-slate-600 mb-1.5 block">
+                  Copy Shareable Calculator Link:
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={typeof window !== 'undefined' ? window.location.href : 'https://energy.arielmc.com/calculator'}
+                    className="flex-1 bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 text-xs font-mono text-slate-700 select-all focus:outline-hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCopyShareLink}
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      copiedLink
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-slate-800 hover:bg-slate-700 text-white'
+                    }`}
+                  >
+                    {copiedLink ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-white" />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-slate-300" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-slate-50 border-t border-slate-200 text-center">
+              <span className="text-[10px] text-slate-500">
+                🔒 Sovereign Infrastructure Protocol • Strictly compliant with SREDA Net-Metering &amp; SRO 159 Customs Guidelines.
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

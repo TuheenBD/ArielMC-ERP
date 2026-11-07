@@ -1,6 +1,38 @@
 {
   "leads": [
     {
+      "id": "NRG-WEB-607926",
+      "company": "Test Industrial RMG",
+      "contact": "Managing Director",
+      "phone": "+880 1819 273458",
+      "email": "energy@arielmc.com",
+      "stage": "NEW_INQUIRY",
+      "capacityKwp": 430,
+      "roofAreaSqFt": 36400,
+      "monthlyBillBdt": 1200000,
+      "estimatedValueBdt": 26488000,
+      "companyCode": "ARIEL_ENERGY",
+      "source": "energy.arielmc.com Feasibility Generator",
+      "company_id": "ARIEL_ENERGY",
+      "createdAt": "2026-11-07T10:16:47.972Z"
+    },
+    {
+      "id": "NRG-WEB-554988",
+      "company": "Test Industrial RMG",
+      "contact": "Managing Director",
+      "phone": "+880 1819 273458",
+      "email": "energy@arielmc.com",
+      "stage": "NEW_INQUIRY",
+      "capacityKwp": 430,
+      "roofAreaSqFt": 36400,
+      "monthlyBillBdt": 1200000,
+      "estimatedValueBdt": 26488000,
+      "companyCode": "ARIEL_ENERGY",
+      "source": "energy.arielmc.com Feasibility Generator",
+      "company_id": "ARIEL_ENERGY",
+      "createdAt": "2026-11-07T10:15:55.053Z"
+    },
+    {
       "id": "NRG-WEB-852188",
       "company": "Ha-Meem Denim Processing Mills",
       "contact": "Brig Gen (Retd) Nizamul Haque",
