@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import fs from 'fs';
+import path from 'path';
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,12 +36,14 @@ export async function POST(req: NextRequest) {
     const annualSavingsBdt = Number(body.annualSavingsBdt) || (selfConsumedKwh * gridTariffRate + exportedKwh * netMeterRate);
     const monthlySavingsBdt = annualSavingsBdt / 12;
 
-    const turnkeyCostBdt = Number(body.totalCommercialTurnkeyBdt) || Number(body.turnkeyCostBdt) || (capacityKwp * 61600); // Strict 25% margin turnkey pricing
+    // Strict 25% commercial margin pricing
+    const turnkeyCostBdt = Number(body.totalCommercialTurnkeyBdt) || Number(body.turnkeyCostBdt) || Math.round(capacityKwp * 61600);
+    const turnkeyWpRate = (turnkeyCostBdt / (capacityKwp * 1000)).toFixed(2);
     const debtAmount = turnkeyCostBdt * 0.8; // 80% BB Green Refinance
     const equityAmount = turnkeyCostBdt * 0.2; // 20% equity
 
     const monthlyRate = 0.045 / 12; // 4.5% concessionary debt
-    const totalPayments = 7 * 12; // 84 months
+    const totalPayments = 7 * 12; // 84 months (after 1-yr moratorium)
     const monthlyEmiBdt =
       (debtAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) /
       (Math.pow(1 + monthlyRate, totalPayments) - 1);
@@ -54,77 +58,196 @@ export async function POST(req: NextRequest) {
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
     const fontOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
 
-    // Color definitions
-    const navy = rgb(0.039, 0.102, 0.184); // #0A1A2F
-    const gold = rgb(0.788, 0.659, 0.416); // #C9A86A
-    const emerald = rgb(0.02, 0.588, 0.412); // #059669
+    // Corporate Color Palette
+    const navy = rgb(0.039, 0.098, 0.184); // #0A192F Dark Corporate Navy
+    const gold = rgb(0.851, 0.467, 0.024); // #D97706 Warm Amber Gold
+    const goldAccent = rgb(0.788, 0.659, 0.416); // #C9A86A Prestige Gold
+    const emerald = rgb(0.02, 0.588, 0.412); // #059669 Emerald Green
+    const emeraldDark = rgb(0.016, 0.471, 0.341); // #047857 Dark Emerald
     const lightBg = rgb(0.973, 0.984, 0.976); // #F8FBF9
     const white = rgb(1, 1, 1);
-    const darkGray = rgb(0.2, 0.25, 0.3);
-    const lightGray = rgb(0.9, 0.93, 0.92);
-    const borderGray = rgb(0.8, 0.85, 0.83);
+    const darkGray = rgb(0.15, 0.2, 0.25);
+    const slateMuted = rgb(0.392, 0.455, 0.545); // #64748B
+    const borderGray = rgb(0.796, 0.835, 0.882); // #CBD5E1
 
     const pageWidth = 595.28; // A4 standard points
     const pageHeight = 841.89;
 
-    // Helper: Draw Header & Footer on each page
+    // Load official company logo
+    let embeddedLogo: any = null;
+    try {
+      const possibleLogoPaths = [
+        path.join(process.cwd(), 'public/logos/ariel-energy-logo.png'),
+        path.join(process.cwd(), 'public/images/solar-gallery/Ariel Energy - Logo.png'),
+        path.join(process.cwd(), '../Ariel-SaaS/public/logos/ariel-energy-logo.png'),
+        path.join(process.cwd(), '../ArielMC-ERP/public/logos/ariel-energy-logo.png'),
+      ];
+      for (const p of possibleLogoPaths) {
+        if (fs.existsSync(p)) {
+          const logoBytes = fs.readFileSync(p);
+          embeddedLogo = await pdfDoc.embedPng(logoBytes);
+          break;
+        }
+      }
+    } catch (e) {
+      console.warn('Logo embed notice:', e);
+    }
+
+    // ==============================================================
+    // 1. OFFICIAL CORPORATE LETTERHEAD HEADER & FOOTER ENGINE
+    // ==============================================================
     const drawPageChrome = (page: any, pageNumber: number, title: string) => {
-      // Top header banner
-      page.drawRectangle({
-        x: 0,
-        y: pageHeight - 50,
-        width: pageWidth,
-        height: 50,
-        color: navy,
-      });
+      const rightX = pageWidth - 40;
 
-      page.drawText('ARIEL RENEWABLE ENERGY LIMITED', {
-        x: 40,
-        y: pageHeight - 32,
-        size: 11,
-        font: fontBold,
-        color: white,
-      });
+      // Draw Logo on top-left if available
+      if (embeddedLogo) {
+        const logoHeight = 28;
+        const logoWidth = 70; // 2.5:1 ratio
+        page.drawImage(embeddedLogo, {
+          x: 40,
+          y: pageHeight - 48,
+          width: logoWidth,
+          height: logoHeight,
+        });
 
-      page.drawText('SOVEREIGN GREEN INFRASTRUCTURE & INDUSTRIAL DECARBONIZATION', {
-        x: 40,
-        y: pageHeight - 44,
-        size: 7,
+        // Brand Typography right next to logo
+        page.drawText('Ariel Renewable Energy Limited', {
+          x: 118,
+          y: pageHeight - 32,
+          size: 9.5,
+          font: fontBold,
+          color: navy,
+        });
+        page.drawText('Sovereign Green Infrastructure & Industrial Decarbonization', {
+          x: 118,
+          y: pageHeight - 42,
+          size: 6.8,
+          font: fontBold,
+          color: gold,
+        });
+        page.drawText('A Member of the ArielMC Enterprise Eco-System', {
+          x: 118,
+          y: pageHeight - 50,
+          size: 6.2,
+          font: fontBold,
+          color: emeraldDark,
+        });
+      } else {
+        page.drawText('Ariel Renewable Energy Limited', {
+          x: 40,
+          y: pageHeight - 32,
+          size: 11,
+          font: fontBold,
+          color: navy,
+        });
+        page.drawText('Sovereign Green Infrastructure & Industrial Decarbonization', {
+          x: 40,
+          y: pageHeight - 42,
+          size: 7,
+          font: fontBold,
+          color: gold,
+        });
+        page.drawText('A Member of the ArielMC Enterprise Eco-System', {
+          x: 40,
+          y: pageHeight - 50,
+          size: 6.5,
+          font: fontBold,
+          color: emeraldDark,
+        });
+      }
+
+      // Top-Right Official Company & EPC Accreditation Info
+      const addr1 = 'Corporate HQ: Ariel House, Level 7, Road 11, Banani, Dhaka-1213';
+      const addr2 = 'SREDA Registered Turnkey EPC Partner • Incorporation Reg: C-194820';
+      const addr3 = 'energy.arielmc.com | energy@arielmc.com | +880 1819 273458';
+
+      page.drawText(addr1, {
+        x: rightX - fontRegular.widthOfTextAtSize(addr1, 6.2),
+        y: pageHeight - 30,
+        size: 6.2,
         font: fontRegular,
+        color: slateMuted,
+      });
+      page.drawText(addr2, {
+        x: rightX - fontRegular.widthOfTextAtSize(addr2, 6.2),
+        y: pageHeight - 39,
+        size: 6.2,
+        font: fontRegular,
+        color: slateMuted,
+      });
+      page.drawText(addr3, {
+        x: rightX - fontRegular.widthOfTextAtSize(addr3, 6.2),
+        y: pageHeight - 48,
+        size: 6.2,
+        font: fontRegular,
+        color: slateMuted,
+      });
+
+      // Dual-Line Official Letterhead Divider (Gold primary + Emerald secondary)
+      page.drawLine({
+        start: { x: 40, y: pageHeight - 56 },
+        end: { x: pageWidth - 40, y: pageHeight - 56 },
+        thickness: 1.8,
         color: gold,
       });
-
-      page.drawText(title.toUpperCase(), {
-        x: pageWidth - 40 - fontBold.widthOfTextAtSize(title.toUpperCase(), 9),
-        y: pageHeight - 34,
-        size: 9,
-        font: fontBold,
+      page.drawLine({
+        start: { x: 40, y: pageHeight - 59 },
+        end: { x: pageWidth - 40, y: pageHeight - 59 },
+        thickness: 0.6,
         color: emerald,
       });
 
-      // Bottom footer bar
+      // Sub-bar on Pages 2, 3, 4 showing Section Title
+      if (pageNumber > 1) {
+        page.drawText(`OFFICIAL EPC DOSSIER • SECTION ${pageNumber}: ${title.toUpperCase()}`, {
+          x: 40,
+          y: pageHeight - 71,
+          size: 7.5,
+          font: fontBold,
+          color: navy,
+        });
+        const refStr = `Ref: AREL/QT/2026/EPC-${Math.round(capacityKwp)}KWP`;
+        page.drawText(refStr, {
+          x: rightX - fontBold.widthOfTextAtSize(refStr, 7),
+          y: pageHeight - 71,
+          size: 7,
+          font: fontBold,
+          color: gold,
+        });
+      }
+
+      // Bottom Footer Bar
       page.drawLine({
-        start: { x: 40, y: 40 },
-        end: { x: pageWidth - 40, y: 40 },
-        thickness: 1,
+        start: { x: 40, y: 38 },
+        end: { x: pageWidth - 40, y: 38 },
+        thickness: 0.8,
         color: borderGray,
       });
 
-      page.drawText('CONFIDENTIAL & PROPRIETARY — PREPARED EXCLUSIVELY FOR CLIENT EXECUTIVE BOARD', {
+      page.drawText('ARIEL RENEWABLE ENERGY LIMITED • SREDA REGISTERED EPC • A MEMBER OF THE ARIELMC ENTERPRISE ECO-SYSTEM', {
         x: 40,
-        y: 28,
-        size: 7,
-        font: fontRegular,
-        color: darkGray,
+        y: 26,
+        size: 6.2,
+        font: fontBold,
+        color: navy,
+      });
+
+      const footerSub = 'Gazipur Master Operations Hub • Corporate Seal & Bankable Green Infrastructure';
+      page.drawText(footerSub, {
+        x: 40,
+        y: 17,
+        size: 5.8,
+        font: fontOblique,
+        color: slateMuted,
       });
 
       const pageStr = `PAGE ${pageNumber} OF 4`;
       page.drawText(pageStr, {
-        x: pageWidth - 40 - fontBold.widthOfTextAtSize(pageStr, 8),
-        y: 28,
+        x: rightX - fontBold.widthOfTextAtSize(pageStr, 8),
+        y: 24,
         size: 8,
         font: fontBold,
-        color: navy,
+        color: emeraldDark,
       });
     };
 
@@ -134,41 +257,69 @@ export async function POST(req: NextRequest) {
     const page1 = pdfDoc.addPage([pageWidth, pageHeight]);
     drawPageChrome(page1, 1, 'Plant Architecture');
 
+    // Reference & Date Meta Bar
+    page1.drawText(`Ref: AREL/QT/2026/EPC-${Math.round(capacityKwp)}KWP-V1 • Confidential Commercial Submission`, {
+      x: 40,
+      y: pageHeight - 72,
+      size: 7.5,
+      font: fontBold,
+      color: slateMuted,
+    });
+    const dateStr = `Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} • Dhaka, Bangladesh`;
+    page1.drawText(dateStr, {
+      x: pageWidth - 40 - fontRegular.widthOfTextAtSize(dateStr, 7.5),
+      y: pageHeight - 72,
+      size: 7.5,
+      font: fontRegular,
+      color: slateMuted,
+    });
+
     // Title Block
     page1.drawRectangle({
       x: 40,
       y: pageHeight - 165,
       width: pageWidth - 80,
-      height: 100,
+      height: 85,
       color: lightBg,
-      borderColor: gold,
-      borderWidth: 1.5,
+      borderColor: goldAccent,
+      borderWidth: 1.2,
     });
 
-    page1.drawText('EXECUTIVE SOLAR FEASIBILITY & ROOF AUDIT DOSSIER', {
-      x: 60,
-      y: pageHeight - 95,
-      size: 13,
+    page1.drawText('EXECUTIVE ROOFTOP SOLAR FEASIBILITY & TURNKEY EPC QUOTATION', {
+      x: 55,
+      y: pageHeight - 98,
+      size: 11.5,
       font: fontBold,
       color: navy,
     });
 
-    page1.drawText(`Target Client: ${companyName}`, {
-      x: 60,
+    page1.drawText(`Prepared For: ${companyName.toUpperCase()}`, {
+      x: 55,
       y: pageHeight - 118,
-      size: 12,
+      size: 11,
       font: fontBold,
-      color: emerald,
+      color: emeraldDark,
     });
 
     page1.drawText(
-      `Location: ${location} | Contact: ${contactName} (${designation}) | Date: ${new Date().toLocaleDateString('en-GB')}`,
+      `Site Location: ${location} | Executive Contact: ${contactName} (${designation})`,
       {
-        x: 60,
-        y: pageHeight - 138,
-        size: 8.5,
+        x: 55,
+        y: pageHeight - 136,
+        size: 8,
         font: fontRegular,
         color: darkGray,
+      }
+    );
+
+    page1.drawText(
+      `Statutory Framework: SREDA Net-Metering Guidelines 2024–2026 • 25.0% Commercial Margin Turnkey Model`,
+      {
+        x: 55,
+        y: pageHeight - 150,
+        size: 7.2,
+        font: fontOblique,
+        color: gold,
       }
     );
 
@@ -177,10 +328,10 @@ export async function POST(req: NextRequest) {
     const badgeY = pageHeight - 245;
 
     const badges = [
-      { label: 'PLANT CAPACITY', val: `${capacityKwp.toLocaleString()} kWp`, sub: 'Tier-1 N-Type TOPCon', col: emerald },
-      { label: 'ANNUAL YIELD', val: `${Math.round(annualGenKwh / 1000).toLocaleString()} MWh`, sub: '1,450 kWh/kWp specific', col: navy },
-      { label: 'MONTHLY SAVINGS', val: `Tk ${(monthlySavingsBdt / 100000).toFixed(2)} Lakh`, sub: 'Direct bill reduction', col: emerald },
-      { label: 'NET CASH SURPLUS', val: `+Tk ${(netMonthlySurplusBdt / 100000).toFixed(2)}L/mo`, sub: 'After 4.5% bank loan', col: gold },
+      { label: 'PLANT CAPACITY', val: `${capacityKwp.toLocaleString()} kWp`, sub: 'N-Type TOPCon 620W', col: emeraldDark },
+      { label: 'ANNUAL YIELD', val: `${Math.round(annualGenKwh / 1000).toLocaleString()} MWh`, sub: '1,420 kWh/kWp specific', col: navy },
+      { label: 'MONTHLY SAVINGS', val: `Tk ${(monthlySavingsBdt / 100000).toFixed(2)} Lakh`, sub: 'Direct bill reduction', col: emeraldDark },
+      { label: 'COMMERCIAL TURNKEY', val: `Tk ${(turnkeyCostBdt / 100000).toFixed(2)}L`, sub: '25% Locked Margin', col: gold },
     ];
 
     badges.forEach((b, i) => {
@@ -196,154 +347,200 @@ export async function POST(req: NextRequest) {
       });
 
       page1.drawText(b.label, { x: bx + 8, y: badgeY + 48, size: 7, font: fontBold, color: darkGray });
-      page1.drawText(b.val, { x: bx + 8, y: badgeY + 26, size: 12, font: fontBold, color: b.col });
+      page1.drawText(b.val, { x: bx + 8, y: badgeY + 26, size: 11.5, font: fontBold, color: b.col });
       page1.drawText(b.sub, { x: bx + 8, y: badgeY + 12, size: 6.5, font: fontRegular, color: darkGray });
     });
 
     // Technical Hardware Specifications Table
-    page1.drawText('1. SYSTEM ENGINEERING & TIER-1 HARDWARE BILL OF QUANTITIES', {
+    page1.drawText('1. SYSTEM ENGINEERING & TIER-1 HARDWARE BILL OF QUANTITIES (BoQ)', {
       x: 40,
-      y: pageHeight - 275,
-      size: 10,
+      y: pageHeight - 272,
+      size: 9.5,
       font: fontBold,
       color: navy,
     });
 
     const specs = [
-      ['PV Module Technology', 'Tier-1 Bloomberg (JinkoSolar / LONGi) N-Type TOPCon 580W–610W Bifacial (22.8% eff.)'],
-      ['Inverter Architecture', 'High-Efficiency String Inverters (Huawei / Sungrow 100kW–125kW), 98.8% Euro Efficiency'],
-      ['Mounting Structure', 'Anodized Marine-Grade AL6005-T5 Aluminum + SS304 Fasteners (Wind load 160 km/h)'],
-      ['DC/AC Switchgear & Protection', 'IP65 Class-II Surge Protection (Type 1+2), DC Isolators, Dual Disconnect Relays'],
-      ['Transformer & Substation', 'Step-up Dry-Type / Oil-immersed Distribution Transformer with HT Breaker Sync'],
-      ['Net-Metering Bi-directional Meter', '3-Phase 4-Quadrant Class 0.2s Smart Meter certified by BPDB/BREB/DESCO'],
-      ['IoT Telemetry & Analytics', 'Ariel-SaaS™ Cloud Engine with RS485 Modbus remote inverter string monitoring'],
-      ['Workmanship & Performance', '12-Year Workmanship Warranty + 30-Year Linear Module Power Output Guarantee (87.4%)'],
+      ['PV Module Technology', 'Tier-1 Bloomberg (JinkoSolar / LONGi) N-Type TOPCon 620W Bifacial (22.8% cell eff., 80% bifaciality)'],
+      ['Inverter Architecture', 'High-Efficiency String Inverters (Huawei / Sungrow 100kW–330kW), 98.8% Euro Efficiency, Multi-MPPT'],
+      ['Mounting Structure', 'Anodized Marine-Grade AL6063-T6 Aluminum Rails + SUS304 Fasteners (Cyclone-rated to 180 km/h)'],
+      ['DC/AC Switchgear & Cables', 'IP66 Class-II Surge Protection (Type 1+2), DC Isolators, Dual Disconnect Relays, 6mm² XLPE UV Solar Wire'],
+      ['Transformer & Substation', 'Step-up Distribution Transformer with HT Breaker Sync, Copper Mesh Earthing & Lightning Arrester'],
+      ['Net-Metering Smart Meter', '3-Phase 4-Quadrant Class 0.2s Bi-directional Smart Meter certified by BPDB/BREB/DESCO'],
+      ['IoT Telemetry & SCADA', 'Ariel-SaaS™ Cloud Engine with RS485 Modbus string monitoring & automated I-REC carbon ledger'],
+      ['Workmanship & Warranty', '15-Year Manufacturer Workmanship + 30-Year Linear Module Power Guarantee (87.4% at Year 30)'],
     ];
 
-    let currentY = pageHeight - 295;
+    let currentY = pageHeight - 292;
     specs.forEach(([param, spec], idx) => {
       const rowBg = idx % 2 === 0 ? lightBg : white;
       page1.drawRectangle({
         x: 40,
-        y: currentY - 6,
+        y: currentY - 5,
         width: pageWidth - 80,
-        height: 20,
+        height: 19,
         color: rowBg,
       });
 
-      page1.drawText(param, { x: 50, y: currentY, size: 8, font: fontBold, color: navy });
-      page1.drawText(spec, { x: 210, y: currentY, size: 7.5, font: fontRegular, color: darkGray });
-      currentY -= 22;
+      page1.drawText(param, { x: 48, y: currentY, size: 7.5, font: fontBold, color: navy });
+      page1.drawText(spec, { x: 195, y: currentY, size: 6.8, font: fontRegular, color: darkGray });
+      currentY -= 20;
     });
 
     // Roof & Civil Audit Readiness
-    currentY -= 15;
+    currentY -= 12;
     page1.drawText('2. ROOFTOP SPATIAL & STRUCTURAL AUDIT PROFILE', {
       x: 40,
       y: currentY,
-      size: 10,
+      size: 9.5,
       font: fontBold,
       color: navy,
     });
 
-    currentY -= 20;
+    currentY -= 18;
     const roofDetails = [
-      `Gross Roof Area: ${roofAreaSqFt.toLocaleString()} sq ft (~${Math.round(grossAreaM2).toLocaleString()} m²)`,
-      `Safety & Egress Buffer: 15% dedicated to RSC / Accord compliant fire escape corridors`,
-      `Roof Construction Type: ${roofType} with non-penetrating clamp mounting or ballasted frames`,
-      `Estimated Module Count: ~${Math.round((capacityKwp * 1000) / 585)} Monocrystalline Bifacial Panels`,
+      `Gross Roof Footprint: ${roofAreaSqFt.toLocaleString()} sq ft (~${Math.round(grossAreaM2).toLocaleString()} m²) with non-penetrating clamps`,
+      `Safety & Egress Buffer: 15% dedicated to RSC / Accord compliant fire escape pathways & roof maintenance walkways`,
+      `Roof Substrate Type: ${roofType} with certified cyclone shear resistance & zero structural penetration`,
+      `Estimated Module Population: ~${Math.round((capacityKwp * 1000) / 620)} Monocrystalline TOPCon 620W Bifacial Panels`,
     ];
 
     roofDetails.forEach((line) => {
-      page1.drawText(`•  ${line}`, { x: 50, y: currentY, size: 8, font: fontRegular, color: darkGray });
-      currentY -= 16;
+      page1.drawText(`•  ${line}`, { x: 48, y: currentY, size: 7.5, font: fontRegular, color: darkGray });
+      currentY -= 15;
     });
 
-    // ==========================================
-    // PAGE 2: 0% CAPEX CASH WATERFALL & LOAN ROI
-    // ==========================================
+    // ==============================================================
+    // PAGE 2: FINANCIAL WATERFALL: 4.5% BANGLADESH BANK GREEN LOAN
+    // ==============================================================
     const page2 = pdfDoc.addPage([pageWidth, pageHeight]);
     drawPageChrome(page2, 2, 'Financial Waterfall');
 
     page2.drawText('3. FINANCIAL WATERFALL: 4.5% BANGLADESH BANK GREEN REFINANCING', {
       x: 40,
-      y: pageHeight - 75,
-      size: 11,
+      y: pageHeight - 90,
+      size: 10.5,
       font: fontBold,
       color: navy,
     });
 
     page2.drawText(
-      'Demonstrating net-positive monthly cash generation from Month 1 under concessionary green credit.',
-      { x: 40, y: pageHeight - 90, size: 8.5, font: fontOblique, color: darkGray }
+      'Demonstrating net-positive monthly cash generation from Day 1 with 1-Year Grace Moratorium under concessionary green credit.',
+      { x: 40, y: pageHeight - 104, size: 8, font: fontOblique, color: slateMuted }
     );
 
-    // Financial Table
+    // Financial Table with Grace Period, 25% Margin Turnkey, and ZERO text clipping
     const finTable = [
-      ['Capital Expenditure (Turnkey EPC @ Tk 51.60/Wp)', `Tk ${(turnkeyCostBdt / 100000).toFixed(2)} Lakh`, 'Includes engineering, procurement, installation & SREDA approvals'],
-      ['Concessionary Debt Facility (80% via IDCOL / BB Refinance)', `Tk ${(debtAmount / 100000).toFixed(2)} Lakh`, '4.5% fixed interest rate, 7-year tenure (84 equal monthly installments)'],
-      ['Client Equity Contribution (20% Milestone Based)', `Tk ${(equityAmount / 100000).toFixed(2)} Lakh`, 'Disbursed in 4 structured milestones tied strictly to delivery & sync'],
-      ['Gross Monthly Grid Bill Reduction (Daytime Displacement)', `Tk ${(monthlySavingsBdt / 100000).toFixed(2)} Lakh/mo`, `Offsets standard ${utilityProvider} commercial grid tariff (@ Tk ${gridTariffRate}/kWh)`],
-      ['Monthly Bank Debt Service (Principal + Interest)', `Tk ${(monthlyEmiBdt / 100000).toFixed(2)} Lakh/mo`, 'Concessionary 4.5% Green Debt EMI schedule over 84 months'],
-      ['NET MONTHLY CASH SURPLUS TO FACTORY (MONTH 1–84)', `+Tk ${(netMonthlySurplusBdt / 100000).toFixed(2)} Lakh/mo`, 'NET POSITIVE CASH: Electricity savings exceed loan payment!'],
-      ['POST-DEBT ANNUAL FREE CASH FLOW (YEARS 8–30)', `+Tk ${(annualSavingsBdt / 100000).toFixed(2)} Lakh/yr`, '100% of solar generation converts directly into unencumbered profit'],
-      ['Project Simple Payback Period', `${paybackYears} Years`, 'Zero capital risk — asset fully amortized within ~44 months'],
-      ['25-Year Cumulative Net Profit Generated', `Tk ${((annualSavingsBdt * 25 - turnkeyCostBdt) / 10000000).toFixed(2)} Crore`, 'Net lifetime financial gain after all maintenance & inverter reserve'],
+      [
+        `Capital Expenditure (Turnkey EPC @ Tk ${turnkeyWpRate}/Wp)`,
+        `Tk ${(turnkeyCostBdt / 100000).toFixed(2)} Lakh`,
+        'Turnkey EPC supply, structure, engineering & SREDA approvals (25% Margin)',
+      ],
+      [
+        'Concessionary Debt Facility (80% via BB Refinancing)',
+        `Tk ${(debtAmount / 100000).toFixed(2)} Lakh`,
+        '4.5% fixed interest, 7-year loan tenure with 1-Year Grace Moratorium',
+      ],
+      [
+        'Client Equity Contribution (20% Milestone Based)',
+        `Tk ${(equityAmount / 100000).toFixed(2)} Lakh`,
+        'Disbursed in 4 structured milestones tied strictly to delivery & commissioning',
+      ],
+      [
+        'Gross Monthly Grid Electricity Bill Reduction',
+        `Tk ${(monthlySavingsBdt / 100000).toFixed(2)} Lakh/mo`,
+        `Direct savings offsetting ${utilityProvider} industrial tariff (@ Tk ${gridTariffRate}/kWh)`,
+      ],
+      [
+        'Monthly Bank Debt Service (Months 13–84)',
+        `Tk ${(monthlyEmiBdt / 100000).toFixed(2)} Lakh/mo`,
+        'Concessionary 4.5% EMI schedule commencing Month 13 (Post 1-Yr Grace)',
+      ],
+      [
+        'NET MONTHLY CASH SURPLUS (MONTH 1–12 GRACE PERIOD)',
+        `+Tk ${(monthlySavingsBdt / 100000).toFixed(2)} Lakh/mo`,
+        'NET CASH SURPLUS: Zero loan EMI in Year 1 moratorium; 100% savings retained',
+      ],
+      [
+        'NET MONTHLY CASH SURPLUS (MONTH 13–84 DEBT SERVICE)',
+        `+Tk ${(netMonthlySurplusBdt / 100000).toFixed(2)} Lakh/mo`,
+        'NET POSITIVE CASH: Electricity bill savings comfortably exceed bank loan EMI',
+      ],
+      [
+        'POST-DEBT ANNUAL FREE CASH FLOW (YEARS 8–30)',
+        `+Tk ${(annualSavingsBdt / 100000).toFixed(2)} Lakh/yr`,
+        '100% unencumbered clean power revenue after full bank loan retirement',
+      ],
+      [
+        'Project Simple Payback Period',
+        `${paybackYears} Years`,
+        'Zero capital risk — entire project fully amortized from solar savings',
+      ],
+      [
+        '25-Year Cumulative Net Profit Generated',
+        `Tk ${((annualSavingsBdt * 25 - turnkeyCostBdt) / 10000000).toFixed(2)} Crore`,
+        'Net lifetime corporate gain after all preventative O&M & inverter reserve',
+      ],
     ];
 
-    let fy = pageHeight - 120;
+    let fy = pageHeight - 128;
     finTable.forEach(([metric, val, note], idx) => {
-      const isHighlight = idx === 5;
-      const rowBg = isHighlight ? rgb(0.85, 0.95, 0.9) : idx % 2 === 0 ? lightBg : white;
+      const isGraceHighlight = idx === 5;
+      const isEmiHighlight = idx === 6;
+      const isHighlight = isGraceHighlight || isEmiHighlight;
+      const rowBg = isHighlight ? rgb(0.88, 0.96, 0.92) : idx % 2 === 0 ? lightBg : white;
 
       page2.drawRectangle({
         x: 40,
-        y: fy - 6,
-        width: pageWidth - 80,
-        height: 24,
+        y: fy - 5,
+        width: pageWidth - 80, // 515.28 pt
+        height: 22,
         color: rowBg,
         borderColor: isHighlight ? emerald : borderGray,
-        borderWidth: isHighlight ? 1.5 : 0.5,
+        borderWidth: isHighlight ? 1.2 : 0.5,
       });
 
+      // Metric Title (Column 1: x=48 to x=260)
       page2.drawText(metric, {
-        x: 50,
-        y: fy + 2,
-        size: 8,
-        font: isHighlight ? fontBold : fontRegular,
-        color: isHighlight ? emerald : navy,
-      });
-
-      page2.drawText(val, {
-        x: 320,
-        y: fy + 2,
-        size: 8.5,
-        font: fontBold,
-        color: isHighlight ? emerald : navy,
-      });
-
-      page2.drawText(note, {
-        x: 420,
+        x: 48,
         y: fy + 3,
-        size: 6.5,
-        font: fontRegular,
-        color: darkGray,
+        size: 7.2,
+        font: isHighlight ? fontBold : fontRegular,
+        color: isHighlight ? emeraldDark : navy,
       });
 
-      fy -= 26;
+      // Financial Value (Column 2: x=270 to x=365)
+      page2.drawText(val, {
+        x: 270,
+        y: fy + 3,
+        size: 8,
+        font: fontBold,
+        color: isHighlight ? emeraldDark : navy,
+      });
+
+      // Notes (Column 3: x=372 to x=550) - carefully fitted so NO text cuts off
+      page2.drawText(note, {
+        x: 372,
+        y: fy + 3.5,
+        size: 5.8,
+        font: fontRegular,
+        color: isHighlight ? emeraldDark : slateMuted,
+      });
+
+      fy -= 24;
     });
 
-    // Explanatory Box: Why is this Zero Working Capital?
-    fy -= 20;
+    // Explanatory Box: Zero Working Capital Advantage
+    fy -= 15;
     page2.drawRectangle({
       x: 40,
-      y: fy - 70,
+      y: fy - 68,
       width: pageWidth - 80,
-      height: 75,
+      height: 72,
       color: navy,
     });
 
-    page2.drawText('THE 0% WORKING CAPITAL ADVANTAGE FOR EXPORT FACTORIES', {
+    page2.drawText('THE ZERO WORKING CAPITAL ADVANTAGE FOR ENTERPRISE CLIENTS', {
       x: 55,
       y: fy - 15,
       size: 9,
@@ -352,15 +549,15 @@ export async function POST(req: NextRequest) {
     });
 
     const whyCash =
-      'Because your monthly grid electricity savings surpass your concessionary 4.5% bank EMI installment, your factory operates cash-positive from Day 1 of commissioning. You do NOT need to divert operating liquidity or working capital from RMG fabric, leather hide, or raw material purchases.';
+      'Because your monthly grid electricity bill savings exceed the concessionary 4.5% bank loan installment, your facility operates cash-positive from Month 1 of commissioning. During the initial 12-month grace period, 100% of generated power savings are retained in free cash. You never need to divert operating liquidity from core manufacturing, raw materials, or employee payroll.';
     page2.drawText(whyCash, {
       x: 55,
-      y: fy - 35,
-      size: 8,
+      y: fy - 33,
+      size: 7.5,
       font: fontRegular,
       color: white,
       maxWidth: pageWidth - 110,
-      lineHeight: 12,
+      lineHeight: 11,
     });
 
     // ==========================================
@@ -371,8 +568,8 @@ export async function POST(req: NextRequest) {
 
     page3.drawText('4. SREDA NET-METERING POLICY & FISCAL EXEMPTIONS (2026–2027)', {
       x: 40,
-      y: pageHeight - 75,
-      size: 11,
+      y: pageHeight - 90,
+      size: 10.5,
       font: fontBold,
       color: navy,
     });
@@ -385,10 +582,10 @@ export async function POST(req: NextRequest) {
         body: 'Under SREDA Net-Metering Guidelines 2024–2026, export factories feed 100% of excess weekend/holiday solar power back into the national grid (BREB/BPDB) at a guaranteed benchmark tariff of Tk 10.50 per unit. Crucial statutory deadline: commercial commissioning must be concluded prior to February 28, 2027 to lock in this premium rate for a full 20-year term.',
       },
       {
-        title: '1% Concessional Customs Duty on Tier-1 Capital Equipment',
-        tag: 'STATUTORY NBR S.R.O.',
-        tagCol: emerald,
-        body: 'Importation of Tier-1 photovoltaic solar modules (H.S. Code 8541.43.00) and grid-tied solar string inverters (H.S. Code 8504.40.90) is legally shielded under the renewable energy statutory regulatory order, carrying a nominal 1% customs duty (exempt from standard 37%+ luxury industrial tariffs).',
+        title: 'SRO 159 Customs Duty Exemption on Tier-1 Capital Equipment',
+        tag: 'NBR S.R.O. 159-LAW/2026',
+        tagCol: emeraldDark,
+        body: 'Importation of Tier-1 photovoltaic solar modules (H.S. Code 8541.43.00) and grid-tied solar string inverters (H.S. Code 8504.40.90) is legally shielded under SRO 159, carrying a nominal 1% customs duty (exempt from standard 37%+ luxury industrial import tariffs). Saves ~16% on total project CapEx.',
       },
       {
         title: '10-Year Corporate Income Tax Holiday Shield',
@@ -398,9 +595,9 @@ export async function POST(req: NextRequest) {
       },
       {
         title: 'IDCOL & Bangladesh Bank Concessionary Green Refinance Scheme',
-        tag: '4.0% – 5.0% DEBT',
+        tag: '4.5% CONCESSIONARY DEBT',
         tagCol: navy,
-        body: 'Structured under Bangladesh Bank Sustainable Finance Department Circulars. Up to 80% of project CapEx financed through nominated commercial participating financial institutions (PFIs) at preferential single-digit sovereign refinance interest rates.',
+        body: 'Structured under Bangladesh Bank Sustainable Finance Department Circulars. Up to 80% of project CapEx financed through nominated commercial participating financial institutions (PFIs) at preferential single-digit sovereign refinance interest rates with 1-Year Grace Period.',
       },
     ];
 
@@ -408,19 +605,19 @@ export async function POST(req: NextRequest) {
     policyCards.forEach((card) => {
       page3.drawRectangle({
         x: 40,
-        y: py - 90,
+        y: py - 78,
         width: pageWidth - 80,
-        height: 95,
+        height: 82,
         color: lightBg,
         borderColor: borderGray,
         borderWidth: 1,
       });
 
-      page3.drawText(card.title, { x: 55, y: py - 18, size: 9.5, font: fontBold, color: navy });
+      page3.drawText(card.title, { x: 52, y: py - 16, size: 9, font: fontBold, color: navy });
 
       page3.drawRectangle({
         x: pageWidth - 200,
-        y: py - 20,
+        y: py - 18,
         width: 145,
         height: 14,
         color: card.tagCol,
@@ -428,23 +625,23 @@ export async function POST(req: NextRequest) {
 
       page3.drawText(card.tag, {
         x: pageWidth - 195,
-        y: py - 16,
-        size: 6.5,
+        y: py - 14,
+        size: 6.2,
         font: fontBold,
         color: white,
       });
 
       page3.drawText(card.body, {
-        x: 55,
-        y: py - 38,
-        size: 7.5,
+        x: 52,
+        y: py - 32,
+        size: 7.2,
         font: fontRegular,
         color: darkGray,
         maxWidth: pageWidth - 110,
-        lineHeight: 11,
+        lineHeight: 10.5,
       });
 
-      py -= 110;
+      py -= 92;
     });
 
     // Milestone Execution Matrix
@@ -452,12 +649,12 @@ export async function POST(req: NextRequest) {
     page3.drawText('5. TURNKEY EPC MILESTONE DEPLOYMENT ROADMAP (12 WEEKS)', {
       x: 40,
       y: py,
-      size: 10,
+      size: 9.5,
       font: fontBold,
       color: navy,
     });
 
-    py -= 20;
+    py -= 18;
     const stages = [
       ['Weeks 1–2', 'Detailed structural load audit, 3D shadow mapping, and SREDA / BPDB interconnection application.'],
       ['Weeks 3–6', 'Opening of 1% concessional L/C, Tier-1 module dispatch from port, and DC mounting structure installation.'],
@@ -466,9 +663,9 @@ export async function POST(req: NextRequest) {
     ];
 
     stages.forEach(([wk, desc]) => {
-      page3.drawText(wk, { x: 50, y: py, size: 8, font: fontBold, color: emerald });
-      page3.drawText(desc, { x: 130, y: py, size: 7.5, font: fontRegular, color: darkGray });
-      py -= 18;
+      page3.drawText(wk, { x: 48, y: py, size: 7.5, font: fontBold, color: emeraldDark });
+      page3.drawText(desc, { x: 125, y: py, size: 7.2, font: fontRegular, color: darkGray });
+      py -= 16;
     });
 
     // ==========================================
@@ -479,15 +676,15 @@ export async function POST(req: NextRequest) {
 
     page4.drawText('6. EU CBAM & SCOPE 1/2 DECARBONIZATION COMPLIANCE', {
       x: 40,
-      y: pageHeight - 75,
-      size: 11,
+      y: pageHeight - 90,
+      size: 10.5,
       font: fontBold,
       color: navy,
     });
 
     page4.drawText(
-      'Protecting European apparel, textile, and leather export orders from carbon tariffs starting 2026.',
-      { x: 40, y: pageHeight - 90, size: 8.5, font: fontOblique, color: darkGray }
+      'Protecting European apparel, textile, and leather export orders from carbon border tariffs starting 2026.',
+      { x: 40, y: pageHeight - 104, size: 8, font: fontOblique, color: slateMuted }
     );
 
     // Carbon metrics table
@@ -496,7 +693,7 @@ export async function POST(req: NextRequest) {
     const treesEquivalent = Math.round(annualCo2Tons * 45);
 
     const esgBoxW = (pageWidth - 80 - 20) / 3;
-    const esgY = pageHeight - 165;
+    const esgY = pageHeight - 170;
 
     const esgCards = [
       { label: 'ANNUAL CO2 ABATED', val: `${co2TonsAnnual.toLocaleString()} MT`, sub: 'Scope 2 emissions eliminated' },
@@ -510,75 +707,43 @@ export async function POST(req: NextRequest) {
         x: bx,
         y: esgY,
         width: esgBoxW,
-        height: 60,
+        height: 58,
         color: white,
-        borderColor: emerald,
+        borderColor: emeraldDark,
         borderWidth: 1,
       });
 
-      page4.drawText(c.label, { x: bx + 10, y: esgY + 44, size: 7, font: fontBold, color: darkGray });
-      page4.drawText(c.val, { x: bx + 10, y: esgY + 24, size: 12, font: fontBold, color: emerald });
-      page4.drawText(c.sub, { x: bx + 10, y: esgY + 10, size: 6.5, font: fontRegular, color: darkGray });
+      page4.drawText(c.label, { x: bx + 10, y: esgY + 42, size: 7, font: fontBold, color: darkGray });
+      page4.drawText(c.val, { x: bx + 10, y: esgY + 22, size: 11.5, font: fontBold, color: emeraldDark });
+      page4.drawText(c.sub, { x: bx + 10, y: esgY + 9, size: 6.2, font: fontRegular, color: darkGray });
     });
 
     // CBAM Explanation
-    let cy = pageHeight - 190;
+    let cy = pageHeight - 195;
     page4.drawText('WHY CBAM COMPLIANCE IS CRUCIAL FOR YOUR EUROPEAN BUYERS', {
       x: 40,
       y: cy,
-      size: 9,
+      size: 8.5,
       font: fontBold,
       color: navy,
     });
 
-    cy -= 18;
+    cy -= 16;
     const cbamText =
-      'The European Union Carbon Border Adjustment Mechanism (CBAM) and corporate ESG audit directives (CSDDD) mandate that apparel brands (such as H&M, Zara/Inditex, Marks & Spencer, and Next) audit Scope 1 & 2 emissions in their Tier-1 vendor supply chain. Facilities powered by on-site solar gain preferential vendor allocation and complete immunity from carbon import duties.';
+      'The European Union Carbon Border Adjustment Mechanism (CBAM) and corporate ESG audit directives (CSDDD) mandate that global brands audit Scope 1 & 2 emissions across vendor supply chains. Facilities powered by on-site solar gain preferential vendor allocation and complete immunity from carbon import duties.';
     page4.drawText(cbamText, {
       x: 40,
       y: cy,
-      size: 7.5,
+      size: 7.2,
       font: fontRegular,
       color: darkGray,
       maxWidth: pageWidth - 80,
       lineHeight: 11,
     });
 
-    // Ariel-SaaS IoT Cloud Box
-    cy -= 50;
-    page4.drawRectangle({
-      x: 40,
-      y: cy - 75,
-      width: pageWidth - 80,
-      height: 80,
-      color: lightBg,
-      borderColor: gold,
-      borderWidth: 1,
-    });
-
-    page4.drawText('ARIEL-SAAS™ CLOUD TELEMETRY & AUTOMATED I-REC ISSUANCE', {
-      x: 55,
-      y: cy - 15,
-      size: 8.5,
-      font: fontBold,
-      color: navy,
-    });
-
-    const saasDesc =
-      'Every plant engineered by Ariel Renewable Energy is pre-integrated with the Ariel-SaaS™ telemetry suite. Features include: (1) Real-time string performance ratio tracking; (2) AI battery dispatch optimization; (3) Automated monthly grid credit audit reconciliations; and (4) Turnkey issuance of internationally tradable I-REC (International Renewable Energy Certificate) carbon credits.';
-    page4.drawText(saasDesc, {
-      x: 55,
-      y: cy - 35,
-      size: 7.5,
-      font: fontRegular,
-      color: darkGray,
-      maxWidth: pageWidth - 110,
-      lineHeight: 11,
-    });
-
-    // Formal Acceptance & Roof Audit Booking Block
-    cy -= 110;
-    page4.drawText('7. FORMAL PHYSICAL ROOF AUDIT & DETAILED ENGINEERING ACCEPTANCE', {
+    // Formal Proposal Acceptance & Sign-off Block
+    cy -= 45;
+    page4.drawText('7. FORMAL PROPOSAL ACCEPTANCE & PHYSICAL AUDIT AUTHORIZATION', {
       x: 40,
       y: cy,
       size: 9.5,
@@ -586,14 +751,14 @@ export async function POST(req: NextRequest) {
       color: navy,
     });
 
-    cy -= 15;
+    cy -= 14;
     page4.drawText(
       'To schedule a physical drone roof inspection, structural load test, and 3D shadow analysis, execute below:',
-      { x: 40, y: cy, size: 7.5, font: fontOblique, color: darkGray }
+      { x: 40, y: cy, size: 7.5, font: fontOblique, color: slateMuted }
     );
 
     // Sign off boxes
-    cy -= 90;
+    cy -= 85;
     const signBoxW = (pageWidth - 80 - 20) / 2;
 
     // Client box
@@ -601,7 +766,7 @@ export async function POST(req: NextRequest) {
       x: 40,
       y: cy,
       width: signBoxW,
-      height: 85,
+      height: 80,
       color: white,
       borderColor: borderGray,
       borderWidth: 1,
@@ -609,21 +774,21 @@ export async function POST(req: NextRequest) {
 
     page4.drawText(`ACCEPTED FOR: ${companyName.toUpperCase()}`, {
       x: 50,
-      y: cy + 70,
+      y: cy + 66,
       size: 7.5,
       font: fontBold,
       color: navy,
     });
-    page4.drawLine({ start: { x: 50, y: cy + 30 }, end: { x: 40 + signBoxW - 20, y: cy + 30 }, thickness: 0.8, color: borderGray });
-    page4.drawText(`Authorized Signatory: ${contactName}`, { x: 50, y: cy + 18, size: 7, font: fontRegular, color: darkGray });
-    page4.drawText('Designation & Corporate Seal / Date', { x: 50, y: cy + 8, size: 6.5, font: fontOblique, color: darkGray });
+    page4.drawLine({ start: { x: 50, y: cy + 28 }, end: { x: 40 + signBoxW - 20, y: cy + 28 }, thickness: 0.8, color: borderGray });
+    page4.drawText(`Authorized Signatory: ${contactName}`, { x: 50, y: cy + 16, size: 7, font: fontRegular, color: darkGray });
+    page4.drawText('Designation & Corporate Seal / Date', { x: 50, y: cy + 7, size: 6.2, font: fontOblique, color: slateMuted });
 
     // Ariel Energy Box
     page4.drawRectangle({
       x: 40 + signBoxW + 20,
       y: cy,
       width: signBoxW,
-      height: 85,
+      height: 80,
       color: white,
       borderColor: borderGray,
       borderWidth: 1,
@@ -631,33 +796,33 @@ export async function POST(req: NextRequest) {
 
     page4.drawText('FOR: ARIEL RENEWABLE ENERGY LIMITED', {
       x: 50 + signBoxW + 20,
-      y: cy + 70,
+      y: cy + 66,
       size: 7.5,
       font: fontBold,
-      color: emerald,
+      color: emeraldDark,
     });
     page4.drawLine({
-      start: { x: 50 + signBoxW + 20, y: cy + 30 },
-      end: { x: pageWidth - 60, y: cy + 30 },
+      start: { x: 50 + signBoxW + 20, y: cy + 28 },
+      end: { x: pageWidth - 60, y: cy + 28 },
       thickness: 0.8,
       color: borderGray,
     });
     page4.drawText('Head of Clean Energy Infrastructure & Engineering', {
       x: 50 + signBoxW + 20,
-      y: cy + 18,
+      y: cy + 16,
       size: 7,
       font: fontRegular,
       color: darkGray,
     });
     page4.drawText('Direct Hotline: +880 1819 273458 | energy@arielmc.com', {
       x: 50 + signBoxW + 20,
-      y: cy + 8,
-      size: 6.5,
+      y: cy + 7,
+      size: 6.2,
       font: fontOblique,
-      color: darkGray,
+      color: slateMuted,
     });
 
-    // Real-Time Enterprise Sync: Push inbound audit lead to Master-CRM and ArielMC-ERP (The Heart of ArielMC)
+    // Real-Time Enterprise Sync
     try {
       const crmWebhookUrl = process.env.ARIELMC_CRM_WEBHOOK_URL || 'http://127.0.0.1:3000/api/webhooks/energy-lead';
       const erpSyncUrl = process.env.ARIELMC_ERP_SYNC_URL || 'http://127.0.0.1:3001/api/crm/sync';
@@ -680,14 +845,12 @@ export async function POST(req: NextRequest) {
         companyCode: 'ARIEL_ENERGY',
       };
 
-      // Push to Master-CRM (which logs the active pipeline lead)
       fetch(crmWebhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadPayload),
       }).catch((e) => console.warn('CRM Webhook async dispatch notice:', e.message));
 
-      // Direct Push to ArielMC-ERP (The Master Source of Truth)
       fetch(erpSyncUrl, {
         method: 'POST',
         headers: {
@@ -719,7 +882,7 @@ export async function POST(req: NextRequest) {
 
     // Serialize PDF
     const pdfBytes = await pdfDoc.save();
-    const safeFilename = `Ariel_Energy_Dossier_${companyName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+    const safeFilename = `Ariel_Energy_EPC_Quotation_${Math.round(capacityKwp)}kWp.pdf`;
 
     return new NextResponse(Buffer.from(pdfBytes), {
       status: 200,
