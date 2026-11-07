@@ -297,6 +297,30 @@ export const REGULATORY_CUTOFF_DEADLINE = {
 
 export const ENERGY_OFFICIAL_COLLATERALS = [
   {
+    code: 'AREL-OPS-2026-OPHR-V1',
+    title: 'Ariel Renewable Energy: Daily Operating Hours & Yield Dynamics Manual (Grid-Tied vs Hybrid BESS)',
+    pdfUrl: '/documents/AREL_OPS_2026_OPHR_V1_Solar_Operating_Hours_Guide.pdf',
+    pages: 4,
+    status: 'ACTIVE_APPROVED',
+    category: 'OPERATIONS_TECHNICAL',
+  },
+  {
+    code: 'AREL-REG-2026-SRO-V1',
+    title: 'NBR SRO 159 & SRO 241 Solar Goods Import Exemption Gazette & ASYCUDA SOP',
+    pdfUrl: '/documents/sro/SRO_159_Solar_Energy_Production_Official_Gazette.pdf',
+    pages: 4,
+    status: 'ACTIVE_APPROVED',
+    category: 'REGULATORY_COMPLIANCE',
+  },
+  {
+    code: 'SREDA-REG-2026-CHK-V1',
+    title: 'SREDA Official Testing Standards Checklist & Component Quality Guidelines',
+    pdfUrl: '/documents/sro/SREDA_Detail_Checklist_and_Application_Guidelines.pdf',
+    pages: 6,
+    status: 'ACTIVE_APPROVED',
+    category: 'QUALITY_CERTIFICATION',
+  },
+  {
     code: 'AREL-OPS-2026-MSTR-V1',
     title: 'Ariel Renewable Energy: Master Operations, Sourcing & Logistics Blueprint (6-Page Executive PDF)',
     pdfUrl: '/documents/AREL_OPS_2026_MSTR_V1_Operations_Sourcing_Logistics_Blueprint.pdf',
