@@ -192,3 +192,4 @@ export const RND_LAB_MODELS: RndModelItem[] = [
     notes: 'Set of 3 nesting canisters: Grande (24×22 cm), Midi (20×18 cm), Petite (16×14 cm). Boutique home living décor.',
   },
 ];
+

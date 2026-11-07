@@ -106,3 +106,4 @@ All engineering blueprints from *The Pattern House* are archived in high-resolut
 - `IMG_0561.jpg`: Finished Tote pattern with seam allowance & stitch callouts
 - `IMG_0562.jpg`: Exterior & Back pocket assembly specifications (24×24 cm)
 - **Vault Location**: `shared-assets/rnd-lab/patterns/the-pattern-house-blueprints/`
+
