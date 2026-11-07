@@ -489,3 +489,4 @@ export const LOGISTICS_EXECUTION_BLUEPRINT: LogisticsRoutePlan[] = [
     riskMitigation: 'Barcode scanning, EL camera electroluminescence crack check, weatherproof staging floor',
   },
 ];
+

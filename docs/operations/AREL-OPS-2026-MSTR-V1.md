@@ -410,3 +410,4 @@ Managing Director & CEO, Ariel Renewable Energy Limited
 
 **Headquarters**: House 30, Road 07, Block C, Niketon, Gulshan-1, Dhaka-1212  
 **Command Portals**: `energy.arielmc.com` • `energy.arielmc.com/crm` • `erp.arielmc.com`  
+

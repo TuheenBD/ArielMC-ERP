@@ -19,6 +19,7 @@ import {
   X,
   Star,
   Sun,
+  Calculator,
 } from 'lucide-react';
 import { UserProfile } from '@/types/auth';
 import { ALL_PAGE_DEFINITIONS } from '@/lib/favoritesManager';
@@ -490,6 +491,17 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             </div>
             <span>Ariel Energy</span>
+          </a>
+
+          {/* Ariel Solar EPC 25% Margin Calculator */}
+          <a
+            id="header-ariel-solar-calc-btn"
+            href="/energy/calculator"
+            className={`${toolBtn} shrink-0 whitespace-nowrap text-[#C8A96A] border-[#C8A96A]/30 hover:border-[#C8A96A] hidden xl:flex`}
+            title="Solar EPC Engineering & 25% Margin Quotation Model"
+          >
+            <Calculator className="w-3.5 h-3.5 text-[#C8A96A]" />
+            <span>Solar Calculator</span>
           </a>
 
           {/* ArielMC AI Copilot Button (Compact & Sleek) */}

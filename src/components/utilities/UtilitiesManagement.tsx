@@ -57,8 +57,8 @@ export const UtilitiesManagement: React.FC<UtilitiesManagementProps> = ({
       id: 'CALCULATOR' as UtilityTab,
       label: 'Calculator',
       icon: CalcIcon,
-      badge: '4 Modes',
-      summary: 'Sourcing margin, multi-currency forex, freight CBM, standard keypad',
+      badge: '5 Modes (Solar EPC)',
+      summary: 'Solar EPC 25% margin quotation, sourcing margin, forex, freight CBM & keypad',
     },
     {
       id: 'NOTEPAD' as UtilityTab,

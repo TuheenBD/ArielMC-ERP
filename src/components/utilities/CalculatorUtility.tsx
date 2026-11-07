@@ -11,10 +11,12 @@ import {
   Check,
   Percent,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Sun
 } from 'lucide-react';
 import { CurrencyRate } from '@/types/erp';
 import { ThemeProfile } from '@/components/Sidebar';
+import SolarEngineeringCalculator from '@/components/SolarEngineeringCalculator';
 
 interface CalculatorUtilityProps {
   activeCurrency?: CurrencyRate;
@@ -25,7 +27,7 @@ export const CalculatorUtility: React.FC<CalculatorUtilityProps> = ({
   activeCurrency,
   theme = 'crm-green',
 }) => {
-  const [calcMode, setCalcMode] = useState<'MARGIN' | 'FOREX' | 'FREIGHT_CBM' | 'STANDARD'>('MARGIN');
+  const [calcMode, setCalcMode] = useState<'MARGIN' | 'FOREX' | 'FREIGHT_CBM' | 'STANDARD' | 'SOLAR_ENGINEERING'>('SOLAR_ENGINEERING');
   const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
 
   // 1. Margin & Costing Calculator State
@@ -134,12 +136,13 @@ export const CalculatorUtility: React.FC<CalculatorUtilityProps> = ({
             Enterprise Financial, Margin &amp; Freight Calculator Suite
           </h3>
           <p className="text-xs text-slate-600 font-medium mt-0.5">
-            Four specialized calculators: B2B Unit Costing &amp; Margin, Real-Time Forex, Freight CBM &amp; Container Estimator, and Standard Keypad.
+            Five specialized calculators: Solar EPC Engineering &amp; Quotation (25% Margin), B2B Sourcing Margin &amp; Costing, Multi-Station Forex, Freight CBM &amp; Container, and Keypad Calculator.
           </p>
         </div>
 
         <div className="flex flex-wrap gap-1.5 p-1 rounded-xl bg-[#12241b] border border-[#2b5540] text-xs">
           {[
+            { id: 'SOLAR_ENGINEERING', label: '☀️ Solar Engineering & 25% Quotation' },
             { id: 'MARGIN', label: '📊 Sourcing Margin & Costing' },
             { id: 'FOREX', label: '💱 Multi-Station Forex' },
             { id: 'FREIGHT_CBM', label: '🚢 Freight CBM & Container' },
@@ -159,6 +162,13 @@ export const CalculatorUtility: React.FC<CalculatorUtilityProps> = ({
           ))}
         </div>
       </div>
+
+      {/* ==================== 0. SOLAR ENGINEERING & QUOTATION CALCULATOR ==================== */}
+      {calcMode === 'SOLAR_ENGINEERING' && (
+        <div className="rounded-xl overflow-hidden shadow-2xl border border-emerald-900/30">
+          <SolarEngineeringCalculator isErpEmbedded={true} />
+        </div>
+      )}
 
       {/* ==================== 1. SOURCING MARGIN & COSTING CALCULATOR ==================== */}
       {calcMode === 'MARGIN' && (
