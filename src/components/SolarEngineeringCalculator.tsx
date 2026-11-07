@@ -922,6 +922,30 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
                       <span className="text-base font-extrabold font-mono text-amber-300">{formatBdt(model.lifetimeNetProfitBdt)}</span>
                     </div>
                   </div>
+
+                  {/* Daily Operating Hours Ribbon */}
+                  <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-emerald-700" />
+                      <div>
+                        <span className="font-bold text-emerald-950 block">
+                          Daily Operating Window: {includeBessStorage ? '24 Hours / Day (Continuous Clean Power)' : '7.5 to 8.5 Hours / Day (08:00 AM – 04:30 PM)'}
+                        </span>
+                        <span className="text-[11px] text-emerald-800">
+                          Equivalent to <strong>3.84 to 4.20 Peak Sun Hours (PSH)</strong> annual mean across Bangladesh (Latitude 23.8°N).
+                        </span>
+                      </div>
+                    </div>
+                    <a
+                      href="/documents/AREL_OPS_2026_OPHR_V1_Solar_Operating_Hours_Guide.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11px] font-bold text-emerald-700 hover:text-emerald-900 underline flex items-center gap-1"
+                    >
+                      <span>Download Technical Guide (PDF)</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
               )}
 
@@ -1067,6 +1091,77 @@ export default function SolarCalculator({ onOpenDossierRequest, isErpEmbedded = 
                     <div className="mt-2 pt-2 border-t border-emerald-200/80 flex justify-between font-bold text-emerald-950">
                       <span>Net Monthly Free Cash Surplus to Client (M13+):</span>
                       <span className="font-mono text-emerald-700">+{formatBdt(model.netMonthlyCashSurplusBdt)} / Month</span>
+                    </div>
+                  </div>
+
+                  {/* Daily Operating Profile & Core Engineering Dynamics */}
+                  <div className="p-3.5 bg-slate-900 text-white rounded-xl space-y-2.5 text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-amber-400" />
+                        <span className="font-bold text-white text-xs uppercase tracking-wider">
+                          Operational Hours &amp; Daily Generation Dynamics
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${includeBessStorage ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}`}>
+                          {includeBessStorage ? '24/7 Continuous Hybrid' : '7.5 – 8.5 Hours Daytime Grid-Tied'}
+                        </span>
+                        <a
+                          href="/documents/AREL_OPS_2026_OPHR_V1_Solar_Operating_Hours_Guide.pdf"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-amber-400 hover:text-amber-300 font-bold underline flex items-center gap-1"
+                          title="Open 3-Page Engineering White Paper PDF"
+                        >
+                          <span>Full Guide PDF</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                      <div className="flex items-start gap-2 bg-slate-800/70 p-2.5 rounded-lg border border-slate-700/60">
+                        <span className="text-amber-400 font-bold text-xs shrink-0">①</span>
+                        <div>
+                          <span className="font-semibold text-slate-200 block">Daily Active Generation Window:</span>
+                          <span className="text-slate-400 text-[10.5px] leading-tight block mt-0.5">
+                            <strong>08:00 AM – 04:30 PM (7.5 to 8.5 Hours/Day)</strong> across Bangladesh latitude (23.8°N). Sunrise ramp-up at 06:15 AM, sunset standby at 05:45 PM.
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2 bg-slate-800/70 p-2.5 rounded-lg border border-slate-700/60">
+                        <span className="text-amber-400 font-bold text-xs shrink-0">②</span>
+                        <div>
+                          <span className="font-semibold text-slate-200 block">Peak Sun Hours (PSH Full-Load Equivalent):</span>
+                          <span className="text-slate-400 text-[10.5px] leading-tight block mt-0.5">
+                            <strong>3.84 to 4.20 Hours/Day</strong> annual mean. Converts {model.installedCapacityKwp} kWp capacity into ~{model.dailyGenKwh.toLocaleString()} kWh/day clean power.
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2 bg-slate-800/70 p-2.5 rounded-lg border border-slate-700/60">
+                        <span className="text-amber-400 font-bold text-xs shrink-0">③</span>
+                        <div>
+                          <span className="font-semibold text-slate-200 block">Seasonal Generation Variation:</span>
+                          <span className="text-slate-400 text-[10.5px] leading-tight block mt-0.5">
+                            <strong>Summer (Mar–May): 4.8–5.1 PSH</strong> (Peak output) • <strong>Winter (Nov–Feb): 3.8–4.3 PSH</strong> (+4% cold cell efficiency) • <strong>Monsoon (Jun–Aug): 3.2–3.5 PSH</strong>.
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2 bg-slate-800/70 p-2.5 rounded-lg border border-slate-700/60">
+                        <span className="text-amber-400 font-bold text-xs shrink-0">④</span>
+                        <div>
+                          <span className="font-semibold text-slate-200 block">Grid Outage &amp; Load-Shedding Defense:</span>
+                          <span className="text-slate-400 text-[10.5px] leading-tight block mt-0.5">
+                            {includeBessStorage 
+                              ? 'Hybrid CATL/BYD LiFePO4 powers 24/7 continuous operation (<10ms UPS switchover). 100% diesel generator fuel displaced (saving Tk 32–38/kWh).'
+                              : 'Standard Grid-Tied inverters disconnect in <20ms during utility load-shedding (IEEE 1547 / SREDA anti-islanding safety). Toggle Hybrid for 24/7 power.'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
