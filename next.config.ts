@@ -29,6 +29,18 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: '/letterhead',
+        destination: '/letterhead.html',
+      },
+      {
+        source: '/energy-letterhead',
+        destination: '/letterhead.html',
+      },
+    ];
+  },
   async headers() {
     return [
       {
