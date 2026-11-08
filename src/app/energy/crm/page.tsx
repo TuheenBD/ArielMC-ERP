@@ -857,8 +857,11 @@ export default function ArielEnergyCrmPage() {
           </div>
         </header>
 
-        {/* Main Content Workspace Body (pt-20 for fixed header clearance, Compact & Full Width) */}
-        <main className="pt-20 p-4 sm:p-5 flex-1 w-full max-w-full space-y-4">
+        {/* Dedicated Fixed Header Spacer (Ensures Main Window Content Never Collides Under Header) */}
+        <div className="h-16 w-full shrink-0" aria-hidden="true" />
+
+        {/* Main Content Workspace Body (Lowered with Standard Margin & Fitting Main Window) */}
+        <main className="flex-1 w-full max-w-full px-5 sm:px-6 lg:px-8 py-6 space-y-6">
           {activeTab === 'overview' && (
             <ExecutiveDashboard
               leads={arelLeads}

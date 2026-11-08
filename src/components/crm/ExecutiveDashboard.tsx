@@ -119,7 +119,7 @@ export default function ExecutiveDashboard({
   }, [leads, applications, suppliers, tickets]);
 
   return (
-    <div className="space-y-8 pb-12 font-sans">
+    <div className="space-y-6 pb-8 font-sans">
       {/* 1. HERO EXECUTIVE KPI COCKPIT */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Pipeline CapEx */}
