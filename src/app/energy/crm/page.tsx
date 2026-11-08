@@ -23,6 +23,7 @@ import {
 } from '@/types/arelCrm';
 
 // CRM Module Components
+import ExecutiveDashboard from '@/components/crm/ExecutiveDashboard';
 import LeadManagement from '@/components/crm/LeadManagement';
 import TechnicalControl from '@/components/crm/TechnicalControl';
 import NewLeadModal from '@/components/crm/NewLeadModal';
@@ -60,6 +61,7 @@ import {
 } from 'lucide-react';
 
 type CrmTab =
+  | 'overview'
   | 'leads'
   | 'banking'
   | 'subcontractors'
@@ -71,6 +73,7 @@ type CrmTab =
   | 'technical';
 
 export default function ArielEnergyCrmPage() {
+  const [arelLeads] = useState(INITIAL_AREL_LEADS);
   const [leads, setLeads] = useState<SolarLead[]>(INITIAL_SOLAR_LEADS);
   const [bankApplications, setBankApplications] = useState(INITIAL_BANK_APPLICATIONS);
   const [subcontractors, setSubcontractors] = useState(INITIAL_SUBCONTRACTORS);
@@ -83,7 +86,7 @@ export default function ArielEnergyCrmPage() {
   const [projectAccounts] = useState(INITIAL_PROJECT_FINANCIALS);
   const [syncStatus, setSyncStatus] = useState(INITIAL_PLATFORM_SYNC);
 
-  const [activeTab, setActiveTab] = useState<CrmTab>('leads');
+  const [activeTab, setActiveTab] = useState<CrmTab>('overview');
   const [activeLeadForTechId, setActiveLeadForTechId] = useState<string>(
     INITIAL_SOLAR_LEADS[0].id
   );
@@ -192,6 +195,7 @@ export default function ArielEnergyCrmPage() {
   };
 
   const tabs: { id: CrmTab; label: string; icon: React.ElementType; badge?: string }[] = [
+    { id: 'overview', label: 'Executive Cockpit', icon: Activity, badge: 'Overview' },
     { id: 'leads', label: 'Lead Control', icon: Building, badge: `${leads.length}` },
     { id: 'banking', label: '4.5% Bank Debt Desk', icon: Landmark, badge: 'IDCOL/PFI' },
     { id: 'subcontractors', label: 'Subcontractors & IEB', icon: ShieldCheck, badge: `${subcontractors.length}` },
@@ -316,6 +320,24 @@ export default function ArielEnergyCrmPage() {
 
       {/* Main Workspace Body */}
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+        {activeTab === 'overview' && (
+          <ExecutiveDashboard
+            leads={arelLeads}
+            applications={bankApplications}
+            subcontractors={subcontractors}
+            products={products}
+            bomPackages={bomPackages}
+            lots={lots}
+            suppliers={suppliers}
+            shipments={shipments}
+            tickets={tickets}
+            accounts={projectAccounts}
+            syncStatus={syncStatus}
+            onNavigateTab={setActiveTab}
+            onOpenNewLeadModal={() => setNewLeadModalOpen(true)}
+          />
+        )}
+
         {activeTab === 'leads' && (
           <LeadManagement
             leads={leads}
