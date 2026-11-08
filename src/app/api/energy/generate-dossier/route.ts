@@ -101,11 +101,11 @@ export async function POST(req: NextRequest) {
 
       // Draw Logo on top-left if available (clean ratio 3.152:1, zero distortion)
       if (embeddedLogo) {
-        const logoHeight = 28;
-        const logoWidth = logoHeight * 3.152; // 88.25 pt
+        const logoHeight = 20;
+        const logoWidth = logoHeight * 7.004; // 140 pt
         page.drawImage(embeddedLogo, {
           x: 40,
-          y: pageHeight - 48,
+          y: pageHeight - 42,
           width: logoWidth,
           height: logoHeight,
         });

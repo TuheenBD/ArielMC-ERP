@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ariel Renewable Energy Limited — Official Corporate Letterhead Standard</title>
+    <link rel="icon" type="image/png" href="images/ariel-energy-logo-clean.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #08120e;
+            color: #1e293b;
+        }
+
+        /* Real A4 Simulation for Browser Display */
+        .a4-sheet {
+            width: 210mm;
+            min-height: 297mm;
+            height: 297mm;
+            box-sizing: border-box;
+            position: relative;
+            background: #ffffff;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        /* Editable Correspondence Typography */
+        .editable-body:focus {
+            outline: 2px dashed #047857;
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        /* Print Media Query: 100% Borderless A4 */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+
+            html, body {
+                background: #ffffff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .a4-sheet {
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
+            .editable-body:focus {
+                outline: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+
+    <!-- Interactive Top Control Bar -->
+    <header class="no-print w-full bg-[#0d1d17] border-b border-emerald-900/60 text-white sticky top-0 z-50 shadow-2xl backdrop-blur-md bg-opacity-95">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Brand & Title -->
+            <div class="flex items-center gap-3">
+                <img src="images/ariel-energy-logo-clean.png" alt="Ariel Renewable Energy Limited" class="h-7 w-auto object-contain">
+                <div>
+                    <h1 class="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
+                        <span>Ariel Renewable Energy Limited</span>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Official Approved Letterhead</span>
+                    </h1>
+                    <p class="text-[11px] text-slate-400">Master Vector Canvas • Niketon HQ • Zero Distortion • Approved Institutional Standards</p>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex items-center gap-2.5">
+                <!-- Content Mode Toggle -->
+                <button type="button" onclick="toggleLetterMode()" id="mode-btn" class="px-3.5 py-1.5 text-xs font-semibold bg-[#162E23] hover:bg-emerald-900/80 text-emerald-200 rounded-lg border border-emerald-700/60 flex items-center gap-2 transition">
+                    <span id="mode-icon">📄</span>
+                    <span id="mode-label">Show Sample Letter</span>
+                </button>
+
+                <!-- Download Official Vector PDF -->
+                <a href="/shared-assets/energy/letterhead/Ariel_Renewable_Energy_Official_Letterhead_Master.pdf" download="Ariel_Renewable_Energy_Official_Letterhead_Master.pdf" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
+                    <span>📥</span>
+                    <span>Master PDF</span>
+                </a>
+
+                <!-- Download Word DOCX -->
+                <a href="/shared-assets/energy/letterhead/Ariel_Energy_Official_Corporate_Letterhead.docx" download="Ariel_Energy_Official_Corporate_Letterhead.docx" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
+                    <span>📝</span>
+                    <span>Word DOCX</span>
+                </a>
+
+                <!-- Print / Save PDF -->
+                <button type="button" onclick="window.print()" class="px-4 py-1.5 text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 rounded-lg shadow-lg hover:shadow-emerald-500/20 flex items-center gap-2 transition transform active:scale-95">
+                    <span>🖨️</span>
+                    <span>Print / Save as PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Calibration Info Note -->
+    <div class="no-print max-w-4xl mx-auto mt-4 px-4 py-2 bg-[#13281f]/90 border border-emerald-800/60 rounded-xl text-xs text-emerald-100 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+            <span class="text-amber-400 text-base">✨</span>
+            <span><strong>Approved Letterhead Standard:</strong> Exact master vector canvas preserved with 100% fidelity. Clean header name design (no orange swoosh, no header contact clutter). Institutional dark navy footer bar with Niketon HQ address, telephony, and <code>info@arielenergybd.com</code>.</span>
+        </div>
+        <a href="index.html" class="text-amber-400 hover:text-amber-300 whitespace-nowrap font-semibold">← Website</a>
+    </div>
+
+    <!-- Main Workspace Container -->
+    <main class="py-6 sm:py-8 w-full flex justify-center overflow-x-auto">
+        
+        <!-- =========================================================
+             A4 SHEET CONTAINER (210mm x 297mm Standard)
+             ========================================================= -->
+        <div id="a4-sheet" class="a4-sheet relative">
+
+            <!-- 1. Master Approved Official Letterhead Artwork Background (Zero Distortion, 300 DPI A4) -->
+            <img 
+                src="images/Ariel_Renewable_Energy_Official_Letterhead_Master.png" 
+                alt="Ariel Renewable Energy Limited Official Letterhead" 
+                class="absolute inset-0 w-full h-full object-fill pointer-events-none select-none z-0"
+            >
+
+            <!-- 2. Central Correspondence Body (Printable / Editable Text Area) -->
+            <div id="letter-body" class="absolute left-[20mm] right-[20mm] top-[38mm] bottom-[34mm] overflow-hidden text-[9pt] leading-[1.55] text-slate-800 z-10">
+                
+                <!-- Blank State (Default clean for stationery printing) -->
+                <div id="blank-notice" class="h-full flex flex-col justify-center items-center text-center text-slate-400 select-none no-print border-2 border-dashed border-emerald-200/60 rounded-xl p-8 bg-white/40 backdrop-blur-xs">
+                    <div class="text-3xl mb-2 text-emerald-600">☀️</div>
+                    <div class="font-bold text-slate-800 text-sm">Ariel Renewable Energy Limited — Official Stationery Sheet</div>
+                    <div class="text-xs text-slate-500 mt-1.5 max-w-sm">This sheet is currently in <strong>Clean Stationery Mode</strong> (blank correspondence area). Click <strong>"Show Sample Letter"</strong> in the top toolbar to preview formal EPC correspondence, or click anywhere inside to begin typing.</div>
+                </div>
+
+                <!-- Sample Formal B2B EPC Correspondence (Toggled on demand) -->
+                <div id="sample-text" class="hidden editable-body h-full p-2 outline-none" contenteditable="true" spellcheck="false">
+                    <div class="flex justify-between items-baseline mb-5 border-b border-slate-200 pb-2">
+                        <div>
+                            <p class="font-bold text-slate-900 text-[9.5pt]">OFFICIAL COMMERCIAL &amp; STATUTORY TRANSMITTAL</p>
+                            <p class="text-[8pt] text-slate-500 font-mono">REF: AREL/OFF/2026/EPC-092 | SREDA NET-METERING &amp; SFD 4.5% DESK</p>
+                        </div>
+                        <div class="text-right text-[8pt] text-slate-600 font-medium">
+                            <p>Date: 09 November 2026</p>
+                            <p class="text-slate-400">Dhaka Operations Headquarters</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 text-[8.5pt]">
+                        <p class="font-semibold text-slate-900">To: The Managing Director &amp; Board of Directors</p>
+                        <p class="text-slate-700 font-medium">[Client Enterprise Name Limited]</p>
+                        <p class="text-slate-500">Dhaka / Gazipur / Chattogram Industrial Zone, Bangladesh</p>
+                        <p class="text-slate-500 text-[8pt] mt-0.5"><strong>Attention:</strong> Chief Financial Officer &amp; Head of Engineering &amp; Utilities</p>
+                    </div>
+
+                    <div class="space-y-2.5 text-[8.5pt] text-slate-700">
+                        <p><strong class="text-slate-900">SUBJECT: OFFICIAL SUBMISSION FOR TURNKEY ROOFTOP SOLAR EPC &amp; 4.5% GREEN REFINANCING SANCTION</strong></p>
+                        
+                        <p>Dear Sir/Madam,</p>
+                        
+                        <p>On behalf of <strong>Ariel Renewable Energy Limited</strong> (Ariel - SaaS™), an operating sovereign corporate entity under <strong>Ariel Group / Holdings</strong>, we have the privilege to submit this formal engineering appraisal and bankable feasibility dossier for your industrial facility.</p>
+
+                        <p>Under statutory guidelines enacted by SREDA and Bangladesh Bank Sustainable Finance Department (SFD), your manufacturing facility qualifies for concessionary <strong>80% debt financing at 4.5% fixed interest</strong> with a 1-year moratorium and 10-year tenor. Our turnkey engineering delivery guarantees strict compliance with BNBC 2020 180 km/h wind load certifications and our signature 15-Year Water-Tight Roof SLA.</p>
+
+                        <div class="my-2.5 p-2.5 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-[8pt]">
+                            <div class="font-bold text-slate-900 mb-1 text-emerald-950">Statutory Project Parameters &amp; Sovereign Financial Underwriting:</div>
+                            <ul class="list-disc list-inside space-y-0.5 text-slate-700">
+                                <li><strong>Pre-Qualified Concessionary Debt:</strong> 80% Capital Covered under Bangladesh Bank Refinance @ 4.5% Fixed.</li>
+                                <li><strong>Tier-1 Equipment Standard:</strong> N-Type TOPCon Bifacial PV Modules + Huawei / Sungrow AFCI Inverters.</li>
+                                <li><strong>Regulatory Yield &amp; SLA:</strong> 25-Year Performance Ratio Guarantee (PR &ge; 80%) with Real-Time Telemetry Bridge.</li>
+                            </ul>
+                        </div>
+
+                        <p>Our executive project team remains available to coordinate on-site 3D LiDAR drone shading analysis, certify the IEB structural load, and submit your dossier directly to your bank's SFD desk.</p>
+
+                        <p class="mt-3">Yours faithfully,</p>
+                        
+                        <div class="mt-2 pt-1">
+                            <p class="font-bold text-slate-900 text-[9pt]">Syed Akramul Hassan</p>
+                            <p class="text-[8pt] text-slate-700 font-medium">Managing Director &amp; Chief Executive Officer</p>
+                            <p class="text-[7.5pt] text-slate-500">Ariel Renewable Energy Limited • A Member of Ariel Group / Holdings</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Interactive Script -->
+    <script>
+        let isSampleVisible = false;
+
+        function toggleLetterMode() {
+            isSampleVisible = !isSampleVisible;
+            const blankNotice = document.getElementById('blank-notice');
+            const sampleText = document.getElementById('sample-text');
+            const modeIcon = document.getElementById('mode-icon');
+            const modeLabel = document.getElementById('mode-label');
+
+            if (isSampleVisible) {
+                blankNotice.classList.add('hidden');
+                sampleText.classList.remove('hidden');
+                modeIcon.textContent = '🧹';
+                modeLabel.textContent = 'Clean Blank Sheet';
+            } else {
+                blankNotice.classList.remove('hidden');
+                sampleText.classList.add('hidden');
+                modeIcon.textContent = '📄';
+                modeLabel.textContent = 'Show Sample Letter';
+            }
+        }
+    </script>
+</body>
+</html>
