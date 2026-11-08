@@ -24,6 +24,8 @@ import {
   ShieldCheck,
   Cpu,
   Layers,
+  LayoutGrid,
+  Table as TableIcon,
 } from 'lucide-react';
 
 interface LeadManagementProps {
@@ -58,6 +60,7 @@ export default function LeadManagement({
   const [selectedCorridor, setSelectedCorridor] = useState<string>('All');
   const [selectedSector, setSelectedSector] = useState<string>('All');
   const [selectedStage, setSelectedStage] = useState<string>('All');
+  const [displayMode, setDisplayMode] = useState<'GRID' | 'TABLE'>('GRID');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   // SREDA Cutoff Date: Feb 28, 2027
@@ -295,6 +298,36 @@ export default function LeadManagement({
 
         {/* Action Buttons: Bank Feasibility Dossier & New Lead Button */}
         <div className="flex items-center gap-2 w-full md:w-auto">
+          {/* Grid vs Table View Mode Toggle */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
+            <button
+              type="button"
+              onClick={() => setDisplayMode('GRID')}
+              className={`p-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                displayMode === 'GRID'
+                  ? 'bg-white text-emerald-800 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Card / Grid View"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Grid</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDisplayMode('TABLE')}
+              className={`p-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                displayMode === 'TABLE'
+                  ? 'bg-white text-emerald-800 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Enterprise Table View"
+            >
+              <TableIcon className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Table</span>
+            </button>
+          </div>
+
           <a
             href="/documents/AREL_BNK_2026_FEAS_V1_Bankable_Feasibility_Study_Dossier.pdf"
             target="_blank"
@@ -330,150 +363,277 @@ export default function LeadManagement({
           </span>
         </div>
 
-        <div className="divide-y divide-slate-100 overflow-x-auto">
-          {filteredLeads.map((lead) => {
-            const stageCfg = STAGE_CONFIG[lead.stage];
-            const isDownloading = downloadingId === lead.id;
+        {displayMode === 'GRID' ? (
+          <div className="divide-y divide-slate-100 overflow-x-auto">
+            {filteredLeads.map((lead) => {
+              const stageCfg = STAGE_CONFIG[lead.stage];
+              const isDownloading = downloadingId === lead.id;
 
-            return (
-              <div
-                key={lead.id}
-                onClick={() => onSelectLead(lead)}
-                className="p-5 hover:bg-emerald-50/40 transition flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 cursor-pointer group"
-              >
-                {/* Left Info: Factory, Group, Contact */}
-                <div className="flex-1 min-w-[300px]">
-                  <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-                    <span className="font-bold text-sm text-[#0A1A2F] group-hover:text-emerald-700 transition">
-                      {lead.factoryName}
-                    </span>
-                    {lead.parentGroup && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                        {lead.parentGroup}
+              return (
+                <div
+                  key={lead.id}
+                  onClick={() => onSelectLead(lead)}
+                  className="p-5 hover:bg-emerald-50/40 transition flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 cursor-pointer group"
+                >
+                  {/* Left Info: Factory, Group, Contact */}
+                  <div className="flex-1 min-w-[300px]">
+                    <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+                      <span className="font-bold text-sm text-[#0A1A2F] group-hover:text-emerald-700 transition">
+                        {lead.factoryName}
                       </span>
-                    )}
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                        lead.priority === 'Critical (SREDA Cutoff)'
-                          ? 'bg-red-100 text-red-800 border border-red-200 animate-pulse'
-                          : 'bg-emerald-50 text-emerald-800'
-                      }`}
+                      {lead.parentGroup && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                          {lead.parentGroup}
+                        </span>
+                      )}
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          lead.priority === 'Critical (SREDA Cutoff)'
+                            ? 'bg-red-100 text-red-800 border border-red-200 animate-pulse'
+                            : 'bg-emerald-50 text-emerald-800'
+                        }`}
+                      >
+                        {lead.priority}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs text-slate-500 flex-wrap">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{lead.location}</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>{lead.contactPerson} ({lead.phone})</span>
+                      </span>
+                      <span className="font-mono text-slate-400 text-[11px]">{lead.id}</span>
+                    </div>
+                  </div>
+
+                  {/* Middle Info: Capacity & CapEx Valuation */}
+                  <div className="flex items-center gap-6 shrink-0 font-mono text-xs">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block uppercase font-sans">
+                        Target Capacity
+                      </span>
+                      <span className="font-bold text-emerald-700 text-sm">
+                        {lead.estimatedCapacityKwp} kWp
+                      </span>
+                      <span className="text-[10px] text-slate-500 block">
+                        {lead.roofAreaSqFt.toLocaleString()} sq ft
+                      </span>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] text-slate-400 block uppercase font-sans">
+                        CapEx Project Value
+                      </span>
+                      <span className="font-bold text-[#0A1A2F] text-sm">
+                        Tk {(lead.projectValueBdt / 10000000).toFixed(2)} Cr
+                      </span>
+                      <span className="text-[10px] text-slate-500 block">
+                        ~Tk {(lead.monthlyBillBdt / 100000).toFixed(1)}L/mo Bill
+                      </span>
+                    </div>
+
+                    {/* Stage Badge & Dropdown */}
+                    <div className="min-w-[160px]">
+                      <span className="text-[10px] text-slate-400 block uppercase font-sans mb-0.5">
+                        Pipeline Stage
+                      </span>
+                      <select
+                        value={lead.stage}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => onUpdateLeadStage(lead.id, e.target.value as LeadStage)}
+                        className={`text-[11px] font-bold px-2 py-1 rounded-lg border border-slate-200 cursor-pointer focus:outline-none ${stageCfg.badgeCol}`}
+                      >
+                        <option value="inbound">1. Inbound Request</option>
+                        <option value="satellite_audit">2. 3D Satellite Audit</option>
+                        <option value="site_audit_scheduled">3. Site Audit Scheduled</option>
+                        <option value="proposal_submitted">4. Proposal Submitted</option>
+                        <option value="bank_financing">5. Bank Financing (4.5%)</option>
+                        <option value="contract_executed">6. Contract Executed</option>
+                        <option value="sreda_connected">7. SREDA Net-Metered</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Right Action Buttons */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    {/* 1-Click Generate 4-Page Dossier PDF */}
+                    <button
+                      type="button"
+                      disabled={isDownloading}
+                      onClick={(e) => handleDownloadDossier(lead, e)}
+                      className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      title="Generate & Download 4-Page Executive Bespoke Dossier PDF"
                     >
-                      {lead.priority}
-                    </span>
-                  </div>
+                      <Download className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">
+                        {isDownloading ? 'Building...' : 'Dossier PDF'}
+                      </span>
+                    </button>
 
-                  <div className="flex items-center gap-4 text-xs text-slate-500 flex-wrap">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{lead.location}</span>
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Phone className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>{lead.contactPerson} ({lead.phone})</span>
-                    </span>
-                    <span className="font-mono text-slate-400 text-[11px]">{lead.id}</span>
-                  </div>
-                </div>
-
-                {/* Middle Info: Capacity & CapEx Valuation */}
-                <div className="flex items-center gap-6 shrink-0 font-mono text-xs">
-                  <div>
-                    <span className="text-[10px] text-slate-400 block uppercase font-sans">
-                      Target Capacity
-                    </span>
-                    <span className="font-bold text-emerald-700 text-sm">
-                      {lead.estimatedCapacityKwp} kWp
-                    </span>
-                    <span className="text-[10px] text-slate-500 block">
-                      {lead.roofAreaSqFt.toLocaleString()} sq ft
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] text-slate-400 block uppercase font-sans">
-                      CapEx Project Value
-                    </span>
-                    <span className="font-bold text-[#0A1A2F] text-sm">
-                      Tk {(lead.projectValueBdt / 10000000).toFixed(2)} Cr
-                    </span>
-                    <span className="text-[10px] text-slate-500 block">
-                      ~Tk {(lead.monthlyBillBdt / 100000).toFixed(1)}L/mo Bill
-                    </span>
-                  </div>
-
-                  {/* Stage Badge & Dropdown */}
-                  <div className="min-w-[160px]">
-                    <span className="text-[10px] text-slate-400 block uppercase font-sans mb-0.5">
-                      Pipeline Stage
-                    </span>
-                    <select
-                      value={lead.stage}
+                    {/* WhatsApp Quick Link */}
+                    <a
+                      href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Dear%20${encodeURIComponent(
+                        lead.contactPerson
+                      )}%2C%20Ariel%20Renewable%20Energy%20Limited%20has%20completed%20the%20${lead.estimatedCapacityKwp}kWp%20solar%20feasibility%20for%20${encodeURIComponent(
+                        lead.factoryName
+                      )}.%20Would%20you%20like%20to%20review%20the%204.5%25%20bank%20waterfall%3F`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => onUpdateLeadStage(lead.id, e.target.value as LeadStage)}
-                      className={`text-[11px] font-bold px-2 py-1 rounded-lg border border-slate-200 cursor-pointer focus:outline-none ${stageCfg.badgeCol}`}
+                      className="p-2 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 text-xs font-bold transition"
+                      title="Open WhatsApp Chat with Decision Maker"
                     >
-                      <option value="inbound">1. Inbound Request</option>
-                      <option value="satellite_audit">2. 3D Satellite Audit</option>
-                      <option value="site_audit_scheduled">3. Site Audit Scheduled</option>
-                      <option value="proposal_submitted">4. Proposal Submitted</option>
-                      <option value="bank_financing">5. Bank Financing (4.5%)</option>
-                      <option value="contract_executed">6. Contract Executed</option>
-                      <option value="sreda_connected">7. SREDA Net-Metered</option>
-                    </select>
+                      <Share2 className="w-3.5 h-3.5" />
+                    </a>
+
+                    {/* Open Technical Control */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenTechnicalForLead(lead);
+                      }}
+                      className="p-2 rounded-lg bg-[#0A1A2F] hover:bg-[#152a45] text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      title="Open Technical Control & Substation Specifications"
+                    >
+                      <Cpu className="w-3.5 h-3.5 text-[#C9A86A]" />
+                      <span className="hidden sm:inline">Technical Control</span>
+                    </button>
                   </div>
                 </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* High-Density Industrial Rooftop Accounts Table View */
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#0A1A2F] text-white uppercase text-[10px] tracking-wider font-mono">
+                <tr>
+                  <th className="py-3 px-4">Factory &amp; Group</th>
+                  <th className="py-3 px-4">Sector &amp; Location</th>
+                  <th className="py-3 px-4">Sanctioned kVA &amp; 70% Limit</th>
+                  <th className="py-3 px-4">Capacity &amp; Area</th>
+                  <th className="py-3 px-4">CapEx (Tk Cr)</th>
+                  <th className="py-3 px-4">80% Green Loan @ 4.5%</th>
+                  <th className="py-3 px-4">Pipeline Stage</th>
+                  <th className="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                {filteredLeads.map((lead) => {
+                  const stageCfg = STAGE_CONFIG[lead.stage];
+                  const maxAllowedAcKw = Math.round(lead.technical.sanctionedLoadKw * 0.7);
+                  const isWithinLimit = lead.estimatedCapacityKwp <= maxAllowedAcKw;
+                  const isDownloading = downloadingId === lead.id;
 
-                {/* Right Action Buttons */}
-                <div className="flex items-center gap-2 shrink-0">
-                  {/* 1-Click Generate 4-Page Dossier PDF */}
-                  <button
-                    type="button"
-                    disabled={isDownloading}
-                    onClick={(e) => handleDownloadDossier(lead, e)}
-                    className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition flex items-center gap-1"
-                    title="Generate & Download 4-Page Executive Bespoke Dossier PDF"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">
-                      {isDownloading ? 'Building...' : 'Dossier PDF'}
-                    </span>
-                  </button>
+                  return (
+                    <tr
+                      key={lead.id}
+                      onClick={() => onSelectLead(lead)}
+                      className="hover:bg-emerald-50/50 transition cursor-pointer"
+                    >
+                      <td className="py-3.5 px-4">
+                        <div className="font-bold text-[#0A1A2F]">{lead.factoryName}</div>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          {lead.parentGroup && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                              {lead.parentGroup}
+                            </span>
+                          )}
+                          <span className="font-mono text-[10px] text-slate-400">{lead.id}</span>
+                        </div>
+                      </td>
 
-                  {/* WhatsApp Quick Link */}
-                  <a
-                    href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Dear%20${encodeURIComponent(
-                      lead.contactPerson
-                    )}%2C%20Ariel%20Renewable%20Energy%20Limited%20has%20completed%20the%20${lead.estimatedCapacityKwp}kWp%20solar%20feasibility%20for%20${encodeURIComponent(
-                      lead.factoryName
-                    )}.%20Would%20you%20like%20to%20review%20the%204.5%25%20bank%20waterfall%3F`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="p-2 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 text-xs font-bold transition"
-                    title="Open WhatsApp Chat with Decision Maker"
-                  >
-                    <Share2 className="w-3.5 h-3.5" />
-                  </a>
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <div className="font-medium text-slate-900">{lead.industrySector}</div>
+                        <div className="text-[11px] text-slate-500">{lead.location}</div>
+                      </td>
 
-                  {/* Open Technical Control */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onOpenTechnicalForLead(lead);
-                    }}
-                    className="p-2 rounded-lg bg-[#0A1A2F] hover:bg-[#152a45] text-white text-xs font-bold transition flex items-center gap-1"
-                    title="Open Technical Control & Substation Specifications"
-                  >
-                    <Cpu className="w-3.5 h-3.5 text-[#C9A86A]" />
-                    <span className="hidden sm:inline">Technical Control</span>
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                      <td className="py-3.5 px-4 whitespace-nowrap font-mono">
+                        <div className="font-bold text-slate-900">{lead.technical.sanctionedLoadKw} kW</div>
+                        <div className={`text-[10px] ${isWithinLimit ? 'text-emerald-700 font-semibold' : 'text-red-700 font-bold'}`}>
+                          Cap: {maxAllowedAcKw} kW {isWithinLimit ? '✓ SREDA OK' : '⚠ Exceeds'}
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap font-mono">
+                        <div className="font-bold text-emerald-700 text-sm">{lead.estimatedCapacityKwp} kWp</div>
+                        <div className="text-[10px] text-slate-500">{lead.roofAreaSqFt.toLocaleString()} sq ft</div>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap font-mono">
+                        <div className="font-bold text-[#0A1A2F]">Tk {(lead.projectValueBdt / 10000000).toFixed(2)} Cr</div>
+                        <div className="text-[10px] text-slate-500">25% Gross Mgn Locked</div>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap font-mono">
+                        <div className="font-bold text-teal-700">Tk {((lead.projectValueBdt * 0.8) / 10000000).toFixed(2)} Cr</div>
+                        <div className="text-[10px] text-slate-500">Equity 20%: Tk {((lead.projectValueBdt * 0.2) / 10000000).toFixed(2)} Cr</div>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <select
+                          value={lead.stage}
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => onUpdateLeadStage(lead.id, e.target.value as LeadStage)}
+                          className={`text-[10px] font-bold px-2 py-1 rounded border border-slate-200 cursor-pointer focus:outline-none ${stageCfg.badgeCol}`}
+                        >
+                          <option value="inbound">1. Inbound</option>
+                          <option value="satellite_audit">2. 3D Satellite</option>
+                          <option value="site_audit_scheduled">3. Site Audit</option>
+                          <option value="proposal_submitted">4. Proposal</option>
+                          <option value="bank_financing">5. Bank Loan (4.5%)</option>
+                          <option value="contract_executed">6. Contract</option>
+                          <option value="sreda_connected">7. SREDA COD</option>
+                        </select>
+                      </td>
+
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            type="button"
+                            disabled={isDownloading}
+                            onClick={(e) => handleDownloadDossier(lead, e)}
+                            className="p-1.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition"
+                            title="Download 10-Page Dossier PDF"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                          </button>
+                          <a
+                            href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Dear%20${encodeURIComponent(
+                              lead.contactPerson
+                            )}%2C%20Ariel%20Renewable%20Energy%20Limited%20has%20completed%20the%20${lead.estimatedCapacityKwp}kWp%20solar%20feasibility%20for%20${encodeURIComponent(
+                              lead.factoryName
+                            )}.%20Would%20you%20like%20to%20review%20the%204.5%25%20bank%20waterfall%3F`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 transition"
+                            title="WhatsApp Chat"
+                          >
+                            <Share2 className="w-3.5 h-3.5" />
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => onOpenTechnicalForLead(lead)}
+                            className="p-1.5 rounded bg-[#0A1A2F] hover:bg-[#152a45] text-white transition"
+                            title="Technical Substation SLD"
+                          >
+                            <Cpu className="w-3.5 h-3.5 text-[#C9A86A]" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
