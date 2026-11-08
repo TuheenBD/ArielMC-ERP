@@ -375,7 +375,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="flex items-center gap-1.5 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#1A1A1A] border border-[#DDE3DD] rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer select-none"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer select-none"
         title="Switch ERP Color Scheme & Theme Palette"
       >
         <Palette className="w-3.5 h-3.5 text-[#C8A96A] shrink-0" />
@@ -383,16 +383,16 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           {activeTheme.swatches.slice(0, 3).map((c, i) => (
             <span
               key={i}
-              className="w-2.5 h-2.5 rounded-full border border-white shadow-2xs"
+              className="w-2.5 h-2.5 rounded-full border border-white/30 shadow-2xs"
               style={{ backgroundColor: c }}
             />
           ))}
         </div>
-        <span className="hidden xl:inline text-[11px] font-semibold text-[#1F3A2E] max-w-[130px] truncate">
+        <span className="hidden xl:inline text-[11px] font-semibold text-slate-200 max-w-[130px] truncate">
           {activeTheme.name}
         </span>
         <ChevronDown
-          className={`w-3 h-3 text-[#6B7269] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-3 h-3 text-slate-300 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 

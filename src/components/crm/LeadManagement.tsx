@@ -26,6 +26,10 @@ import {
   Layers,
   LayoutGrid,
   Table as TableIcon,
+  Eye,
+  Edit3,
+  Trash2,
+  X,
 } from 'lucide-react';
 
 interface LeadManagementProps {
@@ -34,6 +38,9 @@ interface LeadManagementProps {
   onOpenNewLeadModal: () => void;
   onOpenTechnicalForLead: (lead: SolarLead) => void;
   onUpdateLeadStage: (leadId: string, newStage: LeadStage) => void;
+  onEditLead?: (updatedLead: SolarLead) => void;
+  onDeleteLead?: (leadId: string) => void;
+  theme?: string;
 }
 
 const STAGE_CONFIG: Record<
@@ -55,6 +62,9 @@ export default function LeadManagement({
   onOpenNewLeadModal,
   onOpenTechnicalForLead,
   onUpdateLeadStage,
+  onEditLead,
+  onDeleteLead,
+  theme = 'crm-green',
 }: LeadManagementProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCorridor, setSelectedCorridor] = useState<string>('All');
@@ -62,6 +72,63 @@ export default function LeadManagement({
   const [selectedStage, setSelectedStage] = useState<string>('All');
   const [displayMode, setDisplayMode] = useState<'GRID' | 'TABLE'>('GRID');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+
+  // Selection, Edit, and Delete State
+  const [selectedLeadIds, setSelectedLeadIds] = useState<string[]>([]);
+  const [editingLead, setEditingLead] = useState<SolarLead | null>(null);
+  const [deletingLeadId, setDeletingLeadId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2500);
+  };
+
+  const handleToggleSelect = (id: string, e: React.MouseEvent | React.ChangeEvent) => {
+    e.stopPropagation();
+    setSelectedLeadIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedLeadIds.length === filteredLeads.length) {
+      setSelectedLeadIds([]);
+    } else {
+      setSelectedLeadIds(filteredLeads.map((l) => l.id));
+    }
+  };
+
+  const handleBulkDelete = () => {
+    if (confirm(`Are you sure you want to delete ${selectedLeadIds.length} selected leads?`)) {
+      selectedLeadIds.forEach((id) => onDeleteLead?.(id));
+      setSelectedLeadIds([]);
+      showToast(`${selectedLeadIds.length} leads deleted`);
+    }
+  };
+
+  const handleShareLead = (lead: SolarLead, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const shareUrl = `https://energy.arielmc.com/crm?tab=leads&leadId=${lead.id}`;
+    navigator.clipboard.writeText(shareUrl);
+    showToast(`Dossier link for ${lead.factoryName} copied to clipboard!`);
+  };
+
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingLead) return;
+    onEditLead?.(editingLead);
+    setEditingLead(null);
+    showToast(`Lead ${editingLead.factoryName} updated`);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deletingLeadId) return;
+    onDeleteLead?.(deletingLeadId);
+    setSelectedLeadIds((prev) => prev.filter((id) => id !== deletingLeadId));
+    setDeletingLeadId(null);
+    showToast('Lead deleted successfully');
+  };
 
   // SREDA Cutoff Date: Feb 28, 2027
   const sredaDaysRemaining = useMemo(() => {
@@ -351,16 +418,47 @@ export default function LeadManagement({
 
       {/* Main Leads Table & Detail Cards */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+        {/* Header & Bulk Actions */}
+        <div className="px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
           <div className="flex items-center gap-2">
             <Building className="w-4 h-4 text-emerald-700" />
             <h3 className="text-sm font-bold text-[#0A1A2F] uppercase tracking-wider">
               Industrial Rooftop Accounts ({filteredLeads.length})
             </h3>
           </div>
-          <span className="text-[11px] text-slate-500 font-mono">
-            Guaranteed Tk 10.50/kWh Buyback Tracking Active
-          </span>
+
+          {selectedLeadIds.length > 0 ? (
+            <div className="flex items-center gap-2 bg-[#0A1A2F] text-white px-3 py-1 rounded-lg text-xs font-mono">
+              <span className="font-bold text-emerald-300">{selectedLeadIds.length} Selected</span>
+              <span className="text-slate-500">|</span>
+              <button
+                type="button"
+                onClick={handleSelectAll}
+                className="hover:text-emerald-300 text-[11px] font-bold cursor-pointer"
+              >
+                {selectedLeadIds.length === filteredLeads.length ? 'Deselect All' : 'Select All'}
+              </button>
+              <span className="text-slate-500">|</span>
+              <button
+                type="button"
+                onClick={handleBulkDelete}
+                className="hover:text-rose-300 text-[11px] font-bold text-rose-400 cursor-pointer"
+              >
+                Delete Selected
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedLeadIds([])}
+                className="text-slate-400 hover:text-white ml-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+          ) : (
+            <span className="text-[11px] text-slate-500 font-mono">
+              Guaranteed Tk 10.50/kWh Buyback Tracking Active
+            </span>
+          )}
         </div>
 
         {displayMode === 'GRID' ? (
@@ -373,40 +471,51 @@ export default function LeadManagement({
                 <div
                   key={lead.id}
                   onClick={() => onSelectLead(lead)}
-                  className="p-5 hover:bg-emerald-50/40 transition flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 cursor-pointer group"
+                  className={`p-5 hover:bg-emerald-50/40 transition flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 cursor-pointer group ${
+                    selectedLeadIds.includes(lead.id) ? 'bg-emerald-50/60 ring-1 ring-emerald-500' : ''
+                  }`}
                 >
-                  {/* Left Info: Factory, Group, Contact */}
-                  <div className="flex-1 min-w-[300px]">
-                    <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-                      <span className="font-bold text-sm text-[#0A1A2F] group-hover:text-emerald-700 transition">
-                        {lead.factoryName}
-                      </span>
-                      {lead.parentGroup && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                          {lead.parentGroup}
+                  {/* Left Info: Checkbox, Factory, Group, Contact */}
+                  <div className="flex-1 min-w-[300px] flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedLeadIds.includes(lead.id)}
+                      onChange={(e) => handleToggleSelect(lead.id, e)}
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-1 rounded text-emerald-600 focus:ring-0 cursor-pointer shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+                        <span className="font-bold text-sm text-[#0A1A2F] group-hover:text-emerald-700 transition">
+                          {lead.factoryName}
                         </span>
-                      )}
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          lead.priority === 'Critical (SREDA Cutoff)'
-                            ? 'bg-red-100 text-red-800 border border-red-200 animate-pulse'
-                            : 'bg-emerald-50 text-emerald-800'
-                        }`}
-                      >
-                        {lead.priority}
-                      </span>
-                    </div>
+                        {lead.parentGroup && (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                            {lead.parentGroup}
+                          </span>
+                        )}
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            lead.priority === 'Critical (SREDA Cutoff)'
+                              ? 'bg-red-100 text-red-800 border border-red-200 animate-pulse'
+                              : 'bg-emerald-50 text-emerald-800'
+                          }`}
+                        >
+                          {lead.priority}
+                        </span>
+                      </div>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-500 flex-wrap">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{lead.location}</span>
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Phone className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>{lead.contactPerson} ({lead.phone})</span>
-                      </span>
-                      <span className="font-mono text-slate-400 text-[11px]">{lead.id}</span>
+                      <div className="flex items-center gap-4 text-xs text-slate-500 flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{lead.location}</span>
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>{lead.contactPerson} ({lead.phone})</span>
+                        </span>
+                        <span className="font-mono text-slate-400 text-[11px]">{lead.id}</span>
+                      </div>
                     </div>
                   </div>
 
@@ -459,49 +568,65 @@ export default function LeadManagement({
                   </div>
 
                   {/* Right Action Buttons */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    {/* 1-Click Generate 4-Page Dossier PDF */}
+                  <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      onClick={() => onSelectLead(lead)}
+                      className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      title="View Lead Dossier & Turnkey Conversion"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">View</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setEditingLead(lead)}
+                      className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      title="Edit Lead Specifications"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </button>
+
                     <button
                       type="button"
                       disabled={isDownloading}
                       onClick={(e) => handleDownloadDossier(lead, e)}
-                      className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
-                      title="Generate & Download 4-Page Executive Bespoke Dossier PDF"
+                      className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      title="Download Dossier PDF"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span className="hidden sm:inline">
-                        {isDownloading ? 'Building...' : 'Dossier PDF'}
+                        {isDownloading ? 'Building...' : 'PDF'}
                       </span>
                     </button>
 
-                    {/* WhatsApp Quick Link */}
-                    <a
-                      href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Dear%20${encodeURIComponent(
-                        lead.contactPerson
-                      )}%2C%20Ariel%20Renewable%20Energy%20Limited%20has%20completed%20the%20${lead.estimatedCapacityKwp}kWp%20solar%20feasibility%20for%20${encodeURIComponent(
-                        lead.factoryName
-                      )}.%20Would%20you%20like%20to%20review%20the%204.5%25%20bank%20waterfall%3F`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="p-2 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 text-xs font-bold transition"
-                      title="Open WhatsApp Chat with Decision Maker"
-                    >
-                      <Share2 className="w-3.5 h-3.5" />
-                    </a>
-
-                    {/* Open Technical Control */}
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onOpenTechnicalForLead(lead);
-                      }}
-                      className="p-2 rounded-lg bg-[#0A1A2F] hover:bg-[#152a45] text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
-                      title="Open Technical Control & Substation Specifications"
+                      onClick={(e) => handleShareLead(lead, e)}
+                      className="p-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 text-xs font-bold transition cursor-pointer"
+                      title="Share Dossier Link & WhatsApp"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onOpenTechnicalForLead(lead)}
+                      className="p-1.5 rounded-lg bg-[#0A1A2F] hover:bg-[#152a45] text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      title="Technical Substation SLD"
                     >
                       <Cpu className="w-3.5 h-3.5 text-[#C9A86A]" />
-                      <span className="hidden sm:inline">Technical Control</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setDeletingLeadId(lead.id)}
+                      className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition cursor-pointer"
+                      title="Delete Lead"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -514,6 +639,14 @@ export default function LeadManagement({
             <table className="w-full text-left text-xs">
               <thead className="bg-[#0A1A2F] text-white uppercase text-[10px] tracking-wider font-mono">
                 <tr>
+                  <th className="py-3 px-3 w-8 text-center">
+                    <input
+                      type="checkbox"
+                      checked={filteredLeads.length > 0 && selectedLeadIds.length === filteredLeads.length}
+                      onChange={handleSelectAll}
+                      className="rounded text-emerald-600 focus:ring-0 cursor-pointer"
+                    />
+                  </th>
                   <th className="py-3 px-4">Factory &amp; Group</th>
                   <th className="py-3 px-4">Sector &amp; Location</th>
                   <th className="py-3 px-4">Sanctioned kVA &amp; 70% Limit</th>
@@ -535,8 +668,20 @@ export default function LeadManagement({
                     <tr
                       key={lead.id}
                       onClick={() => onSelectLead(lead)}
-                      className="hover:bg-emerald-50/50 transition cursor-pointer"
+                      className={`hover:bg-emerald-50/50 transition cursor-pointer ${
+                        selectedLeadIds.includes(lead.id) ? 'bg-emerald-50/40' : ''
+                      }`}
                     >
+                      {/* Checkbox Column */}
+                      <td className="py-3.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
+                        <input
+                          type="checkbox"
+                          checked={selectedLeadIds.includes(lead.id)}
+                          onChange={(e) => handleToggleSelect(lead.id, e)}
+                          className="rounded text-emerald-600 focus:ring-0 cursor-pointer"
+                        />
+                      </td>
+
                       <td className="py-3.5 px-4">
                         <div className="font-bold text-[#0A1A2F]">{lead.factoryName}</div>
                         <div className="flex items-center gap-1.5 mt-0.5">
@@ -594,7 +739,25 @@ export default function LeadManagement({
                       </td>
 
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <div className="inline-flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <div className="inline-flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            type="button"
+                            onClick={() => onSelectLead(lead)}
+                            className="p-1.5 rounded hover:bg-blue-50 text-blue-700 transition"
+                            title="View Lead Dossier & Turnkey Conversion"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setEditingLead(lead)}
+                            className="p-1.5 rounded hover:bg-amber-50 text-amber-700 transition"
+                            title="Edit Lead"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+
                           <button
                             type="button"
                             disabled={isDownloading}
@@ -604,19 +767,16 @@ export default function LeadManagement({
                           >
                             <Download className="w-3.5 h-3.5" />
                           </button>
-                          <a
-                            href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Dear%20${encodeURIComponent(
-                              lead.contactPerson
-                            )}%2C%20Ariel%20Renewable%20Energy%20Limited%20has%20completed%20the%20${lead.estimatedCapacityKwp}kWp%20solar%20feasibility%20for%20${encodeURIComponent(
-                              lead.factoryName
-                            )}.%20Would%20you%20like%20to%20review%20the%204.5%25%20bank%20waterfall%3F`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+
+                          <button
+                            type="button"
+                            onClick={(e) => handleShareLead(lead, e)}
                             className="p-1.5 rounded bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 transition"
-                            title="WhatsApp Chat"
+                            title="Share Link & WhatsApp"
                           >
                             <Share2 className="w-3.5 h-3.5" />
-                          </a>
+                          </button>
+
                           <button
                             type="button"
                             onClick={() => onOpenTechnicalForLead(lead)}
@@ -624,6 +784,15 @@ export default function LeadManagement({
                             title="Technical Substation SLD"
                           >
                             <Cpu className="w-3.5 h-3.5 text-[#C9A86A]" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setDeletingLeadId(lead.id)}
+                            className="p-1.5 rounded hover:bg-rose-50 text-rose-600 transition"
+                            title="Delete Lead"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </td>
@@ -635,6 +804,186 @@ export default function LeadManagement({
           </div>
         )}
       </div>
+
+      {/* =========================================================================
+          MODAL 1: EDIT LEAD MODAL
+          ========================================================================= */}
+      {editingLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-150">
+            <div className="p-4 bg-[#0A1A2F] text-white flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Edit3 className="w-4 h-4 text-amber-400" />
+                <h3 className="font-extrabold text-sm uppercase tracking-wider font-mono">
+                  Edit Lead: {editingLead.factoryName}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingLead(null)}
+                className="text-slate-400 hover:text-white text-xs font-bold px-2 py-1 rounded cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="p-5 space-y-3.5 text-xs font-sans bg-[#FAF9F5]">
+              <div>
+                <label className="block text-slate-700 font-bold mb-1">Factory Name</label>
+                <input
+                  type="text"
+                  value={editingLead.factoryName}
+                  onChange={(e) => setEditingLead({ ...editingLead, factoryName: e.target.value })}
+                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 font-semibold focus:outline-none focus:border-emerald-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Parent Corporate Group</label>
+                  <input
+                    type="text"
+                    value={editingLead.parentGroup || ''}
+                    onChange={(e) => setEditingLead({ ...editingLead, parentGroup: e.target.value })}
+                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Industry Sector</label>
+                  <input
+                    type="text"
+                    value={editingLead.industrySector}
+                    onChange={(e) => setEditingLead({ ...editingLead, industrySector: e.target.value as any })}
+                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Target Capacity (kWp)</label>
+                  <input
+                    type="number"
+                    value={editingLead.estimatedCapacityKwp}
+                    onChange={(e) => setEditingLead({ ...editingLead, estimatedCapacityKwp: Number(e.target.value) })}
+                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 font-mono font-bold focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">CapEx Value (BDT)</label>
+                  <input
+                    type="number"
+                    value={editingLead.projectValueBdt}
+                    onChange={(e) => setEditingLead({ ...editingLead, projectValueBdt: Number(e.target.value) })}
+                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 font-mono font-bold focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Contact Person</label>
+                  <input
+                    type="text"
+                    value={editingLead.contactPerson}
+                    onChange={(e) => setEditingLead({ ...editingLead, contactPerson: e.target.value })}
+                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Phone / WhatsApp</label>
+                  <input
+                    type="text"
+                    value={editingLead.phone}
+                    onChange={(e) => setEditingLead({ ...editingLead, phone: e.target.value })}
+                    className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 font-mono focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-700 font-bold mb-1">Pipeline Stage</label>
+                <select
+                  value={editingLead.stage}
+                  onChange={(e) => setEditingLead({ ...editingLead, stage: e.target.value as LeadStage })}
+                  className="w-full p-2 bg-white border border-slate-200 rounded-lg text-slate-800 font-semibold focus:outline-none focus:border-emerald-600"
+                >
+                  <option value="inbound">1. Inbound Dossier Request</option>
+                  <option value="satellite_audit">2. 3D Satellite Audit Completed</option>
+                  <option value="site_audit_scheduled">3. Drone &amp; Civil Audit Scheduled</option>
+                  <option value="proposal_submitted">4. Techno-Commercial Submitted</option>
+                  <option value="bank_financing">5. 4.5% Bank Debt Sanctioned</option>
+                  <option value="contract_executed">6. EPC Contract Executed</option>
+                  <option value="sreda_connected">7. SREDA Net-Metered</option>
+                </select>
+              </div>
+
+              <div className="pt-2 border-t border-slate-200 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingLead(null)}
+                  className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 font-bold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded-lg bg-[#0A1A2F] hover:bg-emerald-700 text-white font-bold transition shadow-xs cursor-pointer font-mono"
+                >
+                  Save Lead
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          MODAL 2: DELETE LEAD CONFIRMATION
+          ========================================================================= */}
+      {deletingLeadId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-200 p-5 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 text-rose-600">
+              <div className="p-2 rounded-full bg-rose-100">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <h4 className="font-bold text-sm text-[#0A1A2F]">Delete Lead?</h4>
+            </div>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Are you sure you want to delete lead{' '}
+              <span className="font-bold text-rose-700">
+                {leads.find((l) => l.id === deletingLeadId)?.factoryName}
+              </span>
+              ? This action will remove the lead from the active pipeline.
+            </p>
+            <div className="pt-2 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setDeletingLeadId(null)}
+                className="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition cursor-pointer"
+              >
+                Delete Lead
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-5 right-5 z-50 bg-[#0A1A2F] text-white px-4 py-2.5 rounded-xl shadow-2xl border border-emerald-500/30 flex items-center gap-2 text-xs font-mono animate-in fade-in slide-in-from-bottom-2 duration-150">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

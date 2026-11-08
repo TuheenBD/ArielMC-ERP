@@ -24,11 +24,18 @@ import {
   Search,
   Filter,
   Plus,
+  Eye,
+  Edit3,
+  Trash2,
+  Share2,
+  X,
 } from 'lucide-react';
 
 interface ProjectFinancialControlProps {
   accounts: ProjectFinancialAccount[];
   onPostVoucher?: (payload: JournalVoucherPayload) => void;
+  onEditProjectAccount?: (account: ProjectFinancialAccount) => void;
+  onDeleteProjectAccount?: (id: string) => void;
   theme?: string;
 }
 
@@ -38,6 +45,8 @@ type ViewMode = 'STATEMENT' | 'PORTFOLIO_TABLE';
 export default function ProjectFinancialControl({
   accounts,
   onPostVoucher,
+  onEditProjectAccount,
+  onDeleteProjectAccount,
   theme = 'crm-green',
 }: ProjectFinancialControlProps) {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(accounts[0]?.projectId || '');
@@ -46,6 +55,17 @@ export default function ProjectFinancialControl({
   const [searchTerm, setSearchTerm] = useState('');
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
   const [customLedgerEntries, setCustomLedgerEntries] = useState<Record<string, any[]>>({});
+
+  // Selection, Edit, Delete, Toast states
+  const [selectedAccountIds, setSelectedAccountIds] = useState<string[]>([]);
+  const [editingAccount, setEditingAccount] = useState<ProjectFinancialAccount | null>(null);
+  const [deletingAccount, setDeletingAccount] = useState<ProjectFinancialAccount | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   const handlePostVoucherSubmitted = (payload: JournalVoucherPayload) => {
     const newEntry = {
@@ -82,6 +102,95 @@ export default function ProjectFinancialControl({
       a.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       a.projectId.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Selection handlers
+  const handleSelectAll = () => {
+    if (selectedAccountIds.length === filteredAccounts.length) {
+      setSelectedAccountIds([]);
+    } else {
+      setSelectedAccountIds(filteredAccounts.map((a) => a.id));
+    }
+  };
+
+  const handleToggleSelect = (id: string, e?: any) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    setSelectedAccountIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = () => {
+    if (confirm(`Delete ${selectedAccountIds.length} project accounts?`)) {
+      if (onDeleteProjectAccount) {
+        selectedAccountIds.forEach((id) => onDeleteProjectAccount(id));
+      }
+      setSelectedAccountIds([]);
+      showToast(`Deleted ${selectedAccountIds.length} project accounts`);
+    }
+  };
+
+  // Share handler
+  const handleShare = (acc: ProjectFinancialAccount, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const shareUrl = `${window.location.origin}/crm?tab=finance&projectId=${acc.projectId}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareUrl);
+      showToast(`Financial Audit URL for ${acc.projectName} copied!`);
+    } else {
+      showToast(`Share URL: ${shareUrl}`);
+    }
+  };
+
+  // Download PDF
+  const handleDownloadPdf = (acc: ProjectFinancialAccount, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    showToast(`Generating Financial P&L & Balance Sheet Audit for ${acc.projectName}...`);
+    setTimeout(() => {
+      const doc = `
+================================================================================
+STATUTORY EPC FINANCIAL AUDIT & GROSS MARGIN STATEMENT
+ARIEL RENEWABLE ENERGY LIMITED • IFRS COMPLIANT FINANCIAL AUDIT
+================================================================================
+Project:          ${acc.projectName}
+Project ID:       ${acc.projectId}
+Capacity:         ${acc.capacityKwp} kWp Commercial & Industrial Rooftop
+
+INCOME & MARGIN STATEMENT:
+Turnkey Contract Value:   Tk ${acc.turnkeyContractPriceBdt.toLocaleString()} BDT
+Budgeted / Actual Cost:   Tk ${acc.actualTotalCostBdt.toLocaleString()} BDT
+Audited Gross Profit:     Tk ${acc.grossProfitBdt.toLocaleString()} BDT
+Audited Gross Margin:     ${acc.realizedGrossMarginPct.toFixed(1)}% (Locked 25.0% Benchmark)
+
+CASH & RECEIVABLES:
+Cash Collected to Date:   Tk ${acc.totalCollectedBdt.toLocaleString()} BDT
+Receivables Outstanding:  Tk ${acc.totalOutstandingBdt.toLocaleString()} BDT
+5% DLP Bank Escrow:       Tk ${acc.retention5PercentBdt.toLocaleString()} BDT (Maturity: ${acc.retentionMaturityDate})
+Annual SREDA Net-Meter:   Tk ${acc.annualSurplusCashExportBdt.toLocaleString()} BDT / yr
+
+MILESTONES SUMMARY:
+${acc.milestones.map((m) => `• ${m.milestoneTitle}: ${m.percentage}% (Tk ${m.amountBdt.toLocaleString()}) - Status: ${m.status.toUpperCase()}`).join('\n')}
+================================================================================
+      `;
+      const blob = new Blob([doc], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${acc.projectId}_Financial_Statement.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 600);
+  };
+
+  // Save Edit
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingAccount) return;
+    if (onEditProjectAccount) {
+      onEditProjectAccount(editingAccount);
+    }
+    showToast(`Updated Financial Account for ${editingAccount.projectName}`);
+    setEditingAccount(null);
+  };
 
   // Generate dynamic double-entry general ledger for the selected project
   const generateLedgerEntries = (acc: ProjectFinancialAccount) => {
@@ -778,26 +887,51 @@ export default function ProjectFinancialControl({
           VIEW MODE 2: PORTFOLIO MASTER FINANCIAL TABLE
           ========================================================================= */}
       {viewMode === 'PORTFOLIO_TABLE' && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs space-y-4">
-          <div className="p-4 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs space-y-3">
+          <div className="p-3 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h4 className="text-xs font-extrabold text-[#0A1A2F] uppercase tracking-wider font-mono">
+              <h4 className="text-xs font-black text-[#0A1A2F] uppercase tracking-wider font-mono">
                 Portfolio Master Financial Audit Table ({filteredAccounts.length} Projects)
               </h4>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[10px] text-slate-500">
                 Auditing 25.0% gross margin lock, collections, and 5% DLP retainage across the active pipeline.
               </p>
             </div>
 
-            <div className="relative min-w-[220px]">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search project name..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 font-mono"
-              />
+            <div className="flex items-center gap-2">
+              {/* Bulk Selection Bar */}
+              {selectedAccountIds.length > 0 && (
+                <div className="flex items-center gap-1.5 bg-[#0A1A2F] text-white px-2.5 py-1 rounded-lg text-xs font-mono animate-in fade-in">
+                  <span className="font-bold text-emerald-300">{selectedAccountIds.length} Selected</span>
+                  <span className="text-slate-500">|</span>
+                  <button
+                    type="button"
+                    onClick={handleBulkDelete}
+                    className="hover:text-rose-300 text-[10px] font-bold cursor-pointer"
+                    title="Delete selected accounts"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedAccountIds([])}
+                    className="text-slate-400 hover:text-white ml-1 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+
+              <div className="relative min-w-[200px]">
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search project name, ID..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-8 pr-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 font-mono"
+                />
+              </div>
             </div>
           </div>
 
@@ -805,82 +939,309 @@ export default function ProjectFinancialControl({
             <table className="w-full text-left text-xs font-mono">
               <thead className="bg-[#0A1A2F] text-white uppercase text-[10px] tracking-wider">
                 <tr>
-                  <th className="py-3 px-4">Project &amp; Capacity</th>
-                  <th className="py-3 px-4">Turnkey Contract (BDT)</th>
-                  <th className="py-3 px-4">Actual COGS (BDT)</th>
-                  <th className="py-3 px-4">Gross Profit (25%)</th>
-                  <th className="py-3 px-4">Cash Collected</th>
-                  <th className="py-3 px-4">Receivables</th>
-                  <th className="py-3 px-4">5% DLP Escrow</th>
-                  <th className="py-3 px-4">SREDA Yield / yr</th>
-                  <th className="py-3 px-4 text-right">Drilldown</th>
+                  <th className="py-2.5 px-3 w-8 text-center">
+                    <input
+                      type="checkbox"
+                      checked={filteredAccounts.length > 0 && selectedAccountIds.length === filteredAccounts.length}
+                      onChange={handleSelectAll}
+                      className="rounded text-emerald-600 focus:ring-0 cursor-pointer"
+                    />
+                  </th>
+                  <th className="py-2.5 px-3">Project &amp; Capacity</th>
+                  <th className="py-2.5 px-3">Turnkey Contract</th>
+                  <th className="py-2.5 px-3">Actual COGS</th>
+                  <th className="py-2.5 px-3">Gross Profit (25%)</th>
+                  <th className="py-2.5 px-3">Cash Collected</th>
+                  <th className="py-2.5 px-3">Receivables</th>
+                  <th className="py-2.5 px-3">5% DLP Escrow</th>
+                  <th className="py-2.5 px-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
-                {filteredAccounts.map((acc) => (
-                  <tr
-                    key={acc.id}
-                    onClick={() => {
-                      setSelectedProjectId(acc.projectId);
-                      setViewMode('STATEMENT');
-                    }}
-                    className="hover:bg-emerald-50/50 transition-colors cursor-pointer"
-                  >
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="font-bold text-[#0A1A2F]">{acc.projectName}</div>
-                      <div className="text-[10px] text-slate-400">{acc.capacityKwp} kWp &bull; {acc.projectId}</div>
-                    </td>
+                {filteredAccounts.map((acc) => {
+                  const isSelected = selectedAccountIds.includes(acc.id);
 
-                    <td className="py-3.5 px-4 whitespace-nowrap font-bold text-slate-900">
-                      Tk {acc.turnkeyContractPriceBdt.toLocaleString()}
-                    </td>
+                  return (
+                    <tr
+                      key={acc.id}
+                      className={`hover:bg-emerald-50/50 transition-colors ${isSelected ? 'bg-emerald-50/40' : ''}`}
+                    >
+                      <td className="py-2.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) => handleToggleSelect(acc.id, e)}
+                          className="rounded text-emerald-600 focus:ring-0 cursor-pointer"
+                        />
+                      </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap text-slate-600">
-                      Tk {acc.actualTotalCostBdt.toLocaleString()}
-                    </td>
+                      <td className="py-2.5 px-3 whitespace-nowrap">
+                        <div className="font-bold text-[#0A1A2F]">{acc.projectName}</div>
+                        <div className="text-[10px] text-slate-400">{acc.capacityKwp} kWp &bull; {acc.projectId}</div>
+                      </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span className="font-bold text-[#C8A96A] block">
-                        Tk {acc.grossProfitBdt.toLocaleString()}
-                      </span>
-                      <span className="text-[10px] font-bold text-emerald-800">
-                        {acc.realizedGrossMarginPct.toFixed(1)}% Audited
-                      </span>
-                    </td>
+                      <td className="py-2.5 px-3 whitespace-nowrap font-bold text-slate-900">
+                        Tk {acc.turnkeyContractPriceBdt.toLocaleString()}
+                      </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap font-bold text-emerald-700">
-                      Tk {acc.totalCollectedBdt.toLocaleString()}
-                    </td>
+                      <td className="py-2.5 px-3 whitespace-nowrap text-slate-600">
+                        Tk {acc.actualTotalCostBdt.toLocaleString()}
+                      </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap text-amber-700 font-bold">
-                      Tk {acc.totalOutstandingBdt.toLocaleString()}
-                    </td>
+                      <td className="py-2.5 px-3 whitespace-nowrap">
+                        <span className="font-bold text-[#C8A96A] block">
+                          Tk {acc.grossProfitBdt.toLocaleString()}
+                        </span>
+                        <span className="text-[10px] font-bold text-emerald-800">
+                          {acc.realizedGrossMarginPct.toFixed(1)}% Audited
+                        </span>
+                      </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap text-teal-800">
-                      Tk {acc.retention5PercentBdt.toLocaleString()}
-                    </td>
+                      <td className="py-2.5 px-3 whitespace-nowrap font-bold text-emerald-700">
+                        Tk {acc.totalCollectedBdt.toLocaleString()}
+                      </td>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap text-amber-600 font-semibold">
-                      Tk {(acc.annualSurplusCashExportBdt / 100000).toFixed(1)}L
-                    </td>
+                      <td className="py-2.5 px-3 whitespace-nowrap text-amber-700 font-bold">
+                        Tk {acc.totalOutstandingBdt.toLocaleString()}
+                      </td>
 
-                    <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedProjectId(acc.projectId);
-                          setViewMode('STATEMENT');
-                        }}
-                        className="px-2.5 py-1 rounded bg-[#0A1A2F] hover:bg-emerald-700 text-white text-[11px] font-bold transition cursor-pointer"
-                      >
-                        Statements &rarr;
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="py-2.5 px-3 whitespace-nowrap text-teal-800">
+                        Tk {acc.retention5PercentBdt.toLocaleString()}
+                      </td>
+
+                      <td className="py-2.5 px-3 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1">
+                          {/* View Statements */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedProjectId(acc.projectId);
+                              setViewMode('STATEMENT');
+                            }}
+                            className="p-1 rounded hover:bg-slate-100 text-blue-600 transition"
+                            title="Drilldown to Financial Statements"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Edit Financial Account */}
+                          <button
+                            type="button"
+                            onClick={() => setEditingAccount({ ...acc })}
+                            className="p-1 rounded hover:bg-slate-100 text-amber-600 transition"
+                            title="Edit Financial Contract Values"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Share Financial Audit */}
+                          <button
+                            type="button"
+                            onClick={(e) => handleShare(acc, e)}
+                            className="p-1 rounded hover:bg-slate-100 text-teal-600 transition"
+                            title="Share Financial Audit Link"
+                          >
+                            <Share2 className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Download Statement PDF */}
+                          <button
+                            type="button"
+                            onClick={(e) => handleDownloadPdf(acc, e)}
+                            className="p-1 rounded hover:bg-slate-100 text-emerald-700 transition"
+                            title="Download Financial Audit PDF"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Delete Account */}
+                          <button
+                            type="button"
+                            onClick={() => setDeletingAccount(acc)}
+                            className="p-1 rounded hover:bg-rose-50 text-rose-600 transition"
+                            title="Delete Financial Account"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Project Account Modal */}
+      {editingAccount && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-emerald-700" />
+                <h3 className="text-sm font-black text-[#0A1A2F]">Edit Financials: {editingAccount.projectName}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingAccount(null)}
+                className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="mt-4 space-y-3.5 text-xs font-sans">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Project Name</label>
+                <input
+                  type="text"
+                  value={editingAccount.projectName}
+                  onChange={(e) => setEditingAccount({ ...editingAccount, projectName: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-semibold"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Capacity (kWp)</label>
+                  <input
+                    type="number"
+                    value={editingAccount.capacityKwp}
+                    onChange={(e) => setEditingAccount({ ...editingAccount, capacityKwp: Number(e.target.value) })}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-mono font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Gross Margin (%)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={editingAccount.realizedGrossMarginPct}
+                    onChange={(e) => setEditingAccount({ ...editingAccount, realizedGrossMarginPct: Number(e.target.value) })}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-mono font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Turnkey Contract Price (BDT)</label>
+                  <input
+                    type="number"
+                    value={editingAccount.turnkeyContractPriceBdt}
+                    onChange={(e) => {
+                      const price = Number(e.target.value);
+                      const cost = Math.round(price * 0.75);
+                      const margin = price - cost;
+                      setEditingAccount({
+                        ...editingAccount,
+                        turnkeyContractPriceBdt: price,
+                        actualTotalCostBdt: cost,
+                        grossProfitBdt: margin,
+                      });
+                    }}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-mono font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Actual COGS (BDT)</label>
+                  <input
+                    type="number"
+                    value={editingAccount.actualTotalCostBdt}
+                    onChange={(e) => setEditingAccount({ ...editingAccount, actualTotalCostBdt: Number(e.target.value) })}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-mono font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Cash Collected (BDT)</label>
+                  <input
+                    type="number"
+                    value={editingAccount.totalCollectedBdt}
+                    onChange={(e) => {
+                      const collected = Number(e.target.value);
+                      const outstanding = editingAccount.turnkeyContractPriceBdt - collected;
+                      setEditingAccount({
+                        ...editingAccount,
+                        totalCollectedBdt: collected,
+                        totalOutstandingBdt: outstanding,
+                      });
+                    }}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-mono font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Outstanding (BDT)</label>
+                  <input
+                    type="number"
+                    value={editingAccount.totalOutstandingBdt}
+                    onChange={(e) => setEditingAccount({ ...editingAccount, totalOutstandingBdt: Number(e.target.value) })}
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-mono font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingAccount(null)}
+                  className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold font-mono"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deletingAccount && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900">Confirm Deletion</h3>
+                <p className="text-[11px] text-slate-500">
+                  Delete financial account for <span className="font-bold text-rose-600">{deletingAccount.projectName}</span>?
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setDeletingAccount(null)}
+                className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (onDeleteProjectAccount) onDeleteProjectAccount(deletingAccount.id);
+                  showToast(`Deleted ${deletingAccount.projectName}`);
+                  setDeletingAccount(null);
+                }}
+                className="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold font-mono"
+              >
+                Confirm Delete
+              </button>
+            </div>
           </div>
         </div>
       )}

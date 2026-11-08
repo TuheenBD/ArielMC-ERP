@@ -20,6 +20,14 @@ import {
 import {
   BankLoanStatus,
   TicketStatus,
+  AfterSalesTicket,
+  BankLoanApplication,
+  SubcontractorEntity,
+  ShipmentConsignment,
+  SolarSupplier,
+  SolarProductMaster,
+  InventoryLot,
+  ProjectFinancialAccount,
 } from '@/types/arelCrm';
 
 // CRM Module Components
@@ -170,10 +178,10 @@ export default function ArielEnergyCrmPage() {
   const [leads, setLeads] = useState<SolarLead[]>(INITIAL_SOLAR_LEADS);
   const [bankApplications, setBankApplications] = useState(INITIAL_BANK_APPLICATIONS);
   const [subcontractors, setSubcontractors] = useState(INITIAL_SUBCONTRACTORS);
-  const [products] = useState(INITIAL_SOLAR_PRODUCTS);
-  const [bomPackages] = useState(INITIAL_BOM_PACKAGES);
+  const [products, setProducts] = useState<SolarProductMaster[]>(INITIAL_SOLAR_PRODUCTS);
+  const [bomPackages, setBomPackages] = useState(INITIAL_BOM_PACKAGES);
   const [lots, setLots] = useState(INITIAL_INVENTORY_LOTS);
-  const [suppliers] = useState(INITIAL_SOLAR_SUPPLIERS);
+  const [suppliers, setSuppliers] = useState<SolarSupplier[]>(INITIAL_SOLAR_SUPPLIERS);
   const [shipments, setShipments] = useState(INITIAL_SHIPMENTS);
   const [tickets, setTickets] = useState(INITIAL_AFTER_SALES_TICKETS);
   const [projectAccounts, setProjectAccounts] = useState(INITIAL_PROJECT_FINANCIALS);
@@ -459,6 +467,79 @@ export default function ArielEnergyCrmPage() {
     }));
   };
 
+  // Lead CRUD handlers
+  const handleEditLead = (updated: SolarLead) => {
+    setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+  };
+  const handleDeleteLead = (id: string) => {
+    setLeads((prev) => prev.filter((l) => l.id !== id));
+  };
+
+  // Ticket CRUD handlers
+  const handleEditTicket = (updated: AfterSalesTicket) => {
+    setTickets((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+  };
+  const handleDeleteTicket = (id: string) => {
+    setTickets((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  // Bank Application CRUD handlers
+  const handleEditBankApp = (updated: BankLoanApplication) => {
+    setBankApplications((prev) => prev.map((b) => (b.id === updated.id ? updated : b)));
+  };
+  const handleDeleteBankApp = (id: string) => {
+    setBankApplications((prev) => prev.filter((b) => b.id !== id));
+  };
+
+  // Subcontractor CRUD handlers
+  const handleEditSubcontractor = (updated: SubcontractorEntity) => {
+    setSubcontractors((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  };
+  const handleDeleteSubcontractor = (id: string) => {
+    setSubcontractors((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  // Shipment & Supplier CRUD handlers
+  const handleEditShipment = (updated: ShipmentConsignment) => {
+    setShipments((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  };
+  const handleDeleteShipment = (id: string) => {
+    setShipments((prev) => prev.filter((s) => s.id !== id));
+  };
+  const handleEditSupplier = (updated: SolarSupplier) => {
+    setSuppliers((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  };
+  const handleDeleteSupplier = (id: string) => {
+    setSuppliers((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  // Product & BOM CRUD handlers
+  const handleEditProduct = (updated: SolarProductMaster) => {
+    setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  };
+  const handleDeleteProduct = (id: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  };
+  const handleDeletePackage = (id: string) => {
+    setBomPackages((prev) => prev.filter((pkg) => pkg.id !== id));
+  };
+
+  // Inventory Lot CRUD handlers
+  const handleEditLot = (updated: InventoryLot) => {
+    setLots((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+  };
+  const handleDeleteLot = (id: string) => {
+    setLots((prev) => prev.filter((l) => l.id !== id));
+  };
+
+  // Project Financial Account CRUD handlers
+  const handleEditProjectAccount = (updated: any) => {
+    setProjectAccounts((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
+  };
+  const handleDeleteProjectAccount = (id: string) => {
+    setProjectAccounts((prev) => prev.filter((a) => a.id !== id));
+  };
+
   // Export Pipeline to CSV
   const handleExportCsv = () => {
     const headers = [
@@ -594,7 +675,7 @@ export default function ArielEnergyCrmPage() {
         <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto no-scrollbar">
           {navSections.map((section) => (
             <div key={section.title}>
-              <div className={`px-2 mb-1 text-[8.5px] font-mono uppercase tracking-wider ${tokens.sidebarSectionText} font-bold transition-colors`}>
+              <div className="px-2 mb-1.5 text-[11px] font-mono uppercase tracking-widest font-black text-white drop-shadow-xs transition-colors">
                 {section.title}
               </div>
               <div className="space-y-0.5">
@@ -699,34 +780,34 @@ export default function ArielEnergyCrmPage() {
           MAIN WINDOW (Compact, Zero Overflow, ERP Color Scheme & Footer)
           ========================================================================= */}
       <div className="flex-1 ml-64 xl:ml-72 min-h-screen flex flex-col bg-[#FAF9F5] overflow-x-hidden">
-        {/* Main Window Top Header */}
-        <header className="bg-white/95 backdrop-blur-md border-b border-[#DDE3DD] sticky top-0 z-30 px-5 py-2.5 flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className={`w-8 h-8 rounded-lg ${tokens.headerIconBg} ${tokens.headerIconText} border ${tokens.headerIconBorder} flex items-center justify-center shrink-0 transition-colors`}>
-              <CurrentIcon className="w-4 h-4" />
+        {/* Main Window Top Header (Fixed, Increased Standard Height, Same Color as Side Panel) */}
+        <header className={`fixed top-0 right-0 left-64 xl:left-72 z-30 h-16 px-6 flex items-center justify-between shadow-md transition-colors ${tokens.sidebarBg} border-b ${tokens.sidebarBorder} text-white`}>
+          <div className="flex items-center gap-3 min-w-0">
+            <div className={`w-9 h-9 rounded-xl ${tokens.headerIconBg} ${tokens.headerIconText} border ${tokens.headerIconBorder} flex items-center justify-center shrink-0 transition-colors shadow-2xs`}>
+              <CurrentIcon className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <h2 className="text-xs font-black text-[#1A1A1A] tracking-tight truncate">
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-black text-white tracking-tight truncate">
                   {currentMeta.title}
                 </h2>
-                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#FAF9F5] text-[#1F3A2E] border border-[#DDE3DD] shrink-0">
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
                   AREL-CRM
                 </span>
               </div>
-              <p className="text-[10.5px] text-[#6B7269] font-medium truncate max-w-xl">
+              <p className="text-[11px] text-slate-300 font-medium truncate max-w-xl">
                 {currentMeta.subtitle}
               </p>
             </div>
           </div>
 
           {/* Right Top Status & Fast Action Toolbar with Auth User Profile */}
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#FAF9F5] rounded-lg text-xs font-mono text-[#1A1A1A] border border-[#DDE3DD]">
-              <span className="text-[#6B7269] uppercase text-[9px]">Pipeline:</span>
-              <span className="font-bold text-[#1F3A2E]">Tk 48.75 Cr</span>
-              <span className="text-slate-300">|</span>
-              <span className="font-bold text-[#1A1A1A]">9.75 MWp</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-lg text-xs font-mono text-white border border-white/15">
+              <span className="text-slate-300 uppercase text-[9px] font-bold">Pipeline:</span>
+              <span className="font-bold text-emerald-300">Tk 48.75 Cr</span>
+              <span className="text-white/30">|</span>
+              <span className="font-bold text-white">9.75 MWp</span>
             </div>
 
             {/* ERP Color Scheme Theme Selector */}
@@ -735,18 +816,18 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={handleExportCsv}
-              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#1A1A1A] border border-[#DDE3DD] rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer font-mono"
             >
-              <Download className="w-3 h-3 text-[#6B7269]" />
+              <Download className="w-3.5 h-3.5 text-slate-200" />
               <span>Export</span>
             </button>
 
             <button
               type="button"
               onClick={() => setNewLeadModalOpen(true)}
-              className={`px-2.5 py-1 ${tokens.headerPrimaryBtn} rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer`}
+              className={`px-3 py-1.5 ${tokens.headerPrimaryBtn} rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer`}
             >
-              <Plus className={`w-3 h-3 ${tokens.headerPrimaryBtnText}`} />
+              <Plus className={`w-3.5 h-3.5 ${tokens.headerPrimaryBtnText}`} />
               <span>New Lead</span>
             </button>
 
@@ -754,21 +835,21 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={() => setIsProfileModalOpen(true)}
-              className="flex items-center gap-1.5 p-1 pl-1.5 pr-2 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#1F3A2E] shadow-2xs transition cursor-pointer"
+              className="flex items-center gap-2 p-1.5 pl-2 pr-2.5 rounded-lg bg-white/10 border border-white/20 hover:bg-white/20 shadow-2xs transition cursor-pointer text-white"
               title="Open User Profile & 2SA Authentication Settings"
             >
               <div
-                className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-black font-mono shrink-0 shadow-2xs"
+                className="w-6 h-6 rounded flex items-center justify-center text-[10px] font-black font-mono shrink-0 shadow-2xs"
                 style={{ backgroundColor: currentUser.avatarColor, color: '#0A1A2F' }}
               >
                 {currentUser.avatarInitials}
               </div>
               <div className="text-left hidden md:block">
-                <div className="text-[10px] font-bold text-[#1A1A1A] leading-tight truncate max-w-[100px]">
+                <div className="text-[11px] font-bold text-white leading-tight truncate max-w-[100px]">
                   {currentUser.name.split(' ')[0]}
                 </div>
-                <div className="text-[8.5px] text-[#1F3A2E] font-bold font-mono flex items-center gap-0.5">
-                  <span className="w-1 h-1 rounded-full bg-emerald-500"></span>
+                <div className="text-[9px] text-emerald-300 font-bold font-mono flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span>{currentUser.role.replace('_', ' ')}</span>
                 </div>
               </div>
@@ -776,8 +857,8 @@ export default function ArielEnergyCrmPage() {
           </div>
         </header>
 
-        {/* Main Content Workspace Body (Compact & Full Width) */}
-        <main className="p-4 sm:p-5 flex-1 w-full max-w-full space-y-4">
+        {/* Main Content Workspace Body (pt-20 for fixed header clearance, Compact & Full Width) */}
+        <main className="pt-20 p-4 sm:p-5 flex-1 w-full max-w-full space-y-4">
           {activeTab === 'overview' && (
             <ExecutiveDashboard
               leads={arelLeads}
@@ -803,6 +884,8 @@ export default function ArielEnergyCrmPage() {
               onOpenNewLeadModal={() => setNewLeadModalOpen(true)}
               onOpenTechnicalForLead={handleOpenTechnicalForLead}
               onUpdateLeadStage={handleUpdateStage}
+              onEditLead={handleEditLead}
+              onDeleteLead={handleDeleteLead}
             />
           )}
 
@@ -810,6 +893,8 @@ export default function ArielEnergyCrmPage() {
             <BankFinancingPipeline
               applications={bankApplications}
               onUpdateStatus={handleUpdateBankStatus}
+              onEditApplication={handleEditBankApp}
+              onDeleteApplication={handleDeleteBankApp}
               theme={theme}
             />
           )}
@@ -818,16 +903,28 @@ export default function ArielEnergyCrmPage() {
             <SubcontractorManagement
               subcontractors={subcontractors}
               onAssignWorkOrder={handleAssignWorkOrder}
+              onEditSubcontractor={handleEditSubcontractor}
+              onDeleteSubcontractor={handleDeleteSubcontractor}
               theme={theme}
             />
           )}
 
           {activeTab === 'products' && (
-            <ProductBomVault products={products} bomPackages={bomPackages} />
+            <ProductBomVault
+              products={products}
+              bomPackages={bomPackages}
+              onEditProduct={handleEditProduct}
+              onDeleteProduct={handleDeleteProduct}
+              onDeletePackage={handleDeletePackage}
+            />
           )}
 
           {activeTab === 'inventory' && (
-            <InventoryLotTracking lots={lots} />
+            <InventoryLotTracking
+              lots={lots}
+              onEditLot={handleEditLot}
+              onDeleteLot={handleDeleteLot}
+            />
           )}
 
           {activeTab === 'suppliers_scm' && (
@@ -835,6 +932,10 @@ export default function ArielEnergyCrmPage() {
               suppliers={suppliers}
               shipments={shipments}
               onFileDeclaration={handleFileAsycudaDeclaration}
+              onEditShipment={handleEditShipment}
+              onDeleteShipment={handleDeleteShipment}
+              onEditSupplier={handleEditSupplier}
+              onDeleteSupplier={handleDeleteSupplier}
               theme={theme}
             />
           )}
@@ -844,6 +945,8 @@ export default function ArielEnergyCrmPage() {
               tickets={tickets}
               onUpdateTicketStatus={handleUpdateTicketStatus}
               onAddTicket={(newTkt) => setTickets((prev) => [newTkt, ...prev])}
+              onEditTicket={handleEditTicket}
+              onDeleteTicket={handleDeleteTicket}
             />
           )}
 
@@ -851,6 +954,8 @@ export default function ArielEnergyCrmPage() {
             <ProjectFinancialControl
               accounts={projectAccounts}
               onPostVoucher={handlePostVoucher}
+              onEditProjectAccount={handleEditProjectAccount}
+              onDeleteProjectAccount={handleDeleteProjectAccount}
               theme={theme}
             />
           )}

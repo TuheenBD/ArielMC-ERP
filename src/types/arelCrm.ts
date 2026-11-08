@@ -334,6 +334,8 @@ export interface AfterSalesTicket {
   targetResolutionDate: string;
   resolvedAt?: string;
   rootCauseAnalysis?: string;
+  telemetryAlertTriggered?: boolean;
+  performanceRatioDropPct?: number;
   actionTakenNotes: string[];
 }
 
@@ -403,3 +405,4 @@ export interface PlatformSyncStatus {
   masterCrmRollupConnected: boolean; // crm.arielmc.com executive rollups
   syncHealth: 'HEALTHY' | 'DEGRADED' | 'DISCONNECTED';
 }
+
