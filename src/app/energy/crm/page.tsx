@@ -25,6 +25,7 @@ import {
 // CRM Module Components
 import ExecutiveDashboard from '@/components/crm/ExecutiveDashboard';
 import LeadManagement from '@/components/crm/LeadManagement';
+import LeadDetailConversionModal, { ProjectConversionPayload } from '@/components/crm/LeadDetailConversionModal';
 import TechnicalControl from '@/components/crm/TechnicalControl';
 import NewLeadModal from '@/components/crm/NewLeadModal';
 import BankFinancingPipeline from '@/components/crm/BankFinancingPipeline';
@@ -173,14 +174,18 @@ export default function ArielEnergyCrmPage() {
   const [bomPackages] = useState(INITIAL_BOM_PACKAGES);
   const [lots, setLots] = useState(INITIAL_INVENTORY_LOTS);
   const [suppliers] = useState(INITIAL_SOLAR_SUPPLIERS);
-  const [shipments] = useState(INITIAL_SHIPMENTS);
+  const [shipments, setShipments] = useState(INITIAL_SHIPMENTS);
   const [tickets, setTickets] = useState(INITIAL_AFTER_SALES_TICKETS);
-  const [projectAccounts] = useState(INITIAL_PROJECT_FINANCIALS);
+  const [projectAccounts, setProjectAccounts] = useState(INITIAL_PROJECT_FINANCIALS);
   const [syncStatus, setSyncStatus] = useState(INITIAL_PLATFORM_SYNC);
 
   // Active User Profile State (Strict 2SA Verified)
   const [currentUser, setCurrentUser] = useState(DEMO_USERS[0]);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  // Turnkey EPC Conversion Modal State
+  const [selectedLeadForConversion, setSelectedLeadForConversion] = useState<SolarLead | null>(null);
+  const [isConversionModalOpen, setIsConversionModalOpen] = useState(false);
 
   const [activeTab, setActiveTab] = useState<CrmTab>('overview');
   const [activeLeadForTechId, setActiveLeadForTechId] = useState<string>(
@@ -247,6 +252,189 @@ export default function ArielEnergyCrmPage() {
   const handleOpenTechnicalForLead = (lead: SolarLead) => {
     setActiveLeadForTechId(lead.id);
     setActiveTab('technical');
+  };
+
+  // Open Lead Dossier & Turnkey EPC Conversion Modal
+  const handleOpenLeadConversion = (lead: SolarLead) => {
+    setSelectedLeadForConversion(lead);
+    setIsConversionModalOpen(true);
+  };
+
+  // Execute Turnkey EPC Conversion: Quad-Module Provisioning
+  const handleConfirmConversion = (payload: ProjectConversionPayload) => {
+    // 1. Update lead stage to contract_executed
+    setLeads((prev) =>
+      prev.map((l) =>
+        l.id === payload.leadId
+          ? { ...l, stage: 'contract_executed' as LeadStage, updatedAt: new Date().toISOString().split('T')[0] }
+          : l
+      )
+    );
+
+    // 2. Provision Project Financial Account with strictly locked 25.0% Gross Profit Margin
+    const turnkeyContractPriceBdt = payload.projectValueBdt;
+    const budgetedTotalCostBdt = Math.round(turnkeyContractPriceBdt * 0.75); // Strict 25.0% gross margin lock!
+    const grossProfitBdt = turnkeyContractPriceBdt - budgetedTotalCostBdt;
+
+    const newProjectAccount = {
+      id: `fin-00${projectAccounts.length + 1}`,
+      projectId: payload.leadId,
+      projectName: `${payload.projectName} ${payload.capacityKwp} kWp Turnkey Solar Project`,
+      capacityKwp: payload.capacityKwp,
+      turnkeyContractPriceBdt,
+      actualTotalCostBdt: budgetedTotalCostBdt,
+      budgetedTotalCostBdt,
+      grossProfitBdt,
+      realizedGrossMarginPct: 25.0, // Strict 25.0%
+      milestones: [
+        { id: 'm1', milestoneTitle: 'Milestone 1: 20% Contract Advance', percentage: 20, amountBdt: Math.round(turnkeyContractPriceBdt * 0.20), status: 'paid_in_bank' as any, dueDate: '2026-11-15', paidDate: '2026-11-18' },
+        { id: 'm2', milestoneTitle: 'Milestone 2: 40% Chittagong Port Hardware Arrival', percentage: 40, amountBdt: Math.round(turnkeyContractPriceBdt * 0.40), status: 'invoice_issued' as any, dueDate: '2026-12-10' },
+        { id: 'm3', milestoneTitle: 'Milestone 3: 30% Civil Mounting & Inverter Setup', percentage: 30, amountBdt: Math.round(turnkeyContractPriceBdt * 0.30), status: 'pending' as any, dueDate: '2027-01-15' },
+        { id: 'm4', milestoneTitle: 'Milestone 4: 10% SREDA Grid Synchronization COD', percentage: 10, amountBdt: Math.round(turnkeyContractPriceBdt * 0.10), status: 'pending' as any, dueDate: '2027-02-15' },
+      ],
+      totalCollectedBdt: Math.round(turnkeyContractPriceBdt * 0.20),
+      totalOutstandingBdt: Math.round(turnkeyContractPriceBdt * 0.80),
+      retention5PercentBdt: Math.round(turnkeyContractPriceBdt * 0.05),
+      retentionMaturityDate: '2028-02-15',
+      retentionReleased: false,
+      annualSurplusCashExportBdt: Math.round(payload.capacityKwp * 1450 * 10.50 * 0.15),
+      costLedger: [
+        { id: 'c1', category: 'HARDWARE_MODULES' as any, description: `${payload.pvModuleCount}x ${payload.pvModuleBrand} ${payload.pvModuleWattage}W Panels`, vendorName: payload.pvModuleBrand, budgetedAmountBdt: Math.round(budgetedTotalCostBdt * 0.45), actualSpentAmountBdt: Math.round(budgetedTotalCostBdt * 0.45), status: 'approved' as any },
+        { id: 'c2', category: 'HARDWARE_INVERTERS' as any, description: `${payload.inverterCount}x ${payload.inverterBrand} Inverters`, vendorName: payload.inverterBrand, budgetedAmountBdt: Math.round(budgetedTotalCostBdt * 0.15), actualSpentAmountBdt: Math.round(budgetedTotalCostBdt * 0.15), status: 'approved' as any },
+        { id: 'c3', category: 'MOUNTING_STRUCTURE' as any, description: 'Aluminum AL6005 Racking & Fasteners', vendorName: 'Kai Aluminum Ltd.', budgetedAmountBdt: Math.round(budgetedTotalCostBdt * 0.15), actualSpentAmountBdt: Math.round(budgetedTotalCostBdt * 0.15), status: 'approved' as any },
+        { id: 'c4', category: 'CIVIL_LABOR' as any, description: `Civil Mounting & Pier Foundation (${payload.structuralSubcontractor})`, vendorName: payload.structuralSubcontractor, budgetedAmountBdt: Math.round(budgetedTotalCostBdt * 0.10), actualSpentAmountBdt: Math.round(budgetedTotalCostBdt * 0.10), status: 'approved' as any },
+        { id: 'c5', category: 'ELECTRICAL_LABOR' as any, description: `Substation & Grid Sync (${payload.electricalSubcontractor})`, vendorName: payload.electricalSubcontractor, budgetedAmountBdt: Math.round(budgetedTotalCostBdt * 0.15), actualSpentAmountBdt: Math.round(budgetedTotalCostBdt * 0.15), status: 'approved' as any },
+      ],
+      updatedAt: new Date().toISOString().split('T')[0],
+    };
+    setProjectAccounts((prev) => [newProjectAccount, ...prev]);
+
+    // 3. Provision Inventory Staging Lot
+    const newLot = {
+      id: `lot-00${lots.length + 1}`,
+      lotNumber: `LOT-2026-00${lots.length + 1}`,
+      assignedProjectName: payload.projectName,
+      warehouseLocation: 'Central SCM Distribution Hub (Tongi Industrial Corridor)',
+      pvModulesStock: {
+        brand: payload.pvModuleBrand,
+        wattageWp: payload.pvModuleWattage,
+        quantityUnits: payload.pvModuleCount,
+        qcPassedUnits: payload.pvModuleCount,
+        status: 'reserved' as any,
+      },
+      invertersStock: {
+        brand: payload.inverterBrand,
+        model: `${payload.inverterBrand} 100KTL-M2`,
+        quantityUnits: payload.inverterCount,
+        qcPassedUnits: payload.inverterCount,
+        status: 'reserved' as any,
+      },
+      stagedDate: new Date().toISOString().split('T')[0],
+      stagingStatus: 'ready_for_dispatch' as any,
+    };
+    setLots((prev) => [newLot as any, ...prev]);
+
+    // 4. Provision 4.5% Bank Financing Desk Application
+    const newBankApp = {
+      id: `app-00${bankApplications.length + 1}`,
+      applicationCode: `AREL-BNK-2026-${Math.floor(100 + Math.random() * 900)}`,
+      leadId: payload.leadId,
+      factoryName: payload.projectName,
+      targetPfi: (payload.bankPfi as any) || 'Eastern Bank PLC',
+      sfdDeskOfficerName: 'Md. Ashraful Alam (VP & Green Head)',
+      sfdDeskOfficerContact: '+880 1711-234567',
+      loanFacilityAmountBdt: Math.round(payload.projectValueBdt * 0.70), // 70% Debt
+      clientEquityAmountBdt: Math.round(payload.projectValueBdt * 0.30), // 30% Equity
+      fixedInterestRatePct: 4.5,
+      tenureMonths: 120,
+      moratoriumGraceMonths: 12,
+      status: 'dossier_submitted' as any,
+      disbursedAmountBdt: 0,
+      dscrProjected: 1.62,
+      expectedFirstDisbursementDate: '2026-12-15',
+    };
+    setBankApplications((prev) => [newBankApp as any, ...prev]);
+
+    // 5. Update Subcontractors active projects
+    const chosenSubs = [payload.structuralSubcontractor, payload.mechanicalSubcontractor, payload.electricalSubcontractor];
+    setSubcontractors((prev) =>
+      prev.map((sub) => {
+        if (chosenSubs.some((cs) => cs && (sub.companyName.includes(cs) || cs.includes(sub.companyName)))) {
+          return {
+            ...sub,
+            activeProjects: [payload.projectName, ...sub.activeProjects],
+          };
+        }
+        return sub;
+      })
+    );
+
+    // 6. Switch to Project Financials to showcase the 25.0% margin lock
+    setActiveTab('finance');
+  };
+
+  // Handle Subcontractor Work Order
+  const handleAssignWorkOrder = (payload: any) => {
+    setSubcontractors((prev) =>
+      prev.map((s) =>
+        s.id === payload.subcontractorId
+          ? {
+              ...s,
+              activeProjects: [payload.projectName, ...s.activeProjects],
+            }
+          : s
+      )
+    );
+  };
+
+  // Handle ASYCUDA Declaration
+  const handleFileAsycudaDeclaration = (payload: any) => {
+    const newShipment = {
+      id: `sh-${Date.now()}`,
+      shipmentCode: `SH-2026-${Math.floor(100 + Math.random() * 900)}`,
+      projectLeadId: 'lead-001',
+      factoryName: 'Ha-Meem Denim Washing & Weaving Plant',
+      lcNumber: payload.lcNumber,
+      erqAccountUtilized: true,
+      shippingLine: 'COSCO Shipping Lines',
+      vesselName: 'M/V Banglar Shourabh V.204',
+      billOfLadingNo: payload.blNumber,
+      portOfLoading: 'Shanghai Port (SHA)',
+      portOfDischarge: 'Chittagong Port (CGP)' as any,
+      etdDate: '2026-11-01',
+      etaPortDate: payload.etaPortDate,
+      cfAgentName: 'Bengal Cargo & Customs House Agency',
+      cfAgentContact: '+880 1819-223344',
+      sredaNocNumber: payload.sredaNocNumber,
+      sredaNocDate: '2026-10-25',
+      customsBoeNumber: `ASYCUDA-${payload.blNumber}`,
+      hsCode: '8541.43.00',
+      customsDutyPaidBdt: payload.customsDutyPaidBdt,
+      clearanceStatus: 'customs_duty_1pct_assessed' as any,
+    };
+    setShipments((prev) => [newShipment, ...prev]);
+  };
+
+  // Handle Journal Voucher
+  const handlePostVoucher = (payload: any) => {
+    if (payload.isCostItem) {
+      setProjectAccounts((prev) =>
+        prev.map((p) => {
+          if (p.id === payload.projectId || p.projectId === payload.projectId) {
+            const updatedActualCost = p.actualTotalCostBdt + payload.amountBdt;
+            const updatedGrossProfit = p.turnkeyContractPriceBdt - updatedActualCost;
+            const updatedMargin = (updatedGrossProfit / p.turnkeyContractPriceBdt) * 100;
+            return {
+              ...p,
+              actualTotalCostBdt: updatedActualCost,
+              grossProfitBdt: updatedGrossProfit,
+              realizedGrossMarginPct: Math.round(updatedMargin * 10) / 10,
+            };
+          }
+          return p;
+        })
+      );
+    }
   };
 
   // Update Bank Status
@@ -611,7 +799,7 @@ export default function ArielEnergyCrmPage() {
           {activeTab === 'leads' && (
             <LeadManagement
               leads={leads}
-              onSelectLead={handleOpenTechnicalForLead}
+              onSelectLead={handleOpenLeadConversion}
               onOpenNewLeadModal={() => setNewLeadModalOpen(true)}
               onOpenTechnicalForLead={handleOpenTechnicalForLead}
               onUpdateLeadStage={handleUpdateStage}
@@ -622,11 +810,16 @@ export default function ArielEnergyCrmPage() {
             <BankFinancingPipeline
               applications={bankApplications}
               onUpdateStatus={handleUpdateBankStatus}
+              theme={theme}
             />
           )}
 
           {activeTab === 'subcontractors' && (
-            <SubcontractorManagement subcontractors={subcontractors} />
+            <SubcontractorManagement
+              subcontractors={subcontractors}
+              onAssignWorkOrder={handleAssignWorkOrder}
+              theme={theme}
+            />
           )}
 
           {activeTab === 'products' && (
@@ -638,7 +831,12 @@ export default function ArielEnergyCrmPage() {
           )}
 
           {activeTab === 'suppliers_scm' && (
-            <SupplierScmControl suppliers={suppliers} shipments={shipments} />
+            <SupplierScmControl
+              suppliers={suppliers}
+              shipments={shipments}
+              onFileDeclaration={handleFileAsycudaDeclaration}
+              theme={theme}
+            />
           )}
 
           {activeTab === 'after_sales' && (
@@ -650,7 +848,11 @@ export default function ArielEnergyCrmPage() {
           )}
 
           {activeTab === 'finance' && (
-            <ProjectFinancialControl accounts={projectAccounts} />
+            <ProjectFinancialControl
+              accounts={projectAccounts}
+              onPostVoucher={handlePostVoucher}
+              theme={theme}
+            />
           )}
 
           {activeTab === 'technical' && (
@@ -724,8 +926,16 @@ export default function ArielEnergyCrmPage() {
       </div>
 
       {/* =========================================================================
-          MODALS: Onboard New Factory Lead & User Profile Control
+          MODALS: Onboard New Factory Lead & User Profile Control & Conversion Engine
           ========================================================================= */}
+      <LeadDetailConversionModal
+        lead={selectedLeadForConversion}
+        isOpen={isConversionModalOpen}
+        onClose={() => setIsConversionModalOpen(false)}
+        onConfirmConversion={handleConfirmConversion}
+        theme={theme}
+      />
+
       <NewLeadModal
         isOpen={newLeadModalOpen}
         onClose={() => setNewLeadModalOpen(false)}

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { SubcontractorEntity, SubcontractorCategory } from '@/types/arelCrm';
+import AssignWorkOrderModal, { WorkOrderPayload } from './AssignWorkOrderModal';
 import {
   Users,
   ShieldCheck,
@@ -18,18 +19,36 @@ import {
   LayoutGrid,
   Table as TableIcon,
   Search,
+  Plus,
 } from 'lucide-react';
 
 interface SubcontractorManagementProps {
   subcontractors: SubcontractorEntity[];
+  onAssignWorkOrder?: (payload: WorkOrderPayload) => void;
+  theme?: string;
 }
 
 export default function SubcontractorManagement({
   subcontractors,
+  onAssignWorkOrder,
+  theme = 'crm-green',
 }: SubcontractorManagementProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'GRID' | 'TABLE'>('GRID');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isWorkOrderModalOpen, setIsWorkOrderModalOpen] = useState(false);
+  const [selectedSub, setSelectedSub] = useState<SubcontractorEntity | null>(null);
+
+  const handleOpenAssignModal = (sub?: SubcontractorEntity) => {
+    setSelectedSub(sub || null);
+    setIsWorkOrderModalOpen(true);
+  };
+
+  const handleWorkOrderSubmitted = (payload: WorkOrderPayload) => {
+    if (onAssignWorkOrder) {
+      onAssignWorkOrder(payload);
+    }
+  };
 
   const filtered = subcontractors.filter((sub) => {
     if (selectedCategory !== 'ALL' && sub.category !== selectedCategory) return false;
@@ -120,6 +139,16 @@ export default function SubcontractorManagement({
               <span className="hidden sm:inline">Table</span>
             </button>
           </div>
+
+          {/* Issue Work Order Button */}
+          <button
+            type="button"
+            onClick={() => handleOpenAssignModal()}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0A1A2F] hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer font-mono"
+          >
+            <Plus className="w-3.5 h-3.5 text-[#C9A86A]" />
+            <span>Issue Work Order</span>
+          </button>
         </div>
       </div>
 
@@ -197,7 +226,8 @@ export default function SubcontractorManagement({
                 </span>
                 <button
                   type="button"
-                  className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition cursor-pointer"
+                  onClick={() => handleOpenAssignModal(sub)}
+                  className="px-2.5 py-1 rounded bg-[#0A1A2F] hover:bg-emerald-700 text-white font-bold transition cursor-pointer text-[11px]"
                 >
                   Assign Work Order
                 </button>
@@ -273,6 +303,7 @@ export default function SubcontractorManagement({
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
                       <button
                         type="button"
+                        onClick={() => handleOpenAssignModal(sub)}
                         className="px-2.5 py-1 rounded bg-[#0A1A2F] hover:bg-emerald-700 text-white text-[11px] font-bold transition cursor-pointer"
                       >
                         Assign Work Order
@@ -285,6 +316,16 @@ export default function SubcontractorManagement({
           </div>
         </div>
       )}
+
+      {/* Assign Work Order Modal */}
+      <AssignWorkOrderModal
+        isOpen={isWorkOrderModalOpen}
+        onClose={() => setIsWorkOrderModalOpen(false)}
+        subcontractors={subcontractors}
+        selectedSubcontractor={selectedSub}
+        onAssignWorkOrder={handleWorkOrderSubmitted}
+        theme={theme}
+      />
     </div>
   );
 }

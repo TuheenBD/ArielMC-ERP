@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { BankLoanApplication, BankPfi, BankLoanStatus } from '@/types/arelCrm';
+import BankDossierModal from './BankDossierModal';
 import {
   Landmark,
   BadgePercent,
@@ -23,14 +24,29 @@ import {
 interface BankFinancingPipelineProps {
   applications: BankLoanApplication[];
   onUpdateStatus?: (id: string, newStatus: BankLoanStatus) => void;
+  theme?: string;
 }
 
 export default function BankFinancingPipeline({
   applications,
   onUpdateStatus,
+  theme = 'crm-green',
 }: BankFinancingPipelineProps) {
   const [selectedPfi, setSelectedPfi] = useState<string>('ALL');
   const [displayMode, setDisplayMode] = useState<'TABLE' | 'GRID'>('TABLE');
+  const [selectedAppForDossier, setSelectedAppForDossier] = useState<BankLoanApplication | null>(null);
+  const [isDossierModalOpen, setIsDossierModalOpen] = useState(false);
+
+  const handleOpenDossier = (app?: BankLoanApplication) => {
+    setSelectedAppForDossier(app || applications[0] || null);
+    setIsDossierModalOpen(true);
+  };
+
+  const handleModalStatusUpdate = (appId: string, newStatus: BankLoanStatus) => {
+    if (onUpdateStatus) {
+      onUpdateStatus(appId, newStatus);
+    }
+  };
 
   const filtered = applications.filter((app) => {
     if (selectedPfi !== 'ALL' && app.targetPfi !== selectedPfi) return false;
@@ -144,15 +160,14 @@ export default function BankFinancingPipeline({
             </button>
           </div>
 
-          <a
-            href="/documents/AREL_BNK_2026_FEAS_V1_Bankable_Feasibility_Study_Dossier.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 transition"
+          <button
+            type="button"
+            onClick={() => handleOpenDossier()}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0A1A2F] hover:bg-emerald-700 text-white text-xs font-bold transition font-mono cursor-pointer shadow-xs"
           >
-            <Download className="w-3.5 h-3.5" />
+            <FileText className="w-3.5 h-3.5 text-[#C9A86A]" />
             <span>Bank Dossier</span>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -211,15 +226,14 @@ export default function BankFinancingPipeline({
                     </td>
 
                     <td className="py-3.5 px-4 text-right">
-                      <a
-                        href="/documents/AREL_BNK_2026_FEAS_V1_Bankable_Feasibility_Study_Dossier.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-bold transition"
+                      <button
+                        type="button"
+                        onClick={() => handleOpenDossier(app)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-800 text-slate-700 rounded text-[11px] font-bold transition cursor-pointer font-mono"
                       >
                         <FileText className="w-3 h-3 text-emerald-700" />
                         <span>Dossier</span>
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -281,20 +295,28 @@ export default function BankFinancingPipeline({
 
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span className="text-slate-400 font-mono">Disbursed: Tk {(app.disbursedAmountBdt / 10000000).toFixed(2)} Cr</span>
-                <a
-                  href="/documents/AREL_BNK_2026_FEAS_V1_Bankable_Feasibility_Study_Dossier.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-[#0A1A2F] hover:bg-emerald-700 text-white rounded text-xs font-bold transition"
+                <button
+                  type="button"
+                  onClick={() => handleOpenDossier(app)}
+                  className="inline-flex items-center gap-1 px-3 py-1 bg-[#0A1A2F] hover:bg-emerald-700 text-white rounded text-xs font-bold transition cursor-pointer font-mono"
                 >
                   <FileText className="w-3 h-3 text-[#C9A86A]" />
                   <span>View Dossier</span>
-                </a>
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* Interactive Bankable Feasibility & Debt Amortization Dossier Modal */}
+      <BankDossierModal
+        application={selectedAppForDossier}
+        isOpen={isDossierModalOpen}
+        onClose={() => setIsDossierModalOpen(false)}
+        onUpdateStatus={handleModalStatusUpdate}
+        theme={theme}
+      />
     </div>
   );
 }

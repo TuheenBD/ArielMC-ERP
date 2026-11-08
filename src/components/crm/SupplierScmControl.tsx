@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { SolarSupplier, ShipmentConsignment, CustomsClearanceStatus } from '@/types/arelCrm';
+import AsycudaCustomsModal, { AsycudaPayload } from './AsycudaCustomsModal';
 import {
   Truck,
   Ship,
@@ -19,20 +20,36 @@ import {
   LayoutGrid,
   Table as TableIcon,
   Search,
+  Plus,
 } from 'lucide-react';
 
 interface SupplierScmControlProps {
   suppliers: SolarSupplier[];
   shipments: ShipmentConsignment[];
+  onFileDeclaration?: (payload: AsycudaPayload) => void;
+  theme?: string;
 }
 
 export default function SupplierScmControl({
   suppliers,
   shipments,
+  onFileDeclaration,
+  theme = 'crm-green',
 }: SupplierScmControlProps) {
   const [activeSubTab, setActiveSubTab] = useState<'SUPPLIERS' | 'SHIPMENTS'>('SUPPLIERS');
   const [displayMode, setDisplayMode] = useState<'GRID' | 'TABLE'>('GRID');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAsycudaModalOpen, setIsAsycudaModalOpen] = useState(false);
+
+  const handleOpenAsycudaModal = () => {
+    setIsAsycudaModalOpen(true);
+  };
+
+  const handleDeclarationFiled = (payload: AsycudaPayload) => {
+    if (onFileDeclaration) {
+      onFileDeclaration(payload);
+    }
+  };
 
   const filteredSuppliers = suppliers.filter((s) => {
     if (
@@ -161,6 +178,16 @@ export default function SupplierScmControl({
               <span className="hidden sm:inline">Table</span>
             </button>
           </div>
+
+          {/* File ASYCUDA Declaration Button */}
+          <button
+            type="button"
+            onClick={handleOpenAsycudaModal}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0A1A2F] hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer font-mono"
+          >
+            <Plus className="w-3.5 h-3.5 text-[#C9A86A]" />
+            <span>File ASYCUDA Box 44</span>
+          </button>
         </div>
       </div>
 
@@ -426,6 +453,14 @@ export default function SupplierScmControl({
           )}
         </div>
       )}
+
+      {/* ASYCUDA World Box 44 Customs Declaration Modal */}
+      <AsycudaCustomsModal
+        isOpen={isAsycudaModalOpen}
+        onClose={() => setIsAsycudaModalOpen(false)}
+        onFileDeclaration={handleDeclarationFiled}
+        theme={theme}
+      />
     </div>
   );
 }

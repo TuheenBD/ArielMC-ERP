@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ProjectFinancialAccount, MilestoneBillingItem, ProjectCostItem } from '@/types/arelCrm';
+import PostJournalVoucherModal, { JournalVoucherPayload } from './PostJournalVoucherModal';
 import {
   DollarSign,
   TrendingUp,
@@ -22,20 +23,50 @@ import {
   Table as TableIcon,
   Search,
   Filter,
+  Plus,
 } from 'lucide-react';
 
 interface ProjectFinancialControlProps {
   accounts: ProjectFinancialAccount[];
+  onPostVoucher?: (payload: JournalVoucherPayload) => void;
+  theme?: string;
 }
 
 type FinancialTab = 'pnl' | 'ledger' | 'balance_sheet' | 'milestones';
 type ViewMode = 'STATEMENT' | 'PORTFOLIO_TABLE';
 
-export default function ProjectFinancialControl({ accounts }: ProjectFinancialControlProps) {
+export default function ProjectFinancialControl({
+  accounts,
+  onPostVoucher,
+  theme = 'crm-green',
+}: ProjectFinancialControlProps) {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(accounts[0]?.projectId || '');
   const [activeTab, setActiveTab] = useState<FinancialTab>('pnl');
   const [viewMode, setViewMode] = useState<ViewMode>('STATEMENT');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
+  const [customLedgerEntries, setCustomLedgerEntries] = useState<Record<string, any[]>>({});
+
+  const handlePostVoucherSubmitted = (payload: JournalVoucherPayload) => {
+    const newEntry = {
+      date: payload.postingDate,
+      ref: payload.voucherRef,
+      accountCode: `${payload.debitAccountCode} / ${payload.creditAccountCode}`,
+      accountTitle: `${payload.debitAccountTitle} / ${payload.creditAccountTitle}`,
+      debit: payload.amountBdt,
+      credit: payload.amountBdt,
+      desc: `${payload.voucherType}: ${payload.description}`,
+    };
+
+    setCustomLedgerEntries((prev) => ({
+      ...prev,
+      [payload.projectId]: [...(prev[payload.projectId] || []), newEntry],
+    }));
+
+    if (onPostVoucher) {
+      onPostVoucher(payload);
+    }
+  };
 
   const activeAccount = accounts.find((a) => a.projectId === selectedProjectId) || accounts[0];
 
@@ -177,7 +208,9 @@ export default function ProjectFinancialControl({ accounts }: ProjectFinancialCo
   };
 
   const bs = calculateBalanceSheet(activeAccount);
-  const ledger = generateLedgerEntries(activeAccount);
+  const baseLedger = generateLedgerEntries(activeAccount);
+  const extraEntries = (activeAccount && (customLedgerEntries[activeAccount.id] || customLedgerEntries[activeAccount.projectId])) || [];
+  const ledger = [...baseLedger, ...extraEntries];
 
   return (
     <div className="space-y-6">
@@ -498,13 +531,23 @@ export default function ProjectFinancialControl({ accounts }: ProjectFinancialCo
                     Real-time transaction posting for {activeAccount.projectName} ({activeAccount.projectId})
                   </p>
                 </div>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer self-start sm:self-auto"
-                >
-                  <Download className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Export Ledger CSV</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsVoucherModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0A1A2F] hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer font-mono"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-[#C9A86A]" />
+                    <span>Post Voucher</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer self-start sm:self-auto"
+                  >
+                    <Download className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Export Ledger CSV</span>
+                  </button>
+                </div>
               </div>
 
               <div className="overflow-x-auto">
@@ -841,6 +884,16 @@ export default function ProjectFinancialControl({ accounts }: ProjectFinancialCo
           </div>
         </div>
       )}
+
+      {/* Post Project General Ledger Voucher Modal */}
+      <PostJournalVoucherModal
+        isOpen={isVoucherModalOpen}
+        onClose={() => setIsVoucherModalOpen(false)}
+        projects={accounts}
+        activeProject={activeAccount}
+        onPostVoucher={handlePostVoucherSubmitted}
+        theme={theme}
+      />
     </div>
   );
 }
