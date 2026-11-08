@@ -504,6 +504,17 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Solar Calculator</span>
           </a>
 
+          {/* AREL-CRM Enterprise Hub */}
+          <a
+            id="header-ariel-crm-btn"
+            href="/energy/crm"
+            className={`${toolBtn} shrink-0 whitespace-nowrap text-amber-300 border-amber-500/40 hover:border-amber-400 hidden 2xl:flex`}
+            title="AREL-CRM — Ariel Renewable Energy Enterprise Operating System"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <span>AREL-CRM</span>
+          </a>
+
           {/* ArielMC AI Copilot Button (Compact & Sleek) */}
           {onOpenArielAi && (
             <button

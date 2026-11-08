@@ -73,6 +73,15 @@ export default function ErpEnergyCalculatorPage() {
             </button>
           </div>
 
+          <Link
+            href="/energy/crm"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 hover:text-white bg-slate-900 border border-amber-500/40 px-3 py-1.5 rounded-lg transition hover:border-amber-400"
+            title="Open Full AREL-CRM Enterprise Operating Hub"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <span>Open AREL-CRM</span>
+          </Link>
+
           <a
             href="https://energy.arielmc.com"
             target="_blank"
