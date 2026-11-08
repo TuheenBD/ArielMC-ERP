@@ -231,25 +231,15 @@ export default function ArielEnergyCrmPage() {
               <ArrowUpRight className="w-3 h-3 opacity-70" />
             </a>
 
-            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
+            <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
               <img
-                src="/logos/ariel-energy-icon.png"
-                alt="Ariel Renewable Energy"
-                className="w-8 h-8 object-contain rounded-lg shadow-xs"
+                src="/logos/ariel-energy-logo.png"
+                alt="Ariel Renewable Energy Limited — Sovereign Green Infrastructure & Industrial Decarbonization"
+                className="h-8 sm:h-9 w-auto object-contain shrink-0"
               />
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-sm text-[#0A1A2F] tracking-tight">
-                    Ariel Renewable Energy Limited
-                  </span>
-                  <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
-                    Enterprise Operating System
-                  </span>
-                </div>
-                <span className="text-[10px] text-slate-500 font-mono block">
-                  Turnkey EPC • SREDA 70% Cap • Bangladesh Bank 4.5% Green Debt
-                </span>
-              </div>
+              <span className="hidden xl:inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200 self-center">
+                Enterprise Operating System
+              </span>
             </div>
           </div>
 

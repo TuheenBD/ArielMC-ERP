@@ -271,3 +271,4 @@ export default function ProjectFinancialControl({ accounts }: ProjectFinancialCo
     </div>
   );
 }
+
