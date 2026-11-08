@@ -77,10 +77,10 @@ export async function POST(req: NextRequest) {
     let embeddedLogo: any = null;
     try {
       const possibleLogoPaths = [
+        path.join(process.cwd(), 'public/logos/ariel-energy-logo-clean.png'),
+        path.join(process.cwd(), '../Ariel-SaaS/public/logos/ariel-energy-logo-clean.png'),
+        path.join(process.cwd(), '../ArielMC-ERP/public/logos/ariel-energy-logo-clean.png'),
         path.join(process.cwd(), 'public/logos/ariel-energy-logo.png'),
-        path.join(process.cwd(), 'public/images/solar-gallery/Ariel Energy - Logo.png'),
-        path.join(process.cwd(), '../Ariel-SaaS/public/logos/ariel-energy-logo.png'),
-        path.join(process.cwd(), '../ArielMC-ERP/public/logos/ariel-energy-logo.png'),
       ];
       for (const p of possibleLogoPaths) {
         if (fs.existsSync(p)) {
@@ -99,38 +99,15 @@ export async function POST(req: NextRequest) {
     const drawPageChrome = (page: any, pageNumber: number, title: string) => {
       const rightX = pageWidth - 40;
 
-      // Draw Logo on top-left if available
+      // Draw Logo on top-left if available (clean ratio 3.152:1, zero distortion)
       if (embeddedLogo) {
         const logoHeight = 28;
-        const logoWidth = 70; // 2.5:1 ratio
+        const logoWidth = logoHeight * 3.152; // 88.25 pt
         page.drawImage(embeddedLogo, {
           x: 40,
           y: pageHeight - 48,
           width: logoWidth,
           height: logoHeight,
-        });
-
-        // Brand Typography right next to logo
-        page.drawText('Ariel Renewable Energy Limited', {
-          x: 118,
-          y: pageHeight - 32,
-          size: 9.5,
-          font: fontBold,
-          color: navy,
-        });
-        page.drawText('Sovereign Green Infrastructure & Industrial Decarbonization', {
-          x: 118,
-          y: pageHeight - 42,
-          size: 6.8,
-          font: fontBold,
-          color: gold,
-        });
-        page.drawText('A Member of Ariel Group / Holdings', {
-          x: 118,
-          y: pageHeight - 50,
-          size: 6.2,
-          font: fontBold,
-          color: emeraldDark,
         });
       } else {
         page.drawText('Ariel Renewable Energy Limited', {
@@ -147,53 +124,38 @@ export async function POST(req: NextRequest) {
           font: fontBold,
           color: gold,
         });
-        page.drawText('A Member of Ariel Group / Holdings', {
-          x: 40,
-          y: pageHeight - 50,
-          size: 6.5,
-          font: fontBold,
-          color: emeraldDark,
-        });
       }
 
-      // Top-Right Official Company & EPC Accreditation Info
-      const addr1 = 'Corporate HQ: Ariel House, Level 7, Road 11, Banani, Dhaka-1213';
-      const addr2 = 'SREDA Registered Turnkey EPC Partner • Incorporation Reg: C-194820';
-      const addr3 = 'energy.arielmc.com | energy@arielmc.com | +880 1819 273458';
+      // Top-Right: Division Title & Statutory Registration Only (Zero Header Address/Phone Clutter)
+      const headerTitle = 'COMMERCIAL & INDUSTRIAL ROOFTOP SOLAR DIVISION';
+      const headerSub = 'SREDA Registered Turnkey EPC Partner • Reg: C-194820';
 
-      page.drawText(addr1, {
-        x: rightX - fontRegular.widthOfTextAtSize(addr1, 6.2),
-        y: pageHeight - 30,
-        size: 6.2,
-        font: fontRegular,
-        color: slateMuted,
+      page.drawText(headerTitle, {
+        x: rightX - fontBold.widthOfTextAtSize(headerTitle, 7.5),
+        y: pageHeight - 32,
+        size: 7.5,
+        font: fontBold,
+        color: navy,
       });
-      page.drawText(addr2, {
-        x: rightX - fontRegular.widthOfTextAtSize(addr2, 6.2),
-        y: pageHeight - 39,
-        size: 6.2,
-        font: fontRegular,
-        color: slateMuted,
-      });
-      page.drawText(addr3, {
-        x: rightX - fontRegular.widthOfTextAtSize(addr3, 6.2),
-        y: pageHeight - 48,
-        size: 6.2,
+      page.drawText(headerSub, {
+        x: rightX - fontRegular.widthOfTextAtSize(headerSub, 6.5),
+        y: pageHeight - 42,
+        size: 6.5,
         font: fontRegular,
         color: slateMuted,
       });
 
       // Dual-Line Official Letterhead Divider (Gold primary + Emerald secondary)
       page.drawLine({
-        start: { x: 40, y: pageHeight - 56 },
-        end: { x: pageWidth - 40, y: pageHeight - 56 },
-        thickness: 1.8,
+        start: { x: 40, y: pageHeight - 54 },
+        end: { x: pageWidth - 40, y: pageHeight - 54 },
+        thickness: 1.5,
         color: gold,
       });
       page.drawLine({
-        start: { x: 40, y: pageHeight - 59 },
-        end: { x: pageWidth - 40, y: pageHeight - 59 },
-        thickness: 0.6,
+        start: { x: 40, y: pageHeight - 56.5 },
+        end: { x: pageWidth - 40, y: pageHeight - 56.5 },
+        thickness: 0.5,
         color: emerald,
       });
 
@@ -201,7 +163,7 @@ export async function POST(req: NextRequest) {
       if (pageNumber > 1) {
         page.drawText(`OFFICIAL EPC DOSSIER • SECTION ${pageNumber}: ${title.toUpperCase()}`, {
           x: 40,
-          y: pageHeight - 71,
+          y: pageHeight - 68,
           size: 7.5,
           font: fontBold,
           color: navy,
@@ -209,45 +171,60 @@ export async function POST(req: NextRequest) {
         const refStr = `Ref: AREL/QT/2026/EPC-${Math.round(capacityKwp)}KWP`;
         page.drawText(refStr, {
           x: rightX - fontBold.widthOfTextAtSize(refStr, 7),
-          y: pageHeight - 71,
+          y: pageHeight - 68,
           size: 7,
           font: fontBold,
           color: gold,
         });
       }
 
-      // Bottom Footer Bar
-      page.drawLine({
-        start: { x: 40, y: 38 },
-        end: { x: pageWidth - 40, y: 38 },
-        thickness: 0.8,
-        color: borderGray,
-      });
-
-      page.drawText('ARIEL RENEWABLE ENERGY LIMITED • SREDA REGISTERED EPC • A MEMBER OF THE ARIELMC ENTERPRISE ECO-SYSTEM', {
+      // Bottom Corporate Footer Bar (Approved Master Letterhead Standard)
+      // Subtitle line above dark bar
+      const footSub = 'Sovereign Clean Energy Infrastructure • Turnkey Commercial & Industrial (C&I) Solar EPC • SREDA Registered';
+      page.drawText(footSub, {
         x: 40,
-        y: 26,
+        y: 42,
         size: 6.2,
         font: fontBold,
         color: navy,
       });
 
-      const footerSub = 'Gazipur Master Operations Hub • Corporate Seal & Bankable Green Infrastructure';
-      page.drawText(footerSub, {
-        x: 40,
-        y: 17,
-        size: 5.8,
-        font: fontOblique,
-        color: slateMuted,
-      });
-
       const pageStr = `PAGE ${pageNumber} OF 4`;
       page.drawText(pageStr, {
-        x: rightX - fontBold.widthOfTextAtSize(pageStr, 8),
-        y: 24,
-        size: 8,
+        x: rightX - fontBold.widthOfTextAtSize(pageStr, 7.5),
+        y: 42,
+        size: 7.5,
         font: fontBold,
         color: emeraldDark,
+      });
+
+      // Dark Navy Bar across bottom
+      page.drawRectangle({
+        x: 0,
+        y: 0,
+        width: pageWidth,
+        height: 36,
+        color: rgb(10 / 255, 25 / 255, 47 / 255), // #0A192F
+      });
+
+      // Line 1: Corporate HQ Address
+      const footAddr = 'Corporate HQ: House - 30 (1st Floor), Road - 07, Block - C, Niketon, Gulshan-1, Dhaka-1212, Bangladesh';
+      page.drawText(footAddr, {
+        x: (pageWidth - fontBold.widthOfTextAtSize(footAddr, 6.8)) / 2,
+        y: 20,
+        size: 6.8,
+        font: fontBold,
+        color: white,
+      });
+
+      // Line 2: Telephony, Email & Website
+      const footContacts = '☎ : +880 2410 811 91    📱 : +880 1819 273 458    ✉ : info@arielenergybd.com    🌐 www.arielenergybd.com';
+      page.drawText(footContacts, {
+        x: (pageWidth - fontRegular.widthOfTextAtSize(footContacts, 6.2)) / 2,
+        y: 8,
+        size: 6.2,
+        font: fontRegular,
+        color: white,
       });
     };
 
@@ -814,7 +791,7 @@ export async function POST(req: NextRequest) {
       font: fontRegular,
       color: darkGray,
     });
-    page4.drawText('Direct Hotline: +880 1819 273458 | energy@arielmc.com', {
+    page4.drawText('Direct Hotline: +880 1819 273 458 | info@arielenergybd.com', {
       x: 50 + signBoxW + 20,
       y: cy + 7,
       size: 6.2,
