@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
           font: fontBold,
           color: gold,
         });
-        page.drawText('A Member of the ArielMC Enterprise Eco-System', {
+        page.drawText('A Member of Ariel Group / Holdings', {
           x: 118,
           y: pageHeight - 50,
           size: 6.2,
@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
           font: fontBold,
           color: gold,
         });
-        page.drawText('A Member of the ArielMC Enterprise Eco-System', {
+        page.drawText('A Member of Ariel Group / Holdings', {
           x: 40,
           y: pageHeight - 50,
           size: 6.5,

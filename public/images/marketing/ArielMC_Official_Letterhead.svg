@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 297" width="210mm" height="297mm">
   <defs>
     <style>
-      .txt-brand { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 4.8mm; font-weight: 700; fill: #003B73; letter-spacing: -0.2px; }
+      .txt-brand { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 4.5mm; font-weight: 800; fill: #1F3A2E; letter-spacing: -0.2px; }
+      .txt-sub { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 2.1mm; font-weight: 600; fill: #8A6D3B; letter-spacing: 0.1px; }
       .txt-reg { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 2.1mm; fill: #1e293b; line-height: 1.35; }
     </style>
   </defs>
@@ -21,7 +22,8 @@
   <!-- Bottom Corporate Footer (Official ArielMC Architecture) -->
   <g transform="translate(0, 270)">
     <!-- Corporate Company Heading (Exact Official Specification) -->
-    <text x="16" y="-3" class="txt-brand">Ariel Marketing &amp; Communications Limited</text>
+    <text x="16" y="-3.5" class="txt-brand">ArielMC • Ariel Marketing &amp; Communications Limited</text>
+    <text x="16" y="0.2" class="txt-sub">A Sovereign Operating Entity of Ariel Group / Holdings • Global B2B / B2C / D2C Export Sourcing Gateway</text>
 
     <!-- 1. Address -->
     <g transform="translate(16, 4)">

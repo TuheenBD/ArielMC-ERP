@@ -359,11 +359,20 @@ Ariel Marketing & Communications Limited`);
                 </div>
               </div>
 
-              {/* Bottom Institutional Corporate Footer (Exact 4-Pillar Layout) */}
+              {/* Bottom Institutional Corporate Footer (Official ArielMC Architecture) */}
               <div className="absolute left-8 right-8 bottom-6 border-t border-slate-200 pt-3">
-                <h4 className="text-sm font-extrabold text-[#003B73] tracking-tight mb-2">
-                  Ariel Marketing &amp; Communications Limited
-                </h4>
+                <div className="flex items-baseline justify-between mb-2 border-b border-emerald-900/10 pb-1">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-base font-black tracking-tight text-[#1F3A2E] font-heading">ArielMC</span>
+                      <span className="text-[11px] font-bold text-[#8A6D3B] uppercase tracking-wider font-heading">• Ariel Marketing &amp; Communications Limited</span>
+                    </div>
+                    <p className="text-[8px] text-slate-500 font-sans tracking-wide">A Sovereign Operating Entity of Ariel Group / Holdings • Global B2B / B2C / D2C Export Sourcing Gateway</p>
+                  </div>
+                  <div className="text-right text-[8px] font-mono font-bold text-[#1F3A2E]">
+                    BANGLADESH • UK • USA • EU • AUSTRALIA
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-4 gap-2 text-[8px] text-slate-700 leading-tight">
                   <div>
