@@ -408,7 +408,7 @@ export default function LeadManagement({
           <button
             type="button"
             onClick={onOpenNewLeadModal}
-            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-sm cursor-pointer shrink-0"
+            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-sm hover:shadow-[0_8px_25px_rgba(16,185,129,0.35)] hover:backdrop-blur-md hover:border hover:border-emerald-300/40 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4" />
             <span>Onboard New Factory Lead</span>

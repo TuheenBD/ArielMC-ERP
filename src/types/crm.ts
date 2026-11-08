@@ -20,7 +20,22 @@ export interface SolarLead {
   id: string;
   factoryName: string;
   parentGroup?: string;
-  industrySector: 'RMG / Apparel' | 'Textiles & Dyeing' | 'Leather & Footwear' | 'Ceramics & Tableware' | 'Jute Mills' | 'Heavy Packaging';
+  industrySector:
+    | 'RMG / Apparel'
+    | 'Textiles & Dyeing'
+    | 'Steel & Heavy Engineering'
+    | 'Ceramics & Tableware'
+    | 'Ceramics & Sanitaryware'
+    | 'Leather & Footwear'
+    | 'Leather & Tannery'
+    | 'Jute Mills'
+    | 'Jute & Natural Fiber'
+    | 'Agro & Food Processing'
+    | 'Pharmaceuticals'
+    | 'Heavy Packaging'
+    | 'Commercial & Corporate'
+    | 'Other, Pls mention'
+    | (string & {});
   location: string;
   corridor: 'Dhaka / Gazipur / Savar' | 'Chattogram / Narayanganj' | 'Mymensingh / Valuka' | 'Other Industrial Belt';
   contactPerson: string;

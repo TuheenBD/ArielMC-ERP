@@ -825,7 +825,7 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={() => setNewLeadModalOpen(true)}
-              className={`px-3 py-1.5 ${tokens.headerPrimaryBtn} rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer`}
+              className={`px-3 py-1.5 ${tokens.headerPrimaryBtn} rounded-lg text-xs font-bold transition-all duration-300 flex items-center gap-1.5 shadow-2xs hover:shadow-[0_6px_20px_rgba(16,185,129,0.35)] hover:backdrop-blur-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer`}
             >
               <Plus className={`w-3.5 h-3.5 ${tokens.headerPrimaryBtnText}`} />
               <span>New Lead</span>

@@ -9,11 +9,17 @@ export type IndustrySector =
   | 'Textiles & Dyeing'
   | 'Steel & Heavy Engineering'
   | 'Ceramics & Sanitaryware'
+  | 'Ceramics & Tableware'
   | 'Leather & Tannery'
+  | 'Leather & Footwear'
   | 'Agro & Food Processing'
   | 'Pharmaceuticals'
   | 'Jute & Natural Fiber'
-  | 'Commercial & Corporate';
+  | 'Jute Mills'
+  | 'Heavy Packaging'
+  | 'Commercial & Corporate'
+  | 'Other, Pls mention'
+  | (string & {});
 
 export type LeadStage =
   | 'discovery'              // Step 1: Initial Discovery / Roof Inquiry
