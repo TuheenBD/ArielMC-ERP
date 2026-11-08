@@ -35,6 +35,8 @@ import SupplierScmControl from '@/components/crm/SupplierScmControl';
 import AfterSalesSlaManagement from '@/components/crm/AfterSalesSlaManagement';
 import ProjectFinancialControl from '@/components/crm/ProjectFinancialControl';
 import QuadPlatformSyncModal from '@/components/crm/QuadPlatformSyncModal';
+import QuadPlatformSyncModule from '@/components/crm/QuadPlatformSyncModule';
+import UserProfileModal, { DEMO_USERS } from '@/components/crm/UserProfileModal';
 
 import {
   Activity,
@@ -57,6 +59,10 @@ import {
   Clock,
   CheckCircle2,
   ExternalLink,
+  Globe,
+  Radio,
+  User,
+  Lock,
 } from 'lucide-react';
 
 type CrmTab =
@@ -69,7 +75,8 @@ type CrmTab =
   | 'inventory'
   | 'suppliers_scm'
   | 'after_sales'
-  | 'finance';
+  | 'finance'
+  | 'sync';
 
 interface NavMenuItem {
   id: CrmTab;
@@ -148,6 +155,12 @@ const TAB_METADATA: Record<
       'Project-wise General Ledger, P&L Statement, Balance Sheet, 25% gross margin lock & milestone billing',
     icon: DollarSign,
   },
+  sync: {
+    title: 'Quad-Platform Live Enterprise Synchronization Bus',
+    subtitle:
+      'Zero-duplication cross-platform bus linking ERP (3001) • Master-CRM • Catalog (3000) • Website (8080) • SaaS (3002)',
+    icon: Radio,
+  },
 };
 
 export default function ArielEnergyCrmPage() {
@@ -164,12 +177,22 @@ export default function ArielEnergyCrmPage() {
   const [projectAccounts] = useState(INITIAL_PROJECT_FINANCIALS);
   const [syncStatus, setSyncStatus] = useState(INITIAL_PLATFORM_SYNC);
 
+  // Active User Profile State (Strict 2SA Verified)
+  const [currentUser, setCurrentUser] = useState(DEMO_USERS[0]);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   const [activeTab, setActiveTab] = useState<CrmTab>('overview');
   const [activeLeadForTechId, setActiveLeadForTechId] = useState<string>(
     INITIAL_SOLAR_LEADS[0].id
   );
   const [newLeadModalOpen, setNewLeadModalOpen] = useState(false);
   const [syncModalOpen, setSyncModalOpen] = useState(false);
+
+  // Switch User Profile
+  const handleSwitchUser = (email: string) => {
+    const found = DEMO_USERS.find((u) => u.email === email);
+    if (found) setCurrentUser(found);
+  };
 
   // Update lead stage
   const handleUpdateStage = (leadId: string, newStage: LeadStage) => {
@@ -226,7 +249,7 @@ export default function ArielEnergyCrmPage() {
   const handleTriggerSync = () => {
     setSyncStatus((prev) => ({
       ...prev,
-      lastSyncTimestamp: new Date().toISOString(),
+      lastSyncTimestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
     }));
   };
 
@@ -304,27 +327,33 @@ export default function ArielEnergyCrmPage() {
         { id: 'finance', label: '9. Project Financials', icon: DollarSign, badge: 'P&L / GL' },
       ],
     },
+    {
+      title: 'Cross-Platform Sync',
+      items: [
+        { id: 'sync', label: '10. Quad-Bus Sync', icon: Radio, badge: '4/4 Live' },
+      ],
+    },
   ];
 
   const currentMeta = TAB_METADATA[activeTab];
   const CurrentIcon = currentMeta.icon;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-row font-sans text-slate-800">
+    <div className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]">
       {/* =========================================================================
           LEFT FIXED PANEL (No Scroll, Fixed, Zero horizontal/vertical layout jump)
           ========================================================================= */}
       <aside className="w-64 xl:w-72 bg-[#0A1A2F] text-slate-200 border-r border-[#1B2D45] fixed left-0 top-0 bottom-0 h-screen z-40 flex flex-col justify-between overflow-hidden select-none shadow-xl">
         {/* 1. Header & Brand Wordmark */}
-        <div className="p-4 border-b border-[#1B2D45] shrink-0 bg-[#071324]">
+        <div className="p-3.5 border-b border-[#1B2D45] shrink-0 bg-[#071324]">
           <div className="flex items-center gap-2.5">
             <img
               src="/logos/ariel-energy-icon.png"
               alt="AREL Seal"
-              className="w-9 h-9 object-contain drop-shadow-md shrink-0"
+              className="w-8 h-8 object-contain drop-shadow-md shrink-0"
             />
             <div className="min-w-0 flex-1">
-              <div className="text-[13px] font-black tracking-tight text-white leading-tight truncate">
+              <div className="text-xs font-black tracking-tight text-white leading-tight truncate">
                 Ariel Renewable Energy
               </div>
               <div className="text-[9px] uppercase font-mono tracking-widest text-[#C9A86A] truncate">
@@ -334,31 +363,31 @@ export default function ArielEnergyCrmPage() {
           </div>
 
           {/* Quad Sync Live Pulse Pill */}
-          <div className="mt-3 flex items-center justify-between bg-[#0F223D] px-2.5 py-1.5 rounded-lg border border-[#1E375B]">
+          <div className="mt-2.5 flex items-center justify-between bg-[#0F223D] px-2 py-1 rounded-lg border border-[#1E375B]">
             <div className="flex items-center gap-1.5">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-[10px] font-bold text-emerald-300 font-mono">
+              <span className="text-[9px] font-bold text-emerald-300 font-mono">
                 Quad-Bus: 4/4 Synced
               </span>
             </div>
             <button
               type="button"
-              onClick={() => setSyncModalOpen(true)}
+              onClick={() => setActiveTab('sync')}
               className="text-[9px] font-mono font-bold text-[#C9A86A] hover:text-amber-300 transition cursor-pointer"
             >
-              Sync Details
+              Verify &rarr;
             </button>
           </div>
         </div>
 
         {/* 2. Grouped Navigation Menus (Fixed within panel) */}
-        <nav className="flex-1 px-3 py-3 space-y-3.5 overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto no-scrollbar">
           {navSections.map((section) => (
             <div key={section.title}>
-              <div className="px-2 mb-1.5 text-[9px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+              <div className="px-2 mb-1 text-[8.5px] font-mono uppercase tracking-wider text-slate-400 font-bold">
                 {section.title}
               </div>
               <div className="space-y-0.5">
@@ -371,24 +400,24 @@ export default function ArielEnergyCrmPage() {
                       key={tab.id}
                       type="button"
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full px-2.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between gap-2 cursor-pointer text-left ${
+                      className={`w-full px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-between gap-2 cursor-pointer text-left ${
                         isActive
-                          ? 'bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-sm'
+                          ? 'bg-gradient-to-r from-emerald-700 to-teal-800 text-white shadow-xs'
                           : 'text-slate-300 hover:text-white hover:bg-[#13253F]'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0">
                         <Icon
-                          className={`w-4 h-4 shrink-0 ${
+                          className={`w-3.5 h-3.5 shrink-0 ${
                             isActive ? 'text-white' : 'text-slate-400'
                           }`}
                         />
-                        <span className="truncate">{tab.label}</span>
+                        <span className="truncate text-[11px]">{tab.label}</span>
                       </div>
 
                       {tab.badge && (
                         <span
-                          className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-semibold shrink-0 ${
+                          className={`text-[8.5px] px-1.5 py-0.2 rounded font-mono font-semibold shrink-0 ${
                             isActive
                               ? 'bg-white/20 text-white'
                               : 'bg-[#183152] text-slate-300'
@@ -406,19 +435,19 @@ export default function ArielEnergyCrmPage() {
         </nav>
 
         {/* 3. Quick Action Button inside Sidebar */}
-        <div className="px-3 py-2 border-t border-[#1B2D45] shrink-0 bg-[#081527]">
+        <div className="px-2.5 py-2 border-t border-[#1B2D45] shrink-0 bg-[#081527]">
           <button
             type="button"
             onClick={() => setNewLeadModalOpen(true)}
-            className="w-full py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition cursor-pointer"
+            className="w-full py-1.5 bg-[#1F3A2E] hover:bg-[#2C5240] text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-[#C9A86A]" />
             <span>Onboard Factory Lead</span>
           </button>
         </div>
 
         {/* 4. Bottom Footer: SREDA Countdown & Ecosystem Portals */}
-        <div className="p-3 bg-[#06101D] border-t border-[#1B2D45] shrink-0 text-xs">
+        <div className="p-2.5 bg-[#06101D] border-t border-[#1B2D45] shrink-0 text-xs">
           {/* SREDA Countdown Pill */}
           <div className="p-2 rounded-lg bg-[#0C1A2E] border border-[#1C3659] mb-2 text-[10px]">
             <div className="text-amber-400 font-bold flex items-center justify-between">
@@ -428,18 +457,18 @@ export default function ArielEnergyCrmPage() {
               </span>
               <span className="font-mono text-amber-300">Feb 28, 2027</span>
             </div>
-            <div className="text-slate-400 text-[9px] mt-0.5">
+            <div className="text-slate-400 text-[8.5px] mt-0.5">
               Lock Tk 10.50/kWh buyback tariff before policy sunset
             </div>
           </div>
 
           {/* Quick Ecosystem Links */}
-          <div className="grid grid-cols-2 gap-1.5 text-[10px] font-bold text-slate-300">
+          <div className="grid grid-cols-2 gap-1 text-[9.5px] font-bold text-slate-300">
             <a
               href="https://crm.arielmc.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2 py-1.5 rounded bg-[#10223A] hover:text-white hover:bg-[#183256] text-center truncate flex items-center justify-center gap-1 border border-[#1B3252] transition"
+              className="px-2 py-1 rounded bg-[#10223A] hover:text-white hover:bg-[#183256] text-center truncate flex items-center justify-center gap-1 border border-[#1B3252] transition"
               title="Open Master-CRM Group Hub"
             >
               <span>Master-CRM</span>
@@ -449,7 +478,7 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={handleExportCsv}
-              className="px-2 py-1.5 rounded bg-[#10223A] hover:text-white hover:bg-[#183256] text-center truncate flex items-center justify-center gap-1 border border-[#1B3252] transition cursor-pointer"
+              className="px-2 py-1 rounded bg-[#10223A] hover:text-white hover:bg-[#183256] text-center truncate flex items-center justify-center gap-1 border border-[#1B3252] transition cursor-pointer"
               title="Export Full Pipeline to CSV"
             >
               <span>Export CSV</span>
@@ -460,61 +489,85 @@ export default function ArielEnergyCrmPage() {
       </aside>
 
       {/* =========================================================================
-          MAIN WINDOW (Offset by sidebar width, full height scrollable)
+          MAIN WINDOW (Compact, Zero Overflow, ERP Color Scheme & Footer)
           ========================================================================= */}
-      <div className="flex-1 ml-64 xl:ml-72 min-h-screen flex flex-col bg-slate-50">
+      <div className="flex-1 ml-64 xl:ml-72 min-h-screen flex flex-col bg-[#FAF9F5] overflow-x-hidden">
         {/* Main Window Top Header */}
-        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 px-6 py-3.5 flex items-center justify-between shadow-xs">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center shrink-0">
+        <header className="bg-white/95 backdrop-blur-md border-b border-[#DDE3DD] sticky top-0 z-30 px-5 py-2.5 flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-[#1F3A2E] border border-emerald-200/70 flex items-center justify-center shrink-0">
               <CurrentIcon className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm font-extrabold text-[#0A1A2F] tracking-tight truncate">
+              <div className="flex items-center gap-1.5">
+                <h2 className="text-xs font-black text-[#1A1A1A] tracking-tight truncate">
                   {currentMeta.title}
                 </h2>
-                <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 text-slate-600 border border-slate-200 shrink-0">
+                <span className="hidden sm:inline-block px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-[#FAF9F5] text-[#1F3A2E] border border-[#DDE3DD] shrink-0">
                   AREL-CRM
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium truncate max-w-xl">
+              <p className="text-[10.5px] text-[#6B7269] font-medium truncate max-w-xl">
                 {currentMeta.subtitle}
               </p>
             </div>
           </div>
 
-          {/* Right Top Status & Fast Action Toolbar */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-mono text-slate-700 border border-slate-200/80">
-              <span className="text-slate-400 uppercase text-[10px]">Pipeline:</span>
-              <span className="font-bold text-emerald-700">Tk 48.75 Cr</span>
+          {/* Right Top Status & Fast Action Toolbar with Auth User Profile */}
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#FAF9F5] rounded-lg text-xs font-mono text-[#1A1A1A] border border-[#DDE3DD]">
+              <span className="text-[#6B7269] uppercase text-[9px]">Pipeline:</span>
+              <span className="font-bold text-[#1F3A2E]">Tk 48.75 Cr</span>
               <span className="text-slate-300">|</span>
-              <span className="font-bold text-slate-900">9.75 MWp</span>
+              <span className="font-bold text-[#1A1A1A]">9.75 MWp</span>
             </div>
 
             <button
               type="button"
               onClick={handleExportCsv}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#1A1A1A] border border-[#DDE3DD] rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <Download className="w-3 h-3 text-[#6B7269]" />
               <span>Export</span>
             </button>
 
             <button
               type="button"
               onClick={() => setNewLeadModalOpen(true)}
-              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="px-2.5 py-1 bg-[#1F3A2E] hover:bg-[#2C5240] text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-3 h-3 text-[#C9A86A]" />
               <span>New Lead</span>
+            </button>
+
+            {/* Auth & User Profile Pill */}
+            <button
+              type="button"
+              onClick={() => setIsProfileModalOpen(true)}
+              className="flex items-center gap-1.5 p-1 pl-1.5 pr-2 rounded-lg bg-white border border-[#DDE3DD] hover:border-[#1F3A2E] shadow-2xs transition cursor-pointer"
+              title="Open User Profile & 2SA Authentication Settings"
+            >
+              <div
+                className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-black font-mono shrink-0 shadow-2xs"
+                style={{ backgroundColor: currentUser.avatarColor, color: '#0A1A2F' }}
+              >
+                {currentUser.avatarInitials}
+              </div>
+              <div className="text-left hidden md:block">
+                <div className="text-[10px] font-bold text-[#1A1A1A] leading-tight truncate max-w-[100px]">
+                  {currentUser.name.split(' ')[0]}
+                </div>
+                <div className="text-[8.5px] text-[#1F3A2E] font-bold font-mono flex items-center gap-0.5">
+                  <span className="w-1 h-1 rounded-full bg-emerald-500"></span>
+                  <span>{currentUser.role.replace('_', ' ')}</span>
+                </div>
+              </div>
             </button>
           </div>
         </header>
 
-        {/* Main Content Workspace Body */}
-        <main className="p-6 lg:p-8 flex-1 w-full max-w-7xl mx-auto space-y-6">
+        {/* Main Content Workspace Body (Compact & Full Width) */}
+        <main className="p-4 sm:p-5 flex-1 w-full max-w-full space-y-4">
           {activeTab === 'overview' && (
             <ExecutiveDashboard
               leads={arelLeads}
@@ -586,11 +639,73 @@ export default function ArielEnergyCrmPage() {
               onUpdateLeadTechnical={handleUpdateTechnical}
             />
           )}
+
+          {activeTab === 'sync' && (
+            <QuadPlatformSyncModule
+              syncStatus={syncStatus}
+              onTriggerSync={handleTriggerSync}
+            />
+          )}
         </main>
+
+        {/* =========================================================================
+            INSTITUTIONAL MASTER SYSTEM FOOTER (Follows ArielMC-ERP Canonical Standard)
+            ========================================================================= */}
+        <footer className="mt-8 pt-5 pb-6 border-t border-[#DDE3DD] text-center select-none bg-white/70">
+          <div className="max-w-4xl mx-auto px-4 flex flex-col items-center gap-1.5">
+            {/* Line 1: Official Brand & Entity Lockup */}
+            <div className="flex flex-wrap items-center justify-center gap-2 font-bold text-xs tracking-tight text-[#0A1A2F]">
+              <img
+                src="/logos/ariel-energy-icon.png"
+                alt="AREL Seal"
+                className="w-4 h-4 object-contain inline-block"
+              />
+              <span className="font-black text-[#003177]">
+                ArielMC<sup className="text-[0.65em] font-bold -top-0.5 ml-[1px]">™</sup>
+              </span>
+              <span className="text-slate-300">|</span>
+              <span className="font-extrabold text-[#1F3A2E]">
+                Ariel Renewable Energy Limited
+              </span>
+              <span className="text-[#C9A86A]">|</span>
+              <span className="font-medium text-[#6B7269]">
+                Sovereign Green Infrastructure &amp; Industrial Decarbonization
+              </span>
+            </div>
+
+            {/* Line 2: Legal Copyright & Compliance */}
+            <div className="text-[11px] text-[#6B7269] flex flex-wrap items-center justify-center gap-1 font-medium">
+              <span>© 2026</span>
+              <strong className="text-[#1F3A2E] font-bold">ArielMC</strong>
+              <span className="opacity-50">&bull;</span>
+              <span className="text-[#003177] font-semibold">
+                Ariel Marketing &amp; Communications Limited
+              </span>
+              <span className="opacity-50">&bull;</span>
+              <span>All Right Reserve</span>
+              <span className="opacity-50">|</span>
+              <span>SREDA Net-Metering Compliance</span>
+              <span className="opacity-50">&bull;</span>
+              <span>BDS IEC 61215/61730 Tested</span>
+            </div>
+
+            {/* Line 3: Quad-Bus Sync Beacon & Protocols */}
+            <div className="flex flex-wrap items-center justify-center gap-2.5 text-[9.5px] font-mono text-[#6B7269] pt-0.5">
+              <span className="flex items-center gap-1 text-emerald-800 font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Quad-Bus: 4/4 Connected (ERP • Master-CRM • Catalog • Website)</span>
+              </span>
+              <span>•</span>
+              <span>Refinance: Bangladesh Bank SFD 4.5% Green Desk</span>
+              <span>•</span>
+              <span>Port: Chittagong CFS ASYCUDA Box 44 (1.0% AIT)</span>
+            </div>
+          </div>
+        </footer>
       </div>
 
       {/* =========================================================================
-          MODALS: Onboard New Factory Lead & Quad Platform Sync
+          MODALS: Onboard New Factory Lead & User Profile Control
           ========================================================================= */}
       <NewLeadModal
         isOpen={newLeadModalOpen}
@@ -598,33 +713,12 @@ export default function ArielEnergyCrmPage() {
         onAddLead={handleAddLead}
       />
 
-      {syncModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-            <div className="p-4 bg-[#0A1A2F] text-white flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Share2 className="w-4 h-4 text-[#C9A86A]" />
-                <h3 className="font-extrabold text-sm uppercase tracking-wider">
-                  Quad-Platform Live Enterprise Synchronization
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSyncModalOpen(false)}
-                className="text-slate-400 hover:text-white text-xs font-bold px-2 py-1 rounded"
-              >
-                ✕ Close
-              </button>
-            </div>
-            <div className="p-6">
-              <QuadPlatformSyncModal
-                syncStatus={syncStatus}
-                onTriggerSync={handleTriggerSync}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        currentUser={currentUser}
+        onSwitchUser={handleSwitchUser}
+      />
     </div>
   );
 }
