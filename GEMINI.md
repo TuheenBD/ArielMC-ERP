@@ -68,3 +68,34 @@ Everywhere products, filters, navigation, or indices are rendered, they must str
 2. Tabletop & Hospitality
 3. Home Living & Décor
 4. Architectural Elements
+
+
+## Ariel Group / Holdings Corporate Architecture & Sovereign Platform Mapping
+Under **Ariel Group / Holdings**, the enterprise operates through two dedicated sovereign platforms that interconnect via the Quad-Bus Architecture:
+
+1. **`ArielMC-ERP`** (`ArielMC-ERP` / `erp.arielmc.com` / Port 3001)
+   - **Dedicated Legal Entity**: `Ariel Marketing & Communications Limited`
+   - **Primary Brand**: `ArielMC`
+   - **Enterprise Mandate**: Core B2B / B2C / D2C Global Sourcing & Supply Chain Business worldwide (Leather, Jute, Ceramics, RMG, Pottery/Terracotta across BD, UK, USA, EU, AU operating stations).
+
+2. **`Ariel - SaaS`** (`Ariel-SaaS` / `energy.arielmc.com` / Port 3002)
+   - **Dedicated Legal Entity**: `Ariel Renewable Energy Limited` (`AREL`)
+   - **Primary Brand**: `Ariel - SaaS™` / `Ariel Renewable Energy`
+   - **Enterprise Mandate**: Core Sovereign Renewable Energy Business in Bangladesh (Turnkey Commercial & Industrial [C&I] Rooftop Solar EPC, SREDA Net-Metering, Bangladesh Bank SFD 4.5% Green Debt Refinance Desk, Subcontractor & IEB Body Management, SCM & ASYCUDA Box 44 Customs Control, and IoT Telemetry).
+
+3. **Enterprise Connectivity & Inter-Platform Protocol**:
+   - Both platforms operate as sovereign corporate entities but remain seamlessly interconnected under **Ariel Group / Holdings**.
+   - Footers, legal copyrights, branding, and entity notices must strictly reflect this separation (`ArielMC-ERP` $\rightarrow$ `Ariel Marketing & Communications Limited`; `Ariel - SaaS` $\rightarrow$ `Ariel Renewable Energy Limited`).
+   - Data exchange between `ArielMC-ERP` and `Ariel - SaaS` is mediated through the high-speed Quad-Platform Synchronization Bus and shared digital asset infrastructure.
+
+## Central Digital Asset Management (DAM) Architecture
+All product and supplier media assets are stored in the unified central asset vault:
+- **Central Storage Path**: `ArielMC-Enterprise-Hub/shared-assets/`
+  - `products/{compendium-slug}/{department-slug}/{sku}/` (e.g. `products/01-the-leather-compendium/structured-carry-bags/LD-SCB-6/ld-scb-6.jpg`)
+  - `suppliers/{supplier-code}_{supplier-name}/`
+  - `buyers/`
+- **Zero-Duplication Unified Access**:
+  - `arielmc-website/shared-assets` -> symlinked to `shared-assets/` (served at `/shared-assets/...`)
+  - `arielmc-catalog/public/shared-assets` -> symlinked to `shared-assets/` (served at `/shared-assets/...`)
+  - `ArielMC-ERP/public/shared-assets` -> symlinked to `shared-assets/` (served at `/shared-assets/...`)
+- **Strict Rule**: When uploading or enlisting new product photos, place them directly inside the SKU folder in `shared-assets/products/{compendium-slug}/{department-slug}/{sku}/`. They are instantly and simultaneously available across Website, Catalog, and ERP with zero file copying.
