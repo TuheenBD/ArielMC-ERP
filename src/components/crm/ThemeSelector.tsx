@@ -39,6 +39,10 @@ export interface ThemeTokens {
   accentBg: string;
   cardHighlightBg: string;
   cardHighlightBorder: string;
+  tableHeaderHex: string;
+  darkCardHex: string;
+  darkCardBorderHex: string;
+  darkCardSubtextHex: string;
 }
 
 export const ERP_THEMES: ThemeOption[] = [
@@ -151,7 +155,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#3B82F6]',
         accentBg: 'bg-[#4169E1]',
         cardHighlightBg: 'bg-[#EFF6FF]',
-        cardHighlightBorder: 'border-[#3B82F6]'
+        cardHighlightBorder: 'border-[#3B82F6]',
+        tableHeaderHex: '#0F172A',
+        darkCardHex: '#0B132B',
+        darkCardBorderHex: '#1E293B',
+        darkCardSubtextHex: '#60A5FA'
       };
     case 'hydrangea':
       return {
@@ -178,7 +186,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#AD56C4]',
         accentBg: 'bg-[#AD56C4]',
         cardHighlightBg: 'bg-[#FDF2F8]',
-        cardHighlightBorder: 'border-[#AD56C4]'
+        cardHighlightBorder: 'border-[#AD56C4]',
+        tableHeaderHex: '#1C0824',
+        darkCardHex: '#230C2E',
+        darkCardBorderHex: '#3D1A4D',
+        darkCardSubtextHex: '#FF8DA1'
       };
     case 'california-beaches':
       return {
@@ -205,7 +217,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#66C4FF]',
         accentBg: 'bg-[#66C4FF]',
         cardHighlightBg: 'bg-[#EBF7FF]',
-        cardHighlightBorder: 'border-[#66C4FF]'
+        cardHighlightBorder: 'border-[#66C4FF]',
+        tableHeaderHex: '#0E1A21',
+        darkCardHex: '#14232C',
+        darkCardBorderHex: '#203642',
+        darkCardSubtextHex: '#66C4FF'
       };
     case 'mossy-hollow':
       return {
@@ -232,7 +248,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#8F9E6D]',
         accentBg: 'bg-[#8F9E6D]',
         cardHighlightBg: 'bg-[#F4F7EB]',
-        cardHighlightBorder: 'border-[#8F9E6D]'
+        cardHighlightBorder: 'border-[#8F9E6D]',
+        tableHeaderHex: '#1D2013',
+        darkCardHex: '#282B1B',
+        darkCardBorderHex: '#3D4127',
+        darkCardSubtextHex: '#D4DE95'
       };
     case 'ink-wash':
       return {
@@ -259,7 +279,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#6D8196]',
         accentBg: 'bg-[#6D8196]',
         cardHighlightBg: 'bg-[#F2F4F7]',
-        cardHighlightBorder: 'border-[#6D8196]'
+        cardHighlightBorder: 'border-[#6D8196]',
+        tableHeaderHex: '#1B1D1F',
+        darkCardHex: '#24272A',
+        darkCardBorderHex: '#363A3F',
+        darkCardSubtextHex: '#CBCBCB'
       };
     case 'fresh-peach':
       return {
@@ -286,7 +310,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#E39A7B]',
         accentBg: 'bg-[#E39A7B]',
         cardHighlightBg: 'bg-[#FFF3EB]',
-        cardHighlightBorder: 'border-[#E39A7B]'
+        cardHighlightBorder: 'border-[#E39A7B]',
+        tableHeaderHex: '#1F1513',
+        darkCardHex: '#2A1D1A',
+        darkCardBorderHex: '#422E29',
+        darkCardSubtextHex: '#FFD3AC'
       };
     case 'stormy-morning':
       return {
@@ -313,7 +341,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#6A89A7]',
         accentBg: 'bg-[#6A89A7]',
         cardHighlightBg: 'bg-[#EBF4FC]',
-        cardHighlightBorder: 'border-[#6A89A7]'
+        cardHighlightBorder: 'border-[#6A89A7]',
+        tableHeaderHex: '#161D24',
+        darkCardHex: '#1E2730',
+        darkCardBorderHex: '#2E3C4A',
+        darkCardSubtextHex: '#BDDDFC'
       };
     case 'crm-green':
     default:
@@ -341,7 +373,11 @@ export const getThemeTokens = (themeId: string): ThemeTokens => {
         accentBorder: 'border-[#C8A96A]',
         accentBg: 'bg-[#C8A96A]',
         cardHighlightBg: 'bg-[#E8F0EA]',
-        cardHighlightBorder: 'border-[#2C5240]'
+        cardHighlightBorder: 'border-[#2C5240]',
+        tableHeaderHex: '#162E23',
+        darkCardHex: '#13261E',
+        darkCardBorderHex: '#28493A',
+        darkCardSubtextHex: '#C8A96A'
       };
   }
 };

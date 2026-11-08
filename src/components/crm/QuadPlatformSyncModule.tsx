@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlatformSyncStatus } from '@/types/arelCrm';
+import { getDhakaTimeString } from '@/lib/timeUtils';
 import {
   Globe,
   Database,
@@ -30,8 +31,22 @@ export default function QuadPlatformSyncModule({
   onTriggerSync,
 }: QuadPlatformSyncModuleProps) {
   const [isSyncing, setIsSyncing] = useState(false);
-  const [lastSyncTime, setLastSyncTime] = useState(syncStatus.lastSyncTimestamp);
+  const [lastSyncTime, setLastSyncTime] = useState(() => {
+    return syncStatus.lastSyncTimestamp && !syncStatus.lastSyncTimestamp.includes('11:50')
+      ? syncStatus.lastSyncTimestamp
+      : `${getDhakaTimeString()} BST (UTC+6)`;
+  });
   const [testPayloadResult, setTestPayloadResult] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (syncStatus.lastSyncTimestamp && !syncStatus.lastSyncTimestamp.includes('11:50')) {
+      setLastSyncTime(
+        syncStatus.lastSyncTimestamp.includes('BST')
+          ? syncStatus.lastSyncTimestamp
+          : `${syncStatus.lastSyncTimestamp} BST (UTC+6)`
+      );
+    }
+  }, [syncStatus.lastSyncTimestamp]);
 
   const platforms = [
     {
@@ -88,7 +103,8 @@ export default function QuadPlatformSyncModule({
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
-      setLastSyncTime(new Date().toISOString().replace('T', ' ').slice(0, 19));
+      const dhakaNow = `${getDhakaTimeString()} BST (UTC+6)`;
+      setLastSyncTime(dhakaNow);
       onTriggerSync?.();
     }, 900);
   };
@@ -151,7 +167,7 @@ export default function QuadPlatformSyncModule({
 
         <div className="flex items-center gap-2.5 shrink-0">
           <span className="text-[10px] font-mono text-[#6B7269]">
-            Last Beacon: <strong className="text-[#1A1A1A]">{lastSyncTime}</strong>
+            Last Beacon: <strong className="text-[var(--crm-dark-header,#162E23)] font-bold">{lastSyncTime}</strong>
           </span>
           <button
             type="button"

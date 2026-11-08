@@ -174,7 +174,13 @@ export default function ExecutiveDashboard({
         </div>
 
         {/* SREDA Cutoff Countdown Clock */}
-        <div className="p-5 rounded-2xl bg-gradient-to-br from-[#0A1A2F] to-[#152a45] text-white shadow-xs border border-[#C9A86A]/40 relative overflow-hidden">
+        <div
+          className="p-5 rounded-2xl text-white shadow-xs border relative overflow-hidden transition-colors"
+          style={{
+            backgroundColor: 'var(--crm-dark-bg, #13261E)',
+            borderColor: 'var(--crm-dark-border, #28493A)',
+          }}
+        >
           <div className="relative">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#C9A86A]">
@@ -444,7 +450,13 @@ export default function ExecutiveDashboard({
       </div>
 
       {/* 4. EXECUTIVE LAUNCHPAD & QUICK ACTIONS */}
-      <div className="bg-[#0A1A2F] text-white rounded-2xl p-6 shadow-md border border-[#C9A86A]/30">
+      <div
+        className="text-white rounded-2xl p-6 shadow-md border transition-colors"
+        style={{
+          backgroundColor: 'var(--crm-dark-bg, #13261E)',
+          borderColor: 'var(--crm-dark-border, #28493A)',
+        }}
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
           <div>
             <h3 className="text-base font-extrabold tracking-tight text-white flex items-center gap-2">

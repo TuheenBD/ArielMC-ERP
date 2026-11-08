@@ -1544,6 +1544,82 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 
 /* ========================================================
+   THEME OVERRIDE: CRM-GREEN (Heritage Leather & Sand / Deep Forest Green)
+   ======================================================== */
+[data-theme="crm-green"],
+:root:not([data-theme]) {
+  --primary: #1F3A2E;
+  --accent: #C8A96A;
+  --crm-dark-header: #162E23;
+  --crm-dark-bg: #13261E;
+  --crm-dark-border: #2C5240;
+  --crm-dark-subtext: #C8A96A;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers, Countdown Card, Launchpad) */
+[data-theme="crm-green"] .bg-\[\#0A1A2F\],
+[data-theme="crm-green"] [class*="bg-[#0A1A2F]"],
+[data-theme="crm-green"] .bg-\[\#071324\],
+[data-theme="crm-green"] [class*="bg-[#071324]"],
+[data-theme="crm-green"] thead,
+[data-theme="crm-green"] thead tr,
+[data-theme="crm-green"] thead th,
+:root:not([data-theme]) .bg-\[\#0A1A2F\],
+:root:not([data-theme]) [class*="bg-[#0A1A2F]"],
+:root:not([data-theme]) thead,
+:root:not([data-theme]) thead tr,
+:root:not([data-theme]) thead th {
+  background-color: #162E23 !important;
+  color: #FFFFFF !important;
+  border-color: #2C5240 !important;
+}
+
+/* Secondary Dark Toolbar / Launchpad / Card Elements */
+[data-theme="crm-green"] .bg-\[\#10223A\],
+[data-theme="crm-green"] [class*="bg-[#10223A]"],
+[data-theme="crm-green"] .bg-\[\#152a45\],
+[data-theme="crm-green"] [class*="bg-[#152a45]"],
+:root:not([data-theme]) .bg-\[\#10223A\],
+:root:not([data-theme]) [class*="bg-[#10223A]"],
+:root:not([data-theme]) .bg-\[\#152a45\],
+:root:not([data-theme]) [class*="bg-[#152a45]"] {
+  background-color: #13261E !important;
+}
+
+/* Dark Borders */
+[data-theme="crm-green"] .border-\[\#1B2D45\],
+[data-theme="crm-green"] [class*="border-[#1B2D45]"],
+[data-theme="crm-green"] .border-\[\#1B3252\],
+[data-theme="crm-green"] [class*="border-[#1B3252]"],
+:root:not([data-theme]) .border-\[\#1B2D45\],
+:root:not([data-theme]) [class*="border-[#1B2D45]"] {
+  border-color: #2C5240 !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="crm-green"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="crm-green"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="crm-green"] .hover\:bg-\[\#152a45\]:hover,
+[data-theme="crm-green"] [class*="hover:bg-[#152a45]"]:hover,
+[data-theme="crm-green"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="crm-green"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #28493A !important;
+}
+
+/* Launchpad & Gradient Card Overrides */
+[data-theme="crm-green"] .from-\[\#0A1A2F\],
+[data-theme="crm-green"] [class*="from-[#0A1A2F]"] {
+  --tw-gradient-from: #162E23 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: #1F3A2E var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+[data-theme="crm-green"] .to-\[\#152a45\],
+[data-theme="crm-green"] [class*="to-[#152a45]"] {
+  --tw-gradient-to: #1F3A2E var(--tw-gradient-to-position) !important;
+}
+
+/* ========================================================
    THEME OVERRIDE: ROYAL-BLUE
    ======================================================== */
 [data-theme="royal-blue"] {

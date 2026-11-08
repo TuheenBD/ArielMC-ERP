@@ -47,6 +47,7 @@ import QuadPlatformSyncModal from '@/components/crm/QuadPlatformSyncModal';
 import QuadPlatformSyncModule from '@/components/crm/QuadPlatformSyncModule';
 import UserProfileModal, { DEMO_USERS } from '@/components/crm/UserProfileModal';
 import { ThemeSelector, getThemeTokens } from '@/components/crm/ThemeSelector';
+import { getDhakaTimeString } from '@/lib/timeUtils';
 
 import {
   Activity,
@@ -205,11 +206,26 @@ export default function ArielEnergyCrmPage() {
   // ERP Color Scheme Theme Profile State
   const [theme, setTheme] = useState<string>('crm-green');
 
+  // Bangladesh Standard Time (BST, UTC+6) Live System Clock Authority
+  const [dhakaLiveClock, setDhakaLiveClock] = useState<string>('');
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('arielmc_erp_theme') || 'crm-green';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
     document.body.setAttribute('data-theme', savedTheme);
+
+    // Initialize Dhaka Time on client mount
+    setDhakaLiveClock(getDhakaTimeString());
+    setSyncStatus((prev) => ({
+      ...prev,
+      lastSyncTimestamp: `${getDhakaTimeString()} BST (UTC+6)`,
+    }));
+
+    const interval = setInterval(() => {
+      setDhakaLiveClock(getDhakaTimeString());
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSelectTheme = (newTheme: string) => {
@@ -463,7 +479,7 @@ export default function ArielEnergyCrmPage() {
   const handleTriggerSync = () => {
     setSyncStatus((prev) => ({
       ...prev,
-      lastSyncTimestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      lastSyncTimestamp: `${getDhakaTimeString()} BST (UTC+6)`,
     }));
   };
 
@@ -627,7 +643,16 @@ export default function ArielEnergyCrmPage() {
   const tokens = getThemeTokens(theme);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]" data-theme={theme}>
+    <div
+      className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]"
+      data-theme={theme}
+      style={{
+        '--crm-dark-header': tokens.tableHeaderHex,
+        '--crm-dark-bg': tokens.darkCardHex,
+        '--crm-dark-border': tokens.darkCardBorderHex,
+        '--crm-dark-subtext': tokens.darkCardSubtextHex,
+      } as React.CSSProperties}
+    >
       {/* =========================================================================
           LEFT FIXED PANEL (Dynamic Theme Adapting, Fixed, Zero Layout Jump)
           ========================================================================= */}
@@ -734,8 +759,24 @@ export default function ArielEnergyCrmPage() {
           </button>
         </div>
 
-        {/* 4. Bottom Footer: SREDA Countdown & Ecosystem Portals */}
+        {/* 4. Bottom Footer: Dhaka System Clock, SREDA Countdown & Ecosystem Portals */}
         <div className={`p-2.5 ${tokens.sidebarFooterBg} border-t ${tokens.sidebarBorder} shrink-0 text-xs transition-colors`}>
+          {/* Bangladesh Standard Time (BST, UTC+6) Live Authority Clock */}
+          <div className={`p-2 rounded-lg ${tokens.sidebarPulseBox} mb-2 text-[10px] border transition-colors`}>
+            <div className={`font-bold flex items-center justify-between ${tokens.sidebarSectionText}`}>
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3 h-3 text-emerald-400" />
+                <span>Dhaka System Clock</span>
+              </span>
+              <span className="font-mono text-[8.5px] px-1 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                BST (UTC+6)
+              </span>
+            </div>
+            <div className="font-mono font-bold text-white text-[11px] mt-1 tracking-wider">
+              {dhakaLiveClock || getDhakaTimeString()}
+            </div>
+          </div>
+
           {/* SREDA Countdown Pill */}
           <div className={`p-2 rounded-lg ${tokens.sidebarPulseBox} mb-2 text-[10px] border transition-colors`}>
             <div className={`font-bold flex items-center justify-between ${tokens.sidebarSectionText}`}>
