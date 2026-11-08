@@ -671,7 +671,7 @@ export default function ArielEnergyCrmPage() {
         </main>
 
         {/* =========================================================================
-            INSTITUTIONAL MASTER SYSTEM FOOTER (Follows ArielMC-ERP Canonical Standard)
+            INSTITUTIONAL MASTER SYSTEM FOOTER (Dedicated for Ariel - SaaS™)
             ========================================================================= */}
         <footer className="mt-8 pt-5 pb-6 border-t border-[#DDE3DD] text-center select-none bg-white/70">
           <div className="max-w-4xl mx-auto px-4 flex flex-col items-center gap-1.5">
@@ -686,10 +686,6 @@ export default function ArielEnergyCrmPage() {
                 Ariel - SaaS<sup className="text-[0.65em] font-bold -top-0.5 ml-[1px]">™</sup>
               </span>
               <span className="text-slate-300">|</span>
-              <span className="font-black text-[#003177]">
-                ArielMC<sup className="text-[0.65em] font-bold -top-0.5 ml-[1px]">™</sup>
-              </span>
-              <span className="text-slate-300">|</span>
               <span className="font-extrabold text-[#1F3A2E]">
                 Ariel Renewable Energy Limited
               </span>
@@ -700,17 +696,10 @@ export default function ArielEnergyCrmPage() {
             </div>
 
             {/* Line 2: Legal Copyright & Compliance */}
-            <div className="text-[11px] text-[#6B7269] flex flex-wrap items-center justify-center gap-1 font-medium">
+            <div className="text-[11px] text-[#6B7269] flex flex-wrap items-center justify-center gap-1.5 font-medium">
               <span>© 2026</span>
-              <strong className="text-[#1F3A2E] font-bold">ArielMC</strong>
-              <span className="opacity-50">&bull;</span>
-              <span className="text-[#003177] font-semibold">
-                Ariel - SaaS™ Cloud Enterprise Platform
-              </span>
-              <span className="opacity-50">&bull;</span>
-              <span className="text-[#003177] font-semibold">
-                Ariel Marketing &amp; Communications Limited
-              </span>
+              <strong className="text-[#003177] font-bold">Ariel - SaaS™</strong>
+              <span className="text-[#1F3A2E] font-medium">Cloud Enterprise Operating Platform</span>
               <span className="opacity-50">&bull;</span>
               <span>All Right Reserve</span>
               <span className="opacity-50">|</span>
@@ -723,7 +712,7 @@ export default function ArielEnergyCrmPage() {
             <div className="flex flex-wrap items-center justify-center gap-2.5 text-[9.5px] font-mono text-[#6B7269] pt-0.5">
               <span className="flex items-center gap-1 text-emerald-800 font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Quad-Bus: 4/4 Connected (ERP • Master-CRM • Catalog • Website)</span>
+                <span>Quad-Bus: 4/4 Connected (ERP • Master-CRM • Catalog • Website • SaaS)</span>
               </span>
               <span>•</span>
               <span>Refinance: Bangladesh Bank SFD 4.5% Green Desk</span>
