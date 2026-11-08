@@ -1541,3 +1541,878 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   color: #233442 !important;
   border-color: #BDDDFC !important;
 }
+
+
+/* ========================================================
+   THEME OVERRIDE: ROYAL-BLUE
+   ======================================================== */
+[data-theme="royal-blue"] {
+  --primary: #2563EB;
+  --accent: #60A5FA;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="royal-blue"] .bg-\[\#0A1A2F\],
+[data-theme="royal-blue"] [class*="bg-[#0A1A2F]"],
+[data-theme="royal-blue"] .bg-\[\#071324\],
+[data-theme="royal-blue"] [class*="bg-[#071324]"],
+[data-theme="royal-blue"] thead,
+[data-theme="royal-blue"] thead tr,
+[data-theme="royal-blue"] thead th {
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+  border-color: #1E293B !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="royal-blue"] .bg-\[\#10223A\],
+[data-theme="royal-blue"] [class*="bg-[#10223A]"],
+[data-theme="royal-blue"] .bg-\[\#152a45\],
+[data-theme="royal-blue"] [class*="bg-[#152a45]"] {
+  background-color: #0B132B !important;
+}
+
+/* Dark Borders */
+[data-theme="royal-blue"] .border-\[\#1B2D45\],
+[data-theme="royal-blue"] [class*="border-[#1B2D45]"],
+[data-theme="royal-blue"] .border-\[\#1B3252\],
+[data-theme="royal-blue"] [class*="border-[#1B3252]"] {
+  border-color: #1E293B !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="royal-blue"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="royal-blue"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #1E293B !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="royal-blue"] .bg-\[\#1F3A2E\],
+[data-theme="royal-blue"] [class*="bg-[#1F3A2E]"] {
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="royal-blue"] .text-\[\#1F3A2E\],
+[data-theme="royal-blue"] [class*="text-[#1F3A2E]"] {
+  color: #1E3A8A !important;
+}
+
+[data-theme="royal-blue"] .border-\[\#1F3A2E\],
+[data-theme="royal-blue"] [class*="border-[#1F3A2E]"] {
+  border-color: #3B82F6 !important;
+}
+
+[data-theme="royal-blue"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="royal-blue"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #1E293B !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="royal-blue"] .text-\[\#C8A96A\],
+[data-theme="royal-blue"] [class*="text-[#C8A96A]"],
+[data-theme="royal-blue"] .text-\[\#C9A86A\],
+[data-theme="royal-blue"] [class*="text-[#C9A86A]"] {
+  color: #60A5FA !important;
+}
+
+[data-theme="royal-blue"] .bg-\[\#C8A96A\],
+[data-theme="royal-blue"] [class*="bg-[#C8A96A]"],
+[data-theme="royal-blue"] .bg-\[\#C9A86A\],
+[data-theme="royal-blue"] [class*="bg-[#C9A86A]"] {
+  background-color: #4169E1 !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="royal-blue"] .bg-emerald-50,
+[data-theme="royal-blue"] [class*="bg-emerald-50"],
+[data-theme="royal-blue"] .bg-emerald-100,
+[data-theme="royal-blue"] [class*="bg-emerald-100"],
+[data-theme="royal-blue"] .bg-teal-50,
+[data-theme="royal-blue"] [class*="bg-teal-50"],
+[data-theme="royal-blue"] .bg-\[\#E8F0EA\],
+[data-theme="royal-blue"] [class*="bg-[#E8F0EA]"],
+[data-theme="royal-blue"] .bg-\[\#F0F4F1\],
+[data-theme="royal-blue"] [class*="bg-[#F0F4F1]"] {
+  background-color: #EFF6FF !important;
+}
+
+[data-theme="royal-blue"] .border-emerald-200,
+[data-theme="royal-blue"] [class*="border-emerald-200"],
+[data-theme="royal-blue"] .border-emerald-300,
+[data-theme="royal-blue"] [class*="border-emerald-300"],
+[data-theme="royal-blue"] .border-teal-200,
+[data-theme="royal-blue"] [class*="border-teal-200"] {
+  border-color: #BFDBFE !important;
+}
+
+[data-theme="royal-blue"] .text-emerald-700,
+[data-theme="royal-blue"] [class*="text-emerald-700"],
+[data-theme="royal-blue"] .text-emerald-800,
+[data-theme="royal-blue"] [class*="text-emerald-800"],
+[data-theme="royal-blue"] .text-emerald-600,
+[data-theme="royal-blue"] [class*="text-emerald-600"],
+[data-theme="royal-blue"] .text-teal-700,
+[data-theme="royal-blue"] [class*="text-teal-700"] {
+  color: #1D4ED8 !important;
+}
+
+[data-theme="royal-blue"] .bg-emerald-600,
+[data-theme="royal-blue"] [class*="bg-emerald-600"],
+[data-theme="royal-blue"] .bg-emerald-500,
+[data-theme="royal-blue"] [class*="bg-emerald-500"] {
+  background-color: #2563EB !important;
+}
+
+
+/* ========================================================
+   THEME OVERRIDE: HYDRANGEA
+   ======================================================== */
+[data-theme="hydrangea"] {
+  --primary: #AD56C4;
+  --accent: #FF9CE9;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="hydrangea"] .bg-\[\#0A1A2F\],
+[data-theme="hydrangea"] [class*="bg-[#0A1A2F]"],
+[data-theme="hydrangea"] .bg-\[\#071324\],
+[data-theme="hydrangea"] [class*="bg-[#071324]"],
+[data-theme="hydrangea"] thead,
+[data-theme="hydrangea"] thead tr,
+[data-theme="hydrangea"] thead th {
+  background-color: #230C2E !important;
+  color: #FFFFFF !important;
+  border-color: #341344 !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="hydrangea"] .bg-\[\#10223A\],
+[data-theme="hydrangea"] [class*="bg-[#10223A]"],
+[data-theme="hydrangea"] .bg-\[\#152a45\],
+[data-theme="hydrangea"] [class*="bg-[#152a45]"] {
+  background-color: #1C0824 !important;
+}
+
+/* Dark Borders */
+[data-theme="hydrangea"] .border-\[\#1B2D45\],
+[data-theme="hydrangea"] [class*="border-[#1B2D45]"],
+[data-theme="hydrangea"] .border-\[\#1B3252\],
+[data-theme="hydrangea"] [class*="border-[#1B3252]"] {
+  border-color: #341344 !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="hydrangea"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="hydrangea"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="hydrangea"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="hydrangea"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #341344 !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="hydrangea"] .bg-\[\#1F3A2E\],
+[data-theme="hydrangea"] [class*="bg-[#1F3A2E]"] {
+  background-color: #230C2E !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="hydrangea"] .text-\[\#1F3A2E\],
+[data-theme="hydrangea"] [class*="text-[#1F3A2E]"] {
+  color: #701A75 !important;
+}
+
+[data-theme="hydrangea"] .border-\[\#1F3A2E\],
+[data-theme="hydrangea"] [class*="border-[#1F3A2E]"] {
+  border-color: #AD56C4 !important;
+}
+
+[data-theme="hydrangea"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="hydrangea"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #341344 !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="hydrangea"] .text-\[\#C8A96A\],
+[data-theme="hydrangea"] [class*="text-[#C8A96A]"],
+[data-theme="hydrangea"] .text-\[\#C9A86A\],
+[data-theme="hydrangea"] [class*="text-[#C9A86A]"] {
+  color: #FF9CE9 !important;
+}
+
+[data-theme="hydrangea"] .bg-\[\#C8A96A\],
+[data-theme="hydrangea"] [class*="bg-[#C8A96A]"],
+[data-theme="hydrangea"] .bg-\[\#C9A86A\],
+[data-theme="hydrangea"] [class*="bg-[#C9A86A]"] {
+  background-color: #AD56C4 !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="hydrangea"] .bg-emerald-50,
+[data-theme="hydrangea"] [class*="bg-emerald-50"],
+[data-theme="hydrangea"] .bg-emerald-100,
+[data-theme="hydrangea"] [class*="bg-emerald-100"],
+[data-theme="hydrangea"] .bg-teal-50,
+[data-theme="hydrangea"] [class*="bg-teal-50"],
+[data-theme="hydrangea"] .bg-\[\#E8F0EA\],
+[data-theme="hydrangea"] [class*="bg-[#E8F0EA]"],
+[data-theme="hydrangea"] .bg-\[\#F0F4F1\],
+[data-theme="hydrangea"] [class*="bg-[#F0F4F1]"] {
+  background-color: #FDF2F8 !important;
+}
+
+[data-theme="hydrangea"] .border-emerald-200,
+[data-theme="hydrangea"] [class*="border-emerald-200"],
+[data-theme="hydrangea"] .border-emerald-300,
+[data-theme="hydrangea"] [class*="border-emerald-300"],
+[data-theme="hydrangea"] .border-teal-200,
+[data-theme="hydrangea"] [class*="border-teal-200"] {
+  border-color: #F5D0FE !important;
+}
+
+[data-theme="hydrangea"] .text-emerald-700,
+[data-theme="hydrangea"] [class*="text-emerald-700"],
+[data-theme="hydrangea"] .text-emerald-800,
+[data-theme="hydrangea"] [class*="text-emerald-800"],
+[data-theme="hydrangea"] .text-emerald-600,
+[data-theme="hydrangea"] [class*="text-emerald-600"],
+[data-theme="hydrangea"] .text-teal-700,
+[data-theme="hydrangea"] [class*="text-teal-700"] {
+  color: #86198F !important;
+}
+
+[data-theme="hydrangea"] .bg-emerald-600,
+[data-theme="hydrangea"] [class*="bg-emerald-600"],
+[data-theme="hydrangea"] .bg-emerald-500,
+[data-theme="hydrangea"] [class*="bg-emerald-500"] {
+  background-color: #C026D3 !important;
+}
+
+
+/* ========================================================
+   THEME OVERRIDE: CALIFORNIA-BEACHES
+   ======================================================== */
+[data-theme="california-beaches"] {
+  --primary: #66C4FF;
+  --accent: #FFC067;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="california-beaches"] .bg-\[\#0A1A2F\],
+[data-theme="california-beaches"] [class*="bg-[#0A1A2F]"],
+[data-theme="california-beaches"] .bg-\[\#071324\],
+[data-theme="california-beaches"] [class*="bg-[#071324]"],
+[data-theme="california-beaches"] thead,
+[data-theme="california-beaches"] thead tr,
+[data-theme="california-beaches"] thead th {
+  background-color: #14232C !important;
+  color: #FFFFFF !important;
+  border-color: #1B2F3B !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="california-beaches"] .bg-\[\#10223A\],
+[data-theme="california-beaches"] [class*="bg-[#10223A]"],
+[data-theme="california-beaches"] .bg-\[\#152a45\],
+[data-theme="california-beaches"] [class*="bg-[#152a45]"] {
+  background-color: #0E1A21 !important;
+}
+
+/* Dark Borders */
+[data-theme="california-beaches"] .border-\[\#1B2D45\],
+[data-theme="california-beaches"] [class*="border-[#1B2D45]"],
+[data-theme="california-beaches"] .border-\[\#1B3252\],
+[data-theme="california-beaches"] [class*="border-[#1B3252]"] {
+  border-color: #1B2F3B !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="california-beaches"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="california-beaches"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="california-beaches"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="california-beaches"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #1B2F3B !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="california-beaches"] .bg-\[\#1F3A2E\],
+[data-theme="california-beaches"] [class*="bg-[#1F3A2E]"] {
+  background-color: #14232C !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="california-beaches"] .text-\[\#1F3A2E\],
+[data-theme="california-beaches"] [class*="text-[#1F3A2E]"] {
+  color: #103E5C !important;
+}
+
+[data-theme="california-beaches"] .border-\[\#1F3A2E\],
+[data-theme="california-beaches"] [class*="border-[#1F3A2E]"] {
+  border-color: #66C4FF !important;
+}
+
+[data-theme="california-beaches"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="california-beaches"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #1B2F3B !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="california-beaches"] .text-\[\#C8A96A\],
+[data-theme="california-beaches"] [class*="text-[#C8A96A]"],
+[data-theme="california-beaches"] .text-\[\#C9A86A\],
+[data-theme="california-beaches"] [class*="text-[#C9A86A]"] {
+  color: #FFC067 !important;
+}
+
+[data-theme="california-beaches"] .bg-\[\#C8A96A\],
+[data-theme="california-beaches"] [class*="bg-[#C8A96A]"],
+[data-theme="california-beaches"] .bg-\[\#C9A86A\],
+[data-theme="california-beaches"] [class*="bg-[#C9A86A]"] {
+  background-color: #66C4FF !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="california-beaches"] .bg-emerald-50,
+[data-theme="california-beaches"] [class*="bg-emerald-50"],
+[data-theme="california-beaches"] .bg-emerald-100,
+[data-theme="california-beaches"] [class*="bg-emerald-100"],
+[data-theme="california-beaches"] .bg-teal-50,
+[data-theme="california-beaches"] [class*="bg-teal-50"],
+[data-theme="california-beaches"] .bg-\[\#E8F0EA\],
+[data-theme="california-beaches"] [class*="bg-[#E8F0EA]"],
+[data-theme="california-beaches"] .bg-\[\#F0F4F1\],
+[data-theme="california-beaches"] [class*="bg-[#F0F4F1]"] {
+  background-color: #EBF7FF !important;
+}
+
+[data-theme="california-beaches"] .border-emerald-200,
+[data-theme="california-beaches"] [class*="border-emerald-200"],
+[data-theme="california-beaches"] .border-emerald-300,
+[data-theme="california-beaches"] [class*="border-emerald-300"],
+[data-theme="california-beaches"] .border-teal-200,
+[data-theme="california-beaches"] [class*="border-teal-200"] {
+  border-color: #BAE6FD !important;
+}
+
+[data-theme="california-beaches"] .text-emerald-700,
+[data-theme="california-beaches"] [class*="text-emerald-700"],
+[data-theme="california-beaches"] .text-emerald-800,
+[data-theme="california-beaches"] [class*="text-emerald-800"],
+[data-theme="california-beaches"] .text-emerald-600,
+[data-theme="california-beaches"] [class*="text-emerald-600"],
+[data-theme="california-beaches"] .text-teal-700,
+[data-theme="california-beaches"] [class*="text-teal-700"] {
+  color: #0369A1 !important;
+}
+
+[data-theme="california-beaches"] .bg-emerald-600,
+[data-theme="california-beaches"] [class*="bg-emerald-600"],
+[data-theme="california-beaches"] .bg-emerald-500,
+[data-theme="california-beaches"] [class*="bg-emerald-500"] {
+  background-color: #0284C7 !important;
+}
+
+
+/* ========================================================
+   THEME OVERRIDE: MOSSY-HOLLOW
+   ======================================================== */
+[data-theme="mossy-hollow"] {
+  --primary: #8F9E6D;
+  --accent: #D4DE95;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="mossy-hollow"] .bg-\[\#0A1A2F\],
+[data-theme="mossy-hollow"] [class*="bg-[#0A1A2F]"],
+[data-theme="mossy-hollow"] .bg-\[\#071324\],
+[data-theme="mossy-hollow"] [class*="bg-[#071324]"],
+[data-theme="mossy-hollow"] thead,
+[data-theme="mossy-hollow"] thead tr,
+[data-theme="mossy-hollow"] thead th {
+  background-color: #282B1B !important;
+  color: #FFFFFF !important;
+  border-color: #343823 !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="mossy-hollow"] .bg-\[\#10223A\],
+[data-theme="mossy-hollow"] [class*="bg-[#10223A]"],
+[data-theme="mossy-hollow"] .bg-\[\#152a45\],
+[data-theme="mossy-hollow"] [class*="bg-[#152a45]"] {
+  background-color: #1D2013 !important;
+}
+
+/* Dark Borders */
+[data-theme="mossy-hollow"] .border-\[\#1B2D45\],
+[data-theme="mossy-hollow"] [class*="border-[#1B2D45]"],
+[data-theme="mossy-hollow"] .border-\[\#1B3252\],
+[data-theme="mossy-hollow"] [class*="border-[#1B3252]"] {
+  border-color: #343823 !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="mossy-hollow"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="mossy-hollow"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="mossy-hollow"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="mossy-hollow"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #343823 !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="mossy-hollow"] .bg-\[\#1F3A2E\],
+[data-theme="mossy-hollow"] [class*="bg-[#1F3A2E]"] {
+  background-color: #282B1B !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="mossy-hollow"] .text-\[\#1F3A2E\],
+[data-theme="mossy-hollow"] [class*="text-[#1F3A2E]"] {
+  color: #2F3A1D !important;
+}
+
+[data-theme="mossy-hollow"] .border-\[\#1F3A2E\],
+[data-theme="mossy-hollow"] [class*="border-[#1F3A2E]"] {
+  border-color: #8F9E6D !important;
+}
+
+[data-theme="mossy-hollow"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="mossy-hollow"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #343823 !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="mossy-hollow"] .text-\[\#C8A96A\],
+[data-theme="mossy-hollow"] [class*="text-[#C8A96A]"],
+[data-theme="mossy-hollow"] .text-\[\#C9A86A\],
+[data-theme="mossy-hollow"] [class*="text-[#C9A86A]"] {
+  color: #D4DE95 !important;
+}
+
+[data-theme="mossy-hollow"] .bg-\[\#C8A96A\],
+[data-theme="mossy-hollow"] [class*="bg-[#C8A96A]"],
+[data-theme="mossy-hollow"] .bg-\[\#C9A86A\],
+[data-theme="mossy-hollow"] [class*="bg-[#C9A86A]"] {
+  background-color: #8F9E6D !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="mossy-hollow"] .bg-emerald-50,
+[data-theme="mossy-hollow"] [class*="bg-emerald-50"],
+[data-theme="mossy-hollow"] .bg-emerald-100,
+[data-theme="mossy-hollow"] [class*="bg-emerald-100"],
+[data-theme="mossy-hollow"] .bg-teal-50,
+[data-theme="mossy-hollow"] [class*="bg-teal-50"],
+[data-theme="mossy-hollow"] .bg-\[\#E8F0EA\],
+[data-theme="mossy-hollow"] [class*="bg-[#E8F0EA]"],
+[data-theme="mossy-hollow"] .bg-\[\#F0F4F1\],
+[data-theme="mossy-hollow"] [class*="bg-[#F0F4F1]"] {
+  background-color: #F4F7EB !important;
+}
+
+[data-theme="mossy-hollow"] .border-emerald-200,
+[data-theme="mossy-hollow"] [class*="border-emerald-200"],
+[data-theme="mossy-hollow"] .border-emerald-300,
+[data-theme="mossy-hollow"] [class*="border-emerald-300"],
+[data-theme="mossy-hollow"] .border-teal-200,
+[data-theme="mossy-hollow"] [class*="border-teal-200"] {
+  border-color: #D9E2B8 !important;
+}
+
+[data-theme="mossy-hollow"] .text-emerald-700,
+[data-theme="mossy-hollow"] [class*="text-emerald-700"],
+[data-theme="mossy-hollow"] .text-emerald-800,
+[data-theme="mossy-hollow"] [class*="text-emerald-800"],
+[data-theme="mossy-hollow"] .text-emerald-600,
+[data-theme="mossy-hollow"] [class*="text-emerald-600"],
+[data-theme="mossy-hollow"] .text-teal-700,
+[data-theme="mossy-hollow"] [class*="text-teal-700"] {
+  color: #3F4922 !important;
+}
+
+[data-theme="mossy-hollow"] .bg-emerald-600,
+[data-theme="mossy-hollow"] [class*="bg-emerald-600"],
+[data-theme="mossy-hollow"] .bg-emerald-500,
+[data-theme="mossy-hollow"] [class*="bg-emerald-500"] {
+  background-color: #65733C !important;
+}
+
+
+/* ========================================================
+   THEME OVERRIDE: INK-WASH
+   ======================================================== */
+[data-theme="ink-wash"] {
+  --primary: #6D8196;
+  --accent: #FFFFE3;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="ink-wash"] .bg-\[\#0A1A2F\],
+[data-theme="ink-wash"] [class*="bg-[#0A1A2F]"],
+[data-theme="ink-wash"] .bg-\[\#071324\],
+[data-theme="ink-wash"] [class*="bg-[#071324]"],
+[data-theme="ink-wash"] thead,
+[data-theme="ink-wash"] thead tr,
+[data-theme="ink-wash"] thead th {
+  background-color: #24272A !important;
+  color: #FFFFFF !important;
+  border-color: #303438 !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="ink-wash"] .bg-\[\#10223A\],
+[data-theme="ink-wash"] [class*="bg-[#10223A]"],
+[data-theme="ink-wash"] .bg-\[\#152a45\],
+[data-theme="ink-wash"] [class*="bg-[#152a45]"] {
+  background-color: #1B1D1F !important;
+}
+
+/* Dark Borders */
+[data-theme="ink-wash"] .border-\[\#1B2D45\],
+[data-theme="ink-wash"] [class*="border-[#1B2D45]"],
+[data-theme="ink-wash"] .border-\[\#1B3252\],
+[data-theme="ink-wash"] [class*="border-[#1B3252]"] {
+  border-color: #303438 !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="ink-wash"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="ink-wash"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="ink-wash"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="ink-wash"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #303438 !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="ink-wash"] .bg-\[\#1F3A2E\],
+[data-theme="ink-wash"] [class*="bg-[#1F3A2E]"] {
+  background-color: #24272A !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="ink-wash"] .text-\[\#1F3A2E\],
+[data-theme="ink-wash"] [class*="text-[#1F3A2E]"] {
+  color: #24272A !important;
+}
+
+[data-theme="ink-wash"] .border-\[\#1F3A2E\],
+[data-theme="ink-wash"] [class*="border-[#1F3A2E]"] {
+  border-color: #6D8196 !important;
+}
+
+[data-theme="ink-wash"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="ink-wash"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #303438 !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="ink-wash"] .text-\[\#C8A96A\],
+[data-theme="ink-wash"] [class*="text-[#C8A96A]"],
+[data-theme="ink-wash"] .text-\[\#C9A86A\],
+[data-theme="ink-wash"] [class*="text-[#C9A86A]"] {
+  color: #FFFFE3 !important;
+}
+
+[data-theme="ink-wash"] .bg-\[\#C8A96A\],
+[data-theme="ink-wash"] [class*="bg-[#C8A96A]"],
+[data-theme="ink-wash"] .bg-\[\#C9A86A\],
+[data-theme="ink-wash"] [class*="bg-[#C9A86A]"] {
+  background-color: #6D8196 !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="ink-wash"] .bg-emerald-50,
+[data-theme="ink-wash"] [class*="bg-emerald-50"],
+[data-theme="ink-wash"] .bg-emerald-100,
+[data-theme="ink-wash"] [class*="bg-emerald-100"],
+[data-theme="ink-wash"] .bg-teal-50,
+[data-theme="ink-wash"] [class*="bg-teal-50"],
+[data-theme="ink-wash"] .bg-\[\#E8F0EA\],
+[data-theme="ink-wash"] [class*="bg-[#E8F0EA]"],
+[data-theme="ink-wash"] .bg-\[\#F0F4F1\],
+[data-theme="ink-wash"] [class*="bg-[#F0F4F1]"] {
+  background-color: #F2F4F7 !important;
+}
+
+[data-theme="ink-wash"] .border-emerald-200,
+[data-theme="ink-wash"] [class*="border-emerald-200"],
+[data-theme="ink-wash"] .border-emerald-300,
+[data-theme="ink-wash"] [class*="border-emerald-300"],
+[data-theme="ink-wash"] .border-teal-200,
+[data-theme="ink-wash"] [class*="border-teal-200"] {
+  border-color: #CBD5E1 !important;
+}
+
+[data-theme="ink-wash"] .text-emerald-700,
+[data-theme="ink-wash"] [class*="text-emerald-700"],
+[data-theme="ink-wash"] .text-emerald-800,
+[data-theme="ink-wash"] [class*="text-emerald-800"],
+[data-theme="ink-wash"] .text-emerald-600,
+[data-theme="ink-wash"] [class*="text-emerald-600"],
+[data-theme="ink-wash"] .text-teal-700,
+[data-theme="ink-wash"] [class*="text-teal-700"] {
+  color: #334155 !important;
+}
+
+[data-theme="ink-wash"] .bg-emerald-600,
+[data-theme="ink-wash"] [class*="bg-emerald-600"],
+[data-theme="ink-wash"] .bg-emerald-500,
+[data-theme="ink-wash"] [class*="bg-emerald-500"] {
+  background-color: #475569 !important;
+}
+
+
+/* ========================================================
+   THEME OVERRIDE: FRESH-PEACH
+   ======================================================== */
+[data-theme="fresh-peach"] {
+  --primary: #E39A7B;
+  --accent: #DBB06B;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="fresh-peach"] .bg-\[\#0A1A2F\],
+[data-theme="fresh-peach"] [class*="bg-[#0A1A2F]"],
+[data-theme="fresh-peach"] .bg-\[\#071324\],
+[data-theme="fresh-peach"] [class*="bg-[#071324]"],
+[data-theme="fresh-peach"] thead,
+[data-theme="fresh-peach"] thead tr,
+[data-theme="fresh-peach"] thead th {
+  background-color: #2A1D1A !important;
+  color: #FFFFFF !important;
+  border-color: #382622 !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="fresh-peach"] .bg-\[\#10223A\],
+[data-theme="fresh-peach"] [class*="bg-[#10223A]"],
+[data-theme="fresh-peach"] .bg-\[\#152a45\],
+[data-theme="fresh-peach"] [class*="bg-[#152a45]"] {
+  background-color: #1F1513 !important;
+}
+
+/* Dark Borders */
+[data-theme="fresh-peach"] .border-\[\#1B2D45\],
+[data-theme="fresh-peach"] [class*="border-[#1B2D45]"],
+[data-theme="fresh-peach"] .border-\[\#1B3252\],
+[data-theme="fresh-peach"] [class*="border-[#1B3252]"] {
+  border-color: #382622 !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="fresh-peach"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="fresh-peach"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="fresh-peach"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="fresh-peach"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #382622 !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="fresh-peach"] .bg-\[\#1F3A2E\],
+[data-theme="fresh-peach"] [class*="bg-[#1F3A2E]"] {
+  background-color: #2A1D1A !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="fresh-peach"] .text-\[\#1F3A2E\],
+[data-theme="fresh-peach"] [class*="text-[#1F3A2E]"] {
+  color: #2A1D1A !important;
+}
+
+[data-theme="fresh-peach"] .border-\[\#1F3A2E\],
+[data-theme="fresh-peach"] [class*="border-[#1F3A2E]"] {
+  border-color: #E39A7B !important;
+}
+
+[data-theme="fresh-peach"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="fresh-peach"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #382622 !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="fresh-peach"] .text-\[\#C8A96A\],
+[data-theme="fresh-peach"] [class*="text-[#C8A96A]"],
+[data-theme="fresh-peach"] .text-\[\#C9A86A\],
+[data-theme="fresh-peach"] [class*="text-[#C9A86A]"] {
+  color: #DBB06B !important;
+}
+
+[data-theme="fresh-peach"] .bg-\[\#C8A96A\],
+[data-theme="fresh-peach"] [class*="bg-[#C8A96A]"],
+[data-theme="fresh-peach"] .bg-\[\#C9A86A\],
+[data-theme="fresh-peach"] [class*="bg-[#C9A86A]"] {
+  background-color: #E39A7B !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="fresh-peach"] .bg-emerald-50,
+[data-theme="fresh-peach"] [class*="bg-emerald-50"],
+[data-theme="fresh-peach"] .bg-emerald-100,
+[data-theme="fresh-peach"] [class*="bg-emerald-100"],
+[data-theme="fresh-peach"] .bg-teal-50,
+[data-theme="fresh-peach"] [class*="bg-teal-50"],
+[data-theme="fresh-peach"] .bg-\[\#E8F0EA\],
+[data-theme="fresh-peach"] [class*="bg-[#E8F0EA]"],
+[data-theme="fresh-peach"] .bg-\[\#F0F4F1\],
+[data-theme="fresh-peach"] [class*="bg-[#F0F4F1]"] {
+  background-color: #FFF3EB !important;
+}
+
+[data-theme="fresh-peach"] .border-emerald-200,
+[data-theme="fresh-peach"] [class*="border-emerald-200"],
+[data-theme="fresh-peach"] .border-emerald-300,
+[data-theme="fresh-peach"] [class*="border-emerald-300"],
+[data-theme="fresh-peach"] .border-teal-200,
+[data-theme="fresh-peach"] [class*="border-teal-200"] {
+  border-color: #FED7AA !important;
+}
+
+[data-theme="fresh-peach"] .text-emerald-700,
+[data-theme="fresh-peach"] [class*="text-emerald-700"],
+[data-theme="fresh-peach"] .text-emerald-800,
+[data-theme="fresh-peach"] [class*="text-emerald-800"],
+[data-theme="fresh-peach"] .text-emerald-600,
+[data-theme="fresh-peach"] [class*="text-emerald-600"],
+[data-theme="fresh-peach"] .text-teal-700,
+[data-theme="fresh-peach"] [class*="text-teal-700"] {
+  color: #9A3412 !important;
+}
+
+[data-theme="fresh-peach"] .bg-emerald-600,
+[data-theme="fresh-peach"] [class*="bg-emerald-600"],
+[data-theme="fresh-peach"] .bg-emerald-500,
+[data-theme="fresh-peach"] [class*="bg-emerald-500"] {
+  background-color: #EA580C !important;
+}
+
+
+/* ========================================================
+   THEME OVERRIDE: STORMY-MORNING
+   ======================================================== */
+[data-theme="stormy-morning"] {
+  --primary: #6A89A7;
+  --accent: #88BDF2;
+}
+
+/* Dark Surfaces (Sidebar, Table Headers, Modals, Top Headers) */
+[data-theme="stormy-morning"] .bg-\[\#0A1A2F\],
+[data-theme="stormy-morning"] [class*="bg-[#0A1A2F]"],
+[data-theme="stormy-morning"] .bg-\[\#071324\],
+[data-theme="stormy-morning"] [class*="bg-[#071324]"],
+[data-theme="stormy-morning"] thead,
+[data-theme="stormy-morning"] thead tr,
+[data-theme="stormy-morning"] thead th {
+  background-color: #1E2730 !important;
+  color: #FFFFFF !important;
+  border-color: #283542 !important;
+}
+
+/* Secondary Dark Toolbar / Sidebar elements */
+[data-theme="stormy-morning"] .bg-\[\#10223A\],
+[data-theme="stormy-morning"] [class*="bg-[#10223A]"],
+[data-theme="stormy-morning"] .bg-\[\#152a45\],
+[data-theme="stormy-morning"] [class*="bg-[#152a45]"] {
+  background-color: #161D24 !important;
+}
+
+/* Dark Borders */
+[data-theme="stormy-morning"] .border-\[\#1B2D45\],
+[data-theme="stormy-morning"] [class*="border-[#1B2D45]"],
+[data-theme="stormy-morning"] .border-\[\#1B3252\],
+[data-theme="stormy-morning"] [class*="border-[#1B3252]"] {
+  border-color: #283542 !important;
+}
+
+/* Hover on Dark Surfaces */
+[data-theme="stormy-morning"] .hover\:bg-\[\#10223A\]:hover,
+[data-theme="stormy-morning"] [class*="hover:bg-[#10223A]"]:hover,
+[data-theme="stormy-morning"] .hover\:bg-\[\#183256\]:hover,
+[data-theme="stormy-morning"] [class*="hover:bg-[#183256]"]:hover {
+  background-color: #283542 !important;
+}
+
+/* Primary Brand Forest Green -> Active Theme Primary */
+[data-theme="stormy-morning"] .bg-\[\#1F3A2E\],
+[data-theme="stormy-morning"] [class*="bg-[#1F3A2E]"] {
+  background-color: #1E2730 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="stormy-morning"] .text-\[\#1F3A2E\],
+[data-theme="stormy-morning"] [class*="text-[#1F3A2E]"] {
+  color: #1E2730 !important;
+}
+
+[data-theme="stormy-morning"] .border-\[\#1F3A2E\],
+[data-theme="stormy-morning"] [class*="border-[#1F3A2E]"] {
+  border-color: #6A89A7 !important;
+}
+
+[data-theme="stormy-morning"] .hover\:bg-\[\#2C5240\]:hover,
+[data-theme="stormy-morning"] [class*="hover:bg-[#2C5240]"]:hover {
+  background-color: #283542 !important;
+}
+
+/* Gold / Accent Tokens */
+[data-theme="stormy-morning"] .text-\[\#C8A96A\],
+[data-theme="stormy-morning"] [class*="text-[#C8A96A]"],
+[data-theme="stormy-morning"] .text-\[\#C9A86A\],
+[data-theme="stormy-morning"] [class*="text-[#C9A86A]"] {
+  color: #88BDF2 !important;
+}
+
+[data-theme="stormy-morning"] .bg-\[\#C8A96A\],
+[data-theme="stormy-morning"] [class*="bg-[#C8A96A]"],
+[data-theme="stormy-morning"] .bg-\[\#C9A86A\],
+[data-theme="stormy-morning"] [class*="bg-[#C9A86A]"] {
+  background-color: #6A89A7 !important;
+  color: #FFFFFF !important;
+}
+
+/* Light Tinted Green/Emerald Cards & Washes -> Theme Tint */
+[data-theme="stormy-morning"] .bg-emerald-50,
+[data-theme="stormy-morning"] [class*="bg-emerald-50"],
+[data-theme="stormy-morning"] .bg-emerald-100,
+[data-theme="stormy-morning"] [class*="bg-emerald-100"],
+[data-theme="stormy-morning"] .bg-teal-50,
+[data-theme="stormy-morning"] [class*="bg-teal-50"],
+[data-theme="stormy-morning"] .bg-\[\#E8F0EA\],
+[data-theme="stormy-morning"] [class*="bg-[#E8F0EA]"],
+[data-theme="stormy-morning"] .bg-\[\#F0F4F1\],
+[data-theme="stormy-morning"] [class*="bg-[#F0F4F1]"] {
+  background-color: #EBF4FC !important;
+}
+
+[data-theme="stormy-morning"] .border-emerald-200,
+[data-theme="stormy-morning"] [class*="border-emerald-200"],
+[data-theme="stormy-morning"] .border-emerald-300,
+[data-theme="stormy-morning"] [class*="border-emerald-300"],
+[data-theme="stormy-morning"] .border-teal-200,
+[data-theme="stormy-morning"] [class*="border-teal-200"] {
+  border-color: #BFDBFE !important;
+}
+
+[data-theme="stormy-morning"] .text-emerald-700,
+[data-theme="stormy-morning"] [class*="text-emerald-700"],
+[data-theme="stormy-morning"] .text-emerald-800,
+[data-theme="stormy-morning"] [class*="text-emerald-800"],
+[data-theme="stormy-morning"] .text-emerald-600,
+[data-theme="stormy-morning"] [class*="text-emerald-600"],
+[data-theme="stormy-morning"] .text-teal-700,
+[data-theme="stormy-morning"] [class*="text-teal-700"] {
+  color: #1E40AF !important;
+}
+
+[data-theme="stormy-morning"] .bg-emerald-600,
+[data-theme="stormy-morning"] [class*="bg-emerald-600"],
+[data-theme="stormy-morning"] .bg-emerald-500,
+[data-theme="stormy-morning"] [class*="bg-emerald-500"] {
+  background-color: #3B82F6 !important;
+}

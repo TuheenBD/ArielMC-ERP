@@ -37,7 +37,7 @@ import ProjectFinancialControl from '@/components/crm/ProjectFinancialControl';
 import QuadPlatformSyncModal from '@/components/crm/QuadPlatformSyncModal';
 import QuadPlatformSyncModule from '@/components/crm/QuadPlatformSyncModule';
 import UserProfileModal, { DEMO_USERS } from '@/components/crm/UserProfileModal';
-import { ThemeSelector } from '@/components/crm/ThemeSelector';
+import { ThemeSelector, getThemeTokens } from '@/components/crm/ThemeSelector';
 
 import {
   Activity,
@@ -355,15 +355,16 @@ export default function ArielEnergyCrmPage() {
 
   const currentMeta = TAB_METADATA[activeTab];
   const CurrentIcon = currentMeta.icon;
+  const tokens = getThemeTokens(theme);
 
   return (
     <div className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]" data-theme={theme}>
       {/* =========================================================================
-          LEFT FIXED PANEL (No Scroll, Fixed, Zero horizontal/vertical layout jump)
+          LEFT FIXED PANEL (Dynamic Theme Adapting, Fixed, Zero Layout Jump)
           ========================================================================= */}
-      <aside className="w-64 xl:w-72 bg-[#0A1A2F] text-slate-200 border-r border-[#1B2D45] fixed left-0 top-0 bottom-0 h-screen z-40 flex flex-col justify-between overflow-hidden select-none shadow-xl">
+      <aside className={`w-64 xl:w-72 ${tokens.sidebarBg} text-slate-200 border-r ${tokens.sidebarBorder} fixed left-0 top-0 bottom-0 h-screen z-40 flex flex-col justify-between overflow-hidden select-none shadow-xl transition-colors`}>
         {/* 1. Header & Brand Wordmark */}
-        <div className="p-3.5 border-b border-[#1B2D45] shrink-0 bg-[#071324]">
+        <div className={`p-3.5 border-b ${tokens.sidebarBorder} shrink-0 ${tokens.sidebarHeaderBg} transition-colors`}>
           <div className="flex items-center gap-2.5">
             <img
               src="/logos/ariel-energy-icon.png"
@@ -374,14 +375,14 @@ export default function ArielEnergyCrmPage() {
               <div className="text-xs font-black tracking-tight text-white leading-tight truncate">
                 Ariel Renewable Energy
               </div>
-              <div className="text-[9px] uppercase font-mono tracking-widest text-[#C9A86A] truncate">
+              <div className={`text-[9px] uppercase font-mono tracking-widest ${tokens.sidebarSubtext} truncate`}>
                 Enterprise OS 2026.1
               </div>
             </div>
           </div>
 
           {/* Quad Sync Live Pulse Pill */}
-          <div className="mt-2.5 flex items-center justify-between bg-[#0F223D] px-2 py-1 rounded-lg border border-[#1E375B]">
+          <div className={`mt-2.5 flex items-center justify-between ${tokens.sidebarPulseBox} px-2 py-1 rounded-lg border transition-colors`}>
             <div className="flex items-center gap-1.5">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -394,7 +395,7 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={() => setActiveTab('sync')}
-              className="text-[9px] font-mono font-bold text-[#C9A86A] hover:text-amber-300 transition cursor-pointer"
+              className={`text-[9px] font-mono font-bold ${tokens.sidebarSubtext} hover:opacity-80 transition cursor-pointer`}
             >
               Verify &rarr;
             </button>
@@ -405,7 +406,7 @@ export default function ArielEnergyCrmPage() {
         <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto no-scrollbar">
           {navSections.map((section) => (
             <div key={section.title}>
-              <div className="px-2 mb-1 text-[8.5px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+              <div className={`px-2 mb-1 text-[8.5px] font-mono uppercase tracking-wider ${tokens.sidebarSectionText} font-bold transition-colors`}>
                 {section.title}
               </div>
               <div className="space-y-0.5">
@@ -420,14 +421,14 @@ export default function ArielEnergyCrmPage() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-between gap-2 cursor-pointer text-left ${
                         isActive
-                          ? 'bg-gradient-to-r from-emerald-700 to-teal-800 text-white shadow-xs'
-                          : 'text-slate-300 hover:text-white hover:bg-[#13253F]'
+                          ? `${tokens.sidebarActiveItem}`
+                          : `${tokens.sidebarInactiveItem}`
                       }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <Icon
                           className={`w-3.5 h-3.5 shrink-0 ${
-                            isActive ? 'text-white' : 'text-slate-400'
+                            isActive ? 'text-inherit' : 'opacity-75'
                           }`}
                         />
                         <span className="truncate text-[11px]">{tab.label}</span>
@@ -437,8 +438,8 @@ export default function ArielEnergyCrmPage() {
                         <span
                           className={`text-[8.5px] px-1.5 py-0.2 rounded font-mono font-semibold shrink-0 ${
                             isActive
-                              ? 'bg-white/20 text-white'
-                              : 'bg-[#183152] text-slate-300'
+                              ? tokens.sidebarBadgeActive
+                              : tokens.sidebarBadgeInactive
                           }`}
                         >
                           {tab.badge}
@@ -453,27 +454,27 @@ export default function ArielEnergyCrmPage() {
         </nav>
 
         {/* 3. Quick Action Button inside Sidebar */}
-        <div className="px-2.5 py-2 border-t border-[#1B2D45] shrink-0 bg-[#081527]">
+        <div className={`px-2.5 py-2 border-t ${tokens.sidebarBorder} shrink-0 ${tokens.sidebarFooterBg} transition-colors`}>
           <button
             type="button"
             onClick={() => setNewLeadModalOpen(true)}
-            className="w-full py-1.5 bg-[#1F3A2E] hover:bg-[#2C5240] text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer"
+            className={`w-full py-1.5 ${tokens.headerPrimaryBtn} rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer`}
           >
-            <Plus className="w-3.5 h-3.5 text-[#C9A86A]" />
+            <Plus className={`w-3.5 h-3.5 ${tokens.headerPrimaryBtnText}`} />
             <span>Onboard Factory Lead</span>
           </button>
         </div>
 
         {/* 4. Bottom Footer: SREDA Countdown & Ecosystem Portals */}
-        <div className="p-2.5 bg-[#06101D] border-t border-[#1B2D45] shrink-0 text-xs">
+        <div className={`p-2.5 ${tokens.sidebarFooterBg} border-t ${tokens.sidebarBorder} shrink-0 text-xs transition-colors`}>
           {/* SREDA Countdown Pill */}
-          <div className="p-2 rounded-lg bg-[#0C1A2E] border border-[#1C3659] mb-2 text-[10px]">
-            <div className="text-amber-400 font-bold flex items-center justify-between">
+          <div className={`p-2 rounded-lg ${tokens.sidebarPulseBox} mb-2 text-[10px] border transition-colors`}>
+            <div className={`font-bold flex items-center justify-between ${tokens.sidebarSectionText}`}>
               <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-amber-400" />
+                <Clock className="w-3 h-3" />
                 <span>SREDA Net-Meter Cutoff</span>
               </span>
-              <span className="font-mono text-amber-300">Feb 28, 2027</span>
+              <span className="font-mono">Feb 28, 2027</span>
             </div>
             <div className="text-slate-400 text-[8.5px] mt-0.5">
               Lock Tk 10.50/kWh buyback tariff before policy sunset
@@ -481,12 +482,12 @@ export default function ArielEnergyCrmPage() {
           </div>
 
           {/* Quick Ecosystem Links */}
-          <div className="grid grid-cols-2 gap-1 text-[9.5px] font-bold text-slate-300">
+          <div className="grid grid-cols-2 gap-1 text-[9.5px] font-bold">
             <a
               href="https://crm.arielmc.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2 py-1 rounded bg-[#10223A] hover:text-white hover:bg-[#183256] text-center truncate flex items-center justify-center gap-1 border border-[#1B3252] transition"
+              className={`px-2 py-1 rounded ${tokens.sidebarActionBtnBg} text-center truncate flex items-center justify-center gap-1 transition`}
               title="Open Master-CRM Group Hub"
             >
               <span>Master-CRM</span>
@@ -496,11 +497,11 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={handleExportCsv}
-              className="px-2 py-1 rounded bg-[#10223A] hover:text-white hover:bg-[#183256] text-center truncate flex items-center justify-center gap-1 border border-[#1B3252] transition cursor-pointer"
+              className={`px-2 py-1 rounded ${tokens.sidebarActionBtnBg} text-center truncate flex items-center justify-center gap-1 transition cursor-pointer`}
               title="Export Full Pipeline to CSV"
             >
               <span>Export CSV</span>
-              <Download className="w-2.5 h-2.5 text-emerald-400" />
+              <Download className="w-2.5 h-2.5" />
             </button>
           </div>
         </div>
@@ -513,7 +514,7 @@ export default function ArielEnergyCrmPage() {
         {/* Main Window Top Header */}
         <header className="bg-white/95 backdrop-blur-md border-b border-[#DDE3DD] sticky top-0 z-30 px-5 py-2.5 flex items-center justify-between shadow-2xs">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-[#1F3A2E] border border-emerald-200/70 flex items-center justify-center shrink-0">
+            <div className={`w-8 h-8 rounded-lg ${tokens.headerIconBg} ${tokens.headerIconText} border ${tokens.headerIconBorder} flex items-center justify-center shrink-0 transition-colors`}>
               <CurrentIcon className="w-4 h-4" />
             </div>
             <div className="min-w-0">
@@ -555,9 +556,9 @@ export default function ArielEnergyCrmPage() {
             <button
               type="button"
               onClick={() => setNewLeadModalOpen(true)}
-              className="px-2.5 py-1 bg-[#1F3A2E] hover:bg-[#2C5240] text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
+              className={`px-2.5 py-1 ${tokens.headerPrimaryBtn} rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer`}
             >
-              <Plus className="w-3 h-3 text-[#C9A86A]" />
+              <Plus className={`w-3 h-3 ${tokens.headerPrimaryBtnText}`} />
               <span>New Lead</span>
             </button>
 
