@@ -570,6 +570,7 @@ export default function ArielEnergyCrmPage() {
             <AfterSalesSlaManagement
               tickets={tickets}
               onUpdateTicketStatus={handleUpdateTicketStatus}
+              onAddTicket={(newTkt) => setTickets((prev) => [newTkt, ...prev])}
             />
           )}
 
