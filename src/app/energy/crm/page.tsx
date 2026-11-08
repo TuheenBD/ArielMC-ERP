@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { INITIAL_SOLAR_LEADS } from '@/data/crmLeads';
 import { SolarLead, LeadStage } from '@/types/crm';
@@ -37,6 +37,7 @@ import ProjectFinancialControl from '@/components/crm/ProjectFinancialControl';
 import QuadPlatformSyncModal from '@/components/crm/QuadPlatformSyncModal';
 import QuadPlatformSyncModule from '@/components/crm/QuadPlatformSyncModule';
 import UserProfileModal, { DEMO_USERS } from '@/components/crm/UserProfileModal';
+import { ThemeSelector } from '@/components/crm/ThemeSelector';
 
 import {
   Activity,
@@ -187,6 +188,23 @@ export default function ArielEnergyCrmPage() {
   );
   const [newLeadModalOpen, setNewLeadModalOpen] = useState(false);
   const [syncModalOpen, setSyncModalOpen] = useState(false);
+
+  // ERP Color Scheme Theme Profile State
+  const [theme, setTheme] = useState<string>('crm-green');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('arielmc_erp_theme') || 'crm-green';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.body.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  const handleSelectTheme = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem('arielmc_erp_theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    document.body.setAttribute('data-theme', newTheme);
+  };
 
   // Switch User Profile
   const handleSwitchUser = (email: string) => {
@@ -339,7 +357,7 @@ export default function ArielEnergyCrmPage() {
   const CurrentIcon = currentMeta.icon;
 
   return (
-    <div className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]" data-theme={theme}>
       {/* =========================================================================
           LEFT FIXED PANEL (No Scroll, Fixed, Zero horizontal/vertical layout jump)
           ========================================================================= */}
@@ -522,6 +540,9 @@ export default function ArielEnergyCrmPage() {
               <span className="font-bold text-[#1A1A1A]">9.75 MWp</span>
             </div>
 
+            {/* ERP Color Scheme Theme Selector */}
+            <ThemeSelector currentTheme={theme} onSelectTheme={handleSelectTheme} />
+
             <button
               type="button"
               onClick={handleExportCsv}
@@ -660,6 +681,10 @@ export default function ArielEnergyCrmPage() {
                 alt="AREL Seal"
                 className="w-4 h-4 object-contain inline-block"
               />
+              <span className="font-black text-[#003177] tracking-tight">
+                Ariel - SaaS<sup className="text-[0.65em] font-bold -top-0.5 ml-[1px]">™</sup>
+              </span>
+              <span className="text-slate-300">|</span>
               <span className="font-black text-[#003177]">
                 ArielMC<sup className="text-[0.65em] font-bold -top-0.5 ml-[1px]">™</sup>
               </span>
@@ -677,6 +702,10 @@ export default function ArielEnergyCrmPage() {
             <div className="text-[11px] text-[#6B7269] flex flex-wrap items-center justify-center gap-1 font-medium">
               <span>© 2026</span>
               <strong className="text-[#1F3A2E] font-bold">ArielMC</strong>
+              <span className="opacity-50">&bull;</span>
+              <span className="text-[#003177] font-semibold">
+                Ariel - SaaS™ Cloud Enterprise Platform
+              </span>
               <span className="opacity-50">&bull;</span>
               <span className="text-[#003177] font-semibold">
                 Ariel Marketing &amp; Communications Limited
