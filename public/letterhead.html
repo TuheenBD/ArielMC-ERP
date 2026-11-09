@@ -82,7 +82,7 @@
             
             <!-- Brand & Title -->
             <div class="flex items-center gap-3">
-                <img src="images/ariel-energy-logo-clean.png" alt="Ariel Renewable Energy Limited" class="h-7 w-auto object-contain">
+                <img src="/images/ariel-energy-logo-clean.png" onerror="if(!this.tried){this.tried=true;this.src='images/ariel-energy-logo-clean.png';}" alt="Ariel Renewable Energy Limited" class="h-7 w-auto object-contain">
                 <div>
                     <h1 class="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
                         <span>Ariel Renewable Energy Limited</span>
@@ -96,20 +96,26 @@
             <div class="flex items-center gap-2.5">
                 <!-- Content Mode Toggle -->
                 <button type="button" onclick="toggleLetterMode()" id="mode-btn" class="px-3.5 py-1.5 text-xs font-semibold bg-[#162E23] hover:bg-emerald-900/80 text-emerald-200 rounded-lg border border-emerald-700/60 flex items-center gap-2 transition">
-                    <span id="mode-icon">📄</span>
-                    <span id="mode-label">Show Sample Letter</span>
+                    <span id="mode-icon">🧹</span>
+                    <span id="mode-label">Clean Blank Sheet</span>
                 </button>
 
                 <!-- Download Official Vector PDF -->
-                <a href="/shared-assets/energy/letterhead/Ariel_Renewable_Energy_Official_Letterhead_Master.pdf" download="Ariel_Renewable_Energy_Official_Letterhead_Master.pdf" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
+                <a href="/documents/Ariel_Renewable_Energy_Official_Letterhead_Master.pdf" download="Ariel_Renewable_Energy_Official_Letterhead_Master.pdf" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
                     <span>📥</span>
                     <span>Master PDF</span>
                 </a>
 
                 <!-- Download Word DOCX -->
-                <a href="/shared-assets/energy/letterhead/Ariel_Energy_Official_Corporate_Letterhead.docx" download="Ariel_Energy_Official_Corporate_Letterhead.docx" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
+                <a href="/documents/Ariel_Energy_Official_Corporate_Letterhead.docx" download="Ariel_Energy_Official_Corporate_Letterhead.docx" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
                     <span>📝</span>
                     <span>Word DOCX</span>
+                </a>
+
+                <!-- Download Sample Letter PDF -->
+                <a href="/documents/Ariel_Energy_Official_Corporate_Letterhead.pdf" target="_blank" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 flex items-center gap-1.5 transition">
+                    <span>📑</span>
+                    <span>Letter PDF</span>
                 </a>
 
                 <!-- Print / Save PDF -->
@@ -140,7 +146,7 @@
 
             <!-- 1. Master Approved Official Letterhead Artwork Background (Zero Distortion, 300 DPI A4) -->
             <img 
-                src="images/Ariel_Renewable_Energy_Official_Letterhead_Master.png" 
+                src="/images/Ariel_Renewable_Energy_Official_Letterhead_Master.png" onerror="if(!this.tried){this.tried=true;this.src='images/Ariel_Renewable_Energy_Official_Letterhead_Master.png';}" 
                 alt="Ariel Renewable Energy Limited Official Letterhead" 
                 class="absolute inset-0 w-full h-full object-fill pointer-events-none select-none z-0"
             >
@@ -149,14 +155,14 @@
             <div id="letter-body" class="absolute left-[20mm] right-[20mm] top-[38mm] bottom-[34mm] overflow-hidden text-[9pt] leading-[1.55] text-slate-800 z-10">
                 
                 <!-- Blank State (Default clean for stationery printing) -->
-                <div id="blank-notice" class="h-full flex flex-col justify-center items-center text-center text-slate-400 select-none no-print border-2 border-dashed border-emerald-200/60 rounded-xl p-8 bg-white/40 backdrop-blur-xs">
+                <div id="blank-notice" class="hidden h-full flex flex-col justify-center items-center text-center text-slate-400 select-none no-print border-2 border-dashed border-emerald-200/60 rounded-xl p-8 bg-white/40 backdrop-blur-xs">
                     <div class="text-3xl mb-2 text-emerald-600">☀️</div>
                     <div class="font-bold text-slate-800 text-sm">Ariel Renewable Energy Limited — Official Stationery Sheet</div>
                     <div class="text-xs text-slate-500 mt-1.5 max-w-sm">This sheet is currently in <strong>Clean Stationery Mode</strong> (blank correspondence area). Click <strong>"Show Sample Letter"</strong> in the top toolbar to preview formal EPC correspondence, or click anywhere inside to begin typing.</div>
                 </div>
 
                 <!-- Sample Formal B2B EPC Correspondence (Toggled on demand) -->
-                <div id="sample-text" class="hidden editable-body h-full p-2 outline-none" contenteditable="true" spellcheck="false">
+                <div id="sample-text" class="editable-body h-full p-2 outline-none" contenteditable="true" spellcheck="false">
                     <div class="flex justify-between items-baseline mb-5 border-b border-slate-200 pb-2">
                         <div>
                             <p class="font-bold text-slate-900 text-[9.5pt]">OFFICIAL COMMERCIAL &amp; STATUTORY TRANSMITTAL</p>
@@ -213,7 +219,7 @@
 
     <!-- Interactive Script -->
     <script>
-        let isSampleVisible = false;
+        let isSampleVisible = true;
 
         function toggleLetterMode() {
             isSampleVisible = !isSampleVisible;
