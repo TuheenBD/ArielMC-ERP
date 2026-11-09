@@ -787,8 +787,10 @@ export async function POST(req: NextRequest) {
 
     // Real-Time Enterprise Sync
     try {
-      const crmWebhookUrl = process.env.ARIELMC_CRM_WEBHOOK_URL || 'http://127.0.0.1:3000/api/webhooks/energy-lead';
-      const erpSyncUrl = process.env.ARIELMC_ERP_SYNC_URL || 'http://127.0.0.1:3001/api/crm/sync';
+      const crmWebhookUrl = process.env.ARIELMC_CRM_WEBHOOK_URL || 
+        (process.env.NODE_ENV === 'production' ? 'https://crm.arielmc.com/api/webhooks/energy-lead' : 'http://127.0.0.1:3003/api/webhooks/energy-lead');
+      const erpSyncUrl = process.env.ARIELMC_ERP_SYNC_URL || 
+        (process.env.NODE_ENV === 'production' ? 'https://erp.arielmc.com/api/crm/sync' : 'http://127.0.0.1:3001/api/crm/sync');
       const syncSecret = process.env.ARIELMC_SYNC_SECRET || 'arielmc-sovereign-sync-key-2026';
 
       const leadPayload = {
