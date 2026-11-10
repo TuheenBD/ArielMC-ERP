@@ -238,6 +238,45 @@ export const INITIAL_AREL_LEADS: ArelLead[] = [
       'Sanctioned load verified. Preparing preliminary proposal.',
     ],
   },
+  {
+    id: 'lead-007',
+    leadCode: 'AREL-LD-2026-007',
+    factoryName: 'GreenCycle Integrated Agribusiness & Sovereign Clean Tech Complex',
+    parentGroup: 'Ariel Group / Holdings',
+    industrySector: 'Agro & Food Processing',
+    location: '22.0 Bigha Agricultural Corridor, Bangladesh',
+    corridor: 'Dhaka / Gazipur / Savar',
+    primaryContact: {
+      name: 'Executive Managing Director',
+      designation: 'Sponsor Director',
+      phone: '+880 1711-000000',
+      email: 'info@arielmc.com',
+      whatsapp: '+880 1711-000000',
+    },
+    roofAreaSqFt: 12970, // 7 primary covered sheds + 36,000 sq ft agrivoltaic corridor
+    roofSubstrate: 'Corrugated Trapezoidal Tin',
+    sanctionedLoadKva: 100,
+    proposedCapacityKwp: 80, // 80 kWp Solar PV + 120 kWh BESS + 25 m³ Biogas
+    isWithin70PercentCap: true,
+    utilityProvider: 'BREB',
+    monthlyElectricityBillBdt: 125000,
+    turnkeyRatePerWpBdt: 52.50,
+    totalProjectCapexBdt: 8606000, // BDT 86.06 Lakh Clean Tech EPC & IoT Architecture
+    concessionaryDebt80Bdt: 7500000,
+    clientEquity20Bdt: 1106000,
+    firstYearAnnualSavingsBdt: 3657000, // Clean Microgrid + IoT loss prevention
+    stage: 'bank_sfd_review',
+    priority: 'Critical (SREDA Cutoff)',
+    createdAt: '2026-11-10',
+    updatedAt: '2026-11-11',
+    assignedEngineer: 'Syed Akramul Hassan',
+    notes: [
+      'Sovereign flagship clean energy microgrid (80 kWp TOPCon Solar + 120 kWh BESS + 25 m³ Biogas).',
+      'Industrial IoT telemetry mesh on energy.arielmc.com (Port 3002).',
+      'Asset valuation: BDT 5.89 Crore; Land collateral: BDT 3.63 Crore (LTV 33%, DSCR 5.03x).',
+      'Total 10-year projected value accrued to Ariel Group / Holdings: BDT 1.916 Crore.',
+    ],
+  },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -321,6 +360,25 @@ export const INITIAL_BANK_APPLICATIONS: BankLoanApplication[] = [
     status: 'milestone_disbursement_active',
     sanctionDate: '2026-08-25',
     disbursedAmountBdt: 20640000, // Fully disbursed
+  },
+  {
+    id: 'loan-005',
+    applicationCode: 'AREL-BNK-2026-05',
+    leadId: 'lead-007',
+    factoryName: 'GreenCycle Integrated Agribusiness & Sovereign Clean Tech Complex',
+    targetPfi: 'BRAC Bank PLC',
+    sfdDeskOfficerName: 'Head of Sustainable Finance Unit',
+    sfdDeskOfficerContact: '+880 1711-000000 | sfd@bracbank.com',
+    loanFacilityAmountBdt: 12000000, // BDT 1.20 Crore composite term loan
+    clientEquityAmountBdt: 36300000, // Land Equity Capitalized
+    fixedInterestRatePct: 4.5,
+    tenureMonths: 60,
+    moratoriumGraceMonths: 6,
+    dscrProjected: 5.03,
+    dossierRef: 'AREL-FIN-BANK-2026-V1',
+    status: 'dossier_submitted',
+    sanctionDate: '2026-11-10',
+    disbursedAmountBdt: 0,
   },
 ];
 
@@ -992,6 +1050,36 @@ export const INITIAL_PROJECT_FINANCIALS: ProjectFinancialAccount[] = [
       { id: 'c2', category: 'HARDWARE_INVERTERS', description: '12x Sungrow SG125CX Inverters', vendorName: 'Sungrow Power Supply', budgetedAmountBdt: 5563200, actualSpentAmountBdt: 0, status: 'budgeted' },
     ],
     updatedAt: '2026-11-08',
+  },
+  {
+    id: 'fin-006',
+    projectId: 'lead-007',
+    projectName: 'GreenCycle 22.0 Bigha Sovereign Microgrid & IoT Hub',
+    capacityKwp: 80,
+    turnkeyContractPriceBdt: 8606000,
+    actualTotalCostBdt: 7054500,
+    budgetedTotalCostBdt: 7054500,
+    grossProfitBdt: 1551500,
+    realizedGrossMarginPct: 18.0,
+    milestones: [
+      { id: 'm1', milestoneTitle: 'Milestone 1: 20% Contract Advance', percentage: 20, amountBdt: 1721200, status: 'invoice_issued', dueDate: '2026-11-20' },
+      { id: 'm2', milestoneTitle: 'Milestone 2: 40% Solar Modules & BESS Skid Delivery', percentage: 40, amountBdt: 3442400, status: 'pending', dueDate: '2026-12-30' },
+      { id: 'm3', milestoneTitle: 'Milestone 3: 30% Installation & Biogas Digester', percentage: 30, amountBdt: 2581800, status: 'pending', dueDate: '2027-01-30' },
+      { id: 'm4', milestoneTitle: 'Milestone 4: 10% SREDA COD & Ariel-SaaS Telemetry Go-Live', percentage: 10, amountBdt: 860600, status: 'pending', dueDate: '2027-02-28' },
+    ],
+    totalCollectedBdt: 0,
+    totalOutstandingBdt: 8606000,
+    retention5PercentBdt: 430300,
+    retentionMaturityDate: '2028-02-28',
+    retentionReleased: false,
+    annualSurplusCashExportBdt: 3657000,
+    costLedger: [
+      { id: 'c1', category: 'HARDWARE_MODULES', description: '136x Tier-1 TOPCon 590W Bifacial Solar Panels', vendorName: 'Tier-1 BNEF Manufacturer', budgetedAmountBdt: 1845000, actualSpentAmountBdt: 0, status: 'budgeted' },
+      { id: 'c2', category: 'HARDWARE_INVERTERS', description: '1x Huawei 60kW 3-Phase Hybrid Inverter', vendorName: 'Huawei Digital Power', budgetedAmountBdt: 650000, actualSpentAmountBdt: 0, status: 'budgeted' },
+      { id: 'c3', category: 'MOUNTING_STRUCTURE', description: 'Containerized LiFePO4 120 kWh BESS Skid', vendorName: 'AREL Storage Systems', budgetedAmountBdt: 2337500, actualSpentAmountBdt: 0, status: 'budgeted' },
+      { id: 'c4', category: 'BALANCE_OF_SYSTEM', description: 'Ariel-SaaS IoT LoRaWAN Mesh & SCADA Edge Controller', vendorName: 'Ariel-SaaS Digital', budgetedAmountBdt: 833000, actualSpentAmountBdt: 0, status: 'budgeted' },
+    ],
+    updatedAt: '2026-11-10',
   },
 ];
 
