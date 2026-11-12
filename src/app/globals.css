@@ -2492,3 +2492,41 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 [data-theme="stormy-morning"] [class*="bg-emerald-500"] {
   background-color: #3B82F6 !important;
 }
+
+/* Energy CRM (.crm-shell) Main Window Typography & Contrast Boost */
+.crm-shell aside [class*="text-slate-400"],
+.crm-shell header [class*="text-slate-400"] {
+  color: #CFE0D5 !important;
+}
+.crm-shell aside [class*="text-slate-300"],
+.crm-shell header [class*="text-slate-300"] {
+  color: #E6EFEA !important;
+}
+.crm-shell main [class*="text-[#6B7269]"],
+.crm-shell footer [class*="text-[#6B7269]"] {
+  color: #475569 !important;
+}
+.crm-shell main [class*="text-[10px]"],
+.crm-shell main [class*="text-[10.5px]"],
+.crm-shell main [class*="text-[11px]"] {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+.crm-shell main .text-xs {
+  font-size: 13.5px !important;
+  line-height: 1.45 !important;
+}
+.crm-shell main .text-sm {
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+}
+.crm-shell main .text-base {
+  font-size: 17px !important;
+  line-height: 1.45 !important;
+}
+.crm-shell footer [class*="text-[11px]"] {
+  font-size: 12.5px !important;
+}
+.crm-shell footer .text-xs {
+  font-size: 13.5px !important;
+}

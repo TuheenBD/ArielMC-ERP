@@ -654,7 +654,7 @@ export default function ArielEnergyCrmPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#FAF9F5] flex flex-row font-sans text-[#1A1A1A]"
+      className="min-h-screen crm-shell bg-[#F4F6F4] flex flex-row font-sans text-[#111827]"
       data-theme={theme}
       style={{
         '--crm-dark-header': tokens.tableHeaderHex,
@@ -710,8 +710,9 @@ export default function ArielEnergyCrmPage() {
         <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto no-scrollbar">
           {navSections.map((section) => (
             <div key={section.title}>
-              <div className="px-2 mb-1.5 text-[11px] font-mono uppercase tracking-widest font-black text-white drop-shadow-xs transition-colors">
-                {section.title}
+              <div className={`px-2 mb-1.5 text-[11.5px] font-mono uppercase tracking-wider font-black ${tokens.sidebarSectionText} flex items-center gap-1.5 transition-colors drop-shadow-xs`}>
+                <span className="h-1.5 w-1.5 rounded-full bg-current shrink-0 opacity-90" />
+                <span>{section.title}</span>
               </div>
               <div className="space-y-0.5">
                 {section.items.map((tab) => {
