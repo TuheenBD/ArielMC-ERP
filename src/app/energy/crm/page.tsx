@@ -641,6 +641,16 @@ export default function ArielEnergyCrmPage() {
   const currentMeta = TAB_METADATA[activeTab];
   const CurrentIcon = currentMeta.icon;
   const tokens = getThemeTokens(theme);
+  const headerPipelineCapexCr = (
+    (activeTab === 'overview'
+      ? arelLeads.reduce((s, l) => s + l.totalProjectCapexBdt, 0)
+      : leads.reduce((s, l) => s + l.projectValueBdt, 0)) / 10000000
+  ).toFixed(2);
+  const headerPipelineMwp = (
+    (activeTab === 'overview'
+      ? arelLeads.reduce((s, l) => s + l.proposedCapacityKwp, 0)
+      : leads.reduce((s, l) => s + l.estimatedCapacityKwp, 0)) / 1000
+  ).toFixed(2);
 
   return (
     <div
@@ -845,10 +855,10 @@ export default function ArielEnergyCrmPage() {
           {/* Right Top Status & Fast Action Toolbar with Auth User Profile */}
           <div className="flex items-center gap-2.5 shrink-0">
             <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-white/10 rounded-lg text-xs font-mono text-white border border-white/15">
-              <span className="text-slate-300 uppercase text-[9px] font-bold">Pipeline:</span>
-              <span className="font-bold text-emerald-300">Tk 48.75 Cr</span>
-              <span className="text-white/30">|</span>
-              <span className="font-bold text-white">9.75 MWp</span>
+              <span className="text-slate-200 uppercase text-[11px] font-bold">Pipeline:</span>
+              <span className="font-bold text-emerald-300">Tk {headerPipelineCapexCr} Cr</span>
+              <span className="text-white/40">|</span>
+              <span className="font-bold text-white">{headerPipelineMwp} MWp</span>
             </div>
 
             {/* ERP Color Scheme Theme Selector */}
