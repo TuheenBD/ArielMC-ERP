@@ -131,7 +131,8 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
-      "/images/products/leather/ld-scb-6.jpg"
+      "/images/products/leather/ld-scb-6.jpg",
+      "/images/products/leather/ld-scb-6-studio.jpg"
     ],
     "createdDate": "2026-11-01"
   },
@@ -8473,8 +8474,8 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "styleCode": "CTB",
     "eanBarcode": "0538920190080",
     "name": "The Botanical Meadow Embroidered Corduroy Artisan Tote",
-    "sector": "LEATHER",
-    "category": "01 The Leather Compendium / Handcrafted Leather Bags",
+    "sector": "TEXTILE",
+    "category": "04 Thread & Weave / Canvas Tote Bags",
     "subCategory": "Corduroy & Leather Fusion Shoulder Totes",
     "hsCode": "4202.92.00",
     "packagingMode": "Standard Export Carton & Cloth Dustbag",
@@ -8483,8 +8484,9 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "dimensions": "360 x 380 x 100 mm",
     "weightKg": 0.78,
     "tags": [
-      "Leather",
-      "Handcrafted Leather Bags",
+      "Textiles",
+      "Canvas Tote Bags",
+      "Thread & Weave",
       "The Hawkers",
       "Corduroy",
       "Botanical Embroidery",
@@ -8552,16 +8554,13 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "highResPhotoCount": 4
     },
     "attributes": {
-      "sector": "LEATHER",
+      "sector": "TEXTILE",
       "data": {
-        "leatherType": "Chestnut Cowhide Handles & Patch Pocket",
-        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
-        "hideOrigin": "Dhaka LWG Tannery Hub",
-        "thicknessMm": "1.8 - 2.0 mm (Strap Grade)",
-        "hardwareFinish": "Reinforced Saddle Riveting",
-        "edgeFinish": "Natural Wax Beveled Edges",
-        "reachCompliant": true,
-        "lwgCertification": "LWG Audited Supply Chain"
+        "composition": "Fine-Wale Cotton Corduroy with Chestnut Cowhide Leather Accents",
+        "gsm": 340,
+        "weaveType": "Ribbed Corduroy Cut-Pile & Full-Grain Leather Trim",
+        "dyeStandard": "Azo-Free Eco Reactive Dye & Chromium-Free Tannage",
+        "shrinkageLimit": "< 2%"
       }
     },
     "complianceCertificates": [
