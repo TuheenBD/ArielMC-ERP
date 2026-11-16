@@ -1068,7 +1068,7 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
     minimumOrderQuantity: 50,
     paymentTerms: '30% Advance | 70% LC / Clean B/L',
     crmStatus: 'Active Studio Partner • Made in Bangladesh Patriotism & Green Sourcing.',
-    lastInteractionMemo: 'Enlisted for Siofra Velvety Forest Cashmere Canvas & Suede shoulder tote (LD-SCB-08). Dedicated to local wisdom, environment, green and locally sourced materials.',
+    lastInteractionMemo: 'Enlisted for Siofra Velvety Forest Tote (LD-SCB-08) and Talisman Graphite Black Field Messenger (LD-SCB-09). Dedicated to local wisdom, environment, green and locally sourced materials.',
     sourcingDeedVerified: true,
     clause3IncentiveWaiverSigned: true,
     bankDetails: {
@@ -1079,6 +1079,7 @@ export const INITIAL_FACTORIES: SupplierFactory[] = [
     },
     associatedSkus: [
       'LD-SCB-08',
+      'LD-SCB-09',
     ],
   },
 ];

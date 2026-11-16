@@ -8983,4 +8983,142 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     ],
     "createdDate": "2026-11-16"
   },
+  {
+    "id": "prod-ld-scb-09",
+    "sku": "LD-SCB-09",
+    "roadmapCode": "LD-SCB-09",
+    "prodtId": 84,
+    "styleCode": "SCB",
+    "eanBarcode": "0538920190084",
+    "name": "The Talisman Graphite Black Bonded Canvas & Leather Field Messenger",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Structured Carry & Bags",
+    "subCategory": "Bonded Canvas, Tweed & Leather Messenger Bags",
+    "hsCode": "4202.12.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Vintage-inspired urban field messenger crafted in up-cycled Sepia-toned graphite tweed canvas bonded outer with heavy cotton twill inner lining. Accented with vegetable-tanned leather straps, front flap harnesses, welt trim, and leather shoulder pad. Features dedicated padded laptop compartment, internal organizer chambers, front slip pocket under flap, rear document pocket with magnetic brass snap, and antique brass roller buckles.",
+    "unit": "PCS",
+    "dimensions": "380 x 305 x 76 mm (15\" x 12\" x 3\")",
+    "weightKg": 1.15,
+    "tags": [
+      "Leather",
+      "Structured Carry & Bags",
+      "MIB Spirit",
+      "Bonded Canvas",
+      "Messenger",
+      "Laptop Chamber",
+      "Up-cycled Tweed",
+      "Antique Brass",
+      "Export Verified",
+      "ArielMC Certified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 2500,
+      "factoryCostUsd": 20.00,
+      "initialFactoryAskingCostBdt": 3150,
+      "initialFactoryAskingCostUsd": 25.20,
+      "negotiatedSavingsBdt": 650,
+      "negotiatedSavingsUsd": 5.20,
+      "exportPackagingUsd": 0.50,
+      "inlandFreightPortUsd": 0.35,
+      "qualityInspectionReserveUsd": 0.25,
+      "complianceOverheadReserveUsd": 0.25,
+      "totalLandedCostUsd": 21.35,
+      "arielSourcingMarginPct": 33.3,
+      "b2bFobPriceUsd": 32.00,
+      "d2cRetailPriceUsd": 115.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 3.04,
+      "totalEnterpriseMarginPct": 42.8
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 32.00,
+        "marginPct": 33.3
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 29.50,
+        "marginPct": 27.6
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 27.20,
+        "marginPct": 21.5
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-MIB-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (MIB Spirit & ArielMC)",
+      "signedMouDate": "2026-03-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 98,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-MIB-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Green Craft & Sourcing Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-SCB-09-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-SCB-09-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 7
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Vegetable-Tanned Cowhide Straps, Welt Pockets & Shoulder Pad",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Dhaka LWG Tannery Hub & Local Sourcing",
+        "thicknessMm": "2.0 - 2.2 mm (Straps & Harnesses)",
+        "fabricOuter": "Up-cycled Sepia-Toned Graphite Tweed Canvas Bonded",
+        "fabricInner": "Heavy Cotton Twill Lining",
+        "hardwareFinish": "Solid Antique Brass Roller Buckles, Studs & Magnetic Snap Closures",
+        "edgeFinish": "Hand-Burnished Natural Wax Edges",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Leather Trims"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Green Sourcing & Up-cycled Tweed Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_mib_01",
+      "factoryCode": "FAC-MIB-01",
+      "factoryName": "MIB Spirit",
+      "contactPerson": "Studio Operations & Sourcing Lead",
+      "contactPhone": "+880 1403-001291",
+      "contactEmail": "inbangladesh1971@gmail.com",
+      "location": "Lalmatia & Gulshan Studio Hub, Dhaka, Bangladesh",
+      "leadTimeDays": 28,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 45,
+      "samplePackingUsd": 10,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.90
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-scb-09.jpg",
+      "/images/products/leather/ld-scb-09-studio-front.jpg",
+      "/images/products/leather/ld-scb-09-side.jpg",
+      "/images/products/leather/ld-scb-09-back.jpg",
+      "/images/products/leather/ld-scb-09-detail-pocket.jpg",
+      "/images/products/leather/ld-scb-09-interior-chamber.jpg",
+      "/images/products/leather/ld-scb-09-interior-top.jpg"
+    ],
+    "createdDate": "2026-11-16"
+  },
 ];
