@@ -8849,4 +8849,138 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     ],
     "createdDate": "2026-11-06"
   },
+  {
+    "id": "prod-ld-scb-08",
+    "sku": "LD-SCB-08",
+    "roadmapCode": "LD-SCB-08",
+    "prodtId": 83,
+    "styleCode": "SCB",
+    "eanBarcode": "0538920190083",
+    "name": "The Siofra Velvety Forest Cashmere Canvas & Suede Shoulder Tote",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Structured Carry & Bags",
+    "subCategory": "Artisan Canvas, Suede & Leather Shoulder Totes",
+    "hsCode": "4202.12.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Handcrafted shoulder tote featuring velvety forest green suede and heavy cashmere canvas body, adjustable vegetable-tanned tan leather straps, front slip pocket with leather brand patch, exterior rear zippered compartment, custom antique brass hardware with leather medallion & tassel charm, and reinforced dual interior drop-in and zippered pockets.",
+    "unit": "PCS",
+    "dimensions": "355 x 280 x 115 mm",
+    "weightKg": 0.85,
+    "tags": [
+      "Leather",
+      "Structured Carry & Bags",
+      "MIB Spirit",
+      "Velvety Suede",
+      "Cashmere Canvas",
+      "Export Verified",
+      "ArielMC Certified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 1750,
+      "factoryCostUsd": 14.00,
+      "initialFactoryAskingCostBdt": 2200,
+      "initialFactoryAskingCostUsd": 17.60,
+      "negotiatedSavingsBdt": 450,
+      "negotiatedSavingsUsd": 3.60,
+      "exportPackagingUsd": 0.35,
+      "inlandFreightPortUsd": 0.25,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 14.90,
+      "arielSourcingMarginPct": 33.8,
+      "b2bFobPriceUsd": 22.50,
+      "d2cRetailPriceUsd": 79.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 2.14,
+      "totalEnterpriseMarginPct": 43.3
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 22.50,
+        "marginPct": 33.8
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 20.50,
+        "marginPct": 27.3
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 18.90,
+        "marginPct": 21.2
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-MIB-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (MIB Spirit & ArielMC)",
+      "signedMouDate": "2026-03-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 98,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-MIB-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Green Craft & Sourcing Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-SCB-08-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-SCB-08-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 8
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Full-Grain Tan Cowhide Straps & Welts",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Dhaka LWG Tannery Hub & Local Sourcing",
+        "thicknessMm": "1.8 - 2.0 mm (Straps & Trims)",
+        "hardwareFinish": "Solid Antique Brass Buckles, Zippers & Charm Ring",
+        "edgeFinish": "Hand-Burnished Natural Wax Edges",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Leather Trims"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Green Sourcing Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_mib_01",
+      "factoryCode": "FAC-MIB-01",
+      "factoryName": "MIB Spirit",
+      "contactPerson": "Studio Operations & Sourcing Lead",
+      "contactPhone": "+880 1403-001291",
+      "contactEmail": "inbangladesh1971@gmail.com",
+      "location": "Lalmatia & Gulshan Studio Hub, Dhaka, Bangladesh",
+      "leadTimeDays": 28,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 35,
+      "samplePackingUsd": 10,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.90
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-scb-08.jpg",
+      "/images/products/leather/ld-scb-08-studio-front.jpg",
+      "/images/products/leather/ld-scb-08-back.jpg",
+      "/images/products/leather/ld-scb-08-detail-zipper.jpg",
+      "/images/products/leather/ld-scb-08-side.jpg",
+      "/images/products/leather/ld-scb-08-3-4.jpg",
+      "/images/products/leather/ld-scb-08-interior-slip.jpg",
+      "/images/products/leather/ld-scb-08-interior-zip.jpg"
+    ],
+    "createdDate": "2026-11-16"
+  },
 ];
