@@ -9071,7 +9071,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "factoryAuditReportName": "ArielMC Artisan Green Craft & Sourcing Audit",
       "studioPhotoZipUrl": "/assets/studio/LD-SCB-09-Studio-HiRes.zip",
       "studioPhotoZipName": "LD-SCB-09-Studio-300DPI-Pack.zip",
-      "highResPhotoCount": 7
+      "highResPhotoCount": 6
     },
     "attributes": {
       "sector": "LEATHER",
@@ -9112,7 +9112,6 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "sampleStatus": "BUYER_APPROVED",
     "images": [
       "/images/products/leather/ld-scb-09.jpg",
-      "/images/products/leather/ld-scb-09-studio-front.jpg",
       "/images/products/leather/ld-scb-09-side.jpg",
       "/images/products/leather/ld-scb-09-back.jpg",
       "/images/products/leather/ld-scb-09-detail-pocket.jpg",
