@@ -9120,4 +9120,137 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     ],
     "createdDate": "2026-11-16"
   },
+  {
+    "id": "prod-ld-sna-01",
+    "sku": "LD-SNA-01",
+    "roadmapCode": "LD-SNA-01",
+    "prodtId": 85,
+    "styleCode": "SNA",
+    "eanBarcode": "0538920190085",
+    "name": "The Siena Pebble Tassel Bifold Wallet",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Wallets & Small Leather Goods",
+    "subCategory": "Pebbled Leather Bifold Wallets & Tassel Coin Purses",
+    "hsCode": "4202.31.00",
+    "packagingMode": "Rigid Boutique Gift Box & Cloth Dust Pouch",
+    "description": "Effortlessly refined and perfectly proportioned for on-the-go elegance, The Siena Pebble Tassel Bifold transitions seamlessly from daytime errands to evening escapes. Crafted from supple, richly grained pebbled leather in a warm terracotta-rose hue, this palm-sized wallet is defined by its soft crescent-curved flap and fluid, hand-cut leather tassel. Compact enough to slip into a clutch or carry solo in hand, its thoughtfully structured interior keeps daily essentials neatly organized without added bulk. Inside, you will find six dedicated card slots, a full-length lined billfold compartment, and a discreet side-zip section for coins or small valuables. Finished with precision tonal stitching and clean edges, it offers boutique retailers and corporate gifting curators an accessible piece of everyday luxury.",
+    "unit": "PCS",
+    "dimensions": "110 x 95 x 22 mm (closed) / 190 x 110 x 12 mm (open)",
+    "weightKg": 0.13,
+    "tags": [
+      "Leather",
+      "Wallets & Small Leather Goods",
+      "MIB Spirit",
+      "Pebbled Leather",
+      "Terracotta Rose",
+      "Bifold",
+      "Tassel Pull",
+      "Export Verified",
+      "ArielMC Certified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 750,
+      "factoryCostUsd": 6.00,
+      "initialFactoryAskingCostBdt": 950,
+      "initialFactoryAskingCostUsd": 7.60,
+      "negotiatedSavingsBdt": 200,
+      "negotiatedSavingsUsd": 1.60,
+      "exportPackagingUsd": 0.30,
+      "inlandFreightPortUsd": 0.15,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.10,
+      "totalLandedCostUsd": 6.70,
+      "arielSourcingMarginPct": 31.6,
+      "b2bFobPriceUsd": 9.80,
+      "d2cRetailPriceUsd": 38.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 0.93,
+      "totalEnterpriseMarginPct": 41.1
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 100 - 250 pcs)",
+        "moqRange": "100 - 250 pcs",
+        "fobPriceUsd": 9.80,
+        "marginPct": 31.6
+      },
+      {
+        "slabName": "Wholesale Tier 2 (251 - 500 pcs)",
+        "moqRange": "251 - 500 pcs",
+        "fobPriceUsd": 8.90,
+        "marginPct": 24.7
+      },
+      {
+        "slabName": "FCL Bulk Volume (501+ pcs)",
+        "moqRange": "501+ pcs",
+        "fobPriceUsd": 7.95,
+        "marginPct": 15.7
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-MIB-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (MIB Spirit & ArielMC)",
+      "signedMouDate": "2026-03-01",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 98,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-MIB-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Green Craft & Sourcing Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-SNA-01-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-SNA-01-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 4
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Full-Grain Pebbled Cowhide in Terracotta-Rose Hue",
+        "tanningMethod": "Chrome-Free Semi-Vegetable Tanned",
+        "hideOrigin": "Dhaka LWG Tannery Hub & Local Sourcing",
+        "thicknessMm": "1.2 - 1.4 mm (Supple Pebbled Hide)",
+        "lining": "Soft Yarn-Dyed Cotton Twill",
+        "hardwareFinish": "Solid Antique Brass Side Zipper & Tassel Ring",
+        "edgeFinish": "Hand-Inked & Burnished Tonal Edges",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Leather Trims"
+      }
+    },
+    "complianceCertificates": [
+      "BSCIC Artisan Guild Certified",
+      "Chromium-VI Free",
+      "Ethical Green Sourcing Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_mib_01",
+      "factoryCode": "FAC-MIB-01",
+      "factoryName": "MIB Spirit",
+      "contactPerson": "Studio Operations & Sourcing Lead",
+      "contactPhone": "+880 1403-001291",
+      "contactEmail": "inbangladesh1971@gmail.com",
+      "location": "Lalmatia & Gulshan Studio Hub, Dhaka, Bangladesh",
+      "leadTimeDays": 21,
+      "moq": 100,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 25,
+      "samplePackingUsd": 8,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.90
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-sna-01.jpg",
+      "/images/products/leather/ld-sna-01-lifestyle.jpg",
+      "/images/products/leather/ld-sna-01-interior.jpg",
+      "/images/products/leather/ld-sna-01-flatlay.jpg"
+    ],
+    "createdDate": "2026-11-16"
+  },
 ];
