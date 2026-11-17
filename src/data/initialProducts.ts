@@ -8600,6 +8600,140 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "createdDate": "2026-11-17"
   },
   {
+    "id": "prod-ld-hlb-23",
+    "sku": "LD-HLB-23",
+    "roadmapCode": "LD-IZM-01",
+    "prodtId": 81,
+    "styleCode": "HLB",
+    "eanBarcode": "0538920190081",
+    "name": "The Izumi Crossbody Satchel – Velvety Forest",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Handcrafted Leather Bags",
+    "subCategory": "Handcrafted Leather & Fusion Bags",
+    "hsCode": "4202.22.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Designed for effortless everyday sophistication, the Izumi Crossbody Satchel combines minimalist charm with practical functionality. Crafted in a rich, velvety forest green textile and accented with warm brown leather-finish details, its structured curved flap, subtle metallic brand plaque, and signature artisanal tassel charm make it an ideal companion for errands, casual outings, or hands-free city travel.",
+    "unit": "PCS",
+    "dimensions": "230 x 150 x 65 mm",
+    "weightKg": 0.42,
+    "tags": [
+      "Leather",
+      "Fusion Bags",
+      "MIB Spirit",
+      "Velvety Forest",
+      "Crossbody Satchel",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 1200,
+      "factoryCostUsd": 9.88,
+      "initialFactoryAskingCostBdt": 2475,
+      "initialFactoryAskingCostUsd": 20.37,
+      "negotiatedSavingsBdt": 1275,
+      "negotiatedSavingsUsd": 10.49,
+      "exportPackagingUsd": 0.25,
+      "inlandFreightPortUsd": 0.15,
+      "qualityInspectionReserveUsd": 0.10,
+      "complianceOverheadReserveUsd": 0.10,
+      "totalLandedCostUsd": 10.48,
+      "arielSourcingMarginPct": 32.38,
+      "b2bFobPriceUsd": 15.50,
+      "d2cRetailPriceUsd": 65.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 1.47,
+      "totalEnterpriseMarginPct": 41.88
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 15.50,
+        "marginPct": 32.4
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 14.25,
+        "marginPct": 26.5
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 13.50,
+        "marginPct": 22.4
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-MIB-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (MIB Spirit & ArielMC)",
+      "signedMouDate": "2026-03-15",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 96,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-MIB-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Guild & Ethical Labor Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-HLB-23-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-HLB-23-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 8
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Velvety Woven Textile & Bovine Leather Trim",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Savar & Dhaka Artisan Hub",
+        "thicknessMm": "1.2 - 1.4 mm leather accents",
+        "hardwareFinish": "Antique Brass & Polished Metal Brand Plaque",
+        "edgeFinish": "Tonal Clean Inking with Contrast Chocolate Stitching",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "LWG Audited Tannery Trim",
+      "UK REACH Annex XVII Compliant",
+      "Chromium-VI Free (<3 mg/kg)",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_05",
+      "factoryCode": "FAC-MIB-01",
+      "factoryName": "MIB Spirit Studio • Made in Bangladesh",
+      "contactPerson": "Lead Artisan & Studio Director",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "info@arielmc.com",
+      "location": "Lalmatia & Savar Craft Clusters, Dhaka, Bangladesh",
+      "leadTimeDays": 21,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 10,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.90
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-hlb-23.jpg",
+      "/images/products/leather/ld-hlb-23-studio.jpg",
+      "/images/products/leather/ld-hlb-23-side.jpg",
+      "/images/products/leather/ld-hlb-23-flap.jpg",
+      "/images/products/leather/ld-hlb-23-strap.jpg",
+      "/images/products/leather/ld-hlb-23-detail.jpg",
+      "/images/products/leather/ld-hlb-23-back.jpg",
+      "/images/products/leather/ld-hlb-23-interior.jpg"
+    ],
+    "createdDate": "2026-11-17"
+  },
+  {
     "id": "prod-tx-ctb-04",
     "sku": "TX-CTB-04-AMC",
     "roadmapCode": "LD-HKR-02",
