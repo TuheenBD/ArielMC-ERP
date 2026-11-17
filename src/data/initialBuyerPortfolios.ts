@@ -796,4 +796,124 @@ export const INITIAL_BUYER_PORTFOLIOS: BuyerPortfolio[] = [
     ],
     internalMerchandisingNotes: 'Pay strict attention to seasonal inversion (shipping opposite to Northern Hemisphere seasons).',
   },
+  // 6. TAGWISE SHOP (EU / Germany Station - Prospect in Development)
+  {
+    id: 'bp-tagwise-06',
+    buyerCompany: 'Tagwise Shop',
+    brandCode: 'TAGWISE-DE',
+    marketStation: 'EU',
+    accountStatus: 'PROSPECT_IN_DEVELOPMENT',
+    lastUpdated: '2026-11-17',
+    websiteUrl: 'https://tagwise.shop',
+    crmStatus: 'Inquiry Received • ArielMC SOP-B2B-SMP-2026-V1 Dispatched • Awaiting SKU Selection & Corporate Tax ID',
+    lastInteractionMemo: 'Inbound email from Wolfgang Lütscher (tagwise.shop@gmail.com) requesting complimentary samples and wholesale export catalog for Germany. Official response dispatched enforcing SOP-B2B-SMP-2026-V1 (samples billed upfront, 100% credited against 1st bulk PO). Consignee address: Pia Göring, Idastr. 4, 46284 Dorsten, Germany.',
+    commercialPaymentTerms: 'Commercial Samples: 100% Advance (Credited on 1st Bulk PO). Bulk Orders: 50% Advance, 50% Against B/L Copy.',
+    courierImportAccount: {
+      carrier: 'DHL Express',
+      accountNumber: 'PENDING_BUYER_NOMINATION',
+      routingCode: 'DUS-EXP-01',
+    },
+
+    // Pillar E: Business Portfolio
+    businessPortfolio: {
+      legalEntityName: 'Tagwise Shop',
+      tradeName: 'Tagwise Shop (Germany)',
+      country: 'Germany',
+      headquarters: 'Idastr. 4, 46284 Dorsten, Germany',
+      establishedYear: 2024,
+      annualCorporateTurnoverUsd: 'Under Evaluation (~$250k–$500k USD)',
+      storeCount: 1,
+      eCommerceChannels: ['tagwise.shop', 'European Online Marketplaces'],
+      tierClassification: 'Boutique Lifestyle Chain',
+      keyDecisionMakers: [
+        {
+          name: 'Wolfgang Lütscher',
+          designation: 'Commercial Buyer / Sourcing Manager',
+          email: 'tagwise.shop@gmail.com',
+          phone: '',
+          decisionScope: 'Product Selection, Sampling Review & Price Negotiation',
+        },
+        {
+          name: 'Pia Göring',
+          designation: 'Consignee / Logistics Recipient',
+          email: 'tagwise.shop@gmail.com',
+          phone: '',
+          decisionScope: 'Sample Delivery Acceptance & Local German Customs Clearance',
+        },
+      ],
+      primaryStationBranch: 'EU',
+    },
+
+    // Pillar A: Current Products, Pictures & Sales Price
+    currentProducts: [],
+
+    // Pillar B: Buyer Interest Points
+    interestPoints: {
+      preferredMaterials: [
+        'Natural Full-Grain Cowhide Leather',
+        'Natural Golden Jute & Organic Canvas',
+        'Lead-Free Artisanal Terracotta & Glazed Ceramics',
+      ],
+      sustainabilityMandates: [
+        'EU REACH Annex XVII Chemical Safety Compliance',
+        'Zero Hazardous Azo Dyes & Chromium VI (< 3 ppm)',
+        'FSC Certified Recycled Packaging',
+      ],
+      qualityStandardsAql: 'Standard Export AQL 2.5 Major / 4.0 Minor.',
+      packagingAndBranding: 'Standard protective export packaging; custom private labelling available upon MOQ qualification.',
+      designAesthetic: 'Contemporary European minimalism with authentic natural textures.',
+      targetLeadTimeWeeks: 6,
+      priceSensitivity: 'VOLUME_SENSITIVE',
+      specialRequirementsNotes: 'Buyer inquired regarding complimentary sampling. Enforced SOP-B2B-SMP-2026-V1 policy requiring upfront sample fee fully deductible against initial bulk PO.',
+    },
+
+    // Pillar C: Future Reach Planning
+    futureReachPlanning: [
+      {
+        id: 'fut-tag-01',
+        seasonOrQuarter: 'Q1 / Q2 2027 European Boutique Assortment',
+        targetCategory: 'Artisan Leather Small Goods, Canvas Totes & Jute Décor',
+        projectedVolumeUnits: 500,
+        targetWholesaleFobUsd: 15.0,
+        targetRetailSalesPrice: 45.0,
+        samplingTargetDate: '2026-12-05',
+        shelfLaunchDate: '2027-03-01',
+        developmentStage: 'CONCEPT',
+        strategicObjective: 'Convert initial German inquiry into recurring boutique wholesale account under ArielMC EU Station.',
+      },
+    ],
+
+    // Pillar D: Financial Portfolio
+    financialPortfolio: {
+      approvedCreditLimitUsd: 0,
+      paymentTerms: '100% Advance Wire for Samples / 50% Advance Wire for Bulk Orders',
+      creditRiskRating: 'BBB Watchlist',
+      lifetimeGmvUsd: 0,
+      ytdRevenueUsd: 0,
+      outstandingReceivablesUsd: 0,
+      overdueAmountUsd: 0,
+      advisingIssuingBank: 'European Retail Bank (Germany)',
+      swiftBic: 'PENDING_VERIFICATION',
+      preferredTradeCurrency: 'EUR',
+      paymentPunctualityScorePct: 100.0,
+    },
+
+    // Additional Dimensions:
+    competitiveIntelligence: {
+      shareOfWalletPct: 0,
+      primaryAlternativeSourcingHubs: ['Guangzhou (China)', 'Pakistan', 'Local German Wholesalers'],
+      strategicAdvantageOverCompetitors: 'ArielMC provides certified ethical manufacturing, zero child labor, direct DHL Express door-to-door transit, and 100% sample fee refund on first order.',
+    },
+    interactionLogs: [
+      {
+        id: 'log-tag-01',
+        date: '2026-11-17',
+        type: 'CONTRACT_NEGOTIATION',
+        summary: 'Inbound inquiry received from Wolfgang Lütscher for complimentary samples. Sent official institutional reply outlining SOP-B2B-SMP-2026-V1, requesting company registration, VAT ID, and target SKU selection.',
+        attendedBy: 'ArielMC Commercial Sourcing Desk (info@arielmc.com)',
+        nextFollowUpDate: '2026-11-20',
+      },
+    ],
+    internalMerchandisingNotes: 'High-risk sample hunter pattern detected (generic request for free samples + free air shipping). Must ensure sample charges and courier costs (~€45–€55) are collected prior to physical dispatch, with full credit applied against qualifying bulk PO.',
+  }
 ];
