@@ -9520,4 +9520,139 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     ],
     "createdDate": "2026-11-16"
   },
+  {
+    "id": "prod-ld-scb-10",
+    "sku": "LD-SCB-10",
+    "roadmapCode": "LD-HYM-01",
+    "prodtId": 86,
+    "styleCode": "SCB",
+    "eanBarcode": "0538920190086",
+    "name": "The Hiyami Compact Everyday Backpack – Velvety Forest",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Structured Carry & Bags",
+    "subCategory": "Structured Carry & Bags",
+    "hsCode": "4202.92.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Designed around the philosophy of carrying only what matters, the Hiyami Compact Backpack delivers effortless organization in a sleek, rounded silhouette. Crafted from a soft, velvety forest-green textile with rich chocolate-brown leather trim, this lightweight everyday carry features a smooth wrap-around zipper, braided tassel pull, and subtle embossed logo patch. Fitted with adjustable slim shoulder straps and a sturdy top grab handle for hands-free urban versatility.",
+    "unit": "PCS",
+    "dimensions": "280 x 254 x 102 mm (11\" x 10\" x 4\")",
+    "weightKg": 0.58,
+    "tags": [
+      "Leather",
+      "Structured Carry & Bags",
+      "Backpack",
+      "Velvety Forest",
+      "Artisan Crafted",
+      "Made in Bangladesh",
+      "ArielMC Certified",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 1400,
+      "factoryCostUsd": 11.67,
+      "initialFactoryAskingCostBdt": 1650,
+      "initialFactoryAskingCostUsd": 13.75,
+      "negotiatedSavingsBdt": 250,
+      "negotiatedSavingsUsd": 2.08,
+      "exportPackagingUsd": 0.55,
+      "inlandFreightPortUsd": 0.35,
+      "qualityInspectionReserveUsd": 0.30,
+      "complianceOverheadReserveUsd": 0.25,
+      "totalLandedCostUsd": 13.12,
+      "arielSourcingMarginPct": 39.0,
+      "b2bFobPriceUsd": 21.50,
+      "d2cRetailPriceUsd": 78.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 2.04,
+      "totalEnterpriseMarginPct": 48.5
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 21.50,
+        "marginPct": 39.0
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 19.80,
+        "marginPct": 33.7
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 18.20,
+        "marginPct": 27.9
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-MIB-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (MIB Spirit & ArielMC)",
+      "signedMouDate": "2026-03-15",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 96,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-MIB-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Guild & Ethical Labor Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-SCB-10-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-SCB-10-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 5
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Velvety Woven Textile & Bovine Leatherette/Leather Trim",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Savar & Dhaka Artisan Hub",
+        "thicknessMm": "1.4 - 1.6 mm leather trim",
+        "fabricOuter": "Soft Velvety Woven Microfiber Shell",
+        "fabricInner": "Yarn-Dyed Heavy Cotton Twill",
+        "hardwareFinish": "Antique Brass Wrap-Around Zipper & Metal Emblem Patch",
+        "edgeFinish": "Clean Tonal Inking with Contrast Chocolate Stitching",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "LWG Audited Tannery Trim",
+      "UK REACH Annex XVII Compliant",
+      "Chromium-VI Free (<3 mg/kg)",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_05",
+      "factoryCode": "FAC-MIB-01",
+      "factoryName": "MIB Spirit Studio • Made in Bangladesh",
+      "contactPerson": "Lead Artisan & Studio Director",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "info@arielmc.com",
+      "location": "Lalmatia & Savar Craft Clusters, Dhaka, Bangladesh",
+      "leadTimeDays": 28,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 45,
+      "samplePackingUsd": 10,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.90
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-scb-10.jpg",
+      "/images/products/leather/ld-scb-10-studio.jpg",
+      "/images/products/leather/ld-scb-10-side.jpg",
+      "/images/products/leather/ld-scb-10-handle.jpg",
+      "/images/products/leather/ld-scb-10-straps.jpg"
+    ],
+    "createdDate": "2026-11-17"
+  },
 ];
