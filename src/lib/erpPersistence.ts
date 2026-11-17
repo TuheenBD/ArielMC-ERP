@@ -103,13 +103,26 @@ export const fetchProducts = async (): Promise<ProductItem[]> => {
     }
   }
 
-  // LocalStorage / Seed Fallback
+  // LocalStorage / Seed Fallback with Auto-Merge for Newly Seeded SKUs
   if (typeof window !== 'undefined') {
     try {
       const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.PRODUCTS);
       if (cached) {
         const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const existingSkus = new Set(parsed.map((p: any) => p.sku));
+          let hasNewSeed = false;
+          for (const initProd of INITIAL_PRODUCTS) {
+            if (!existingSkus.has(initProd.sku)) {
+              parsed.push(initProd);
+              hasNewSeed = true;
+            }
+          }
+          if (hasNewSeed) {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.PRODUCTS, JSON.stringify(parsed));
+          }
+          return parsed;
+        }
       }
     } catch {}
   }

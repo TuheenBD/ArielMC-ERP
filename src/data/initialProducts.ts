@@ -8467,6 +8467,139 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "createdDate": "2026-11-06"
   },
   {
+    "id": "prod-ld-hlb-22",
+    "sku": "LD-HLB-22",
+    "roadmapCode": "LD-LPE-01",
+    "prodtId": 80,
+    "styleCode": "HLB",
+    "eanBarcode": "0538920190080",
+    "name": "The Loopé Pebbled Leather Shoulder Bag – Pine Green",
+    "sector": "LEATHER",
+    "category": "01 The Leather Compendium / Handcrafted Leather Bags",
+    "subCategory": "Pebbled Leather Shoulder Bags & Satchels",
+    "hsCode": "4202.21.00",
+    "packagingMode": "Standard Export Carton & Cloth Dustbag",
+    "description": "Effortlessly blending structured utility with everyday elegance, the Loopé Shoulder Bag is crafted from supple, full-grain pebbled leather in a rich pine green finish. Designed with soft, curved contours and refined artisanal detailing, its signature leather tassel charm and clean exterior slip pocket offer a balance of understated sophistication and practical access.",
+    "unit": "PCS",
+    "dimensions": "280 x 230 x 90 mm",
+    "weightKg": 0.68,
+    "tags": [
+      "Leather",
+      "Handcrafted Leather Bags",
+      "MIB Spirit",
+      "Pebbled Cowhide",
+      "Shoulder Bag",
+      "Export Verified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 2900,
+      "factoryCostUsd": 23.87,
+      "initialFactoryAskingCostBdt": 6450,
+      "initialFactoryAskingCostUsd": 53.09,
+      "negotiatedSavingsBdt": 3550,
+      "negotiatedSavingsUsd": 29.22,
+      "exportPackagingUsd": 0.35,
+      "inlandFreightPortUsd": 0.20,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 24.72,
+      "arielSourcingMarginPct": 3.16,
+      "b2bFobPriceUsd": 25.50,
+      "d2cRetailPriceUsd": 115.00,
+      "incentiveCategory": "CRUST_LEATHER_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 2.42,
+      "totalEnterpriseMarginPct": 12.66
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
+        "moqRange": "50 - 100 pcs",
+        "fobPriceUsd": 25.50,
+        "marginPct": 22.5
+      },
+      {
+        "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
+        "moqRange": "101 - 250 pcs",
+        "fobPriceUsd": 23.80,
+        "marginPct": 18.2
+      },
+      {
+        "slabName": "FCL Bulk Volume (251+ pcs)",
+        "moqRange": "251+ pcs",
+        "fobPriceUsd": 22.50,
+        "marginPct": 15.0
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-MIB-01-2026.pdf",
+      "signedMouName": "Deed of Sourcing Agreement (MIB Spirit & ArielMC)",
+      "signedMouDate": "2026-03-15",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 96,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-MIB-01-2026.pdf",
+      "factoryAuditReportName": "ArielMC Artisan Guild & Ethical Labor Audit",
+      "studioPhotoZipUrl": "/assets/studio/LD-HLB-22-Studio-HiRes.zip",
+      "studioPhotoZipName": "LD-HLB-22-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 7
+    },
+    "attributes": {
+      "sector": "LEATHER",
+      "data": {
+        "leatherType": "Pine Green Full-Grain Pebbled Cowhide",
+        "tanningMethod": "Vegetable-Tanned & Chromium-VI Free",
+        "hideOrigin": "Savar LWG Tannery Hub",
+        "thicknessMm": "1.4 - 1.6 mm",
+        "hardwareFinish": "Antique Brass Tone Zippers & Metal Hardware",
+        "edgeFinish": "Tonal Edge Finishing with Knotted Strap Anchors",
+        "reachCompliant": true,
+        "lwgCertification": "LWG Audited Supply Chain"
+      }
+    },
+    "complianceCertificates": [
+      "LWG Audited Tannery",
+      "UK REACH Annex XVII Compliant",
+      "Chromium-VI Free (<3 mg/kg)",
+      "Ethical Craft Verified"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_lth_05",
+      "factoryCode": "FAC-MIB-01",
+      "factoryName": "MIB Spirit Studio • Made in Bangladesh",
+      "contactPerson": "Lead Artisan & Studio Director",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "info@arielmc.com",
+      "location": "Lalmatia & Savar Craft Clusters, Dhaka, Bangladesh",
+      "leadTimeDays": 28,
+      "moq": 50,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 50,
+      "samplePackingUsd": 15,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.90
+    },
+    "sampleStatus": "BUYER_APPROVED",
+    "images": [
+      "/images/products/leather/ld-hlb-22.jpg",
+      "/images/products/leather/ld-hlb-22-studio.jpg",
+      "/images/products/leather/ld-hlb-22-side.jpg",
+      "/images/products/leather/ld-hlb-22-strap.jpg",
+      "/images/products/leather/ld-hlb-22-back.jpg",
+      "/images/products/leather/ld-hlb-22-detail.jpg",
+      "/images/products/leather/ld-hlb-22-interior.jpg"
+    ],
+    "createdDate": "2026-11-17"
+  },
+  {
     "id": "prod-tx-ctb-04",
     "sku": "TX-CTB-04-AMC",
     "roadmapCode": "LD-HKR-02",
