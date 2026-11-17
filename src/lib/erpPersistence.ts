@@ -103,25 +103,31 @@ export const fetchProducts = async (): Promise<ProductItem[]> => {
     }
   }
 
-  // LocalStorage / Seed Fallback with Auto-Merge for Newly Seeded SKUs
+  // LocalStorage / Seed Fallback with Auto-Deduplication & Auto-Merge
   if (typeof window !== 'undefined') {
     try {
       const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.PRODUCTS);
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          const existingSkus = new Set(parsed.map((p: any) => p.sku));
-          let hasNewSeed = false;
-          for (const initProd of INITIAL_PRODUCTS) {
-            if (!existingSkus.has(initProd.sku)) {
-              parsed.push(initProd);
-              hasNewSeed = true;
+          const uniqueMap = new Map<string, ProductItem>();
+          for (const item of parsed) {
+            if (item && item.sku && !uniqueMap.has(item.sku)) {
+              uniqueMap.set(item.sku, item);
             }
           }
-          if (hasNewSeed) {
-            localStorage.setItem(LOCAL_STORAGE_KEYS.PRODUCTS, JSON.stringify(parsed));
+          let hasChange = uniqueMap.size !== parsed.length;
+          for (const initProd of INITIAL_PRODUCTS) {
+            if (!uniqueMap.has(initProd.sku)) {
+              uniqueMap.set(initProd.sku, initProd);
+              hasChange = true;
+            }
           }
-          return parsed;
+          const deduplicated = Array.from(uniqueMap.values());
+          if (hasChange) {
+            localStorage.setItem(LOCAL_STORAGE_KEYS.PRODUCTS, JSON.stringify(deduplicated));
+          }
+          return deduplicated;
         }
       }
     } catch {}
