@@ -8632,44 +8632,44 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     ],
     "costing": {
       "factoryCostBdt": 1200,
-      "factoryCostUsd": 9.88,
+      "factoryCostUsd": 10.00,
       "initialFactoryAskingCostBdt": 2475,
-      "initialFactoryAskingCostUsd": 20.37,
+      "initialFactoryAskingCostUsd": 20.63,
       "negotiatedSavingsBdt": 1275,
-      "negotiatedSavingsUsd": 10.49,
-      "exportPackagingUsd": 0.25,
-      "inlandFreightPortUsd": 0.15,
-      "qualityInspectionReserveUsd": 0.10,
-      "complianceOverheadReserveUsd": 0.10,
-      "totalLandedCostUsd": 10.48,
-      "arielSourcingMarginPct": 32.38,
-      "b2bFobPriceUsd": 15.50,
-      "d2cRetailPriceUsd": 65.00,
+      "negotiatedSavingsUsd": 10.63,
+      "exportPackagingUsd": 0.75,
+      "inlandFreightPortUsd": 0.85,
+      "qualityInspectionReserveUsd": 1.20,
+      "complianceOverheadReserveUsd": 0.65,
+      "totalLandedCostUsd": 13.45,
+      "arielSourcingMarginPct": 34.4,
+      "b2bFobPriceUsd": 20.50,
+      "d2cRetailPriceUsd": 72.00,
       "incentiveCategory": "CRUST_LEATHER_10",
       "incentiveRatePct": 10,
       "sourceTaxRatePct": 5,
       "netIncentivePct": 9.5,
-      "netIncentiveUsd": 1.47,
-      "totalEnterpriseMarginPct": 41.88
+      "netIncentiveUsd": 1.95,
+      "totalEnterpriseMarginPct": 43.9
     },
     "volumePricingSlabs": [
       {
         "slabName": "Pilot Run (MOQ 50 - 100 pcs)",
         "moqRange": "50 - 100 pcs",
-        "fobPriceUsd": 15.50,
-        "marginPct": 32.4
+        "fobPriceUsd": 20.50,
+        "marginPct": 34.4
       },
       {
         "slabName": "Wholesale Tier 2 (101 - 250 pcs)",
         "moqRange": "101 - 250 pcs",
-        "fobPriceUsd": 14.25,
-        "marginPct": 26.5
+        "fobPriceUsd": 18.80,
+        "marginPct": 28.5
       },
       {
         "slabName": "FCL Bulk Volume (251+ pcs)",
         "moqRange": "251+ pcs",
-        "fobPriceUsd": 13.50,
-        "marginPct": 22.4
+        "fobPriceUsd": 17.20,
+        "marginPct": 21.8
       }
     ],
     "sourcingVault": {
