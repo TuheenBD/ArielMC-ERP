@@ -41,9 +41,9 @@ import { EnterpriseContact } from '@/types/utilities';
 import { INITIAL_ENTERPRISE_CONTACTS } from '@/data/initialUtilitiesData';
 
 const LOCAL_STORAGE_KEYS = {
-  PRODUCTS: 'arielmc_erp_products_v2',
-  FACTORIES: 'arielmc_erp_factories_v2',
-  SAMPLES: 'arielmc_erp_samples_v1',
+  PRODUCTS: 'arielmc_erp_products_v10',
+  FACTORIES: 'arielmc_erp_factories_v10',
+  SAMPLES: 'arielmc_erp_samples_v10',
   ORDERS: 'arielmc_erp_orders_v1',
   LEADS: 'arielmc_erp_leads_v1',
   INVENTORY: 'arielmc_erp_inventory_v1',
@@ -56,7 +56,7 @@ const LOCAL_STORAGE_KEYS = {
   POS_SHIFTS: 'arielmc_erp_pos_shifts_v1',
   POS_TRANSACTIONS: 'arielmc_erp_pos_transactions_v1',
   BUYER_PORTFOLIOS: 'arielmc_erp_buyer_portfolios_v1',
-  FACTORY_PORTFOLIOS: 'arielmc_erp_factory_portfolios_v2',
+  FACTORY_PORTFOLIOS: 'arielmc_erp_factory_portfolios_v10',
   D2C_SALES_POINTS: 'arielmc_erp_d2c_sales_points_v1',
   D2C_SALE_ORDERS: 'arielmc_erp_d2c_sale_orders_v1',
   PROFORMA_INVOICES: 'arielmc_erp_proforma_invoices_v1',
@@ -1723,21 +1723,46 @@ export const persistBuyerPortfolios = async (portfolios: BuyerPortfolio[]): Prom
 export const fetchFactoryPortfolios = async (): Promise<FactorySupplierPortfolio[]> => {
   if (typeof window !== 'undefined') {
     try {
+      // Purge all legacy localStorage keys that caused supplier profile cross-contamination
+      const legacyKeys = [
+        'arielmc_erp_factory_portfolios_v1',
+        'arielmc_erp_factory_portfolios_v2',
+        'arielmc_erp_factory_portfolios_v3',
+        'arielmc_erp_factory_portfolios_v4',
+        'arielmc_erp_factory_portfolios_v5',
+        'arielmc_factory_portfolios',
+        'arielmc_factory_portfolios_v2',
+        'arielmc_erp_factories_v1',
+        'arielmc_erp_factories_v2',
+        'arielmc_erp_factories_v3',
+        'arielmc_erp_products_v1',
+        'arielmc_erp_products_v2',
+        'arielmc_erp_products_v3',
+      ];
+      legacyKeys.forEach((k) => {
+        try { localStorage.removeItem(k); } catch {}
+      });
+
       const cached = localStorage.getItem(LOCAL_STORAGE_KEYS.FACTORY_PORTFOLIOS);
       if (cached) {
         const parsed: FactorySupplierPortfolio[] = JSON.parse(cached);
-        // Ensure master styles and published products (e.g. Bangla Eco, Beni Boonon) are hydrated if empty
-        const merged = [...INITIAL_FACTORY_PORTFOLIOS];
-        parsed.forEach((p) => {
-          const idx = merged.findIndex((m) => m.id === p.id || m.factoryCode === p.factoryCode || m.factoryName?.toLowerCase() === p.factoryName?.toLowerCase());
-          if (idx >= 0) {
-            merged[idx] = {
-              ...merged[idx],
+        // Master code seed always anchors verified factories (Bangla Eco, FineFair, Rodela, etc.)
+        const merged = INITIAL_FACTORY_PORTFOLIOS.map((init) => {
+          const p = parsed.find((item) => item.id === init.id || item.factoryCode === init.factoryCode);
+          if (p) {
+            return {
               ...p,
-              activeProducts: (p.activeProducts && p.activeProducts.length > 0) ? p.activeProducts : merged[idx].activeProducts,
-              potentialProducts: (p.potentialProducts && p.potentialProducts.length > 0) ? p.potentialProducts : merged[idx].potentialProducts,
+              // Authoritative static code seed takes absolute priority for verified activeProducts
+              activeProducts: init.activeProducts,
+              potentialProducts: (p.potentialProducts && p.potentialProducts.length > 0) ? p.potentialProducts : init.potentialProducts,
             };
-          } else {
+          }
+          return init;
+        });
+
+        // Retain any newly created custom supplier factories added by the user
+        parsed.forEach((p) => {
+          if (!merged.some((m) => m.id === p.id || m.factoryCode === p.factoryCode)) {
             merged.push(p);
           }
         });

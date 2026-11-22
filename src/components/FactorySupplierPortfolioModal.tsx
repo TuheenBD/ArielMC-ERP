@@ -46,6 +46,17 @@ import {
   Square,
 } from 'lucide-react';
 
+export const getDivisionTitleForSector = (sector?: string, category?: string): string => {
+  const s = (sector || '').toUpperCase();
+  const c = (category || '').toLowerCase();
+  if (s === 'LEATHER' || c.includes('leather')) return '01 The Leather Compendium';
+  if (s === 'JUTE' || c.includes('jute')) return '02 The Golden Fiber Edit';
+  if (s === 'CERAMICS' || c.includes('ceramic') || c.includes('stoneware') || c.includes('porcelain')) return '03 The Ceramic Index';
+  if (s === 'TEXTILE' || c.includes('textile') || c.includes('canvas') || c.includes('woven') || c.includes('knit')) return '04 Thread & Weave';
+  if (s === 'POTTERY' || c.includes('pottery') || c.includes('terracotta') || c.includes('clay')) return '05 Earth & Form';
+  return '02 The Golden Fiber Edit';
+};
+
 interface FactorySupplierPortfolioModalProps {
   portfolio: FactorySupplierPortfolio;
   onClose: () => void;
@@ -121,12 +132,12 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
     );
     const enriched: FactorySupplierPortfolio = {
       ...portfolio,
-      activeProducts: (portfolio.activeProducts && portfolio.activeProducts.length > 0)
-        ? portfolio.activeProducts
-        : (master?.activeProducts || []),
-      potentialProducts: (portfolio.potentialProducts && portfolio.potentialProducts.length > 0)
-        ? portfolio.potentialProducts
-        : (master?.potentialProducts || []),
+      activeProducts: (master?.activeProducts && master.activeProducts.length > 0)
+        ? master.activeProducts
+        : (portfolio.activeProducts || []),
+      potentialProducts: (master?.potentialProducts && master.potentialProducts.length > 0)
+        ? master.potentialProducts
+        : (portfolio.potentialProducts || []),
       capacityAndMachinery: portfolio.capacityAndMachinery || master?.capacityAndMachinery,
       complianceAudits: (portfolio.complianceAudits && portfolio.complianceAudits.length > 0)
         ? portfolio.complianceAudits
@@ -367,7 +378,7 @@ export const FactorySupplierPortfolioModal: React.FC<FactorySupplierPortfolioMod
       sku: prod.sku,
       productName: prod.name,
       category: prod.category || currentPortfolio.sectors[0] || 'Jute',
-      divisionTitle: prod.sector === 'LEATHER' ? '01 The Leather Compendium' : prod.sector === 'JUTE' ? '02 The Golden Fiber Edit' : '05 Fine Ceramics',
+      divisionTitle: getDivisionTitleForSector(prod.sector, prod.category),
       imageUrl: prod.images && prod.images.length > 0 ? prod.images[0] : '',
       specifications: prod.description || `${prod.dimensions || ''} - Export grade`,
       factoryPurchasePriceBdt: purchaseBdt,

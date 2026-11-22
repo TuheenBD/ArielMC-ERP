@@ -51,6 +51,17 @@ import { FactoryRatingModelModal } from './FactoryRatingModelModal';
 import { QualityChemicalComplianceTracker } from './QualityChemicalComplianceTracker';
 import { EditSupplierModal } from './EditSupplierModal';
 
+export const getDivisionTitleForSector = (sector?: string, category?: string): string => {
+  const s = (sector || '').toUpperCase();
+  const c = (category || '').toLowerCase();
+  if (s === 'LEATHER' || c.includes('leather')) return '01 The Leather Compendium';
+  if (s === 'JUTE' || c.includes('jute')) return '02 The Golden Fiber Edit';
+  if (s === 'CERAMICS' || c.includes('ceramic') || c.includes('stoneware') || c.includes('porcelain')) return '03 The Ceramic Index';
+  if (s === 'TEXTILE' || c.includes('textile') || c.includes('canvas') || c.includes('woven') || c.includes('knit')) return '04 Thread & Weave';
+  if (s === 'POTTERY' || c.includes('pottery') || c.includes('terracotta') || c.includes('clay')) return '05 Earth & Form';
+  return '02 The Golden Fiber Edit';
+};
+
 interface FactoryManagementProps {
   factories?: SupplierFactory[];
   onAddFactory: (newFactory: SupplierFactory) => void;
@@ -146,17 +157,20 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
   useEffect(() => {
     fetchFactoryPortfolios().then((persisted) => {
       if (persisted && persisted.length > 0) {
-        // Merge with INITIAL_FACTORY_PORTFOLIOS so newly added factories (e.g. Bangla Eco) are never lost
-        const merged = [...INITIAL_FACTORY_PORTFOLIOS];
+        // Master INITIAL_FACTORY_PORTFOLIOS always anchors verified factories with zero cache drift
+        const merged = INITIAL_FACTORY_PORTFOLIOS.map((init) => {
+          const p = persisted.find((item) => item.id === init.id || item.factoryCode === init.factoryCode);
+          if (p) {
+            return {
+              ...p,
+              activeProducts: init.activeProducts, // Authoritative code seed takes absolute priority
+              potentialProducts: (p.potentialProducts && p.potentialProducts.length > 0) ? p.potentialProducts : init.potentialProducts,
+            };
+          }
+          return init;
+        });
         persisted.forEach((p) => {
-          const idx = merged.findIndex((m) => m.id === p.id || m.factoryCode === p.factoryCode);
-          if (idx >= 0) {
-            if ((!p.activeProducts || p.activeProducts.length === 0) && merged[idx].activeProducts && merged[idx].activeProducts.length > 0) {
-              merged[idx] = { ...p, activeProducts: merged[idx].activeProducts };
-            } else {
-              merged[idx] = p;
-            }
-          } else {
+          if (!merged.some((m) => m.id === p.id || m.factoryCode === p.factoryCode)) {
             merged.push(p);
           }
         });
@@ -189,23 +203,31 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
       (p) => p.id === fac.id || p.factoryCode === fac.code || p.factoryName?.toLowerCase() === fac.name?.toLowerCase()
     );
 
-    // Auto-relational product discovery from Catalog Products
+    // If master initialMatch exists and has curated activeProducts, it is the immutable source of truth
+    if (initialMatch && initialMatch.activeProducts && initialMatch.activeProducts.length > 0) {
+      return {
+        ...(found || initialMatch),
+        activeProducts: initialMatch.activeProducts,
+        potentialProducts: (found?.potentialProducts && found.potentialProducts.length > 0)
+          ? found.potentialProducts
+          : (initialMatch.potentialProducts || []),
+        locationProfile: found?.locationProfile || initialMatch.locationProfile,
+        capacityAndMachinery: found?.capacityAndMachinery || initialMatch.capacityAndMachinery,
+        complianceAudits: (found?.complianceAudits && found.complianceAudits.length > 0) ? found.complianceAudits : initialMatch.complianceAudits,
+        subSupplierNetwork: (found?.subSupplierNetwork && found.subSupplierNetwork.length > 0) ? found.subSupplierNetwork : initialMatch.subSupplierNetwork,
+        financialAndBanking: found?.financialAndBanking || initialMatch.financialAndBanking,
+        qualityScorecard: found?.qualityScorecard || initialMatch.qualityScorecard,
+        keyManagementContacts: (found?.keyManagementContacts && found.keyManagementContacts.length > 0) ? found.keyManagementContacts : initialMatch.keyManagementContacts,
+      };
+    }
+
+    // Auto-relational product discovery strictly by exact factory ID/Code for new dynamic factories only
     const dynamicallyMatchedSkus: SupplierActiveProduct[] = INITIAL_PRODUCTS.filter((prod) => {
       const pFac = prod.partnerFactory;
       if (!pFac) return false;
-      if (pFac.factoryId && (pFac.factoryId === fac.id || pFac.factoryId === fac.code)) return true;
       if (pFac.factoryCode && pFac.factoryCode === fac.code) return true;
-      if (pFac.factoryName && fac.name) {
-        const fn1 = pFac.factoryName.toLowerCase().trim();
-        const fn2 = fac.name.toLowerCase().trim();
-        if (fn1 === fn2) return true;
-        const stopWords = new Set(['craft', 'crafts', 'ltd', 'limited', 'handicrafts', 'handicraft', 'handcrafted', 'industries', 'mill', 'mills', 'co-operative', 'bd', 'bangladesh', 'artisan', 'artisans', 'studio', 'goods', 'fabrics']);
-        const words1 = fn1.split(/[\s,.-]+/).filter((w) => w.length > 3 && !stopWords.has(w));
-        const words2 = fn2.split(/[\s,.-]+/).filter((w) => w.length > 3 && !stopWords.has(w));
-        if (words1.length > 0 && words2.length > 0) {
-          if (words1.some((w) => words2.includes(w))) return true;
-        }
-      }
+      if (pFac.factoryId && (pFac.factoryId === fac.id || pFac.factoryId === fac.code)) return true;
+      if (pFac.factoryName && fac.name && pFac.factoryName.toLowerCase().trim() === fac.name.toLowerCase().trim()) return true;
       return false;
     }).map((p, idx) => {
       const purchaseBdt = p.costing.factoryCostBdt || Math.round((p.costing.factoryCostUsd || 0) * 120);
@@ -218,8 +240,8 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
         sku: p.sku,
         productName: p.name,
         category: p.category || (p.sector === 'LEATHER' ? 'Everyday Carry & SLGs' : 'Jute Home Decor'),
-        divisionTitle: p.sector === 'LEATHER' ? '01 The Leather Compendium' : p.sector === 'JUTE' ? '02 The Golden Fiber Edit' : '05 Fine Ceramics',
-        imageUrl: p.images && p.images.length > 0 ? p.images[0] : '/images/products/jute/rugs/mandala-jute-rug-natural.jpg',
+        divisionTitle: getDivisionTitleForSector(p.sector, p.category),
+        imageUrl: p.images && p.images.length > 0 ? p.images[0] : '',
         specifications: p.description || `${p.dimensions || ''} - Export grade`,
         factoryPurchasePriceBdt: purchaseBdt,
         factoryPurchasePriceUsd: purchaseUsd,
@@ -239,21 +261,9 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     });
 
     if (found) {
-      let activeProducts = (found.activeProducts && found.activeProducts.length > 0)
+      const activeProducts = (found.activeProducts && found.activeProducts.length > 0)
         ? found.activeProducts
-        : (initialMatch?.activeProducts && initialMatch.activeProducts.length > 0)
-          ? initialMatch.activeProducts
-          : dynamicallyMatchedSkus;
-
-      // Merge dynamic SKUs if not already in activeProducts
-      if (dynamicallyMatchedSkus.length > 0) {
-        const existingSkus = new Set(activeProducts.map((p) => p.sku));
-        const missingSkus = dynamicallyMatchedSkus.filter((p) => !existingSkus.has(p.sku));
-        if (missingSkus.length > 0) {
-          activeProducts = [...activeProducts, ...missingSkus];
-        }
-      }
-
+        : dynamicallyMatchedSkus;
       const potentialProducts = (found.potentialProducts && found.potentialProducts.length > 0)
         ? found.potentialProducts
         : (initialMatch?.potentialProducts || []);
@@ -271,19 +281,11 @@ export const FactoryManagement: React.FC<FactoryManagementProps> = ({
     }
 
     if (initialMatch) {
-      let activeProducts = (initialMatch.activeProducts && initialMatch.activeProducts.length > 0)
-        ? initialMatch.activeProducts
-        : dynamicallyMatchedSkus;
-      if (dynamicallyMatchedSkus.length > 0) {
-        const existingSkus = new Set(activeProducts.map((p) => p.sku));
-        const missingSkus = dynamicallyMatchedSkus.filter((p) => !existingSkus.has(p.sku));
-        if (missingSkus.length > 0) {
-          activeProducts = [...activeProducts, ...missingSkus];
-        }
-      }
       return {
         ...initialMatch,
-        activeProducts,
+        activeProducts: (initialMatch.activeProducts && initialMatch.activeProducts.length > 0)
+          ? initialMatch.activeProducts
+          : dynamicallyMatchedSkus,
       };
     }
 

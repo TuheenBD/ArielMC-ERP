@@ -1505,6 +1505,45 @@ export const MASTER_PRODUCT_ROADMAP: ProductRoadmapItem[] = [
     typicalMoq: '400 pcs',
     hsCode: '6914.90.00',
   },
+  // -------------------------------------------------------------------------
+  // Golden Fiber Edit -> Wave 1 Amazon & Export Jute Totes (2026/2027)
+  // -------------------------------------------------------------------------
+  {
+    sl: 2,
+    prodtId: 87,
+    code: 'JTE-BCH-01',
+    sector: 'JUTE',
+    divisionName: 'The Golden Fiber Edit',
+    category: 'Everyday Carry & Bags',
+    subCategory: 'Market Shoppers & Lifestyle Totes',
+    productName: 'The Eco-Lined Jute Market & Coastal Beach Tote',
+    typicalMoq: '300 pcs',
+    hsCode: '4202.92.98',
+  },
+  {
+    sl: 2,
+    prodtId: 88,
+    code: 'JTE-URB-02',
+    sector: 'JUTE',
+    divisionName: 'The Golden Fiber Edit',
+    category: 'Everyday Carry & Bags',
+    subCategory: 'Market Shoppers & Lifestyle Totes',
+    productName: 'The Urban Sage Juco & Jute Everyday Tote',
+    typicalMoq: '300 pcs',
+    hsCode: '4202.92.98',
+  },
+  {
+    sl: 2,
+    prodtId: 89,
+    code: 'JD-EDC-23-RDL',
+    sector: 'JUTE',
+    divisionName: 'The Golden Fiber Edit',
+    category: 'Everyday Carry & Bags',
+    subCategory: 'Market Shoppers & Lifestyle Totes',
+    productName: 'ArielMC Heritage Folk Cross-Stitch Geometric Jute Tote',
+    typicalMoq: '150 pcs',
+    hsCode: '4202.92.98',
+  },
 ];
 
 // Helper functions for dynamic roadmap lookup

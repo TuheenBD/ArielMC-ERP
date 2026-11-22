@@ -17,7 +17,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
     "styleCode": "SCB",
     "eanBarcode": "0538920190001",
     "name": "The Artisan Indigo Denim & Leather Tassel Crossbody Satchel",
-    "sector": "TEXTILE",
+    "sector": "LEATHER",
     "category": "01 The Leather Compendium / Structured Carry & Bags",
     "subCategory": "Handcrafted Leather & Denim Satchels",
     "hsCode": "4202.11.00",
@@ -3713,21 +3713,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -3837,21 +3837,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
-      "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+        "partnerFactory": {
+      "factoryId": "fac_cer_03",
+      "factoryCode": "FAC-MIN-01",
+      "factoryName": "Minitro",
+      "contactPerson": "Studio Production Manager",
+      "contactPhone": "+880 1712-491823",
+      "contactEmail": "orders@minitro.com.bd",
+      "location": "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 300,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 30,
+      "samplePackingUsd": 10,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.85
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -3960,21 +3960,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4085,21 +4085,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
-      "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+        "partnerFactory": {
+      "factoryId": "fac_cer_03",
+      "factoryCode": "FAC-MIN-01",
+      "factoryName": "Minitro",
+      "contactPerson": "Studio Production Manager",
+      "contactPhone": "+880 1712-491823",
+      "contactEmail": "orders@minitro.com.bd",
+      "location": "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 300,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 30,
+      "samplePackingUsd": 10,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.85
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4208,21 +4208,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
-      "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+        "partnerFactory": {
+      "factoryId": "fac_cer_03",
+      "factoryCode": "FAC-MIN-01",
+      "factoryName": "Minitro",
+      "contactPerson": "Studio Production Manager",
+      "contactPhone": "+880 1712-491823",
+      "contactEmail": "orders@minitro.com.bd",
+      "location": "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 300,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 30,
+      "samplePackingUsd": 10,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.85
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4331,21 +4331,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4457,21 +4457,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4581,21 +4581,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4707,21 +4707,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -4831,21 +4831,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -5080,21 +5080,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -5206,21 +5206,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -5832,21 +5832,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
-      "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+        "partnerFactory": {
+      "factoryId": "fac_cer_03",
+      "factoryCode": "FAC-MIN-01",
+      "factoryName": "Minitro",
+      "contactPerson": "Studio Production Manager",
+      "contactPhone": "+880 1712-491823",
+      "contactEmail": "orders@minitro.com.bd",
+      "location": "Tejgaon Industrial Area, Dhaka-1208, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 300,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 30,
+      "samplePackingUsd": 10,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.85
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -6081,21 +6081,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -6204,21 +6204,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "ISO 6486 Lead & Cadmium Leaching Certified",
       "BSCI Audited Facility"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_cer_01",
-      "factoryCode": "FAC-MON-01",
-      "factoryName": "Monno Ceramic Industries Ltd",
-      "contactPerson": "Tanvir Ahmed (Head of Export)",
-      "contactPhone": "+880 1755-559210",
-      "contactEmail": "info@monnoceramic.com",
-      "location": "Islampur, Purba Panchash, Dhamrai, Dhaka",
-      "leadTimeDays": 30,
-      "moq": 150,
+        "partnerFactory": {
+      "factoryId": "fac_cer_02",
+      "factoryCode": "FAC-ARZ-01",
+      "factoryName": "ARAAZ Ceramics",
+      "contactPerson": "Corporate Sales & Technical Lead",
+      "contactPhone": "+880 1713-092814",
+      "contactEmail": "info@araazceramics.com",
+      "location": "Mirzapur, Tangail & Corporate HQ: Gulshan, Dhaka",
+      "leadTimeDays": 35,
+      "moq": 500,
       "sampleTurnaroundDays": 10,
-      "samplePriceUsd": 85,
-      "samplePackingUsd": 20,
+      "samplePriceUsd": 40,
+      "samplePackingUsd": 15,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.95
+      "rating": 4.88
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -6421,13 +6421,13 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
         "marginPct": 8.5
       }
     ],
-    "sourcingVault": {
-      "signedMouUrl": "/docs/mou/MOU-FAC-BE-01-2026.pdf",
-      "signedMouName": "Deed of Sourcing Agreement (Bangla Eco & ArielMC)",
+        "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-AMC-TX01-2026.pdf",
+      "signedMouName": "ArielMC Internal Atelier Production Charter",
       "signedMouDate": "2026-01-15",
       "hasIncentiveWaiverClause": true,
       "factoryRatingGrade": "A",
-      "factoryRatingScore": 94,
+      "factoryRatingScore": 96,
       "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-BE-01-2026.pdf",
       "factoryAuditReportName": "ArielMC On-Site Artisan Quality & Wage Audit",
       "studioPhotoZipUrl": "/assets/studio/TX-CTB-01-AMC-Studio-HiRes.zip",
@@ -6450,21 +6450,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "BSCI Audit Grade A",
       "Sedex SMETA"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_lth_01",
-      "factoryCode": "FAC-BE-01",
-      "factoryName": "Bangla Eco",
-      "contactPerson": "Shahrier Nyeem (Director)",
-      "contactPhone": "+880 1533-685796",
-      "contactEmail": "banglaeco.contact@gmail.com",
-      "location": "Hazaribagh & Savar, Dhaka",
+        "partnerFactory": {
+      "factoryId": "fac_tx_01",
+      "factoryCode": "FAC-AMC-TX01",
+      "factoryName": "ArielMC Textile Atelier & Woven Guild",
+      "contactPerson": "Textile Guild Coordinator & Production Head",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "textiles@arielmc.com",
+      "location": "Gazipur & Narayanganj Textile Cluster / ArielMC Studio",
       "leadTimeDays": 21,
       "moq": 100,
       "sampleTurnaroundDays": 7,
       "samplePriceUsd": 35,
       "samplePackingUsd": 10,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.9
+      "rating": 4.95
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -6547,13 +6547,13 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
         "marginPct": 8.5
       }
     ],
-    "sourcingVault": {
-      "signedMouUrl": "/docs/mou/MOU-FAC-BE-01-2026.pdf",
-      "signedMouName": "Deed of Sourcing Agreement (Bangla Eco & ArielMC)",
+        "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-AMC-TX01-2026.pdf",
+      "signedMouName": "ArielMC Internal Atelier Production Charter",
       "signedMouDate": "2026-01-15",
       "hasIncentiveWaiverClause": true,
       "factoryRatingGrade": "A",
-      "factoryRatingScore": 94,
+      "factoryRatingScore": 96,
       "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-BE-01-2026.pdf",
       "factoryAuditReportName": "ArielMC On-Site Artisan Quality & Wage Audit",
       "studioPhotoZipUrl": "/assets/studio/TX-CTB-02-AMC-Studio-HiRes.zip",
@@ -6576,21 +6576,21 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "BSCI Audit Grade A",
       "Sedex SMETA"
     ],
-    "partnerFactory": {
-      "factoryId": "fac_lth_01",
-      "factoryCode": "FAC-BE-01",
-      "factoryName": "Bangla Eco",
-      "contactPerson": "Shahrier Nyeem (Director)",
-      "contactPhone": "+880 1533-685796",
-      "contactEmail": "banglaeco.contact@gmail.com",
-      "location": "Hazaribagh & Savar, Dhaka",
+        "partnerFactory": {
+      "factoryId": "fac_tx_01",
+      "factoryCode": "FAC-AMC-TX01",
+      "factoryName": "ArielMC Textile Atelier & Woven Guild",
+      "contactPerson": "Textile Guild Coordinator & Production Head",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "textiles@arielmc.com",
+      "location": "Gazipur & Narayanganj Textile Cluster / ArielMC Studio",
       "leadTimeDays": 21,
       "moq": 100,
       "sampleTurnaroundDays": 7,
       "samplePriceUsd": 35,
       "samplePackingUsd": 10,
       "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
-      "rating": 4.9
+      "rating": 4.95
     },
     "sampleStatus": "BUYER_APPROVED",
     "images": [
@@ -6702,7 +6702,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Fair Trade Artisan Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -6827,7 +6827,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Fair Trade Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -6952,7 +6952,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Natural Clay Certified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7077,7 +7077,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "FDA Lead Free"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7201,7 +7201,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "FDA 21 CFR Compliant"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7325,7 +7325,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "FDA Lead Free"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7449,7 +7449,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "BSCI Audited"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7574,7 +7574,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Fair Trade"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7698,7 +7698,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Fair Trade Artisan Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -7823,7 +7823,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "BSCI Certified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_pot_01",
+      "factoryId": "fac_dhm_02",
       "factoryCode": "FAC-DHM-02",
       "factoryName": "Dhamrai Traditional Clay & Terracotta Guild",
       "contactPerson": "Gouranga Pal (Master Potter)",
@@ -8572,7 +8572,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Ethical Craft Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_lth_05",
+      "factoryId": "fac_mib_01",
       "factoryCode": "FAC-MIB-01",
       "factoryName": "MIB Spirit Studio • Made in Bangladesh",
       "contactPerson": "Lead Artisan & Studio Director",
@@ -8705,7 +8705,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Ethical Craft Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_lth_05",
+      "factoryId": "fac_mib_01",
       "factoryCode": "FAC-MIB-01",
       "factoryName": "MIB Spirit Studio • Made in Bangladesh",
       "contactPerson": "Lead Artisan & Studio Director",
@@ -9630,7 +9630,7 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "Ethical Craft Verified"
     ],
     "partnerFactory": {
-      "factoryId": "fac_lth_05",
+      "factoryId": "fac_mib_01",
       "factoryCode": "FAC-MIB-01",
       "factoryName": "MIB Spirit Studio • Made in Bangladesh",
       "contactPerson": "Lead Artisan & Studio Director",
@@ -9654,5 +9654,406 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       "/images/products/leather/ld-scb-10-straps.jpg"
     ],
     "createdDate": "2026-11-17"
+  },
+  {
+    "id": "prod-b2c-jte-01",
+    "sku": "JTE-BCH-01",
+    "roadmapCode": "JD-EDC-37-B2C",
+    "prodtId": 87,
+    "styleCode": "BCH",
+    "eanBarcode": "0538920190087",
+    "name": "The Eco-Lined Jute Market & Coastal Beach Tote",
+    "sector": "JUTE",
+    "category": "02 The Golden Fiber Edit / Everyday Carry & Bags",
+    "subCategory": "Eco-Lined Jute Market & Beach Totes",
+    "hsCode": "4202.92.98",
+    "packagingMode": "Standard Export Carton & Poly-Sleeve with Micro-Pak",
+    "description": "Premium 380 GSM natural golden jute tote featuring zero-odor vegetable-oil batching, water-resistant food-grade laminated interior barrier, reinforced soft cotton webbing shoulder handles, antiqued brass top zip closure, and interior zippered smartphone pocket.",
+    "unit": "PCS",
+    "dimensions": "430 x 340 x 150 mm (17 x 13.5 x 6 in)",
+    "weightKg": 0.38,
+    "tags": [
+      "Jute",
+      "Everyday Carry & Bags",
+      "Beach Tote",
+      "Farmers Market",
+      "Amazon B2C Flagship",
+      "Vegetable Batching Zero Odor",
+      "Export Verified",
+      "ArielMC Certified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 145,
+      "factoryCostUsd": 1.15,
+      "initialFactoryAskingCostBdt": 175,
+      "initialFactoryAskingCostUsd": 1.39,
+      "negotiatedSavingsBdt": 30,
+      "negotiatedSavingsUsd": 0.24,
+      "exportPackagingUsd": 0.25,
+      "inlandFreightPortUsd": 0.15,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 1.85,
+      "arielSourcingMarginPct": 38.5,
+      "b2bFobPriceUsd": 2.95,
+      "d2cRetailPriceUsd": 24.99,
+      "incentiveCategory": "DIVERSIFIED_JUTE_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 0.28,
+      "totalEnterpriseMarginPct": 48.0
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Amazon US Pilot Batch (MOQ 300 - 500 pcs)",
+        "moqRange": "300 - 500 pcs",
+        "fobPriceUsd": 2.95,
+        "marginPct": 38.5
+      },
+      {
+        "slabName": "Wholesale Tier 2 (501 - 1,500 pcs)",
+        "moqRange": "501 - 1,500 pcs",
+        "fobPriceUsd": 2.45,
+        "marginPct": 32.0
+      },
+      {
+        "slabName": "FCL Container Volume (1,501+ pcs)",
+        "moqRange": "1,501+ pcs",
+        "fobPriceUsd": 1.95,
+        "marginPct": 26.5
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-DHK-04-2026.pdf",
+      "signedMouName": "ArielMC Sovereign Jute Supply Agreement (FineFair Craft & ArielMC)",
+      "signedMouDate": "2026-11-21",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 95,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-DHK-04-2026.pdf",
+      "factoryAuditReportName": "ArielMC Zero-Hydrocarbon & Sedex SMETA Audit",
+      "studioPhotoZipUrl": "/assets/studio/JTE-BCH-01-Studio-HiRes.zip",
+      "studioPhotoZipName": "JTE-BCH-01-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 6
+    },
+    "attributes": {
+      "sector": "JUTE",
+      "data": {
+        "fiberGrade": "Tossa Jute Grade 1 & 2 (100% Biodegradable)",
+        "construction": "High-Density Plain Weave with Lockstitch Seams & Cross-X Handle Box Reinforcement",
+        "weightGsm": 380,
+        "lamination": "Food-Grade PE Wipe-Clean Water-Resistant Barrier (Zero Fiber Shedding)",
+        "bleachStatus": "Natural Unbleached Golden",
+        "dyeType": "Azo-Free Eco Vegetable Dye",
+        "biodegradabilityRate": "100% Biodegradable Core Fiber (180 Days in Soil)",
+        "fumigationStandard": "DAE Plant Quarantine Inspection Certified",
+        "ecoCertifications": [
+          "Zero Mineral Hydrocarbon Batching Verified",
+          "Micro-Pak Anti-Mold Protected (<11% Moisture)"
+        ]
+      }
+    },
+    "complianceCertificates": [
+      "Zero Mineral Batching Hydrocarbon Verified",
+      "Micro-Pak Anti-Mold Protected (<11% Moisture)",
+      "UK DCTS / EU EBA 0% Duty Preferential",
+      "US Prop 65 Lead-Free Hardware Certified"
+    ],
+        "partnerFactory": {
+      "factoryId": "fac_jut_03",
+      "factoryCode": "FAC-DHK-05",
+      "factoryName": "FineFair Craft",
+      "contactPerson": "Kamrul Hasan Chowdhury",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "info@arielmc.com",
+      "location": "Tejgaon Artisan Corridor, Dhaka, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 300,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 15,
+      "samplePackingUsd": 5,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.95
+    },
+    "sampleStatus": "PROTO_REQUESTED",
+    "images": [
+      "/images/products/jute/jte-bch-01.jpg",
+      "/images/products/jute/jte-bch-01-interior.jpg",
+      "/images/products/jute/jte-bch-01-zipper.jpg",
+      "/images/products/jute/jte-bch-01-handle.jpg",
+      "/images/products/jute/jte-bch-01-lifestyle.jpg"
+    ],
+    "createdDate": "2026-11-21"
+  },
+  {
+    "id": "prod-b2c-jte-02",
+    "sku": "JTE-URB-02",
+    "roadmapCode": "JD-EDC-38-B2C",
+    "prodtId": 88,
+    "styleCode": "URB",
+    "eanBarcode": "0538920190088",
+    "name": "The Urban Sage Juco & Jute Everyday Tote",
+    "sector": "JUTE",
+    "category": "02 The Golden Fiber Edit / Everyday Carry & Bags",
+    "subCategory": "Eco-Lined Jute Market & Beach Totes",
+    "hsCode": "4202.92.98",
+    "packagingMode": "Standard Export Carton & Poly-Sleeve with Micro-Pak",
+    "description": "Minimalist Scandinavian-inspired everyday tote crafted from natural bleached juco canvas with contrasting sage-green perimeter binding, matching cotton webbing shoulder straps, front botanical organizer pocket, and genuine leather snap closure.",
+    "unit": "PCS",
+    "dimensions": "360 x 380 x 130 mm (14 x 15 x 5.2 in)",
+    "weightKg": 0.34,
+    "tags": [
+      "Jute",
+      "Juco",
+      "Everyday Carry & Bags",
+      "Urban Tote",
+      "Sage Green",
+      "Amazon B2C Flagship",
+      "Export Verified",
+      "ArielMC Certified"
+    ],
+    "targetMarkets": [
+      "US",
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 175,
+      "factoryCostUsd": 1.40,
+      "initialFactoryAskingCostBdt": 250,
+      "initialFactoryAskingCostUsd": 2.03,
+      "negotiatedSavingsBdt": 75,
+      "negotiatedSavingsUsd": 0.63,
+      "exportPackagingUsd": 0.20,
+      "inlandFreightPortUsd": 0.15,
+      "qualityInspectionReserveUsd": 0.15,
+      "complianceOverheadReserveUsd": 0.15,
+      "totalLandedCostUsd": 1.90,
+      "arielSourcingMarginPct": 35.0,
+      "b2bFobPriceUsd": 2.65,
+      "d2cRetailPriceUsd": 22.99,
+      "incentiveCategory": "DIVERSIFIED_JUTE_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 0.25,
+      "totalEnterpriseMarginPct": 44.5
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Amazon US Pilot Batch (MOQ 300 - 500 pcs)",
+        "moqRange": "300 - 500 pcs",
+        "fobPriceUsd": 2.65,
+        "marginPct": 35.0
+      },
+      {
+        "slabName": "Wholesale Tier 2 (501 - 1,500 pcs)",
+        "moqRange": "501 - 1,500 pcs",
+        "fobPriceUsd": 2.25,
+        "marginPct": 29.5
+      },
+      {
+        "slabName": "FCL Container Volume (1,501+ pcs)",
+        "moqRange": "1,501+ pcs",
+        "fobPriceUsd": 1.85,
+        "marginPct": 24.0
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-DHK-04-2026.pdf",
+      "signedMouName": "ArielMC Sovereign Jute Supply Agreement (J.C. Bag & ArielMC)",
+      "signedMouDate": "2026-11-21",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 94,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-DHK-04-2026.pdf",
+      "factoryAuditReportName": "ArielMC Urban Lifestyle Bag Quality Audit",
+      "studioPhotoZipUrl": "/assets/studio/JTE-URB-02-Studio-HiRes.zip",
+      "studioPhotoZipName": "JTE-URB-02-Studio-300DPI-Pack.zip",
+      "highResPhotoCount": 5
+    },
+    "attributes": {
+      "sector": "JUTE",
+      "data": {
+        "fiberGrade": "Tossa Jute & Cotton Blend Juco (360 GSM)",
+        "construction": "Structured Portrait Tote with Contrast Piping & Reinforced Webbing Anchors",
+        "weightGsm": 360,
+        "lamination": "Food-Grade PE Wipe-Clean Water-Resistant Barrier",
+        "bleachStatus": "Natural Bleached Cream Juco Canvas Body",
+        "dyeType": "Eco-Safe Sage Green Reactive Dye (Perimeter Binding & Straps)",
+        "biodegradabilityRate": "100% Biodegradable Core Materials",
+        "fumigationStandard": "DAE Plant Quarantine Inspection Certified",
+        "ecoCertifications": [
+          "Zero Mineral Hydrocarbon Batching Verified",
+          "Micro-Pak Anti-Mold Protected (<11% Moisture)"
+        ]
+      }
+    },
+    "complianceCertificates": [
+      "Zero Mineral Batching Hydrocarbon Verified",
+      "Micro-Pak Anti-Mold Protected (<11% Moisture)",
+      "UK DCTS / EU EBA 0% Duty Preferential",
+      "US Prop 65 Lead-Free Hardware Certified"
+    ],
+        "partnerFactory": {
+      "factoryId": "fac_jut_03",
+      "factoryCode": "FAC-DHK-05",
+      "factoryName": "FineFair Craft",
+      "contactPerson": "Kamrul Hasan Chowdhury",
+      "contactPhone": "+880 1819-273458",
+      "contactEmail": "info@arielmc.com",
+      "location": "Tejgaon Artisan Corridor, Dhaka, Bangladesh",
+      "leadTimeDays": 25,
+      "moq": 300,
+      "sampleTurnaroundDays": 7,
+      "samplePriceUsd": 15,
+      "samplePackingUsd": 5,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.95
+    },
+    "sampleStatus": "PROTO_REQUESTED",
+    "images": [
+      "/images/products/jute/jte-urb-02.jpg"
+    ],
+    "createdDate": "2026-11-21"
+  },
+  {
+    "id": "prod-jd-23-rdl",
+    "sku": "JD-EDC-23-RDL",
+    "roadmapCode": "JD-EDC-23-RDL",
+    "prodtId": 89,
+    "styleCode": "EDC",
+    "eanBarcode": "0538920190089",
+    "name": "ArielMC Heritage Folk Cross-Stitch Geometric Jute Tote",
+    "sector": "JUTE",
+    "category": "02 The Golden Fiber Edit / Everyday Carry & Bags",
+    "subCategory": "Market Shoppers & Lifestyle Totes",
+    "hsCode": "4202.92.98",
+    "packagingMode": "Standard Export Carton & Poly-Sleeve",
+    "description": "Artisanal folk heritage shopper featuring all-over multi-color cross-stitch geometric diamond needlework on woven jute canvas, natural unbleached linen collar, covered button loop closure, and extended shoulder drop handles.",
+    "unit": "PCS",
+    "dimensions": "380 x 360 x 120 mm",
+    "weightKg": 0.42,
+    "tags": [
+      "Jute",
+      "Everyday Carry & Bags",
+      "Artisan Embroidery",
+      "Folk Heritage",
+      "Rodela Craft Guild",
+      "B2B European Boutique Specimen",
+      "Export Verified",
+      "ArielMC Certified"
+    ],
+    "targetMarkets": [
+      "UK",
+      "EU",
+      "AU"
+    ],
+    "costing": {
+      "factoryCostBdt": 400,
+      "factoryCostUsd": 3.25,
+      "initialFactoryAskingCostBdt": 450,
+      "initialFactoryAskingCostUsd": 3.65,
+      "negotiatedSavingsBdt": 50,
+      "negotiatedSavingsUsd": 0.40,
+      "exportPackagingUsd": 0.35,
+      "inlandFreightPortUsd": 0.20,
+      "qualityInspectionReserveUsd": 0.20,
+      "complianceOverheadReserveUsd": 0.20,
+      "totalLandedCostUsd": 4.20,
+      "arielSourcingMarginPct": 38.2,
+      "b2bFobPriceUsd": 6.80,
+      "d2cRetailPriceUsd": 38.00,
+      "incentiveCategory": "DIVERSIFIED_JUTE_10",
+      "incentiveRatePct": 10,
+      "sourceTaxRatePct": 5,
+      "netIncentivePct": 9.5,
+      "netIncentiveUsd": 0.65,
+      "totalEnterpriseMarginPct": 47.7
+    },
+    "volumePricingSlabs": [
+      {
+        "slabName": "Boutique Pilot (MOQ 150 - 300 pcs)",
+        "moqRange": "150 - 300 pcs",
+        "fobPriceUsd": 6.80,
+        "marginPct": 38.2
+      },
+      {
+        "slabName": "Wholesale Tier 2 (301 - 1,000 pcs)",
+        "moqRange": "301 - 1,000 pcs",
+        "fobPriceUsd": 5.95,
+        "marginPct": 31.5
+      },
+      {
+        "slabName": "Container Volume (1,001+ pcs)",
+        "moqRange": "1,001+ pcs",
+        "fobPriceUsd": 5.20,
+        "marginPct": 25.0
+      }
+    ],
+    "sourcingVault": {
+      "signedMouUrl": "/docs/mou/MOU-FAC-DHK-04-2026.pdf",
+      "signedMouName": "ArielMC Artisan Guild Sourcing Agreement (Rodela Craft & ArielMC)",
+      "signedMouDate": "2026-11-22",
+      "hasIncentiveWaiverClause": true,
+      "factoryRatingGrade": "A",
+      "factoryRatingScore": 93,
+      "factoryAuditReportUrl": "/docs/audit/AUDIT-FAC-DHK-04-2026.pdf",
+      "factoryAuditReportName": "Rodela Artisan Guild Ethical Needlework Audit",
+      "studioPhotoZipUrl": "/assets/studio/JD-EDC-23-RDL-Studio.zip",
+      "studioPhotoZipName": "JD-EDC-23-RDL-Studio-Pack.zip",
+      "highResPhotoCount": 4
+    },
+    "attributes": {
+      "sector": "JUTE",
+      "data": {
+        "fiberGrade": "Tossa Jute & Bleached Cotton Weft",
+        "construction": "Dense Plain Woven Base with Multi-Color Needlework Geometric Tapestry Embroidery",
+        "weightGsm": 420,
+        "lamination": "Natural Breathable Unlaminated Cotton Lining",
+        "bleachStatus": "Natural Jute with Yarn-Dyed Cross-Stitch Embroidery",
+        "dyeType": "Azo-Free Reactive Certified Artisan Dyes",
+        "biodegradabilityRate": "100% Biodegradable Core Fibers",
+        "fumigationStandard": "DAE Plant Quarantine Inspection Certified",
+        "ecoCertifications": [
+          "Artisan Needlework Guild Certified",
+          "Ethical Fair-Trade Verified"
+        ]
+      }
+    },
+    "complianceCertificates": [
+      "Ethical Artisan Craft Verified",
+      "Azo-Free Dye Standard",
+      "UK DCTS / EU EBA 0% Duty Preferential"
+    ],
+    "partnerFactory": {
+      "factoryId": "fac_jut_01",
+      "factoryCode": "FAC-DHK-04",
+      "factoryName": "Rodela Craft Guild",
+      "contactPerson": "Md. Rafiqul Islam / Master Artisan Guild Lead",
+      "contactPhone": "+880 1715-928410",
+      "contactEmail": "rodelacraft.bd@gmail.com",
+      "location": "Mirpur Artisan Craft Complex & Savar Guild Belt, Dhaka",
+      "leadTimeDays": 30,
+      "moq": 150,
+      "sampleTurnaroundDays": 10,
+      "samplePriceUsd": 25,
+      "samplePackingUsd": 5,
+      "sampleCostPolicy": "PAID_UPFRONT_CREDITED_ON_BULK_PO",
+      "rating": 4.88
+    },
+    "sampleStatus": "PROTO_REQUESTED",
+    "images": [
+      "/images/products/jute/JD-EDC-23-RDL.jpg"
+    ],
+    "createdDate": "2026-11-22"
   },
 ];
