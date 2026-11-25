@@ -3,6 +3,7 @@
 
 @layer base {
   :root {
+    font-variant-numeric: tabular-nums;
     /* Exact ArielMC CRM & Website Color System */
     --background: #FAF9F5;      /* Light Ivory White for ALL color schemes */
     --foreground: #1A1A1A;      /* High-contrast ink text */
