@@ -1,0 +1,3 @@
+# ArielMC ERP Enterprise Portal
+User-agent: *
+Disallow: /
