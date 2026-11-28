@@ -2749,6 +2749,124 @@ export const INITIAL_FACTORY_PORTFOLIOS: FactorySupplierPortfolio[] = [
 
     operationalNotes: 'Minitro (minitro.living) is an established contemporary tabletop brand in Dhaka with huge consumer love. Specializes in artisanal coffee mugs, reactive glaze drinkware, and whimsical ceramic design.',
   },
+  // =========================================================================
+  // 10. ETERNAL CERAMICS (FAC-ETC-01) - TIMELESS ART ON PORCELAIN TABLEWARE
+  // =========================================================================
+  {
+    id: 'fac_cer_04',
+    factoryCode: 'FAC-ETC-01',
+    factoryName: 'Eternal Ceramics',
+    vendorClassification: 'FACTORY_CUM_SUPPLIER',
+    sectors: ['CERAMICS'],
+    clusterRegion: 'Uttara Export & Tableware Hub, Dhaka, Bangladesh',
+    factoryAddress: 'House - 8, Road - 20, Sector - 7, Uttara, Dhaka - 1230, Bangladesh',
+    establishedYear: 2018,
+    tier: 'TIER_1_PREFERRED',
+    lastUpdated: '2026-11-28',
+
+    keyManagementContacts: [
+      {
+        name: 'Chief Operating Officer / Tableware Lead',
+        designation: 'COO & Head of Porcelain Tableware Sourcing',
+        phone: '+880 1747-768749',
+        email: 'coo@eternalceramicsbd.com',
+      },
+    ],
+
+    digitalChannels: {
+      website: 'www.eternalceramicsbd.com',
+      facebook: 'facebook.com/eternalceramicsbd',
+    },
+
+    locationProfile: {
+      headOfficeAddress: 'House - 8, Road - 20, Sector - 7, Uttara, Dhaka - 1230, Bangladesh',
+      factoryPlantAddress: 'Uttara Industrial & Ceramic Zone, Dhaka, Bangladesh',
+      showroomAddress: 'House - 8, Road - 20, Sector - 7, Uttara, Dhaka - 1230, Bangladesh',
+      industrialCluster: 'Uttara Export & Tableware Hub',
+      googleMapsUrl: 'https://maps.google.com/?q=Eternal+Ceramics+Uttara+Dhaka',
+      totalFloorAreaSqFt: 35000,
+    },
+
+    capacityAndMachinery: {
+      monthlyCapacityUnits: 65000,
+      allocatedCapacityUnits: 40000,
+      arielMcReservedCapacityUnits: 12000,
+      utilizationRatePct: 61.5,
+      activeLinesCount: 6,
+      totalWorkforce: 110,
+      shiftStructure: 'Double Shift (8h x 2)',
+      machinery: [
+        { machineName: 'High-Temperature Automated Porcelain Vitrification Kilns (1,320°C)', originCountry: 'Germany / Japan', quantity: 4, purpose: 'High-temperature vitrified porcelain dinnerware & teaware' },
+        { machineName: 'Fine Porcelain Pressure Casting & Cup/Saucer Forming Presses', originCountry: 'Taiwan', quantity: 8, purpose: 'Fine rim consistency & handle joining' },
+        { machineName: 'Precision Cobalt Blue & Underglaze Motif Transfer Printing Tables', originCountry: 'Bangladesh / UK', quantity: 6, purpose: 'Timeless art on porcelain underglaze decoration' },
+        { machineName: 'Lead-Free Glaze Dipping Bays & Hand-Banding Finishing Stations', originCountry: 'Bangladesh', quantity: 10, purpose: 'Food-safe LFGB / FDA compliant glazing' },
+      ],
+    },
+
+    complianceAudits: [
+      {
+        id: 'aud_etc_fda',
+        standardName: 'US FDA 21 CFR Food Safe Porcelain Glaze (Zero Lead / Cadmium)',
+        auditDate: '2026-04-15',
+        ratingGrade: 'Certified Grade A',
+        auditBody: 'Intertek Bangladesh',
+        status: 'VALID',
+        validUntil: '2027-11-20',
+        reportNumber: 'ITK-FDA-ETC-2026',
+      },
+      {
+        id: 'aud_etc_lfgb',
+        standardName: 'German LFGB / EU 1935/2004 Food Contact Safe',
+        auditDate: '2026-05-10',
+        ratingGrade: 'Microwave & Dishwasher Safe Pass',
+        auditBody: 'SGS Bangladesh',
+        status: 'VALID',
+        validUntil: '2027-08-15',
+        reportNumber: 'SGS-LFGB-ETC-994',
+      },
+    ],
+
+    subSupplierNetwork: [
+      {
+        id: 'sub-etc-1',
+        materialType: 'High-Purity Kaolin Porcelain Clay & Food-Safe Glaze Compounds',
+        supplierName: 'Bengal Ceramic Minerals & Fine Earth Ltd',
+        locationCluster: 'Mymensingh & Sylhet Mineral Corridor',
+        complianceTier: 'Certified Tier 1',
+        traceabilityVerified: true,
+      },
+    ],
+
+    financialAndBanking: {
+      bankName: 'BRAC Bank PLC',
+      branchName: 'Uttara Branch, Dhaka',
+      routingNumber: '060261942',
+      swiftBic: 'BRAKBDDH',
+      backToBackLcAccepted: true,
+      preferredLcTenorDays: 60,
+      nbrBinNumber: '007192841-0102',
+      tinNumber: '7192830192',
+      epbRegistrationNo: 'EPB-REG-CER-0612',
+      totalSpendYtdBdt: 0,
+      totalSpendYtdUsd: 0,
+      outstandingPayablesBdt: 0,
+      creditTerms: '30% Advance on PO execution, 50% Clean B/L presentation, 20% NOC delivery clearance',
+      paymentPunctualityScorePct: 99.2,
+    },
+
+    qualityScorecard: {
+      aqlPassRatePct: 99.3,
+      onTimeDeliveryRatePct: 98.7,
+      averageDefectRatePct: 0.6,
+      sampleApprovalTurnaroundDays: 4.5,
+      overallRatingScore: 4.94,
+    },
+
+    activeProducts: [],
+    potentialProducts: [],
+
+    operationalNotes: 'Eternal Ceramics (eternalceramicsbd.com) is a premier 178K-follower porcelain tableware brand and manufacturer based in Uttara, Dhaka. Renowned for "Timeless Art on Porcelain", world-class porcelain dinnerware, underglaze cobalt motifs, and high-temperature vitrified tabletop suites.',
+  },
   {
     id: 'fac_pot_02',
     factoryCode: 'FAC-KCS-01',
